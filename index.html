@@ -30,9 +30,11 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin-top: 30px;
+  margin-top: 32px;
   margin-bottom: 18px;
-  z-index: 9;
+  z-index: 10;
+  pointer-events: none;
+  user-select: none;
 }
 
 .banner-gamer-img {
@@ -40,14 +42,19 @@
   width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 5px 42px #16b6f660) drop-shadow(0 3px 18px #222b);
+  filter:
+    drop-shadow(0 8px 38px #19e0fc88)
+    drop-shadow(0 1px 18px #ff38fd88)
+    drop-shadow(0 0 20px #0008);
+  pointer-events: none;
+  user-select: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .banner-gamer-img {
     max-width: 97vw;
   }
-  .banner-gamer { margin-top: 10px; }
+  .banner-gamer { margin-top: 8px; }
 }
     .container {
       max-width: 1300px;
@@ -236,7 +243,7 @@
 </head>
 <body>
 <div class="banner-gamer">
-  <img src="/mnt/data/Artboard 1@2x.png" alt="Danilo no Gamer" class="banner-gamer-img">
+  <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
 </div>
   <div class="container">
     <div id="calendario"></div>
