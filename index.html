@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no 🎮</title>
@@ -24,63 +25,67 @@
       min-height: 100vh;
       transition: background 0.3s;
     }
-    .gamer-title {
+   .gamer-title {
   position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  margin-top: 28px;
-  margin-bottom: 20px;
-  z-index: 3;
+  margin-top: 32px;
+  margin-bottom: 24px;
+  z-index: 10;
   pointer-events: none;
   user-select: none;
+  height: 92px;
 }
 
 .gamer-text {
-  font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 4.2em;
+  font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
+  font-size: 3.6em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  background: linear-gradient(90deg, #ffe379 0%, #ff38fd 35%, #15e8f9 85%);
+  letter-spacing: 0.07em;
+  background: linear-gradient(90deg, #ffe379 5%, #ff38fd 50%, #19e0fc 100%);
   color: #fff;
-  border-radius: 7px;
-  padding: 0 26px 0 22px;
+  padding: 0 34px 0 25px;
+  border-radius: 9px;
+  box-shadow: 0 7px 28px #001b, 0 2px 24px #15e8f933;
   text-shadow:
-    0 4px 18px #000d,
+    0 3px 18px #000a,
     0 0 10px #ffe379bb,
     0 1px 0 #000,
-    0 2px 8px #39e6ff90,
+    0 3px 8px #39e6ff99,
     2px 2px 0 #15e8f966;
-  filter: drop-shadow(0 0 14px #000b);
-  line-height: 1.08;
+  filter: drop-shadow(0 0 16px #000b);
+  line-height: 1.06;
   position: relative;
-  z-index: 2;
+  z-index: 3;
   transition: font-size 0.3s;
 }
 
 .gamer-controller {
-  font-size: 2.4em;
+  font-size: 2.3em;
   position: absolute;
-  right: 12%;
-  bottom: 9%;
-  z-index: 3;
+  right: 6%;
+  bottom: -16px;
+  z-index: 4;
   filter:
-    drop-shadow(0 0 10px #ffe379c0)
-    drop-shadow(0 2px 8px #0009)
-    drop-shadow(0 0 22px #22e8f9);
-  transform: rotate(-15deg);
+    drop-shadow(0 0 10px #ffe379e0)
+    drop-shadow(0 3px 18px #001a)
+    drop-shadow(0 0 32px #22e8f9);
+  transform: rotate(-16deg);
   background: none;
   pointer-events: none;
   user-select: none;
 }
 
 @media (max-width: 700px) {
-  .gamer-text { font-size: 2.3em; padding: 0 10px;}
-  .gamer-controller { font-size: 1.25em; right: 12%; bottom: 14%;}
+  .gamer-title { height: 65px; margin-top: 12px;}
+  .gamer-text { font-size: 1.7em; padding: 0 14px;}
+  .gamer-controller { font-size: 1.1em; right: 5%; bottom: -8px;}
 }
 @media (max-width: 400px) {
-  .gamer-text { font-size: 1.3em;}
+  .gamer-title { height: 44px;}
+  .gamer-text { font-size: 1em;}
 }
     .container {
       max-width: 1300px;
@@ -268,9 +273,9 @@
   </style>
 </head>
 <body>
-  <div class="gamer-title">
+ <div class="gamer-title">
   <span class="gamer-text">Danilo no</span>
-  <span class="gamer-controller">🎮</span>
+  <span class="gamer-controller" title="Controle de videogame">🎮</span>
 </div>
   <div class="container">
     <div id="calendario"></div>
