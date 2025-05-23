@@ -4,13 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no 🎮</title>
-  <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --azul-shadow: #191246;
-      --header-azul: #17113a;
-      --header-azul2: #1a1b3a;
+      --header-preto: #101016;
       --laranja-3d: #ff522e;
       --branco: #fff;
       --gold: #ffe379;
@@ -25,7 +23,7 @@
     }
     body {
       font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
-      background: linear-gradient(to bottom, var(--header-azul2) 0 220px, var(--corpo) 260px 100%);
+      background: var(--corpo);
       color: #e0e0e0;
       min-height: 100vh;
       transition: background 0.3s;
@@ -42,16 +40,19 @@
       top: 0;
       left: 0;
       z-index: 100;
-      background: linear-gradient(to bottom, #13154a 65%, transparent 100%);
-      box-shadow: 0 14px 70px 0 #000b;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 210px;
+      min-height: 220px;
       padding-top: 32px;
       padding-bottom: 16px;
       overflow-x: hidden;
+      /* Fundo preto com textura sutil SVG inline */
+      background: var(--header-preto);
+      background-image: url("data:image/svg+xml;utf8,<svg width='100' height='100' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' fill='black'/><circle fill='%23151520' fill-opacity='0.11' cx='18' cy='32' r='19'/><circle fill='%23151520' fill-opacity='0.07' cx='80' cy='80' r='24'/></svg>");
+      background-size: 160px 160px;
+      box-shadow: 0 12px 52px 0 #000b;
       transition: min-height 0.35s cubic-bezier(.8,0,.22,1);
     }
     .header-3d-bg.shrink {
@@ -59,51 +60,70 @@
       padding-top: 0;
       padding-bottom: 0;
     }
+    .header-content {
+      position: relative;
+      width: fit-content;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 2;
+    }
+    .emoji-controller-bg {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 0.15em;
+    }
+    .emoji-controller {
+      font-size: 9vw;
+      line-height: 1.08;
+      display: block;
+      margin: 0 auto;
+      z-index: 1;
+      position: relative;
+      /* Sombra sutil e menor */
+      filter: drop-shadow(0 0.16em 0.08em var(--laranja-3d)) drop-shadow(0 0.24em 0.08em var(--laranja-3d));
+      pointer-events: none;
+      user-select: none;
+      transition: font-size 0.36s cubic-bezier(.8,0,.22,1);
+    }
     .titulo-3d {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, 0);
       font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
-      font-size: 4.3vw;
+      font-size: 4.5vw;
       font-weight: 100;
       text-transform: uppercase;
       letter-spacing: 0.14em;
       color: var(--branco);
-      line-height: 1.06;
+      line-height: 1.1;
       text-align: center;
       font-stretch: ultra-expanded;
-      font-variation-settings: "wght" 100;
-      font-optical-sizing: auto;
-      /* Sombra laranja profunda, harmoniosa */
+      z-index: 2;
+      /* Sombra laranja profunda */
       text-shadow:
-        0.06em 0.14em 0 var(--laranja-3d),
-        0.11em 0.26em 0 var(--laranja-3d),
-        0.13em 0.29em 0 var(--laranja-3d),
+        0.08em 0.19em 0 var(--laranja-3d),
+        0.14em 0.36em 0 var(--laranja-3d),
         0 7px 22px #000a;
-      margin-bottom: 0.15em;
-      transition: font-size 0.36s cubic-bezier(.8,0,.22,1);
-    }
-    .emoji-controller {
-      font-size: 7vw;
-      line-height: 1.05;
-      display: block;
-      filter: drop-shadow(0.11em 0.22em 0 var(--laranja-3d)) drop-shadow(0.16em 0.27em 0 var(--laranja-3d));
-      margin-top: -0.7em;
-      margin-bottom: 0.1em;
-      user-select: none;
+      margin-bottom: 0.12em;
       pointer-events: none;
-      text-align: center;
-    }
-    .header-3d-bg.shrink .titulo-3d,
-    .header-3d-bg.shrink .emoji-controller {
-      font-size: 1.85vw;
+      background: transparent;
+      width: 100%;
     }
     @media (max-width: 900px) {
-      .titulo-3d { font-size: 9vw; }
+      .titulo-3d { font-size: 8vw; }
       .emoji-controller { font-size: 16vw; }
       .header-3d-bg.shrink .titulo-3d { font-size: 4vw;}
       .header-3d-bg.shrink .emoji-controller { font-size: 7vw;}
     }
     @media (max-width: 600px) {
-      .titulo-3d { font-size: 14vw; }
-      .emoji-controller { font-size: 25vw; }
+      .titulo-3d { font-size: 12vw; }
+      .emoji-controller { font-size: 24vw; }
       .header-3d-bg.shrink .titulo-3d { font-size: 6vw;}
       .header-3d-bg.shrink .emoji-controller { font-size: 10vw;}
       .container { padding: 0 6px;}
@@ -191,7 +211,6 @@
       70% { opacity: 1; transform: translateY(5px) scaleY(1.09);}
       100% { opacity: 1; transform: translateY(0) scaleY(1);}
     }
-    /* drop up */
     .dropdown.drop-up {
       animation: slideUp 0.44s cubic-bezier(.2,1.2,.42,1.01);
     }
@@ -222,8 +241,8 @@
       position: relative;
       border-radius: 9px;
       padding: 4px 8px 4px 2px;
-      transition: background 0.22s, box-shadow 0.22s;
       margin-bottom: 0;
+      transition: background 0.22s, box-shadow 0.22s;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
@@ -233,11 +252,13 @@
     }
     .habit-emoji {
       font-size: 1.7em;
-      display: inline-flex;
+      min-width: 46px;
+      min-height: 46px;
+      display: flex;
       align-items: center;
-      margin-right: 13px;
-      margin-left: 4px;
-      min-width: 38px;
+      justify-content: center;
+      margin-right: 15px;
+      margin-left: 2px;
       text-align: center;
       cursor: pointer;
       will-change: transform;
@@ -267,6 +288,10 @@
       margin-right: 8px;
       accent-color: #ffe379;
       vertical-align: middle;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
     }
     .habit-label {
       flex: 1 1 auto;
@@ -279,8 +304,8 @@
       font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
       display: flex;
       align-items: center;
-      transition: color 0.19s;
       vertical-align: middle;
+      transition: color 0.19s;
     }
     .habit-done {
       text-decoration: line-through;
@@ -335,17 +360,18 @@
 </head>
 <body>
   <div class="header-3d-bg">
-    <div class="titulo-3d">Danilo no</div>
-    <span class="emoji-controller" title="Controle de videogame">🎮</span>
+    <div class="header-content">
+      <div class="emoji-controller-bg">
+        <span class="emoji-controller" title="Controle de videogame" style="z-index:1; margin-top: 12px;">🎮</span>
+        <div class="titulo-3d" style="z-index:2;">Danilo no</div>
+      </div>
+    </div>
   </div>
   <div class="container">
     <div id="calendario"></div>
   </div>
-  <!-- Canvas para confetes -->
   <canvas id="confetti-canvas"></canvas>
-  <!-- Texto de celebração -->
   <div id="celebrate-text">VAI MLK!!!</div>
-  <!-- Som de conquista confiável -->
   <audio id="celebrate-audio">
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
@@ -529,7 +555,6 @@
     // Dropdown toggle
     document.querySelectorAll('tr.main-row').forEach(row => {
       row.addEventListener('click', function(e) {
-        // Só abre/fecha se não for um botão/habit-checkbox
         if (e.target.tagName === 'INPUT' || e.target.classList.contains('habit-emoji')) return;
         const dropdownId = this.getAttribute('data-dropdown');
         const dropdown = document.getElementById(`dropdown-${dropdownId}`);
@@ -539,7 +564,6 @@
           setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
           this.classList.remove('expanded');
         } else {
-          // Fecha outros abertos
           document.querySelectorAll('.dropdown.active').forEach(dd=>{
             dd.classList.remove('active');
             dd.classList.add('drop-up');
@@ -583,16 +607,14 @@
         let progress = getProgress();
         progress[this.id] = this.checked;
         saveProgress(progress);
-        // Destaque individual
         const hi = document.getElementById('habititem-' + this.id);
         if (hi) hi.classList.toggle('habit-complete', this.checked);
-        // Checa se todos do dia foram feitos
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if(parts) {
           const dayId = parts[0];
           const dayRow = document.getElementById(`mainrow-${dayId}`);
           const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
-          const allDone = checkAllHabitsComplete(dayId, habitCount-1); // -1 pois último é cíclico
+          const allDone = checkAllHabitsComplete(dayId, habitCount-1);
           const dropdown = document.getElementById(`dropdown-${dayId}`);
           if(allDone) {
             dayRow.classList.add('day-complete');
@@ -612,7 +634,6 @@
         }
       });
     });
-    // EMOJI CLICK (faz o hábito!)
     document.querySelectorAll('.habit-emoji').forEach(emoji=>{
       emoji.addEventListener('mouseenter', function() {
         emoji.classList.add('glow');
@@ -631,7 +652,6 @@
         }
       });
     });
-    // Inicializa cor dos dias já completos ao carregar
     dados.forEach((dia) => {
       const habitCount = dia.habitos.length + 1;
       const allDone = checkAllHabitsComplete(dia.id, habitCount-1);
