@@ -29,105 +29,7 @@
       margin: 0 auto;
       padding: 0 32px;
     }
-    /* HEADER NOVO */
-    .header-3d-bg {
-      width: 100vw;
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1001;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: var(--header-height);
-      height: var(--header-height);
-      box-shadow: 0 8px 36px 0 #000a;
-      background: linear-gradient(180deg, #8fd1ff 0%, #e0f4ff 60%, #fff7 100%);
-      border-bottom: 4px solid #191919;
-      will-change: background, height;
-      padding: 0;
-      overflow: visible;
-      transition: min-height 0.3s, height 0.3s, background 1.3s cubic-bezier(.6,0,.18,1.2);
-    }
-    .header-3d-bg.shrink {
-      min-height: var(--header-shrink);
-      height: var(--header-shrink);
-    }
-    .header-spacer {
-      height: var(--header-height);
-      transition: height 0.3s;
-      width: 100%;
-      pointer-events: none;
-      user-select: none;
-    }
-    .header-3d-bg.shrink ~ .header-spacer {
-      height: var(--header-shrink);
-    }
-    .logo-title-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100vw;
-      pointer-events: none;
-      user-select: none;
-      position: relative;
-      z-index: 2;
-      justify-content: center;
-      height: 100%;
-    }
-    .logo-text {
-      font-family: 'Bebas Neue', Arial, sans-serif;
-      font-size: 5vw;
-      text-transform: uppercase;
-      color: #fff;
-      letter-spacing: 0.14em;
-      font-weight: 400;
-      background: linear-gradient(90deg, #fff 10%, #ffe379 50%, #ff522e 75%, #36aaff 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-fill-color: transparent;
-      line-height: 1;
-      text-shadow: 0 4px 16px #000b, 0 2px 10px #0028;
-      margin-bottom: -2vw;
-      margin-top: 0.4vw;
-      padding-bottom: 0.5vw;
-      transition: font-size 0.33s, margin-bottom 0.3s;
-    }
-    .logo-controller {
-      font-size: 10vw;
-      margin: 0 auto;
-      margin-top: -0.5vw;
-      margin-bottom: 0;
-      z-index: 1;
-      filter: drop-shadow(0 0 30px #ff522e60) drop-shadow(0 8px 24px #0007);
-      transition: font-size 0.33s, margin-top 0.3s;
-      background: none;
-      pointer-events: none;
-      user-select: none;
-    }
-    .header-3d-bg.shrink .logo-text {
-      font-size: 2vw;
-      margin-bottom: -0.2vw;
-    }
-    .header-3d-bg.shrink .logo-controller {
-      font-size: 5vw;
-      margin-top: 0vw;
-    }
-    @media (max-width: 900px) {
-      .logo-text { font-size: 9vw; margin-bottom: -4vw;}
-      .logo-controller { font-size: 16vw; margin-top: -3vw;}
-      .header-3d-bg.shrink .logo-text { font-size: 4vw; margin-bottom: -1vw;}
-      .header-3d-bg.shrink .logo-controller { font-size: 8vw; margin-top: 0;}
-    }
-    @media (max-width: 600px) {
-      .logo-text { font-size: 13vw; margin-bottom: -6vw;}
-      .logo-controller { font-size: 22vw; margin-top: -6vw;}
-      .header-3d-bg.shrink .logo-text { font-size: 6vw; margin-bottom: -2vw;}
-      .header-3d-bg.shrink .logo-controller { font-size: 13vw; margin-top: -2vw;}
-      .container { padding: 0 6px;}
-    }
-
+    /* Removido: HEADER NOVO */
     /* MES & TABELA */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
@@ -308,8 +210,7 @@
   </style>
 </head>
 <body>
-  </div>
-  <div class="header-spacer"></div>
+  <!-- HEADER FOI REMOVIDO -->
   <div class="container">
     <div id="calendario"></div>
   </div>
@@ -320,48 +221,7 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
   </audio>
 <script>
-  // HEADER DYNAMIC SKY GRADIENT
-  function headerSkyGradient() {
-    const hour = new Date().getHours();
-    let bg;
-    if (hour >= 6 && hour < 11)
-      bg = "linear-gradient(180deg, #8fd1ff 0%, #e0f4ff 70%, #fff7 100%)";
-    else if (hour >= 11 && hour < 17)
-      bg = "linear-gradient(180deg, #ffe79e 0%, #ffd2c6 60%, #ffd999 95%, #fff5 100%)";
-    else if (hour >= 17 && hour < 20)
-      bg = "linear-gradient(180deg, #fd978e 0%, #f4d5e2 55%, #e2a2f2 100%)";
-    else if (hour >= 20 || hour < 4)
-      bg = "linear-gradient(180deg, #1a2240 0%, #373066 70%, #232330 100%)";
-    else
-      bg = "linear-gradient(180deg, #20232c 0%, #384464 60%, #272635 100%)";
-    document.getElementById('dynamic-header').style.background = bg;
-  }
-  headerSkyGradient();
-  setInterval(headerSkyGradient, 5 * 60 * 1000);
-
-  // Shrink header on scroll, sticky always
-  function shrinkHeaderOnScroll() {
-    const header = document.getElementById('dynamic-header');
-    const spacer = document.querySelector('.header-spacer');
-    const scroll = window.scrollY;
-    if(scroll > 30 && !header.classList.contains('shrink')) {
-      header.classList.add('shrink');
-      spacer.style.height = getComputedStyle(header).height;
-    } else if(scroll <= 30 && header.classList.contains('shrink')) {
-      header.classList.remove('shrink');
-      spacer.style.height = getComputedStyle(header).height;
-    }
-  }
-  window.addEventListener('scroll', shrinkHeaderOnScroll);
-
-  // Ajuste inicial e on resize para header
-  function fixHeaderSpacer() {
-    const header = document.getElementById('dynamic-header');
-    document.querySelector('.header-spacer').style.height = getComputedStyle(header).height;
-  }
-  window.addEventListener('resize', fixHeaderSpacer);
-  setTimeout(fixHeaderSpacer, 300);
-
+  // Removido: headerSkyGradient, shrinkHeaderOnScroll, fixHeaderSpacer
   function unlockScroll() {
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
@@ -447,7 +307,6 @@
   }
 
   document.addEventListener("DOMContentLoaded", function() {
-    fixHeaderSpacer();
     // DADOS E GERAÇÃO DA TABELA
     const dados = [];
     const habitos_incrementais = {
@@ -681,7 +540,6 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
-      fixHeaderSpacer();
     });
   });
 </script>
