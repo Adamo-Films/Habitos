@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no Controle</title>
-  <!-- Fonte bem fina, alta -->
+  <!-- Fonte ultra fina -->
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -12,9 +12,9 @@
       --header-azul: #18104b;
       --laranja-3d: #ff522e;
       --branco: #fff;
-      --neon-green: #24ff69;
-      --neon-green2: #b6ff00;
-      --neon-green3: #36fff7;
+      --gold: #ffe379;
+      --gold2: #e4c145;
+      --gold3: #f7e399;
     }
     html, body {
       height: 100%;
@@ -29,20 +29,18 @@
       padding: 0;
       min-height: 100vh;
     }
-
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
     }
-
     .header-3d-bg {
       width: 100vw;
       background: var(--header-azul);
       margin-bottom: 36px;
       padding-top: 36px;
       padding-bottom: 46px;
-      box-shadow: 0 14px 70px 0 #000b  ;
+      box-shadow: 0 14px 70px 0 #000b;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -52,26 +50,26 @@
     }
     .titulo-3d {
       font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
-      font-size: 6.2vw;
+      font-size: 6vw;
       font-weight: 100;
       text-transform: uppercase;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.13em;
       color: var(--branco);
       line-height: 1.03;
       text-align: center;
       font-stretch: ultra-expanded;
-      /* Efeito 3D com shadow reta, curta */
+      /* 3D: sombras muito próximas (efeito dividido por 3!) e letras super finas */
       text-shadow:
-        0.08em 0.18em 0 var(--laranja-3d),
-        0.13em 0.28em 0 var(--laranja-3d),
-        0.19em 0.39em 0 var(--laranja-3d),
-        0.22em 0.49em 0 var(--laranja-3d),
-        0.27em 0.65em 0 var(--laranja-3d),
-        0.39em 0.93em 0 var(--azul-shadow),
-        0 14px 36px #0008;
+        0.027em 0.06em 0 var(--laranja-3d),
+        0.05em 0.12em 0 var(--laranja-3d),
+        0.09em 0.18em 0 var(--laranja-3d),
+        0.13em 0.24em 0 var(--laranja-3d),
+        0.16em 0.33em 0 var(--azul-shadow),
+        0 10px 25px #0009;
+      font-variation-settings: "wght" 100; /* Mais fina possível! */
     }
     @media (max-width: 800px) {
-      .titulo-3d { font-size: 12vw; }
+      .titulo-3d { font-size: 11vw; }
       .header-3d-bg { padding-top: 20px; padding-bottom: 28px;}
       .container { padding: 0 8px; }
     }
@@ -108,33 +106,27 @@
     tr.main-row:hover {
       background-color: #1f2d3d;
     }
-    /* Neon highlight: Dias completos */
+    /* Dia completo: DOURADO (leve e elegante) */
     .day-complete {
       background:
-        linear-gradient(90deg, var(--neon-green), var(--neon-green2) 55%, var(--neon-green3) 100%) !important;
-      color: #050c08 !important;
+        linear-gradient(90deg, var(--gold), var(--gold2) 55%, var(--gold3) 100%) !important;
+      color: #201d09 !important;
       font-weight: bold;
-      letter-spacing: 1.3px;
-      /* Neon glow + split */
+      letter-spacing: 1.1px;
       box-shadow:
-        0 0 8px 2px var(--neon-green),
-        0 0 24px 4px var(--neon-green3),
-        0 0 5px 2px var(--neon-green2),
-        0 0 40px 2px #00ffe6b0,
-        2px 0 0 0 #fffa  inset,
-        -2px 0 0 0 #ff0a  inset;
+        0 0 12px 0 var(--gold2),
+        0 2px 22px 2px #ffe379a0,
+        0 0 0 2px #e4c14590 inset;
       text-shadow:
-        0 0 5px #fff,
-        0 0 6px #24ff69,
-        1px 0 2px #b6ff00,
-        -1px 0 3px #36fff7,
-        0 2px 2px #fff;
-      border-left: 4px solid var(--neon-green3);
-      border-right: 2px solid var(--neon-green2);
+        0 1px 2px #fff7,
+        0 0 4px #ffe37955,
+        0 2px 4px #e4c14588;
+      border-left: 4px solid var(--gold2);
+      border-right: 2px solid var(--gold3);
       border-radius: 2px;
     }
 
-    /* Dropdown (centralizado) */
+    /* Dropdown (centralizado, com check à direita!) */
     .dropdown {
       background: #181818;
       border-bottom: 1px solid #333;
@@ -152,40 +144,38 @@
       margin: 12px 0 12px 0;
       display: flex;
       flex-direction: column;
-      align-items: center;  /* Centraliza os hábitos */
-      gap: 12px;
+      align-items: center;
+      gap: 13px;
       width: 100%;
     }
     .habit-item {
       display: flex;
       align-items: center;
-      gap: 16px;
-      font-size: 1.20em;
-      min-width: 340px;
+      gap: 0;
+      font-size: 1.22em;
+      min-width: 390px;
       max-width: 98vw;
-      justify-content: center;
-    }
-    .habit-checkbox {
-      transform: scale(1.17);
-      cursor: pointer;
-    }
-    .habit-done {
-      text-decoration: line-through;
-      color: #888;
+      justify-content: flex-start;
+      background: none;
+      position: relative;
     }
     .habit-emoji {
-      font-size: 1.5em;
+      font-size: 1.7em;
       display: inline-block;
+      margin-right: 17px;
+      margin-left: 5px;
       transition: transform 0.17s cubic-bezier(.65,-0.6,.31,1.7);
       filter: drop-shadow(0 2px 6px #0007);
       cursor: pointer;
       will-change: transform;
       user-select: none;
+      min-width: 38px;
+      text-align: center;
     }
     .habit-emoji:hover {
       animation: emoji-bounce 0.7s cubic-bezier(.24,-0.06,.41,1.37) 1;
       filter: drop-shadow(0 0 10px #f0a) drop-shadow(0 0 6px #fff9);
-      transform: rotate(-18deg) scale(1.19);
+      transform: rotate(-18deg) scale(1.13);
     }
     @keyframes emoji-bounce {
       0%   { transform: scale(1)    rotate(0);}
@@ -193,6 +183,29 @@
       60%  { transform: scale(0.94) rotate(17deg);}
       90%  { transform: scale(1.12) rotate(-9deg);}
       100% { transform: scale(1.18) rotate(-18deg);}
+    }
+    .habit-checkbox {
+      transform: scale(1.19);
+      cursor: pointer;
+      margin-left: auto;
+      margin-right: 5px;
+    }
+    .habit-label {
+      flex: 1 1 auto;
+      min-width: 100px;
+      max-width: 300px;
+      margin-right: 28px;
+      font-size: 1.04em;
+      color: #d5d5d5;
+      letter-spacing: 0.04em;
+      font-family: inherit;
+      transition: color 0.22s;
+      display: flex;
+      align-items: center;
+    }
+    .habit-done {
+      text-decoration: line-through;
+      color: #888;
     }
     .expand-icon {
       display: inline-block;
@@ -217,17 +230,17 @@
       left: 50%; top: 38%;
       transform: translate(-50%, -50%);
       font-size: 5vw;
-      color: #15ffb6;
+      color: #ffe379;
       text-shadow:
-        0 0 8px #fff,
-        0 0 36px #44ffa6,
-        0 0 110px #001130,
-        5px 5px 0 #0a355b;
+        0 0 7px #fff,
+        0 0 28px #ffe379,
+        0 0 90px #ccaa33,
+        2px 2px 0 #0a355b;
       font-weight: bold;
       z-index: 10000;
       font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
       animation: celebrateText 2.5s ease-out;
       background: none !important;
       border: none !important;
@@ -289,7 +302,7 @@
     let W = canvas.width;
     let H = canvas.height;
     let particles = [];
-    let colors = ['#24ff69','#b6ff00','#36fff7','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
+    let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
     for (let i = 0; i < 1200; i++) {
       particles.push({
         x: Math.random() * W,
@@ -445,14 +458,14 @@
               ${dia.habitos.map((h, idx) => `
                 <div class="habit-item">
                   <span class="habit-emoji" tabindex="0">${habitEmojis[idx % habitEmojis.length]}</span>
+                  <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
-                  <label for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
                 </div>
               `).join('')}
               <div class="habit-item">
                 <span class="habit-emoji" tabindex="0">${cycleEmojis[(i)%cycleEmojis.length]}</span>
+                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
                 <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
-                <label for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
               </div>
             </div>
           </td>
