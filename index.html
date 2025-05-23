@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no Gamer</title>
-  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&family=Bungee:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Archivo+Black&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --gold: #ffe379;
@@ -13,69 +14,93 @@
       --gold3: #f7e399;
       --corpo: #191919;
       --day-inactive: #f2f2f7;
-      --header-height: 330px;
-      --header-shrink: 82px;
+      --header-height: 310px;
+      --header-shrink: 62px;
+      --blue: #0d7af8;
+      --blue-dark: #0650a9;
     }
-    html, body { height: 100%; margin: 0; padding: 0;}
+    html, body { height: 100%; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', Arial, sans-serif;
       background: var(--corpo);
       color: var(--day-inactive);
       min-height: 100vh;
-      transition: background 0.3s;
-      overflow-x: hidden;
     }
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
     }
-    .header-img-bg {
-      width: 100vw;
+    /* HEADER BANNER */
+    .banner-gamer {
+      width: 550px;
+      max-width: 90vw;
+      margin: 0 auto 0 auto;
+      display: block;
+      position: relative;
+      z-index: 4;
+      margin-top: 38px;
+      margin-bottom: 12px;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 0 110px #0d7af880)
+              drop-shadow(0 0 60px #4fc2ffb5)
+              drop-shadow(0 0 13px #ff23c855)
+              drop-shadow(0 0 60px #22004399);
+    }
+    @media (max-width: 800px) {
+      .banner-gamer { width: 92vw; margin-top: 15px;}
+    }
+    /* Alinhar e posicionar o banner */
+    .header-container {
+      width: 100%;
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      min-height: var(--header-height);
-      height: var(--header-height);
+      flex-direction: column;
       position: relative;
-      z-index: 10;
-      padding: 0;
-      margin: 0;
-      margin-bottom: -28px;
-      pointer-events: none;
+      height: 312px;
+      z-index: 4;
     }
-    .header-img-bg img {
-      width: 450px;
-      max-width: 75vw;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      margin-bottom: -28px;
-      object-fit: contain;
-      pointer-events: none;
-      user-select: none;
+    .header-line {
+      width: 100%;
+      border: none;
+      border-top: 4px solid var(--gold2);
+      box-shadow: 0 4px 20px #000a;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      z-index: 6;
     }
-    @media (max-width: 900px) {
-      .header-img-bg { min-height: 200px; height: 200px; }
-      .header-img-bg img { width: 260px; max-width: 98vw; margin-bottom: -16px;}
+    /* Garantir que a imagem encoste na linha */
+    .header-container {
+      position: relative;
+      height: 312px;
+      margin-bottom: -26px;
+      z-index: 6;
     }
-    @media (max-width: 600px) {
-      .header-img-bg { min-height: 130px; height: 130px;}
-      .header-img-bg img { width: 175px; margin-bottom: -10px;}
-      .container { padding: 0 6px;}
+    .banner-gamer {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      transform: translate(-50%, 32px);
+      z-index: 8;
+      /* height: 300px; */
     }
-
+    /* TITULO DA SEÇÃO */
     .mes {
-      font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
+      font-family: 'Bebas Neue', Arial Narrow, Arial, sans-serif;
       font-size: 2.06em;
-      margin: 42px 0 13px;
+      margin: 72px 0 13px;
       border-bottom: 2px solid #f9c74f;
       padding-bottom: 5px;
       letter-spacing: 0.11em;
       color: #f9c74f;
       text-shadow: 0 3px 13px #0009;
       text-align: left;
+      z-index: 10;
+      position: relative;
     }
+    /* TABELA */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -88,21 +113,20 @@
       font-weight: 400;
     }
     th, td {
-      padding: 16px 8px;
+      padding: 12px;
       text-align: left;
       border-bottom: 1px solid #333;
       vertical-align: middle;
-      z-index: 2;
       background: transparent !important;
+      z-index: 2;
       position: relative;
     }
     th {
       background-color: #1e1e1e !important;
       color: #f9c74f !important;
-      font-size: 1.21em;
+      font-size: 1.06em;
       font-weight: 700;
       letter-spacing: 0.02em;
-      z-index: 2;
     }
     tr.main-row {
       cursor: pointer;
@@ -118,9 +142,8 @@
       background-size: calc(var(--progress, 0) * 100%) 100%;
       background-repeat: no-repeat;
       background-position: left top;
-      box-shadow: 0 2px 12px 0 #0008;
+      box-shadow: 0 2px 10px 0 #0008;
       color: #dedede !important;
-      /* Para colocar texto em cima da progressbar */
     }
     tr.main-row.day-complete {
       color: #201d09 !important;
@@ -134,20 +157,33 @@
       background-size: 100% 100% !important;
       color: #222 !important;
     }
-    tr.main-row:not(.day-complete)::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(30,30,30,0.0);
-      pointer-events: none;
-      z-index: 1;
-      border-radius: 1.5px;
-      transition: background 0.3s;
+    /* FADE PROGRESS TEXT */
+    tr.main-row .progress-text {
+      background: linear-gradient(90deg, #222 50%, #fff 50%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      display: inline-block;
+      font-weight: 700;
+      position: relative;
+      z-index: 3;
+      transition: color 0.25s;
     }
-    tr.main-row.day-complete::after {
-      background: transparent;
+    tr.main-row .progress-text.gold {
+      color: #2d2b16 !important;
+      -webkit-text-fill-color: #2d2b16;
+      text-fill-color: #2d2b16;
+      background: none;
+      text-shadow: 0 2px 8px #ffe379a8, 0 2px 14px #fff5, 0 2px 7px #ffe37970;
     }
-    tr.main-row:hover { filter: brightness(1.08);}
+    /* Outras colunas também mudam cor no progresso */
+    tr.main-row .gold {
+      color: #2d2b16 !important;
+      font-weight: bold;
+      text-shadow: 0 2px 8px #ffe379a8, 0 2px 14px #fff5, 0 2px 7px #ffe37970;
+    }
+    /* Dropdown */
     .expand-icon { display: inline-block; width: 16px; transition: transform 0.2s; }
     .main-row.expanded > .expand-icon { transform: rotate(90deg); }
     .dropdown { display: none; transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05); animation: none; height: 0; padding: 0;}
@@ -175,9 +211,9 @@
       border-radius: 9px;
       padding: 4px 8px 4px 2px;
       margin-bottom: 0;
-      transition: background 0.22s, box-shadow 0.22s;
       color: #fafbfc !important;
       box-sizing: border-box;
+      font-size: 1.11em;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
@@ -202,8 +238,6 @@
     .habit-emoji:hover, .habit-emoji.glow {
       animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
       filter: drop-shadow(0 0 10px #39e6ff) drop-shadow(0 0 16px #2363ffbb);
-      box-shadow: none;
-      background: none;
     }
     @keyframes emoji-bounce {
       0%   { transform: scale(1) rotate(0);}
@@ -232,60 +266,47 @@
       display: flex; align-items: center; justify-content: center; min-height: 38px;
       justify-self: end;
     }
-    /* Texto nas células da progressbar */
-    .main-row-cell {
-      font-weight: 600;
-      font-size: 1.13em;
-      position: relative;
-      background: none;
-      padding: 0 4px;
-      z-index: 4;
-      display: inline-block;
-      transition: color 0.3s;
-    }
-    .main-row-cell.dynamic {
-      background: linear-gradient(90deg, #191919 var(--pct,0), #222 0, #fff 0, #fff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-fill-color: transparent;
-      color: #191919;
-      transition: background 0.3s;
-      font-weight: 700;
-    }
-    .main-row-cell.complete {
-      color: #181900 !important;
+    /* CELEBRATORY TEXT */
+    #celebrate-text {
+      display: none;
+      position: fixed;
+      left: 50%;
+      top: 38%;
+      transform: translate(-50%, -50%);
+      font-size: 9vw;
+      color: var(--blue-dark);
+      text-shadow:
+        0 0 80px #0650a9,
+        0 0 38px #003563,
+        0 0 10px #001B2E,
+        0 2px 0 #0d222c;
+      font-family: 'Archivo Black', 'Bebas Neue', Arial, sans-serif;
+      font-weight: bold;
+      z-index: 10000;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
       background: none !important;
-      -webkit-text-fill-color: #181900;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 18px 0 18px;
+      white-space: nowrap;
+      line-height: 0.97;
+      text-align: center;
+      filter: drop-shadow(0 0 20px #003b7d);
+    }
+    @media (max-width: 700px) {
+      #celebrate-text { font-size: 17vw; }
+      .banner-gamer { width: 98vw; }
+      .header-container { height: 170px; }
     }
     /* Confetti canvas */
     #confetti-canvas { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; display: none; }
-    #celebrate-text {
-      display: none; position: fixed; left: 50%; top: 42%;
-      transform: translate(-50%, -50%);
-      font-size: 9vw;
-      color: #0081fd;
-      text-shadow: 0 0 18px #004d7a, 0 0 60px #0081fd, 0 0 130px #002b3b, 2px 2px 0 #000, 0 4px 38px #012e47;
-      font-weight: 900;
-      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
-      letter-spacing: 0.06em;
-      line-height: 1;
-      z-index: 10000;
-      text-transform: uppercase;
-      animation: celebrateText 2.6s cubic-bezier(.12,0,.37,1.23);
-      background: none !important; border: none !important; border-radius: 0 !important; padding: 0 18px 0 18px;
-      pointer-events: none;
-    }
-    @keyframes celebrateText {
-      0%{transform:translate(-50%,-50%)scale(0.7);opacity:0;}
-      55%{transform:translate(-50%,-62%)scale(1.25);opacity:1;}
-      100%{transform:translate(-50%,-50%)scale(1);opacity:1;}
-    }
   </style>
 </head>
 <body>
-  <div class="header-img-bg">
-    <img src="https://i.imgur.com/Krb7yXe.png" alt="Danilo no Gamer" draggable="false" />
+  <div class="header-container">
+    <img class="banner-gamer" src="https://i.imgur.com/Krb7yXe.png" alt="Banner Gamer">
+    <hr class="header-line">
   </div>
   <div class="container">
     <div id="calendario"></div>
@@ -297,6 +318,9 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
   </audio>
 <script>
+  // HEADER SKY GRADIENT REMOVED
+  // Shrink header removed
+
   // EMOJIS para cada hábito
   const habitEmojis = [
     "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
@@ -314,7 +338,7 @@
     let W = canvas.width, H = canvas.height;
     let particles = [];
     let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1200; i++) {
       particles.push({
         x: Math.random() * W,
         y: Math.random() * -H,
@@ -324,7 +348,7 @@
         tilt: Math.random() * 16 - 8,
         tiltAngle: 0,
         tiltAngleIncremental: (Math.random() * 0.09) + .05,
-        alpha: 0.88 + Math.random() * 0.14
+        alpha: 0.84 + Math.random() * 0.16
       });
     }
     let angle = 0;
@@ -335,139 +359,90 @@
         ctx.lineWidth = particles[i].r / 2;
         ctx.strokeStyle = particles[i].color;
         ctx.globalAlpha = particles[i].alpha;
-        ctx.moveTo(particles[i].x + particles[i].tilt + particles[i].r / 4, particles[i].y);
+        ctx.moveTo(particles[i].x + particles[i].tilt + particles[i].r / 4,
+                   particles[i].y);
         ctx.lineTo(particles[i].x + particles[i].tilt, particles[i].y + particles[i].r);
         ctx.stroke();
       }
-      ctx.globalAlpha = 1;
       update();
     }
     function update() {
-      angle += 0.008;
+      angle += 0.01;
       for (let i = 0; i < particles.length; i++) {
-        particles[i].y += (Math.cos(angle + particles[i].d) + 2.8 + particles[i].r/6) * 0.93;
-        particles[i].x += Math.sin(angle*1.18 + i) * 2.7;
+        particles[i].y += (Math.cos(angle + particles[i].d) + 3 + particles[i].r / 4) * 0.75;
+        particles[i].x += Math.sin(angle) * 2.2;
         particles[i].tiltAngle += particles[i].tiltAngleIncremental;
-        particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 3)) * 18;
-        if (particles[i].y > H + 30) {
-          particles[i].y = -14;
+        particles[i].tilt = Math.sin(particles[i].tiltAngle) * 16;
+        if (particles[i].y > H) {
+          particles[i].y = -15;
           particles[i].x = Math.random() * W;
         }
       }
     }
-    let interval = setInterval(draw, 13);
-    const celebrateText = document.getElementById('celebrate-text');
-    celebrateText.style.display = 'block';
+    let confettiAnimation = setInterval(draw, 12);
     setTimeout(() => {
-      clearInterval(interval);
-      ctx.clearRect(0, 0, W, H);
+      clearInterval(confettiAnimation);
+      ctx.clearRect(0,0,W,H);
       canvas.style.display = 'none';
-      celebrateText.style.display = 'none';
-      unlockScroll();
-    }, 4000);
+      document.body.style.overflow = "";
+    }, 2200);
   }
-
-  function unlockScroll() {
-    document.body.style.overflow = "";
-    document.documentElement.style.overflow = "";
+  // CALENDÁRIO DE HÁBITOS
+  const startDate = new Date("2025-05-21");
+  const today = new Date();
+  const habits = [
+    "Beber 2L de água",
+    "Tirar selfie",
+    "Verificar peso",
+    "Dieta com alimentos integrais",
+    "Acordar às 5h",
+    "Meditação (10 min por dia)",
+    "Exercício físico (20 min)",
+    "Leitura (10 min)",
+    "Sem açúcar",
+    "Praticar Italiano"
+  ];
+  const cycleHabits = [
+    "Afirmações",
+    "Banho gelado",
+    "Exercício de agilidade mental",
+    "Diário e gratidão"
+  ];
+  // Geração de hábitos do dia
+  function getHabitsForDay(day) {
+    // Cada 4 dias adiciona o próximo hábito
+    const unlocked = Math.floor((day-1)/4)+1;
+    let dayHabits = [];
+    for (let i = 0; i < unlocked && i < habits.length; ++i)
+      dayHabits.push(habits[i]);
+    return dayHabits;
   }
-
-  // PROGRESSO LOCALSTORAGE
-  function getProgress() {
-    const progress = localStorage.getItem('habits-progress-v1');
-    return progress ? JSON.parse(progress) : {};
+  // Geração de texto do dia (apenas novo hábito, ou quantidade + novo hábito)
+  function getHabitsText(day) {
+    const unlocked = Math.floor((day-1)/4)+1;
+    if(day <= 4) return habits[day-1];
+    // No ciclo: mostra total hábitos + o novo
+    let txt = `${unlocked} hábitos + ${habits[unlocked-1]}`;
+    return txt;
   }
-  function saveProgress(progress) {
-    localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
+  // Habito cíclico do dia
+  function getCycleHabit(day) {
+    return cycleHabits[(day-1)%cycleHabits.length];
   }
-
-  document.addEventListener("DOMContentLoaded", function() {
-    // DADOS E GERAÇÃO DA TABELA
-    const dados = [];
-    const habitos_incrementais = {
-      1: ["Beber 2L de água"],
-      5: ["Dieta com alimentos integrais"],
-      9: ["Acordar às 5h"],
-      13: ["Meditação (10 min por dia)"],
-      17: ["Exercício (60 min)"],
-      21: ["Leitura (30 min)"],
-      25: ["Alimentação sem açúcar refinado"],
-      29: ["Prática de italiano (20 min por dia)"]
-    };
-    const habitos_ciclicos = ["Afirmações","Banho gelado","Exercício de agilidade mental","Diário e gratidão"];
-    const inicio = new Date(2025, 4, 21), fim = new Date(2025, 7, 21);
-    const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
-
-    // QUANTOS DIAS CADA HÁBITO FICA VISÍVEL
-    const habitosDiasExibir = 4;
-    let habitos_ativos = [];
-    let habitos_novos_idx = [];
-    for (let i = 1; i <= dias_total; i++) {
-      if (habitos_incrementais[i]) {
-        habitos_ativos.push(...habitos_incrementais[i]);
-        habitos_novos_idx.push(i);
-      }
-    }
-    // Montar os dados por dia
-    let calendarioDados = [];
-    habitos_ativos = [];
-    habitos_novos_idx = [];
-    for (let i = 1; i <= dias_total; i++) {
-      if (habitos_incrementais[i]) {
-        habitos_ativos.push(...habitos_incrementais[i]);
-        habitos_novos_idx.push(i);
-      }
-      // Quais hábitos mostrar nesse dia?
-      let habitosMostrar = [];
-      let diasDesdeUltimoHabito = i - (habitos_novos_idx[habitos_novos_idx.length-1] || 1);
-      let start = (habitos_novos_idx[habitos_novos_idx.length-1] || 1);
-
-      // Mostra os hábitos dos últimos 4 dias
-      if (diasDesdeUltimoHabito < habitosDiasExibir) {
-        // Exibe todos os hábitos introduzidos nos últimos 4 dias
-        habitosMostrar = [];
-        for (let h=habitos_novos_idx.length-1; h>=0; h--) {
-          let habitoDia = habitos_novos_idx[h];
-          if (i-habitoDia < habitosDiasExibir && habitos_incrementais[habitoDia]) {
-            habitosMostrar.unshift(...habitos_incrementais[habitoDia]);
-          }
-        }
-      } else {
-        // Exibe só os mais recentes
-        habitosMostrar = [];
-        for (let h=habitos_novos_idx.length-1; h>=0; h--) {
-          let habitoDia = habitos_novos_idx[h];
-          if (i-habitoDia < habitosDiasExibir && habitos_incrementais[habitoDia]) {
-            habitosMostrar.unshift(...habitos_incrementais[habitoDia]);
-          }
-        }
-      }
-
-      const data_atual = new Date(inicio); data_atual.setDate(inicio.getDate() + i - 1);
-      const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
-      calendarioDados.push({
-        data: data_atual.toLocaleDateString('pt-BR'),
-        dia: `Dia ${i}`,
-        habitos: habitosMostrar,
-        ciclico: habito_ciclico,
-        mes: data_atual.getMonth() + 1,
-        ano: data_atual.getFullYear(),
-        id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
-      });
-    }
-
-    // Agrupa por mês
-    const calendario = document.getElementById("calendario");
-    const grupos = {};
-    calendarioDados.forEach((obj) => {
-      const id = `${obj.mes}-${obj.ano}`; if (!grupos[id]) grupos[id] = []; grupos[id].push(obj);
-    });
+  // Geração das linhas do calendário
+  function renderCalendar() {
     let html = '';
-    Object.entries(grupos).forEach(([id, dias]) => {
-      const [mes, ano] = id.split("-");
-      const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
-      html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
-      <table>
+    let date = new Date(startDate);
+    let month = "";
+    let table = '';
+    let dias = 92; // Ajusute o número total de dias
+    let todayDay = Math.floor((new Date() - startDate) / (1000*60*60*24)) + 1;
+    for(let d=1; d<=dias; d++) {
+      let thisMonth = date.toLocaleString('pt-BR', { month: 'long', year:'numeric' }).toUpperCase();
+      if (thisMonth !== month) {
+        if (table) html += table + '</tbody></table>';
+        html += `<div class="mes">${thisMonth}</div>
+        <table>
         <thead>
           <tr>
             <th>Data</th>
@@ -476,208 +451,86 @@
             <th>Hábito Cíclico</th>
           </tr>
         </thead>
-        <tbody>`;
-      dias.forEach((dia, i) => {
-        html += `
-        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
-          <td><span class="main-row-cell" id="cell-data-${dia.id}">${dia.data}</span></td>
-          <td><span class="main-row-cell" id="cell-dia-${dia.id}">${dia.dia}</span></td>
-          <td><span class="main-row-cell" id="cell-habitos-${dia.id}">${dia.habitos.length ? dia.habitos.map((h, j) => `<b>${h}</b>`).join(', ') : '-'}</span></td>
-          <td><span class="main-row-cell" id="cell-ciclico-${dia.id}">${dia.ciclico}</span></td>
-        </tr>
-        <tr class="dropdown" id="dropdown-${dia.id}">
-          <td colspan="5">
-            <div class="habit-list">
-              ${dia.habitos.map((h, idx) => `
-                <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
-                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
-                  <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
-                  <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
-                </div>
-              `).join('')}
-              <div class="habit-item" id="habititem-${dia.id}-ciclico">
-                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(i)%cycleEmojis.length]}</span>
-                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
-                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
-              </div>
-            </div>
-          </td>
-        </tr>`;
-      });
-      html += `</tbody></table>`;
-    });
-    calendario.innerHTML = html;
-
-    // LOAD PROGRESS
-    const progress = getProgress();
-    Object.keys(progress).forEach(checkId => {
-      const checkbox = document.getElementById(checkId);
-      if (checkbox) {
-        checkbox.checked = progress[checkId];
-        const label = document.getElementById('label-' + checkId);
-        if (label) label.classList.toggle('habit-done', progress[checkId]);
-        const hi = document.getElementById('habititem-' + checkId);
-        if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
+        <tbody>
+        `;
+        month = thisMonth; table = '';
       }
-    });
-
-    // Atualiza barra de progresso dourada por dia E COR das células
-    function updateProgressBar(dayId, habitCount) {
-      let checked = 0;
-      for (let i=0; i<habitCount; i++) {
-        if (document.getElementById(`${dayId}-habit-${i}`)?.checked) checked++;
-      }
-      if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
-      let pct = checked / habitCount;
-      const row = document.getElementById(`mainrow-${dayId}`);
-      if (row) {
-        row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
-        row.style.setProperty('--progress', pct);
-        // Dynamic color for text in ALL columns
-        ['data','dia','habitos','ciclico'].forEach(col=>{
-          const cell = document.getElementById(`cell-${col}-${dayId}`);
-          if (cell) {
-            if (pct >= 1) {
-              cell.classList.remove('dynamic');
-              cell.classList.add('complete');
-            } else if (pct > 0.02) {
-              cell.classList.add('dynamic');
-              cell.style.setProperty('--pct', `${Math.floor(pct*100)}%`);
-              cell.classList.remove('complete');
-            } else {
-              cell.classList.remove('dynamic','complete');
-              cell.style.setProperty('--pct', `0%`);
+      // COR DO PROGRESSO
+      let completed = d < todayDay;
+      // LINHA PRINCIPAL
+      let habitsText = d <= 4 ? habits[d-1] : getHabitsText(d);
+      let progressClass = completed ? 'gold' : '';
+      table += `<tr class="main-row${completed ? " day-complete":""}" data-dia="${d}">
+        <td class="${progressClass}">${date.toLocaleDateString('pt-BR')}</td>
+        <td class="${progressClass}">Dia ${d}</td>
+        <td class="${progressClass}"><span class="progress-text ${progressClass}">${habitsText||'-'}</span></td>
+        <td class="${progressClass}">${getCycleHabit(d)||'-'}</td>
+        <td class="expand-icon" onclick="toggleDropdown(this,${d})">&#9654;</td>
+      </tr>
+      <tr class="dropdown" id="dropdown-${d}">
+        <td colspan="5">
+          <div class="habit-list">
+            ${
+              getHabitsForDay(d).map((h,i)=>
+                `<div class="habit-item${completed?" habit-complete":""}">
+                  <span class="habit-emoji">${habitEmojis[i]||'⭐'}</span>
+                  <span class="habit-label">${h}</span>
+                  <input type="checkbox" class="habit-checkbox" ${completed?'checked disabled':''}>
+                </div>`).join('')
             }
-          }
-        });
-        if (pct === 1) row.classList.add('day-complete');
-        else row.classList.remove('day-complete');
-      }
+            <div class="habit-item">
+              <span class="habit-emoji">${cycleEmojis[(d-1)%cycleEmojis.length]}</span>
+              <span class="habit-label">${getCycleHabit(d)}</span>
+              <input type="checkbox" class="habit-checkbox" ${completed?'checked disabled':''}>
+            </div>
+          </div>
+        </td>
+      </tr>
+      `;
+      date.setDate(date.getDate()+1);
     }
+    html += table + '</tbody></table>';
+    document.getElementById('calendario').innerHTML = html;
+  }
+  renderCalendar();
 
-    // Dropdown toggle
-    document.querySelectorAll('tr.main-row').forEach(row => {
-      row.addEventListener('click', function(e) {
-        if (e.target.tagName === 'INPUT' || e.target.classList.contains('habit-emoji')) return;
-        const dropdownId = this.getAttribute('data-dropdown');
-        const dropdown = document.getElementById(`dropdown-${dropdownId}`);
-        if(dropdown.classList.contains('active')) {
-          dropdown.classList.remove('active');
-          dropdown.classList.add('drop-up');
-          setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
-          this.classList.remove('expanded');
-        } else {
-          document.querySelectorAll('.dropdown.active').forEach(dd=>{
-            dd.classList.remove('active');
-            dd.classList.add('drop-up');
-            setTimeout(()=>dd.classList.remove('drop-up'), 400);
-            document.querySelector(`.main-row[data-dropdown="${dd.id.replace('dropdown-','')}"]`).classList.remove('expanded');
-          });
-          dropdown.classList.add('active');
-          dropdown.classList.remove('drop-up');
-          this.classList.add('expanded');
-        }
-      });
-    });
-
-    function checkAllHabitsComplete(dayId, habitCount) {
-      let complete = true;
-      for(let i=0; i<habitCount; i++) {
-        if (!document.getElementById(`${dayId}-habit-${i}`)?.checked) {
-          complete = false;
-          break;
-        }
-      }
-      if (complete && !document.getElementById(`${dayId}-ciclico`)?.checked) complete = false;
-      return complete;
+  // Toggle drop
+  window.toggleDropdown = function(icon, d) {
+    let drop = document.getElementById('dropdown-'+d);
+    let row = icon.closest('tr');
+    let open = drop.classList.contains('active');
+    document.querySelectorAll('.dropdown.active').forEach(e=>e.classList.remove('active'));
+    document.querySelectorAll('tr.main-row.expanded').forEach(e=>e.classList.remove('expanded'));
+    if (!open) {
+      drop.classList.add('active');
+      row.classList.add('expanded');
     }
+  }
 
-    function playCelebrateSound() {
-      const audio = document.getElementById('celebrate-audio');
-      audio.currentTime = 0; audio.volume = 0.97;
-      let played = false;
-      audio.play().then(()=>{played=true;}).catch(()=>{
-        if (!played) {
-          document.body.addEventListener('pointerdown', ()=>{audio.play();}, {once:true});
-        }
-      });
-    }
+  // CELEBRATORY TEXT
+  function celebrate() {
+    document.getElementById('celebrate-text').style.display = "block";
+    launchConfettiEpic();
+    setTimeout(()=>{ document.getElementById('celebrate-text').style.display="none"; },1800);
+    let audio = document.getElementById('celebrate-audio');
+    if (audio) { audio.currentTime = 0; audio.play(); }
+  }
+  // Exemplo: celebrate(); // Para testar, chame celebrate()
 
-    document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', function() {
-        const label = document.getElementById('label-' + this.id);
-        if(label) label.classList.toggle('habit-done', this.checked);
-        let progress = getProgress();
-        progress[this.id] = this.checked;
-        saveProgress(progress);
-        const hi = document.getElementById('habititem-' + this.id);
-        if (hi) hi.classList.toggle('habit-complete', this.checked);
-        const parts = this.id.match(/^dia-\d+-\d+-\d+/);
-        if(parts) {
-          const dayId = parts[0];
-          const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
-          updateProgressBar(dayId, habitCount);
-          const allDone = checkAllHabitsComplete(dayId, habitCount-1);
-          const dropdown = document.getElementById(`dropdown-${dayId}`);
-          const dayRow = document.getElementById(`mainrow-${dayId}`);
-          if(allDone) {
-            dayRow.classList.add('day-complete');
-            launchConfettiEpic();
-            playCelebrateSound();
-            setTimeout(()=>{
-              if(dropdown) {
-                dropdown.classList.remove('active');
-                dropdown.classList.add('drop-up');
-                setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
-              }
-              if(dayRow) dayRow.classList.remove('expanded');
-              unlockScroll();
-            }, 950);
-          } else {
-            dayRow.classList.remove('day-complete');
-          }
-        }
-      });
-    });
-
-    document.querySelectorAll('.habit-emoji').forEach(emoji=>{
-      emoji.addEventListener('mouseenter', function() {
-        emoji.classList.add('glow');
-        setTimeout(()=>emoji.classList.remove('glow'), 680);
-      });
-      emoji.addEventListener('mouseleave', function() {
-        emoji.classList.remove('glow');
-      });
-      emoji.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const id = emoji.getAttribute('data-checkbox');
-        const checkbox = document.getElementById(id);
-        if(checkbox) {
-          checkbox.checked = !checkbox.checked;
-          checkbox.dispatchEvent(new Event('change'));
-        }
-      });
-    });
-
-    // Atualizar barra e cor ao carregar
-    calendarioDados.forEach((dia) => {
-      const habitCount = dia.habitos.length + 1;
-      updateProgressBar(dia.id, habitCount);
-      const allDone = checkAllHabitsComplete(dia.id, habitCount-1);
-      if(allDone) {
-        const dayRow = document.getElementById(`mainrow-${dia.id}`);
-        if (dayRow) dayRow.classList.add('day-complete');
-      }
-    });
-
-    window.addEventListener('resize', function() {
-      const canvas = document.getElementById('confetti-canvas');
-      if(canvas.style.display === 'block') {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-    });
-  });
+  // Ajuste do banner encostar na linha
+  function adjustBanner() {
+    const banner = document.querySelector('.banner-gamer');
+    const headerLine = document.querySelector('.header-line');
+    if(!banner || !headerLine) return;
+    // Ajusta a posição da imagem para tocar exatamente a linha
+    let lineRect = headerLine.getBoundingClientRect();
+    let bannerRect = banner.getBoundingClientRect();
+    let shift = (lineRect.top - (bannerRect.top + bannerRect.height));
+    banner.style.transform = `translate(-50%, ${shift+2}px)`;
+  }
+  window.addEventListener('resize', adjustBanner);
+  window.addEventListener('DOMContentLoaded', adjustBanner);
+  setTimeout(adjustBanner, 120);
 </script>
 </body>
 </html>
