@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danilo no Controle</title>
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --azul-shadow: #191246;
+      --header-azul: #18104b;
+      --header-azul2: #2436ab;
+      --laranja-3d: #ff522e;
+      --branco: #fff;
+      --gold: #ffe379;
+      --gold2: #e4c145;
+      --gold3: #f7e399;
+      --corpo: #191919;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      background: linear-gradient(to bottom, var(--header-azul2) 0 290px, var(--corpo) 300px 100%);
+      color: #e0e0e0;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      transition: background 0.3s;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    /* HEADER */
+    .header-3d-bg {
+      width: 100vw;
+      position: sticky;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--header-azul2) 60%, transparent 100%);
+      box-shadow: 0 14px 70px 0 #000b;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      min-height: 180px;
+      padding-top: 36px;
+      padding-bottom: 36px;
+      overflow-x: hidden;
+      transition: min-height 0.35s cubic-bezier(.8,0,.22,1);
+    }
+    .header-3d-bg.shrink {
+      min-height: 70px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .titulo-3d {
+      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
+      font-size: 5.3vw;
+      font-weight: 100;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: var(--branco);
+      line-height: 1.03;
+      text-align: center;
+      font-stretch: ultra-expanded;
+      font-variation-settings: "wght" 100;
+      /* Super hairline */
+      font-optical-sizing: auto;
+      /* 3D: sombras super próximas */
+      text-shadow:
+        0.016em 0.031em 0 var(--laranja-3d),
+        0.028em 0.067em 0 var(--laranja-3d),
+        0.06em 0.09em 0 var(--azul-shadow),
+        0 8px 20px #000a;
+      transition: font-size 0.36s cubic-bezier(.8,0,.22,1);
+    }
+    .header-3d-bg.shrink .titulo-3d {
+      font-size: 2.1vw;
+    }
+    @media (max-width: 900px) {
+      .titulo-3d { font-size: 9vw; }
+      .header-3d-bg.shrink .titulo-3d { font-size: 4vw;}
+    }
+    @media (max-width: 600px) {
+      .titulo-3d { font-size: 13vw; }
+      .header-3d-bg.shrink .titulo-3d { font-size: 6vw;}
+      .container { padding: 0 6px;}
+    }
+
+    /* MESES */
+    .mes {
+      font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
+      font-size: 1.24em;
+      margin: 40px 0 10px;
+      border-bottom: 2px solid #f9c74f;
+      padding-bottom: 5px;
+      letter-spacing: 0.06em;
+      color: #f9c74f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background: none;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-size: 1.04em;
+      font-weight: 400;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background-color: #1e1e1e;
+      color: #f9c74f;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-size: 1em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    tr.main-row {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    tr.main-row:hover {
+      background-color: #1f2d3d;
+    }
+    /* Dia completo: DOURADO suave */
+    .day-complete {
+      background:
+        linear-gradient(90deg, var(--gold) 10%, var(--gold2) 55%, var(--gold3) 100%) !important;
+      color: #201d09 !important;
+      font-weight: bold;
+      letter-spacing: 1.1px;
+      box-shadow:
+        0 0 5px 0 var(--gold2),
+        0 2px 12px 2px #ffe37980,
+        0 0 0 2px #e4c14570 inset;
+      text-shadow:
+        0 1px 2px #fff7,
+        0 0 4px #ffe37944,
+        0 2px 4px #e4c14566;
+      border-left: 4px solid var(--gold2);
+      border-right: 2px solid var(--gold3);
+      border-radius: 2px;
+    }
+
+    /* Dropdown (centralizado, com check à direita, animado) */
+    .dropdown {
+  display: none;
+}
+.dropdown.active {
+  display: table-row;
+}
+    .dropdown > td {
+      padding: 0;
+    }
+    .habit-list {
+      margin: 16px 0 18px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+    .habit-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      font-size: 1.22em;
+      min-width: 390px;
+      max-width: 98vw;
+      justify-content: flex-start;
+      background: none;
+      position: relative;
+      border-radius: 9px;
+      padding: 4px 8px 4px 2px;
+      transition: background 0.22s, box-shadow 0.22s;
+    }
+    .habit-item.habit-complete {
+      background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
+      box-shadow: 0 2px 15px 0 #ffe37955;
+      color: #232201 !important;
+      font-weight: 700;
+    }
+    .habit-emoji {
+      font-size: 1.7em;
+      display: inline-block;
+      margin-right: 17px;
+      margin-left: 5px;
+      min-width: 38px;
+      text-align: center;
+      cursor: pointer;
+      will-change: transform;
+      user-select: none;
+      filter: drop-shadow(0 2px 6px #0007);
+      transition: transform 0.2s, filter 0.17s, box-shadow 0.17s;
+      position: relative;
+      z-index: 3;
+    }
+    .habit-emoji:hover, .habit-emoji.glow {
+      animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
+      filter: drop-shadow(0 0 10px #39e6ff) drop-shadow(0 0 16px #2363ffbb);
+      box-shadow: 0 0 16px 4px #49b4ff55;
+    }
+    @keyframes emoji-bounce {
+      0%   { transform: scale(1) rotate(0);}
+      30%  { transform: scale(1.23) rotate(-17deg);}
+      55%  { transform: scale(0.94) rotate(15deg);}
+      70%  { transform: scale(1.13) rotate(-9deg);}
+      100% { transform: scale(1) rotate(0);}
+    }
+    .habit-checkbox {
+      transform: scale(1.23);
+      cursor: pointer;
+      margin-left: auto;
+      margin-right: 8px;
+      accent-color: #ffe379;
+    }
+    .habit-label {
+      flex: 1 1 auto;
+      min-width: 110px;
+      max-width: 340px;
+      margin-right: 24px;
+      font-size: 1.06em;
+      color: #d5d5d5;
+      letter-spacing: 0.04em;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      transition: color 0.19s;
+    }
+    .habit-done {
+      text-decoration: line-through;
+      color: #888 !important;
+    }
+    .expand-icon {
+      display: inline-block;
+      width: 16px;
+      transition: transform 0.2s;
+    }
+    .main-row.expanded > .expand-icon {
+      transform: rotate(90deg);
+    }
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+    /* Texto de celebração */
+    #celebrate-text {
+      display: none;
+      position: fixed;
+      left: 50%; top: 38%;
+      transform: translate(-50%, -50%);
+      font-size: 5vw;
+      color: #ffe379;
+      text-shadow:
+        0 0 7px #fff,
+        0 0 28px #ffe379,
+        0 0 90px #ccaa33,
+        2px 2px 0 #0a355b;
+      font-weight: bold;
+      z-index: 10000;
+      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      animation: celebrateText 2.5s ease-out;
+      background: none !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 18px 0 18px;
+    }
+    @keyframes celebrateText {
+      0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+      50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1;}
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+  <div class="header-3d-bg">
+    <div class="titulo-3d">Danilo no Controle</div>
+  </div>
+  <div class="container">
+    <div id="calendario"></div>
+  </div>
+  <!-- Canvas para confetes -->
+  <canvas id="confetti-canvas"></canvas>
+  <!-- Texto de celebração -->
+  <div id="celebrate-text">VAI MLK!!!</div>
+  <!-- Som de conquista confiável -->
+  <audio id="celebrate-audio">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
+  </audio>
+<script>
+  // EMOJIS para cada hábito
+  const habitEmojis = [
+    "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
+  ];
+  const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
+
+  // CONFETTI
+  function launchConfettiEpic() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.display = 'block';
+    let W = canvas.width, H = canvas.height;
+    let particles = [];
+    let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
+    for (let i = 0; i < 1200; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * -H,
+        r: 7 + Math.random() * 12,
+        d: Math.random() * 180,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        tilt: Math.random() * 16 - 8,
+        tiltAngle: 0,
+        tiltAngleIncremental: (Math.random() * 0.09) + .05,
+        alpha: 0.84 + Math.random() * 0.16
+      });
+    }
+    let angle = 0;
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < particles.length; i++) {
+        ctx.beginPath();
+        ctx.lineWidth = particles[i].r / 2;
+        ctx.strokeStyle = particles[i].color;
+        ctx.globalAlpha = particles[i].alpha;
+        ctx.moveTo(particles[i].x + particles[i].tilt + particles[i].r / 4, particles[i].y);
+        ctx.lineTo(particles[i].x + particles[i].tilt, particles[i].y + particles[i].r);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      update();
+    }
+    function update() {
+      angle += 0.008;
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].y += (Math.cos(angle + particles[i].d) + 2.8 + particles[i].r/6) * 0.93;
+        particles[i].x += Math.sin(angle*1.18 + i) * 2.7;
+        particles[i].tiltAngle += particles[i].tiltAngleIncremental;
+        particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 3)) * 18;
+        if (particles[i].y > H + 30) {
+          particles[i].y = -14;
+          particles[i].x = Math.random() * W;
+        }
+      }
+    }
+    let interval = setInterval(draw, 13);
+    const celebrateText = document.getElementById('celebrate-text');
+    celebrateText.style.display = 'block';
+    setTimeout(() => {
+      clearInterval(interval);
+      ctx.clearRect(0, 0, W, H);
+      canvas.style.display = 'none';
+      celebrateText.style.display = 'none';
+    }, 4000);
+  }
+
+  // PROGRESSO LOCALSTORAGE
+  function getProgress() {
+    const progress = localStorage.getItem('habits-progress-v1');
+    return progress ? JSON.parse(progress) : {};
+  }
+  function saveProgress(progress) {
+    localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
+  }
+
+  // HEADER SHRINK STICKY
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('.header-3d-bg');
+    if(window.scrollY > 60) header.classList.add('shrink');
+    else header.classList.remove('shrink');
+  });
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // DADOS E GERAÇÃO DA TABELA: igual antes, só mudou a renderização dos habits
+    const dados = [];
+    const habitos_incrementais = {
+      1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
+      5: ["Dieta com alimentos integrais"],
+      9: ["Acordar às 5h"],
+      13: ["Meditação (10 min por dia)"],
+      17: ["Exercício (60 min)"],
+      21: ["Leitura (30 min)"],
+      25: ["Alimentação sem açúcar refinado"],
+      29: ["Prática de italiano (20 min por dia)"]
+    };
+    const habitos_ciclicos = ["Afirmações","Banho gelado","Exercício de agilidade mental","Diário e gratidão"];
+    const inicio = new Date(2025, 4, 21), fim = new Date(2025, 7, 21);
+    const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
+    let habitos_ativos = [];
+    for (let i = 1; i <= dias_total; i++) {
+      const data_atual = new Date(inicio); data_atual.setDate(inicio.getDate() + i - 1);
+      if (habitos_incrementais[i]) habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
+      const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
+      dados.push({
+        data: data_atual.toLocaleDateString('pt-BR'),
+        dia: `Dia ${i}`,
+        habitos: [...habitos_ativos],
+        ciclico: habito_ciclico,
+        mes: data_atual.getMonth() + 1,
+        ano: data_atual.getFullYear(),
+        id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
+      });
+    }
+    const calendario = document.getElementById("calendario");
+    const grupos = {};
+    dados.forEach((obj) => {
+      const id = `${obj.mes}-${obj.ano}`; if (!grupos[id]) grupos[id] = []; grupos[id].push(obj);
+    });
+    let html = '';
+    Object.entries(grupos).forEach(([id, dias]) => {
+      const [mes, ano] = id.split("-");
+      const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
+      html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Data</th>
+            <th>Dia</th>
+            <th>Hábitos Diários</th>
+            <th>Hábito Cíclico</th>
+          </tr>
+        </thead>
+        <tbody>`;
+      dias.forEach((dia, i) => {
+        html += `
+        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
+          <td><span class="expand-icon">&#9654;</span></td>
+          <td>${dia.data}</td>
+          <td>${dia.dia}</td>
+          <td>${dia.habitos.join(', ')}</td>
+          <td>${dia.ciclico}</td>
+        </tr>
+        <tr class="dropdown" id="dropdown-${dia.id}">
+          <td colspan="5">
+            <div class="habit-list">
+              ${dia.habitos.map((h, idx) => `
+                <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
+                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
+                  <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
+                  <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
+                </div>
+              `).join('')}
+              <div class="habit-item" id="habititem-${dia.id}-ciclico">
+                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(i)%cycleEmojis.length]}</span>
+                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
+                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
+              </div>
+            </div>
+          </td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    });
+    calendario.innerHTML = html;
+
+    // LOAD PROGRESS
+    const progress = getProgress();
+    Object.keys(progress).forEach(checkId => {
+      const checkbox = document.getElementById(checkId);
+      if (checkbox) {
+        checkbox.checked = progress[checkId];
+        const label = document.getElementById('label-' + checkId);
+        if (label) label.classList.toggle('habit-done', progress[checkId]);
+        const hi = document.getElementById('habititem-' + checkId);
+        if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
+      }
+    });
+
+    // Dropdown toggle
+    document.querySelectorAll('tr.main-row').forEach(row => {
+      row.addEventListener('click', function(e) {
+        // Só abre/fecha se não for um botão/habit-checkbox
+        if (e.target.tagName === 'INPUT' || e.target.classList.contains('habit-emoji')) return;
+        const dropdownId = this.getAttribute('data-dropdown');
+        const dropdown = document.getElementById(`dropdown-${dropdownId}`);
+        if(dropdown.classList.contains('active')) {
+          dropdown.classList.remove('active');
+          this.classList.remove('expanded');
+        } else {
+          // Fecha outros abertos
+          document.querySelectorAll('.dropdown.active').forEach(dd=>{
+            dd.classList.remove('active');
+            document.querySelector(`.main-row[data-dropdown="${dd.id.replace('dropdown-','')}"]`).classList.remove('expanded');
+          });
+          dropdown.classList.add('active');
+          this.classList.add('expanded');
+        }
+      });
+    });
+
+    // Função para verificar se todos os hábitos do dia foram concluídos
+    function checkAllHabitsComplete(dayId, habitCount) {
+      let complete = true;
+      for(let i=0; i<habitCount; i++) {
+        if (!document.getElementById(`${dayId}-habit-${i}`).checked) {
+          complete = false;
+          break;
+        }
+      }
+      if (complete && !document.getElementById(`${dayId}-ciclico`).checked) complete = false;
+      return complete;
+    }
+
+    // Play sound
+    function playCelebrateSound() {
+      const audio = document.getElementById('celebrate-audio');
+      audio.currentTime = 0; audio.volume = 0.95;
+      let played = false;
+      audio.play().then(()=>{played=true;}).catch(()=>{
+        if (!played) {
+          document.body.addEventListener('pointerdown', ()=>{audio.play();}, {once:true});
+        }
+      });
+    }
+
+    // Checkbox logic + hábito concluído destaque individual
+    document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const label = document.getElementById('label-' + this.id);
+        if(label) label.classList.toggle('habit-done', this.checked);
+        let progress = getProgress();
+        progress[this.id] = this.checked;
+        saveProgress(progress);
+        // Destaque individual
+        const hi = document.getElementById('habititem-' + this.id);
+        if (hi) hi.classList.toggle('habit-complete', this.checked);
+
+        // Checa se todos do dia foram feitos
+        const parts = this.id.match(/^dia-\d+-\d+-\d+/);
+        if(parts) {
+          const dayId = parts[0];
+          const dayRow = document.getElementById(`mainrow-${dayId}`);
+          const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
+          const allDone = checkAllHabitsComplete(dayId, habitCount-1); // -1 pois último é cíclico
+          const dropdown = document.getElementById(`dropdown-${dayId}`);
+          if(allDone) {
+            dayRow.classList.add('day-complete');
+            launchConfettiEpic();
+            playCelebrateSound();
+            setTimeout(()=>{
+              if(dropdown) dropdown.classList.remove('active');
+              if(dayRow) dayRow.classList.remove('expanded');
+            }, 950);
+          } else {
+            dayRow.classList.remove('day-complete');
+          }
+        }
+      });
+    });
+
+    // EMOJI CLICK (faz o hábito!)
+    document.querySelectorAll('.habit-emoji').forEach(emoji=>{
+      emoji.addEventListener('mouseenter', function() {
+        emoji.classList.add('glow');
+        setTimeout(()=>emoji.classList.remove('glow'), 680);
+      });
+      emoji.addEventListener('mouseleave', function() {
+        emoji.classList.remove('glow');
+      });
+      emoji.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const id = emoji.getAttribute('data-checkbox');
+        const checkbox = document.getElementById(id);
+        if(checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    // Inicializa cor dos dias já completos ao carregar
+    dados.forEach((dia) => {
+      const habitCount = dia.habitos.length + 1;
+      const allDone = checkAllHabitsComplete(dia.id, habitCount-1);
+      if(allDone) {
+        const dayRow = document.getElementById(`mainrow-${dia.id}`);
+        if (dayRow) dayRow.classList.add('day-complete');
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      const canvas = document.getElementById('confetti-canvas');
+      if(canvas.style.display === 'block') {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+    });
+  });
+</script>
+</body>
+</html>
