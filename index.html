@@ -20,7 +20,7 @@
     body {
       font-family: 'Inter', Arial, sans-serif;
       background: var(--corpo);
-      color: var(--day-inactive);
+      color: #f5f5f5; /* Texto do corpo BEM mais claro */
       min-height: 100vh;
       transition: background 0.3s;
     }
@@ -34,7 +34,7 @@
       width: 100vw;
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 1001;
+      z-index: 100;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -63,7 +63,6 @@
     .header-3d-bg.shrink ~ .header-spacer {
       height: var(--header-shrink);
     }
-    /* LOGO E CONTROLE - EM GRUPO HARMONIOSO */
     .logo-title-group {
       width: 100vw;
       margin: 0 auto;
@@ -155,6 +154,7 @@
       font-family: 'Inter', Arial, sans-serif;
       font-size: 1.09em;
       font-weight: 400;
+      color: #fafafa !important; /* Mais claro! */
     }
     th, td {
       padding: 12px;
@@ -163,6 +163,7 @@
       vertical-align: middle;
       z-index: 2;
       background: transparent !important;
+      color: #fafafa !important; /* Texto de tabela claro */
     }
     th {
       background-color: #1e1e1e !important;
@@ -187,7 +188,7 @@
       background-repeat: no-repeat;
       background-position: left top;
       box-shadow: 0 2px 10px 0 #0008;
-      color: var(--day-inactive) !important;
+      color: #191919 !important;
     }
     tr.main-row.day-complete {
       color: #201d09 !important;
@@ -205,7 +206,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(30,30,30,0.88);
+      background: rgba(30,30,30,0.85); /* Menos escuro pra dar mais leitura */
       pointer-events: none;
       z-index: 1;
       border-radius: 1.5px;
@@ -229,7 +230,7 @@
       min-width: 390px; max-width: 98vw; justify-content: flex-start;
       background: none; border-radius: 9px; padding: 4px 8px 4px 2px; margin-bottom: 0;
       transition: background 0.22s, box-shadow 0.22s;
-      color: #f7f7f7 !important;
+      color: #fff !important;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
@@ -270,12 +271,11 @@
     }
     .habit-label {
       flex: 1 1 auto; min-width: 110px; max-width: 350px; margin-right: 24px;
-      font-size: 1.09em; color: #f7f7f7 !important; letter-spacing: 0.04em;
+      font-size: 1.09em; color: #fff !important; letter-spacing: 0.04em;
       font-family: 'Inter', Arial, sans-serif; display: flex; align-items: center;
       vertical-align: middle; transition: color 0.19s;
     }
-    .habit-done { text-decoration: line-through; color: #888 !important; }
-    /* Confetti canvas */
+    .habit-done { text-decoration: line-through; color: #bbb !important; }
     #confetti-canvas { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; display: none; }
     #celebrate-text {
       display: none; position: fixed; left: 50%; top: 38%;
@@ -340,7 +340,6 @@
   }
   window.addEventListener('scroll', shrinkHeaderOnScroll);
 
-  // Ajuste inicial e on resize para header
   function fixHeaderSpacer() {
     const header = document.getElementById('dynamic-header');
     document.querySelector('.header-spacer').style.height = getComputedStyle(header).height;
