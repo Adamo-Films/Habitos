@@ -29,7 +29,105 @@
       margin: 0 auto;
       padding: 0 32px;
     }
-    /* Removido: HEADER NOVO */
+    /* HEADER NOVO */
+    .header-3d-bg {
+      width: 100vw;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: var(--header-height);
+      height: var(--header-height);
+      box-shadow: 0 8px 36px 0 #000a;
+      background: linear-gradient(180deg, #8fd1ff 0%, #e0f4ff 60%, #fff7 100%);
+      border-bottom: 4px solid #191919;
+      will-change: background, height;
+      padding: 0;
+      overflow: visible;
+      transition: min-height 0.3s, height 0.3s, background 1.3s cubic-bezier(.6,0,.18,1.2);
+    }
+    .header-3d-bg.shrink {
+      min-height: var(--header-shrink);
+      height: var(--header-shrink);
+    }
+    .header-spacer {
+      height: var(--header-height);
+      transition: height 0.3s;
+      width: 100%;
+      pointer-events: none;
+      user-select: none;
+    }
+    .header-3d-bg.shrink ~ .header-spacer {
+      height: var(--header-shrink);
+    }
+    .logo-title-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100vw;
+      pointer-events: none;
+      user-select: none;
+      position: relative;
+      z-index: 2;
+      justify-content: center;
+      height: 100%;
+    }
+    .logo-text {
+      font-family: 'Bebas Neue', Arial, sans-serif;
+      font-size: 5vw;
+      text-transform: uppercase;
+      color: #fff;
+      letter-spacing: 0.14em;
+      font-weight: 400;
+      background: linear-gradient(90deg, #fff 10%, #ffe379 50%, #ff522e 75%, #36aaff 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
+      line-height: 1;
+      text-shadow: 0 4px 16px #000b, 0 2px 10px #0028;
+      margin-bottom: -2vw;
+      margin-top: 0.4vw;
+      padding-bottom: 0.5vw;
+      transition: font-size 0.33s, margin-bottom 0.3s;
+    }
+    .logo-controller {
+      font-size: 10vw;
+      margin: 0 auto;
+      margin-top: -0.5vw;
+      margin-bottom: 0;
+      z-index: 1;
+      filter: drop-shadow(0 0 30px #ff522e60) drop-shadow(0 8px 24px #0007);
+      transition: font-size 0.33s, margin-top 0.3s;
+      background: none;
+      pointer-events: none;
+      user-select: none;
+    }
+    .header-3d-bg.shrink .logo-text {
+      font-size: 2vw;
+      margin-bottom: -0.2vw;
+    }
+    .header-3d-bg.shrink .logo-controller {
+      font-size: 5vw;
+      margin-top: 0vw;
+    }
+    @media (max-width: 900px) {
+      .logo-text { font-size: 9vw; margin-bottom: -4vw;}
+      .logo-controller { font-size: 16vw; margin-top: -3vw;}
+      .header-3d-bg.shrink .logo-text { font-size: 4vw; margin-bottom: -1vw;}
+      .header-3d-bg.shrink .logo-controller { font-size: 8vw; margin-top: 0;}
+    }
+    @media (max-width: 600px) {
+      .logo-text { font-size: 13vw; margin-bottom: -6vw;}
+      .logo-controller { font-size: 22vw; margin-top: -6vw;}
+      .header-3d-bg.shrink .logo-text { font-size: 6vw; margin-bottom: -2vw;}
+      .header-3d-bg.shrink .logo-controller { font-size: 13vw; margin-top: -2vw;}
+      .container { padding: 0 6px;}
+    }
+
     /* MES & TABELA */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
@@ -210,7 +308,8 @@
   </style>
 </head>
 <body>
-  <!-- HEADER FOI REMOVIDO -->
+  </div>
+  <div class="header-spacer"></div>
   <div class="container">
     <div id="calendario"></div>
   </div>
@@ -221,7 +320,48 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
   </audio>
 <script>
-  // Removido: headerSkyGradient, shrinkHeaderOnScroll, fixHeaderSpacer
+  // HEADER DYNAMIC SKY GRADIENT
+  function headerSkyGradient() {
+    const hour = new Date().getHours();
+    let bg;
+    if (hour >= 6 && hour < 11)
+      bg = "linear-gradient(180deg, #8fd1ff 0%, #e0f4ff 70%, #fff7 100%)";
+    else if (hour >= 11 && hour < 17)
+      bg = "linear-gradient(180deg, #ffe79e 0%, #ffd2c6 60%, #ffd999 95%, #fff5 100%)";
+    else if (hour >= 17 && hour < 20)
+      bg = "linear-gradient(180deg, #fd978e 0%, #f4d5e2 55%, #e2a2f2 100%)";
+    else if (hour >= 20 || hour < 4)
+      bg = "linear-gradient(180deg, #1a2240 0%, #373066 70%, #232330 100%)";
+    else
+      bg = "linear-gradient(180deg, #20232c 0%, #384464 60%, #272635 100%)";
+    document.getElementById('dynamic-header').style.background = bg;
+  }
+  headerSkyGradient();
+  setInterval(headerSkyGradient, 5 * 60 * 1000);
+
+  // Shrink header on scroll, sticky always
+  function shrinkHeaderOnScroll() {
+    const header = document.getElementById('dynamic-header');
+    const spacer = document.querySelector('.header-spacer');
+    const scroll = window.scrollY;
+    if(scroll > 30 && !header.classList.contains('shrink')) {
+      header.classList.add('shrink');
+      spacer.style.height = getComputedStyle(header).height;
+    } else if(scroll <= 30 && header.classList.contains('shrink')) {
+      header.classList.remove('shrink');
+      spacer.style.height = getComputedStyle(header).height;
+    }
+  }
+  window.addEventListener('scroll', shrinkHeaderOnScroll);
+
+  // Ajuste inicial e on resize para header
+  function fixHeaderSpacer() {
+    const header = document.getElementById('dynamic-header');
+    document.querySelector('.header-spacer').style.height = getComputedStyle(header).height;
+  }
+  window.addEventListener('resize', fixHeaderSpacer);
+  setTimeout(fixHeaderSpacer, 300);
+
   function unlockScroll() {
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
@@ -307,6 +447,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function() {
+    fixHeaderSpacer();
     // DADOS E GERAÇÃO DA TABELA
     const dados = [];
     const habitos_incrementais = {
@@ -334,4 +475,215 @@
         ciclico: habito_ciclico,
         mes: data_atual.getMonth() + 1,
         ano: data_atual.getFullYear(),
-        id: `dia-${data_atual
+        id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
+      });
+    }
+    const calendario = document.getElementById("calendario");
+    const grupos = {};
+    dados.forEach((obj) => {
+      const id = `${obj.mes}-${obj.ano}`; if (!grupos[id]) grupos[id] = []; grupos[id].push(obj);
+    });
+    let html = '';
+    Object.entries(grupos).forEach(([id, dias]) => {
+      const [mes, ano] = id.split("-");
+      const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
+      html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Data</th>
+            <th>Dia</th>
+            <th>Hábitos Diários</th>
+            <th>Hábito Cíclico</th>
+          </tr>
+        </thead>
+        <tbody>`;
+      dias.forEach((dia, i) => {
+        html += `
+        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
+          <td><span class="expand-icon">&#9654;</span></td>
+          <td>${dia.data}</td>
+          <td>${dia.dia}</td>
+          <td>${dia.habitos.join(', ')}</td>
+          <td>${dia.ciclico}</td>
+        </tr>
+        <tr class="dropdown" id="dropdown-${dia.id}">
+          <td colspan="5">
+            <div class="habit-list">
+              ${dia.habitos.map((h, idx) => `
+                <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
+                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
+                  <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
+                  <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
+                </div>
+              `).join('')}
+              <div class="habit-item" id="habititem-${dia.id}-ciclico">
+                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(i)%cycleEmojis.length]}</span>
+                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
+                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
+              </div>
+            </div>
+          </td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    });
+    calendario.innerHTML = html;
+
+    // LOAD PROGRESS
+    const progress = getProgress();
+    Object.keys(progress).forEach(checkId => {
+      const checkbox = document.getElementById(checkId);
+      if (checkbox) {
+        checkbox.checked = progress[checkId];
+        const label = document.getElementById('label-' + checkId);
+        if (label) label.classList.toggle('habit-done', progress[checkId]);
+        const hi = document.getElementById('habititem-' + checkId);
+        if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
+      }
+    });
+
+    // Atualiza barra de progresso dourada por dia
+    function updateProgressBar(dayId, habitCount) {
+      let checked = 0;
+      for (let i=0; i<habitCount; i++) {
+        if (document.getElementById(`${dayId}-habit-${i}`)?.checked) checked++;
+      }
+      if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
+      let pct = checked / habitCount;
+      const row = document.getElementById(`mainrow-${dayId}`);
+      if (row) {
+        row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
+        row.style.setProperty('--progress', pct);
+        if (pct === 1) row.classList.add('day-complete');
+        else row.classList.remove('day-complete');
+      }
+    }
+
+    // Dropdown toggle
+    document.querySelectorAll('tr.main-row').forEach(row => {
+      row.addEventListener('click', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.classList.contains('habit-emoji')) return;
+        const dropdownId = this.getAttribute('data-dropdown');
+        const dropdown = document.getElementById(`dropdown-${dropdownId}`);
+        if(dropdown.classList.contains('active')) {
+          dropdown.classList.remove('active');
+          dropdown.classList.add('drop-up');
+          setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
+          this.classList.remove('expanded');
+        } else {
+          document.querySelectorAll('.dropdown.active').forEach(dd=>{
+            dd.classList.remove('active');
+            dd.classList.add('drop-up');
+            setTimeout(()=>dd.classList.remove('drop-up'), 400);
+            document.querySelector(`.main-row[data-dropdown="${dd.id.replace('dropdown-','')}"]`).classList.remove('expanded');
+          });
+          dropdown.classList.add('active');
+          dropdown.classList.remove('drop-up');
+          this.classList.add('expanded');
+        }
+      });
+    });
+
+    function checkAllHabitsComplete(dayId, habitCount) {
+      let complete = true;
+      for(let i=0; i<habitCount; i++) {
+        if (!document.getElementById(`${dayId}-habit-${i}`)?.checked) {
+          complete = false;
+          break;
+        }
+      }
+      if (complete && !document.getElementById(`${dayId}-ciclico`)?.checked) complete = false;
+      return complete;
+    }
+
+    function playCelebrateSound() {
+      const audio = document.getElementById('celebrate-audio');
+      audio.currentTime = 0; audio.volume = 0.97;
+      let played = false;
+      audio.play().then(()=>{played=true;}).catch(()=>{
+        if (!played) {
+          document.body.addEventListener('pointerdown', ()=>{audio.play();}, {once:true});
+        }
+      });
+    }
+
+    document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const label = document.getElementById('label-' + this.id);
+        if(label) label.classList.toggle('habit-done', this.checked);
+        let progress = getProgress();
+        progress[this.id] = this.checked;
+        saveProgress(progress);
+        const hi = document.getElementById('habititem-' + this.id);
+        if (hi) hi.classList.toggle('habit-complete', this.checked);
+        const parts = this.id.match(/^dia-\d+-\d+-\d+/);
+        if(parts) {
+          const dayId = parts[0];
+          const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
+          updateProgressBar(dayId, habitCount);
+          const allDone = checkAllHabitsComplete(dayId, habitCount-1);
+          const dropdown = document.getElementById(`dropdown-${dayId}`);
+          const dayRow = document.getElementById(`mainrow-${dayId}`);
+          if(allDone) {
+            dayRow.classList.add('day-complete');
+            launchConfettiEpic();
+            playCelebrateSound();
+            setTimeout(()=>{
+              if(dropdown) {
+                dropdown.classList.remove('active');
+                dropdown.classList.add('drop-up');
+                setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
+              }
+              if(dayRow) dayRow.classList.remove('expanded');
+              unlockScroll();
+            }, 950);
+          } else {
+            dayRow.classList.remove('day-complete');
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('.habit-emoji').forEach(emoji=>{
+      emoji.addEventListener('mouseenter', function() {
+        emoji.classList.add('glow');
+        setTimeout(()=>emoji.classList.remove('glow'), 680);
+      });
+      emoji.addEventListener('mouseleave', function() {
+        emoji.classList.remove('glow');
+      });
+      emoji.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const id = emoji.getAttribute('data-checkbox');
+        const checkbox = document.getElementById(id);
+        if(checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    dados.forEach((dia) => {
+      const habitCount = dia.habitos.length + 1;
+      updateProgressBar(dia.id, habitCount);
+      const allDone = checkAllHabitsComplete(dia.id, habitCount-1);
+      if(allDone) {
+        const dayRow = document.getElementById(`mainrow-${dia.id}`);
+        if (dayRow) dayRow.classList.add('day-complete');
+      }
+    });
+
+    window.addEventListener('resize', function() {
+      const canvas = document.getElementById('confetti-canvas');
+      if(canvas.style.display === 'block') {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      fixHeaderSpacer();
+    });
+  });
+</script>
+</body>
+</html>
