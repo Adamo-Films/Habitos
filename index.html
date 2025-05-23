@@ -4,27 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no Controle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap" rel="stylesheet">
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --header-bg: #191919;  /* fundo igual ao corpo */
-      --laranja-3d: #ff522e;
       --azul-shadow: #191246;
+      --header-azul: #18104b;
+      --header-azul2: #2436ab;
+      --laranja-3d: #ff522e;
       --branco: #fff;
+      --gold: #ffe379;
+      --gold2: #e4c145;
+      --gold3: #f7e399;
+      --corpo: #191919;
     }
-    body {
-      background: var(--header-bg);
-      color: #e0e0e0;
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
     }
+    body {
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      background: linear-gradient(to bottom, var(--header-azul2) 0 290px, var(--corpo) 300px 100%);
+      color: #e0e0e0;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      transition: background 0.3s;
+    }
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    /* HEADER */
     .header-3d-bg {
       width: 100vw;
       position: sticky;
       top: 0;
       left: 0;
       z-index: 100;
-      background: var(--header-bg);
+      background: linear-gradient(to bottom, var(--header-azul2) 60%, transparent 100%);
+      box-shadow: 0 14px 70px 0 #000b;
       display: flex;
       justify-content: center;
       align-items: flex-end;
@@ -32,28 +53,255 @@
       padding-top: 36px;
       padding-bottom: 36px;
       overflow-x: hidden;
+      transition: min-height 0.35s cubic-bezier(.8,0,.22,1);
+    }
+    .header-3d-bg.shrink {
+      min-height: 70px;
+      padding-top: 0;
+      padding-bottom: 0;
     }
     .titulo-3d {
-      font-family: 'Antonio', Arial, sans-serif;
+      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
       font-size: 5.3vw;
-      font-weight: 700;
+      font-weight: 100;
       text-transform: uppercase;
       letter-spacing: 0.13em;
       color: var(--branco);
       line-height: 1.03;
       text-align: center;
-      /* Efeito 3D de camadas com sombra laranja */
+      font-stretch: ultra-expanded;
+      font-variation-settings: "wght" 100;
+      /* Super hairline */
+      font-optical-sizing: auto;
+      /* 3D: sombras super próximas */
       text-shadow:
-        2px 7px 0 var(--laranja-3d),
-        5px 18px 0 var(--azul-shadow);
+        0.016em 0.031em 0 var(--laranja-3d),
+        0.028em 0.067em 0 var(--laranja-3d),
+        0.06em 0.09em 0 var(--azul-shadow),
+        0 8px 20px #000a;
+      transition: font-size 0.36s cubic-bezier(.8,0,.22,1);
+    }
+    .header-3d-bg.shrink .titulo-3d {
+      font-size: 2.1vw;
     }
     @media (max-width: 900px) {
       .titulo-3d { font-size: 9vw; }
+      .header-3d-bg.shrink .titulo-3d { font-size: 4vw;}
     }
     @media (max-width: 600px) {
       .titulo-3d { font-size: 13vw; }
+      .header-3d-bg.shrink .titulo-3d { font-size: 6vw;}
+      .container { padding: 0 6px;}
     }
-    /* Resto do seu CSS permanece igual */
+
+    /* MESES */
+    .mes {
+      font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
+      font-size: 1.24em;
+      margin: 40px 0 10px;
+      border-bottom: 2px solid #f9c74f;
+      padding-bottom: 5px;
+      letter-spacing: 0.06em;
+      color: #f9c74f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background: none;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-size: 1.04em;
+      font-weight: 400;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background-color: #1e1e1e;
+      color: #f9c74f;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-size: 1em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    tr.main-row {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    tr.main-row:hover {
+      background-color: #1f2d3d;
+    }
+    /* Dia completo: DOURADO suave */
+    .day-complete {
+      background:
+        linear-gradient(90deg, var(--gold) 10%, var(--gold2) 55%, var(--gold3) 100%) !important;
+      color: #201d09 !important;
+      font-weight: bold;
+      letter-spacing: 1.1px;
+      box-shadow:
+        0 0 5px 0 var(--gold2),
+        0 2px 12px 2px #ffe37980,
+        0 0 0 2px #e4c14570 inset;
+      text-shadow:
+        0 1px 2px #fff7,
+        0 0 4px #ffe37944,
+        0 2px 4px #e4c14566;
+      border-left: 4px solid var(--gold2);
+      border-right: 2px solid var(--gold3);
+      border-radius: 2px;
+    }
+
+    /* Dropdown (centralizado, com check à direita, animado) */
+    .dropdown {
+      background: #232323;
+      border-bottom: 1px solid #333;
+      display: table-row;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.38s cubic-bezier(.85,0,.2,1), opacity 0.24s cubic-bezier(.77,0,.25,1);
+      pointer-events: none;
+    }
+    .dropdown.active {
+      opacity: 1;
+      max-height: 1000px;
+      transition: max-height 0.48s cubic-bezier(.2,0,.77,1), opacity 0.29s cubic-bezier(.85,0,.2,1);
+      pointer-events: auto;
+    }
+    .dropdown > td {
+      padding: 0;
+    }
+    .habit-list {
+      margin: 16px 0 18px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+    .habit-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      font-size: 1.22em;
+      min-width: 390px;
+      max-width: 98vw;
+      justify-content: flex-start;
+      background: none;
+      position: relative;
+      border-radius: 9px;
+      padding: 4px 8px 4px 2px;
+      transition: background 0.22s, box-shadow 0.22s;
+    }
+    .habit-item.habit-complete {
+      background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
+      box-shadow: 0 2px 15px 0 #ffe37955;
+      color: #232201 !important;
+      font-weight: 700;
+    }
+    .habit-emoji {
+      font-size: 1.7em;
+      display: inline-block;
+      margin-right: 17px;
+      margin-left: 5px;
+      min-width: 38px;
+      text-align: center;
+      cursor: pointer;
+      will-change: transform;
+      user-select: none;
+      filter: drop-shadow(0 2px 6px #0007);
+      transition: transform 0.2s, filter 0.17s, box-shadow 0.17s;
+      position: relative;
+      z-index: 3;
+    }
+    .habit-emoji:hover, .habit-emoji.glow {
+      animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
+      filter: drop-shadow(0 0 10px #39e6ff) drop-shadow(0 0 16px #2363ffbb);
+      box-shadow: 0 0 16px 4px #49b4ff55;
+    }
+    @keyframes emoji-bounce {
+      0%   { transform: scale(1) rotate(0);}
+      30%  { transform: scale(1.23) rotate(-17deg);}
+      55%  { transform: scale(0.94) rotate(15deg);}
+      70%  { transform: scale(1.13) rotate(-9deg);}
+      100% { transform: scale(1) rotate(0);}
+    }
+    .habit-checkbox {
+      transform: scale(1.23);
+      cursor: pointer;
+      margin-left: auto;
+      margin-right: 8px;
+      accent-color: #ffe379;
+    }
+    .habit-label {
+      flex: 1 1 auto;
+      min-width: 110px;
+      max-width: 340px;
+      margin-right: 24px;
+      font-size: 1.06em;
+      color: #d5d5d5;
+      letter-spacing: 0.04em;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      transition: color 0.19s;
+    }
+    .habit-done {
+      text-decoration: line-through;
+      color: #888 !important;
+    }
+    .expand-icon {
+      display: inline-block;
+      width: 16px;
+      transition: transform 0.2s;
+    }
+    .main-row.expanded > .expand-icon {
+      transform: rotate(90deg);
+    }
+    /* Confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+    /* Texto de celebração */
+    #celebrate-text {
+      display: none;
+      position: fixed;
+      left: 50%; top: 38%;
+      transform: translate(-50%, -50%);
+      font-size: 5vw;
+      color: #ffe379;
+      text-shadow:
+        0 0 7px #fff,
+        0 0 28px #ffe379,
+        0 0 90px #ccaa33,
+        2px 2px 0 #0a355b;
+      font-weight: bold;
+      z-index: 10000;
+      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      animation: celebrateText 2.5s ease-out;
+      background: none !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 18px 0 18px;
+    }
+    @keyframes celebrateText {
+      0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+      50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1;}
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1;}
+    }
   </style>
 </head>
 <body>
