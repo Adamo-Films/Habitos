@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Danilo no Controle</title>
+  <title>Danilo no 🎮</title>
   <!-- Fontes -->
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --azul-shadow: #191246;
-      --header-azul: #18104b;
-      --header-azul2: #2436ab;
+      --header-azul: #17113a;
+      --header-azul2: #1a1b3a;
       --laranja-3d: #ff522e;
       --branco: #fff;
       --gold: #ffe379;
@@ -25,10 +25,8 @@
     }
     body {
       font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
-      background: linear-gradient(to bottom, var(--header-azul2) 0 290px, var(--corpo) 300px 100%);
+      background: linear-gradient(to bottom, var(--header-azul2) 0 220px, var(--corpo) 260px 100%);
       color: #e0e0e0;
-      margin: 0;
-      padding: 0;
       min-height: 100vh;
       transition: background 0.3s;
     }
@@ -44,14 +42,15 @@
       top: 0;
       left: 0;
       z-index: 100;
-      background: linear-gradient(to bottom, var(--header-azul2) 60%, transparent 100%);
+      background: linear-gradient(to bottom, #13154a 65%, transparent 100%);
       box-shadow: 0 14px 70px 0 #000b;
       display: flex;
+      flex-direction: column;
       justify-content: center;
-      align-items: flex-end;
-      min-height: 180px;
-      padding-top: 36px;
-      padding-bottom: 36px;
+      align-items: center;
+      min-height: 210px;
+      padding-top: 32px;
+      padding-bottom: 16px;
       overflow-x: hidden;
       transition: min-height 0.35s cubic-bezier(.8,0,.22,1);
     }
@@ -62,49 +61,65 @@
     }
     .titulo-3d {
       font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
-      font-size: 5.3vw;
+      font-size: 4.3vw;
       font-weight: 100;
       text-transform: uppercase;
-      letter-spacing: 0.13em;
+      letter-spacing: 0.14em;
       color: var(--branco);
-      line-height: 1.03;
+      line-height: 1.06;
       text-align: center;
       font-stretch: ultra-expanded;
       font-variation-settings: "wght" 100;
-      /* Super hairline */
       font-optical-sizing: auto;
-      /* 3D: sombras super próximas */
+      /* Sombra laranja profunda, harmoniosa */
       text-shadow:
-        0.016em 0.031em 0 var(--laranja-3d),
-        0.028em 0.067em 0 var(--laranja-3d),
-        0.06em 0.09em 0 var(--azul-shadow),
-        0 8px 20px #000a;
+        0.06em 0.14em 0 var(--laranja-3d),
+        0.11em 0.26em 0 var(--laranja-3d),
+        0.13em 0.29em 0 var(--laranja-3d),
+        0 7px 22px #000a;
+      margin-bottom: 0.15em;
       transition: font-size 0.36s cubic-bezier(.8,0,.22,1);
     }
-    .header-3d-bg.shrink .titulo-3d {
-      font-size: 2.1vw;
+    .emoji-controller {
+      font-size: 7vw;
+      line-height: 1.05;
+      display: block;
+      filter: drop-shadow(0.11em 0.22em 0 var(--laranja-3d)) drop-shadow(0.16em 0.27em 0 var(--laranja-3d));
+      margin-top: -0.7em;
+      margin-bottom: 0.1em;
+      user-select: none;
+      pointer-events: none;
+      text-align: center;
+    }
+    .header-3d-bg.shrink .titulo-3d,
+    .header-3d-bg.shrink .emoji-controller {
+      font-size: 1.85vw;
     }
     @media (max-width: 900px) {
       .titulo-3d { font-size: 9vw; }
+      .emoji-controller { font-size: 16vw; }
       .header-3d-bg.shrink .titulo-3d { font-size: 4vw;}
+      .header-3d-bg.shrink .emoji-controller { font-size: 7vw;}
     }
     @media (max-width: 600px) {
-      .titulo-3d { font-size: 13vw; }
+      .titulo-3d { font-size: 14vw; }
+      .emoji-controller { font-size: 25vw; }
       .header-3d-bg.shrink .titulo-3d { font-size: 6vw;}
+      .header-3d-bg.shrink .emoji-controller { font-size: 10vw;}
       .container { padding: 0 6px;}
     }
-
     /* MESES */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
-      font-size: 1.24em;
-      margin: 40px 0 10px;
+      font-size: 2.06em;
+      margin: 42px 0 13px;
       border-bottom: 2px solid #f9c74f;
       padding-bottom: 5px;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.11em;
       color: #f9c74f;
+      text-shadow: 0 3px 13px #0009;
+      text-align: left;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
@@ -115,19 +130,20 @@
       margin-left: auto;
       margin-right: auto;
       font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
-      font-size: 1.04em;
+      font-size: 1.09em;
       font-weight: 400;
     }
     th, td {
       padding: 12px;
       text-align: left;
       border-bottom: 1px solid #333;
+      vertical-align: middle;
     }
     th {
       background-color: #1e1e1e;
       color: #f9c74f;
       font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
-      font-size: 1em;
+      font-size: 1.06em;
       font-weight: 700;
       letter-spacing: 0.02em;
     }
@@ -136,7 +152,7 @@
       transition: background 0.2s;
     }
     tr.main-row:hover {
-      background-color: #1f2d3d;
+      background-color: #21243e;
     }
     /* Dia completo: DOURADO suave */
     .day-complete {
@@ -157,14 +173,32 @@
       border-right: 2px solid var(--gold3);
       border-radius: 2px;
     }
-
     /* Dropdown (centralizado, com check à direita, animado) */
     .dropdown {
-  display: none;
-}
-.dropdown.active {
-  display: table-row;
-}
+      display: none;
+      transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05);
+      animation: none;
+      height: 0;
+      padding: 0;
+    }
+    .dropdown.active {
+      display: table-row;
+      animation: slideDown 0.35s cubic-bezier(.2,1.1,.42,1.09);
+      height: auto;
+    }
+    @keyframes slideDown {
+      0% { opacity: 0; transform: translateY(-28px) scaleY(0.7);}
+      70% { opacity: 1; transform: translateY(5px) scaleY(1.09);}
+      100% { opacity: 1; transform: translateY(0) scaleY(1);}
+    }
+    /* drop up */
+    .dropdown.drop-up {
+      animation: slideUp 0.44s cubic-bezier(.2,1.2,.42,1.01);
+    }
+    @keyframes slideUp {
+      0% { opacity: 1; transform: translateY(0) scaleY(1);}
+      100% { opacity: 0; transform: translateY(-38px) scaleY(0.65);}
+    }
     .dropdown > td {
       padding: 0;
     }
@@ -173,14 +207,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       width: 100%;
     }
     .habit-item {
       display: flex;
       align-items: center;
       gap: 0;
-      font-size: 1.22em;
+      font-size: 1.36em;
       min-width: 390px;
       max-width: 98vw;
       justify-content: flex-start;
@@ -189,6 +223,7 @@
       border-radius: 9px;
       padding: 4px 8px 4px 2px;
       transition: background 0.22s, box-shadow 0.22s;
+      margin-bottom: 0;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
@@ -198,18 +233,20 @@
     }
     .habit-emoji {
       font-size: 1.7em;
-      display: inline-block;
-      margin-right: 17px;
-      margin-left: 5px;
+      display: inline-flex;
+      align-items: center;
+      margin-right: 13px;
+      margin-left: 4px;
       min-width: 38px;
       text-align: center;
       cursor: pointer;
       will-change: transform;
       user-select: none;
       filter: drop-shadow(0 2px 6px #0007);
-      transition: transform 0.2s, filter 0.17s, box-shadow 0.17s;
+      transition: transform 0.18s, filter 0.17s, box-shadow 0.17s;
       position: relative;
       z-index: 3;
+      vertical-align: middle;
     }
     .habit-emoji:hover, .habit-emoji.glow {
       animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
@@ -218,30 +255,32 @@
     }
     @keyframes emoji-bounce {
       0%   { transform: scale(1) rotate(0);}
-      30%  { transform: scale(1.23) rotate(-17deg);}
+      30%  { transform: scale(1.19) rotate(-17deg);}
       55%  { transform: scale(0.94) rotate(15deg);}
       70%  { transform: scale(1.13) rotate(-9deg);}
       100% { transform: scale(1) rotate(0);}
     }
     .habit-checkbox {
-      transform: scale(1.23);
+      transform: scale(1.22);
       cursor: pointer;
       margin-left: auto;
       margin-right: 8px;
       accent-color: #ffe379;
+      vertical-align: middle;
     }
     .habit-label {
       flex: 1 1 auto;
       min-width: 110px;
-      max-width: 340px;
+      max-width: 350px;
       margin-right: 24px;
-      font-size: 1.06em;
+      font-size: 1.09em;
       color: #d5d5d5;
       letter-spacing: 0.04em;
       font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
       display: flex;
       align-items: center;
       transition: color 0.19s;
+      vertical-align: middle;
     }
     .habit-done {
       text-decoration: line-through;
@@ -296,7 +335,8 @@
 </head>
 <body>
   <div class="header-3d-bg">
-    <div class="titulo-3d">Danilo no Controle</div>
+    <div class="titulo-3d">Danilo no</div>
+    <span class="emoji-controller" title="Controle de videogame">🎮</span>
   </div>
   <div class="container">
     <div id="calendario"></div>
@@ -316,7 +356,6 @@
     "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
   ];
   const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
-
   // CONFETTI
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
@@ -378,7 +417,6 @@
       celebrateText.style.display = 'none';
     }, 4000);
   }
-
   // PROGRESSO LOCALSTORAGE
   function getProgress() {
     const progress = localStorage.getItem('habits-progress-v1');
@@ -387,14 +425,12 @@
   function saveProgress(progress) {
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
-
   // HEADER SHRINK STICKY
   window.addEventListener('scroll', () => {
     const header = document.querySelector('.header-3d-bg');
     if(window.scrollY > 60) header.classList.add('shrink');
     else header.classList.remove('shrink');
   });
-
   document.addEventListener("DOMContentLoaded", function() {
     // DADOS E GERAÇÃO DA TABELA: igual antes, só mudou a renderização dos habits
     const dados = [];
@@ -478,7 +514,6 @@
       html += `</tbody></table>`;
     });
     calendario.innerHTML = html;
-
     // LOAD PROGRESS
     const progress = getProgress();
     Object.keys(progress).forEach(checkId => {
@@ -491,7 +526,6 @@
         if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
       }
     });
-
     // Dropdown toggle
     document.querySelectorAll('tr.main-row').forEach(row => {
       row.addEventListener('click', function(e) {
@@ -501,19 +535,23 @@
         const dropdown = document.getElementById(`dropdown-${dropdownId}`);
         if(dropdown.classList.contains('active')) {
           dropdown.classList.remove('active');
+          dropdown.classList.add('drop-up');
+          setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
           this.classList.remove('expanded');
         } else {
           // Fecha outros abertos
           document.querySelectorAll('.dropdown.active').forEach(dd=>{
             dd.classList.remove('active');
+            dd.classList.add('drop-up');
+            setTimeout(()=>dd.classList.remove('drop-up'), 400);
             document.querySelector(`.main-row[data-dropdown="${dd.id.replace('dropdown-','')}"]`).classList.remove('expanded');
           });
           dropdown.classList.add('active');
+          dropdown.classList.remove('drop-up');
           this.classList.add('expanded');
         }
       });
     });
-
     // Função para verificar se todos os hábitos do dia foram concluídos
     function checkAllHabitsComplete(dayId, habitCount) {
       let complete = true;
@@ -526,11 +564,10 @@
       if (complete && !document.getElementById(`${dayId}-ciclico`).checked) complete = false;
       return complete;
     }
-
     // Play sound
     function playCelebrateSound() {
       const audio = document.getElementById('celebrate-audio');
-      audio.currentTime = 0; audio.volume = 0.95;
+      audio.currentTime = 0; audio.volume = 0.97;
       let played = false;
       audio.play().then(()=>{played=true;}).catch(()=>{
         if (!played) {
@@ -538,7 +575,6 @@
         }
       });
     }
-
     // Checkbox logic + hábito concluído destaque individual
     document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
       checkbox.addEventListener('change', function() {
@@ -550,7 +586,6 @@
         // Destaque individual
         const hi = document.getElementById('habititem-' + this.id);
         if (hi) hi.classList.toggle('habit-complete', this.checked);
-
         // Checa se todos do dia foram feitos
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if(parts) {
@@ -564,7 +599,11 @@
             launchConfettiEpic();
             playCelebrateSound();
             setTimeout(()=>{
-              if(dropdown) dropdown.classList.remove('active');
+              if(dropdown) {
+                dropdown.classList.remove('active');
+                dropdown.classList.add('drop-up');
+                setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
+              }
               if(dayRow) dayRow.classList.remove('expanded');
             }, 950);
           } else {
@@ -573,7 +612,6 @@
         }
       });
     });
-
     // EMOJI CLICK (faz o hábito!)
     document.querySelectorAll('.habit-emoji').forEach(emoji=>{
       emoji.addEventListener('mouseenter', function() {
@@ -593,7 +631,6 @@
         }
       });
     });
-
     // Inicializa cor dos dias já completos ao carregar
     dados.forEach((dia) => {
       const habitCount = dia.habitos.length + 1;
@@ -603,7 +640,6 @@
         if (dayRow) dayRow.classList.add('day-complete');
       }
     });
-
     window.addEventListener('resize', function() {
       const canvas = document.getElementById('confetti-canvas');
       if(canvas.style.display === 'block') {
