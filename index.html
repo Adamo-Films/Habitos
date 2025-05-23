@@ -4,28 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no Controle</title>
-  <!-- Fonte parecida com a referência: League Spartan -->
-  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap" rel="stylesheet">
+  <!-- Fonte ultra fina, tall e bem clara -->
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100;400;700&family=Montserrat:wght@100;200;300;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --laranja: #FF522E;
-      --shadow: #11043a;
-      --header-azul: #1c1666;
-      --azul-shadow: #321973;
-      --header-bg-gradient: linear-gradient(160deg, #181043 40%, #1c1666 100%);
+      --azul-shadow: #191246;
+      --header-azul: #18104b;
+      --laranja-3d: #ff522e;
+      --branco: #fff;
     }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Montserrat', 'Antonio', 'Arial Narrow', Arial, sans-serif;
       background-color: #121212;
       color: #e0e0e0;
       margin: 0;
       padding: 0;
     }
-
-    /* HEADER ESTILO TWENTIES */
     .header-3d-bg {
       width: 100vw;
-      background: var(--header-bg-gradient);
+      background: var(--header-azul);
       margin-bottom: 36px;
       padding-top: 36px;
       padding-bottom: 46px;
@@ -35,42 +32,37 @@
       align-items: center;
       position: relative;
       min-height: 150px;
+      overflow-x: hidden;
     }
     .titulo-3d {
-      font-family: 'League Spartan', Impact, 'Arial Black', Arial, sans-serif;
-      font-size: 6vw;
-      font-weight: 700;
+      font-family: 'Antonio', 'Montserrat', 'League Gothic', 'Arial Narrow', Arial, sans-serif;
+      font-size: 7vw;
+      font-weight: 100;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--laranja);
-      position: relative;
+      letter-spacing: 0.14em;
+      color: var(--branco);
       line-height: 1.03;
       text-align: center;
-      /* Long blue shadow layers */
+      /* Letras super finas! */
+      font-stretch: expanded;
+      /* Long orange 3d shadow */
       text-shadow:
-        1px 1px 0 var(--azul-shadow),
-        2px 2px 0 var(--azul-shadow),
-        3px 3px 0 var(--azul-shadow),
-        4px 4px 0 var(--azul-shadow),
-        5px 5px 0 var(--azul-shadow),
-        6px 6px 0 var(--azul-shadow),
-        7px 7px 0 var(--azul-shadow),
-        8px 8px 0 var(--azul-shadow),
-        9px 9px 0 var(--azul-shadow),
-        10px 10px 0 var(--azul-shadow),
-        16px 16px 16px #000a,
-        24px 24px 32px #0009;
-      /* Simulando linhas finas e altas */
-      letter-spacing: 0.09em;
-      padding: 0 16px;
+        0.08em 0.12em 0 var(--laranja-3d),
+        0.15em 0.23em 0 var(--laranja-3d),
+        0.22em 0.34em 0 var(--laranja-3d),
+        0.33em 0.47em 0 var(--laranja-3d),
+        0.42em 0.62em 0 var(--laranja-3d),
+        0.65em 0.93em 0 var(--laranja-3d),
+        1em 1.7em 18px var(--azul-shadow),
+        2em 3.2em 44px var(--azul-shadow),
+        0 8px 70px #0008;
       z-index: 2;
-      /* Liga mais a altura do texto na responsividade */
+      padding: 0 20px;
     }
-    @media (max-width: 600px) {
-      .titulo-3d { font-size: 9vw; }
+    @media (max-width: 800px) {
+      .titulo-3d { font-size: 12vw; }
       .header-3d-bg { padding-top: 20px; padding-bottom: 28px;}
     }
-    /* FIM HEADER ESTILO TWENTIES */
 
     table {
       width: 100%;
@@ -118,16 +110,38 @@
     .habit-item {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 1.05em;
+      gap: 16px;
+      font-size: 1.18em;
     }
     .habit-checkbox {
-      transform: scale(1.2);
+      transform: scale(1.17);
       cursor: pointer;
     }
     .habit-done {
       text-decoration: line-through;
       color: #888;
+    }
+    /* Emoji animado */
+    .habit-emoji {
+      font-size: 1.4em;
+      display: inline-block;
+      transition: transform 0.17s cubic-bezier(.65,-0.6,.31,1.7);
+      filter: drop-shadow(0 2px 6px #0007);
+      cursor: pointer;
+      will-change: transform;
+      user-select: none;
+    }
+    .habit-emoji:hover {
+      animation: emoji-bounce 0.7s cubic-bezier(.24,-0.06,.41,1.37) 1;
+      filter: drop-shadow(0 0 10px #f0a) drop-shadow(0 0 6px #fff9);
+      transform: rotate(-18deg) scale(1.18);
+    }
+    @keyframes emoji-bounce {
+      0%   { transform: scale(1)    rotate(0);}
+      30%  { transform: scale(1.23) rotate(-22deg);}
+      60%  { transform: scale(0.94) rotate(17deg);}
+      90%  { transform: scale(1.12) rotate(-9deg);}
+      100% { transform: scale(1.18) rotate(-18deg);}
     }
     .expand-icon {
       display: inline-block;
@@ -171,10 +185,10 @@
         5px 5px 0 #0a355b;
       font-weight: bold;
       z-index: 10000;
-      font-family: 'League Spartan', Impact, 'Arial Black', Arial, sans-serif;
+      font-family: 'Antonio', 'Montserrat', 'League Gothic', 'Arial Narrow', Arial, sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      animation: celebrateText 1.5s ease-out;
+      animation: celebrateText 2.5s ease-out;
       background: none !important;
       border: none !important;
       border-radius: 0 !important;
@@ -196,9 +210,32 @@
   <canvas id="confetti-canvas"></canvas>
   <!-- Texto de celebração -->
   <div id="celebrate-text">VAI MLK!!!</div>
-  <!-- Som de conquista -->
-  <audio id="celebrate-audio" src="https://cdn.jsdelivr.net/gh/danilopaiva-ai/confetti-celebrate/victory.mp3"></audio>
+  <!-- Som de conquista confiável -->
+  <audio id="celebrate-audio">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
+  </audio>
 <script>
+  // ---- EMOJIS para cada hábito (ajuste se quiser outros)
+  const habitEmojis = [
+    "💧", // Beber 2L de água
+    "🤳", // Tirar selfie
+    "⚖️", // Verificar peso
+    "🥗", // Dieta com alimentos integrais
+    "⏰", // Acordar às 5h
+    "🧘", // Meditação
+    "🏋️", // Exercício
+    "📚", // Leitura
+    "🍫🚫", // Sem açúcar refinado
+    "🇮🇹", // Italiano
+  ];
+  // Ciclicos
+  const cycleEmojis = [
+    "💬", // Afirmações
+    "🚿", // Banho gelado
+    "🧠", // Agilidade mental
+    "🙏", // Diário e gratidão
+  ];
   // ---------------------- CONFETTI ANIMATION (Canvas) ----------------------
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
@@ -247,7 +284,6 @@
         particles[i].x += Math.sin(angle*1.18 + i) * 2.7;
         particles[i].tiltAngle += particles[i].tiltAngleIncremental;
         particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 3)) * 18;
-        // reaproveita confete no topo
         if (particles[i].y > H + 30) {
           particles[i].y = -14;
           particles[i].x = Math.random() * W;
@@ -266,7 +302,7 @@
       ctx.clearRect(0, 0, W, H);
       canvas.style.display = 'none';
       celebrateText.style.display = 'none';
-    }, 2600);
+    }, 4000); // agora dura 4 segundos!
   }
 
   // -------------------- PROGRESSO LOCALSTORAGE ----------------------
@@ -366,11 +402,13 @@
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
                 <div class="habit-item">
+                  <span class="habit-emoji" tabindex="0">${habitEmojis[idx % habitEmojis.length]}</span>
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
                   <label for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
                 </div>
               `).join('')}
               <div class="habit-item">
+                <span class="habit-emoji" tabindex="0">${cycleEmojis[(i)%cycleEmojis.length]}</span>
                 <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
                 <label for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
               </div>
@@ -427,11 +465,21 @@
       return complete;
     }
 
-    // Play sound
+    // Play sound (com fallback de play forçado)
     function playCelebrateSound() {
       const audio = document.getElementById('celebrate-audio');
       audio.currentTime = 0;
-      audio.play();
+      audio.volume = 0.93;
+      // Workaround para autoplay block: força play, e tenta catch
+      let played = false;
+      audio.play().then(()=>{played=true;}).catch(()=>{
+        // força play depois de qualquer clique futuro
+        if (!played) {
+          document.body.addEventListener('pointerdown', ()=>{
+            audio.play();
+          }, {once:true});
+        }
+      });
     }
 
     // Evento checkbox
@@ -456,9 +504,7 @@
           const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
           const allDone = checkAllHabitsComplete(dayId, habitCount-1); // -1 pois o último é o cíclico
           if(allDone) {
-            // Linha colorida
             dayRow.classList.add('day-complete');
-            // Animação e som
             launchConfettiEpic();
             playCelebrateSound();
           } else {
