@@ -82,13 +82,69 @@
     .expanded > .expand-icon {
       transform: rotate(90deg);
     }
+    .day-complete {
+      background: linear-gradient(90deg, #29291e 70%, #FFD700 100%) !important;
+      color: #ffd700 !important;
+      font-weight: bold;
+      box-shadow: 0 0 20px 2px #ffd70044;
+    }
+    /* Confetti animation */
+    .confetti {
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 12px;
+      height: 18px;
+      opacity: 0.8;
+      border-radius: 2px;
+      animation: confetti-fall 1.2s linear forwards;
+    }
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotateZ(720deg);
+        opacity: 0.2;
+      }
+    }
   </style>
 </head>
 <body>
   <h2>Calendário de Hábitos - Maio a Agosto 2025</h2>
   <div id="calendario"></div>
-
+  <audio id="celebrate-audio" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b9a9b.mp3"></audio>
+  <div class="confetti" id="confetti"></div>
 <script>
+  // ---- Confetti
+  function launchConfetti() {
+    const confettiColors = ['#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#fff'];
+    const confettiCount = 80;
+    const confettiContainer = document.getElementById('confetti');
+    confettiContainer.innerHTML = '';
+    for (let i = 0; i < confettiCount; i++) {
+      const conf = document.createElement('div');
+      conf.className = 'confetti-piece';
+      conf.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+      conf.style.left = Math.random() * 100 + 'vw';
+      conf.style.top = (Math.random() * -30) + 'px';
+      conf.style.transform = `rotate(${Math.random()*360}deg)`;
+      confettiContainer.appendChild(conf);
+    }
+    setTimeout(() => { confettiContainer.innerHTML = ''; }, 1400);
+  }
+
+  // ---- Save/Load Progress
+  function getProgress() {
+    const progress = localStorage.getItem('habits-progress-v1');
+    return progress ? JSON.parse(progress) : {};
+  }
+  function saveProgress(progress) {
+    localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
+  }
+
   document.addEventListener("DOMContentLoaded", function() {
     const dados = [];
     const habitos_incrementais = {
@@ -142,11 +198,13 @@
       grupos[id].push(obj);
     });
 
+    let html = '';
+
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
       const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
 
-      let html = `
+      html += `
         <div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
         <table>
           <thead>
@@ -163,7 +221,7 @@
 
       dias.forEach((dia, i) => {
         html += `
-        <tr class="main-row" data-dropdown="${dia.id}">
+        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
           <td><span class="expand-icon">&#9654;</span></td>
           <td>${dia.data}</td>
           <td>${dia.dia}</td>
@@ -193,7 +251,19 @@
           </tbody>
         </table>
       `;
-      calendario.innerHTML += html;
+    });
+
+    calendario.innerHTML = html;
+
+    // ---- LOAD PROGRESS
+    const progress = getProgress();
+    Object.keys(progress).forEach(checkId => {
+      const checkbox = document.getElementById(checkId);
+      if (checkbox) {
+        checkbox.checked = progress[checkId];
+        const label = document.getElementById('label-' + checkId);
+        if (label) label.classList.toggle('habit-done', progress[checkId]);
+      }
     });
 
     // Dropdown toggle
@@ -211,7 +281,27 @@
       });
     });
 
-    // Checkmark: riscar hábito feito
+    // Função para verificar se todos os hábitos do dia foram concluídos
+    function checkAllHabitsComplete(dayId, habitCount) {
+      let complete = true;
+      for(let i=0; i<habitCount; i++) {
+        if (!document.getElementById(`${dayId}-habit-${i}`).checked) {
+          complete = false;
+          break;
+        }
+      }
+      if (complete && !document.getElementById(`${dayId}-ciclico`).checked) complete = false;
+      return complete;
+    }
+
+    // Play sound
+    function playCelebrateSound() {
+      const audio = document.getElementById('celebrate-audio');
+      audio.currentTime = 0;
+      audio.play();
+    }
+
+    // Evento checkbox
     document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
       checkbox.addEventListener('change', function() {
         const label = document.getElementById('label-' + this.id);
@@ -220,7 +310,39 @@
         } else {
           label.classList.remove('habit-done');
         }
+        // Save progress
+        let progress = getProgress();
+        progress[this.id] = this.checked;
+        saveProgress(progress);
+
+        // Verifica se completou todos hábitos do dia
+        const parts = this.id.match(/^dia-\d+-\d+-\d+/);
+        if(parts) {
+          const dayId = parts[0];
+          const dayRow = document.getElementById(`mainrow-${dayId}`);
+          const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
+          const allDone = checkAllHabitsComplete(dayId, habitCount-1); // -1 pois o último é o cíclico
+          if(allDone) {
+            // Linha colorida
+            dayRow.classList.add('day-complete');
+            // Animação e som
+            launchConfetti();
+            playCelebrateSound();
+          } else {
+            dayRow.classList.remove('day-complete');
+          }
+        }
       });
+    });
+
+    // Inicializa cor dos dias já completos ao carregar
+    dados.forEach((dia) => {
+      const habitCount = dia.habitos.length + 1; // +1 cíclico
+      const allDone = checkAllHabitsComplete(dia.id, habitCount-1);
+      if(allDone) {
+        const dayRow = document.getElementById(`mainrow-${dia.id}`);
+        if (dayRow) dayRow.classList.add('day-complete');
+      }
     });
 
   });
