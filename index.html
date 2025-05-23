@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendário de Hábitos</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #f9c74f;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background-color: #1e1e1e;
+      color: #f9c74f;
+    }
+    tr:hover {
+      background-color: #1f2d3d;
+    }
+    input[type=checkbox] {
+      transform: scale(1.4);
+      cursor: pointer;
+    }
+    .mes {
+      font-size: 1.4em;
+      margin: 40px 0 10px;
+      border-bottom: 2px solid #f9c74f;
+      padding-bottom: 5px;
+    }
+    .feito {
+      text-decoration: line-through;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h2>Calendário de Hábitos - Maio a Agosto 2025</h2>
+  <div id="calendario"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const dados = [];
+    const habitos_incrementais = {
+      1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
+      5: ["Dieta com alimentos integrais"],
+      9: ["Acordar às 5h"],
+      13: ["Meditação (10 min por dia)"],
+      17: ["Exercício (60 min)"],
+      21: ["Leitura (30 min)"],
+      25: ["Alimentação sem açúcar refinado"],
+      29: ["Prática de italiano (20 min por dia)"]
+    };
+    const habitos_ciclicos = [
+      "Afirmações",
+      "Banho gelado",
+      "Exercício de agilidade mental",
+      "Diário e gratidão"
+    ];
+
+    const inicio = new Date(2025, 4, 21);
+    const fim = new Date(2025, 7, 21);
+    const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
+
+    let habitos_ativos = [];
+    for (let i = 1; i <= dias_total; i++) {
+      const data_atual = new Date(inicio);
+      data_atual.setDate(inicio.getDate() + i - 1);
+
+      if (habitos_incrementais[i]) {
+        habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
+      }
+      const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
+
+      dados.push([
+        data_atual.toLocaleDateString('pt-BR'),
+        `Dia ${i}`,
+        habitos_ativos.join(', '),
+        habito_ciclico,
+        data_atual.getMonth() + 1,
+        data_atual.getFullYear()
+      ]);
+    }
+
+    const calendario = document.getElementById("calendario");
+    const grupos = {};
+
+    dados.forEach(([data, dia, habitos, ciclico, mes, ano]) => {
+      const id = `${mes}-${ano}`;
+      if (!grupos[id]) grupos[id] = [];
+      grupos[id].push({ data, dia, habitos, ciclico });
+    });
+
+    Object.entries(grupos).forEach(([id, dias]) => {
+      const [mes, ano] = id.split("-");
+      const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
+
+      const html = `
+        <div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Dia</th>
+              <th>Hábitos Diários</th>
+              <th>Hábito Cíclico</th>
+              <th>Feito?</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${dias.map(({ data, dia, habitos, ciclico }) => `
+              <tr>
+                <td>${data}</td>
+                <td>${dia}</td>
+                <td>${habitos}</td>
+                <td>${ciclico}</td>
+                <td><input type="checkbox" onchange="this.parentElement.parentElement.classList.toggle('feito')"></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      calendario.innerHTML += html;
+    });
+  });
+</script>
+</body>
+</html>
+
+
