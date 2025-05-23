@@ -16,6 +16,8 @@
       --day-inactive: #f2f2f7;
       --header-height: 190px;
       --header-shrink: 62px;
+      --main-row-text-dark: #191919;
+      --main-row-text-light: #ffffff;
     }
     html, body { height: 100%; margin: 0; padding: 0;}
     body {
@@ -29,16 +31,17 @@
       width: 100%;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      margin-top: 32px;
-      margin-bottom: 18px;
+      align-items: flex-end;
+      margin-top: 10px;
+      margin-bottom: -115px; /* This negative margin makes it touch/overlap the table */
       z-index: 10;
       pointer-events: none;
       user-select: none;
+      position: relative;
     }
     .banner-gamer-img {
-      max-width: 540px;
-      width: 100%;
+      max-width: 840px;      /* Make the banner bigger */
+      width: 90vw;
       height: auto;
       display: block;
       filter:
@@ -47,19 +50,21 @@
         drop-shadow(0 0 20px #0008);
       pointer-events: none;
       user-select: none;
+      margin-bottom: 0; /* No gap below the banner */
+      position: relative;
+      z-index: 1;
     }
-    @media (max-width: 700px) {
-      .banner-gamer-img {
-        max-width: 97vw;
-      }
-      .banner-gamer { margin-top: 8px; }
+    @media (max-width: 900px) {
+      .banner-gamer-img { max-width: 98vw; }
+      .banner-gamer { margin-top: 5px; margin-bottom: -55px; }
     }
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
+      position: relative;
+      z-index: 2;      /* Keeps calendar above the banner img */
     }
-    /* Removido: HEADER NOVO */
     /* MES & TABELA */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
@@ -116,11 +121,21 @@
       box-shadow: 0 2px 10px 0 #0008;
       color: #dedede !important;
     }
+    tr.main-row .main-row-text {
+      /* Default: Light text color */
+      color: var(--main-row-text-light);
+      font-weight: 600;
+      transition: color .16s;
+    }
+    tr.main-row .main-row-text.main-row-text-dark {
+      /* Used for contrast with gold bar */
+      color: var(--main-row-text-dark) !important;
+      text-shadow: 0 1px 2px #fff7, 0 0 4px #ffe37944, 0 2px 4px #e4c14566;
+    }
     tr.main-row.day-complete {
       color: #201d09 !important;
       font-weight: bold;
       letter-spacing: 1.1px;
-      text-shadow: 0 1px 2px #fff7, 0 0 4px #ffe37944, 0 2px 4px #e4c14566;
       border-left: 4px solid var(--gold2);
       border-right: 2px solid var(--gold3);
       border-radius: 2px;
@@ -252,63 +267,17 @@
   <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
   <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
 </audio>
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
-  // Configuração do seu Firebase:
-  const firebaseConfig = {
-    apiKey: "AIzaSyM4nk0dBdn6vbt9l2EIxOLJAfC2pYVf1K",
-    authDomain: "habitos-danilo.firebaseapp.com",
-    projectId: "habitos-danilo",
-    storageBucket: "habitos-danilo.appspot.com",
-    messagingSenderId: "342696648229",
-    appId: "1:342696648229:web:e2b24706e2dde3c1c1200c",
-    measurementId: "G-58B029UGJV"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  // Salva progresso na nuvem (Firestore)
-  function saveProgressToFirebase(userId, progressObj) {
-    db.collection("progressos").doc(userId).set({
-      progresso: progressObj,
-      updatedAt: new Date()
-    }).then(() => {
-      //console.log("Progresso salvo na nuvem!");
-    }).catch((error) => {
-      alert("Erro ao salvar: " + error.message);
-    });
-  }
-
-  // Carrega progresso da nuvem (Firestore)
-  function loadProgressFromFirebase(userId, callback) {
-    db.collection("progressos").doc(userId).get().then(doc => {
-      if(doc.exists) {
-        callback(doc.data().progresso);
-      } else {
-        callback(null);
-      }
-    }).catch((error) => {
-      alert("Erro ao carregar: " + error.message);
-    });
-  }
-</script>
-
-<script>
+  // --- FIREBASE OMITTED IN THIS VERSION, ADD BACK IF NEEDED ---
   function unlockScroll() {
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
   }
-
-  // EMOJIS para cada hábito
   const habitEmojis = [
     "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
   ];
   const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
 
-  // CONFETTI
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
@@ -372,27 +341,17 @@
     }, 4000);
   }
 
-  // PROGRESSO LOCALSTORAGE
+  // Local progress only (for simplicity)
   function getProgress() {
     const progress = localStorage.getItem('habits-progress-v1');
     return progress ? JSON.parse(progress) : {};
   }
   function saveProgress(progress) {
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
-    // Salva na nuvem também!
-    saveProgressToFirebase('danilo', progress); // Troque 'danilo' se quiser multi-usuário!
   }
 
   document.addEventListener("DOMContentLoaded", function() {
-
-    // Ao abrir a página, tenta carregar da nuvem antes de exibir a UI
-    loadProgressFromFirebase('danilo', function(progressoCloud) {
-      if(progressoCloud) {
-        localStorage.setItem('habits-progress-v1', JSON.stringify(progressoCloud));
-      }
-      iniciarCalendario(); // só chama a função de gerar/exibir a UI após garantir os dados
-    });
-
+    iniciarCalendario();
     function iniciarCalendario() {
       // DADOS E GERAÇÃO DA TABELA
       const dados = [];
@@ -410,19 +369,26 @@
       const inicio = new Date(2025, 4, 21), fim = new Date(2025, 7, 21);
       const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
       let habitos_ativos = [];
+      let lastDayHabits = [];
       for (let i = 1; i <= dias_total; i++) {
         const data_atual = new Date(inicio); data_atual.setDate(inicio.getDate() + i - 1);
-        if (habitos_incrementais[i]) habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
+        let novosHabitos = [];
+        if (habitos_incrementais[i]) {
+          habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
+          novosHabitos = habitos_incrementais[i];
+        }
         const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
         dados.push({
           data: data_atual.toLocaleDateString('pt-BR'),
           dia: `Dia ${i}`,
           habitos: [...habitos_ativos],
+          novosHabitos: novosHabitos.length ? novosHabitos : [],
           ciclico: habito_ciclico,
           mes: data_atual.getMonth() + 1,
           ano: data_atual.getFullYear(),
           id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
         });
+        lastDayHabits = [...habitos_ativos];
       }
       const calendario = document.getElementById("calendario");
       const grupos = {};
@@ -446,12 +412,16 @@
           </thead>
           <tbody>`;
         dias.forEach((dia, i) => {
+          // Get only newly added habits for that day
+          const habitosDisplay = dia.novosHabitos.length
+            ? dia.novosHabitos.join(', ')
+            : '-';
           html += `
           <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
             <td><span class="expand-icon">&#9654;</span></td>
             <td>${dia.data}</td>
             <td>${dia.dia}</td>
-            <td>${dia.habitos.join(', ')}</td>
+            <td class="main-row-text">${habitosDisplay}</td>
             <td>${dia.ciclico}</td>
           </tr>
           <tr class="dropdown" id="dropdown-${dia.id}">
@@ -490,7 +460,7 @@
         }
       });
 
-      // Atualiza barra de progresso dourada por dia
+      // Atualiza barra de progresso dourada por dia e texto
       function updateProgressBar(dayId, habitCount) {
         let checked = 0;
         for (let i=0; i<habitCount; i++) {
@@ -502,6 +472,15 @@
         if (row) {
           row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
           row.style.setProperty('--progress', pct);
+
+          // CHANGE TEXT COLOR for "Hábitos Diários" column when progress > 0.38 for contrast
+          const textCell = row.querySelector('.main-row-text');
+          if (pct > 0.38) {
+            textCell.classList.add('main-row-text-dark');
+          } else {
+            textCell.classList.remove('main-row-text-dark');
+          }
+
           if (pct === 1) row.classList.add('day-complete');
           else row.classList.remove('day-complete');
         }
@@ -561,7 +540,7 @@
           if(label) label.classList.toggle('habit-done', this.checked);
           let progress = getProgress();
           progress[this.id] = this.checked;
-          saveProgress(progress); // salva local e na nuvem!
+          saveProgress(progress);
           const hi = document.getElementById('habititem-' + this.id);
           if (hi) hi.classList.toggle('habit-complete', this.checked);
           const parts = this.id.match(/^dia-\d+-\d+-\d+/);
