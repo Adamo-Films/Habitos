@@ -4,17 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no Controle</title>
-  <!-- Fonte ultra fina -->
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&display=swap" rel="stylesheet">
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --azul-shadow: #191246;
       --header-azul: #18104b;
+      --header-azul2: #2436ab;
       --laranja-3d: #ff522e;
       --branco: #fff;
       --gold: #ffe379;
       --gold2: #e4c145;
       --gold3: #f7e399;
+      --corpo: #191919;
     }
     html, body {
       height: 100%;
@@ -22,35 +24,45 @@
       padding: 0;
     }
     body {
-      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
-      background-color: #121212;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      background: linear-gradient(to bottom, var(--header-azul2) 0 290px, var(--corpo) 300px 100%);
       color: #e0e0e0;
       margin: 0;
       padding: 0;
       min-height: 100vh;
+      transition: background 0.3s;
     }
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
     }
+    /* HEADER */
     .header-3d-bg {
       width: 100vw;
-      background: var(--header-azul);
-      margin-bottom: 36px;
-      padding-top: 36px;
-      padding-bottom: 46px;
+      position: sticky;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--header-azul2) 60%, transparent 100%);
       box-shadow: 0 14px 70px 0 #000b;
       display: flex;
       justify-content: center;
-      align-items: center;
-      position: relative;
-      min-height: 170px;
+      align-items: flex-end;
+      min-height: 180px;
+      padding-top: 36px;
+      padding-bottom: 36px;
       overflow-x: hidden;
+      transition: min-height 0.35s cubic-bezier(.8,0,.22,1);
+    }
+    .header-3d-bg.shrink {
+      min-height: 70px;
+      padding-top: 0;
+      padding-bottom: 0;
     }
     .titulo-3d {
       font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
-      font-size: 6vw;
+      font-size: 5.3vw;
       font-weight: 100;
       text-transform: uppercase;
       letter-spacing: 0.13em;
@@ -58,28 +70,41 @@
       line-height: 1.03;
       text-align: center;
       font-stretch: ultra-expanded;
-      /* 3D: sombras muito próximas (efeito dividido por 3!) e letras super finas */
+      font-variation-settings: "wght" 100;
+      /* Super hairline */
+      font-optical-sizing: auto;
+      /* 3D: sombras super próximas */
       text-shadow:
-        0.027em 0.06em 0 var(--laranja-3d),
-        0.05em 0.12em 0 var(--laranja-3d),
-        0.09em 0.18em 0 var(--laranja-3d),
-        0.13em 0.24em 0 var(--laranja-3d),
-        0.16em 0.33em 0 var(--azul-shadow),
-        0 10px 25px #0009;
-      font-variation-settings: "wght" 100; /* Mais fina possível! */
+        0.016em 0.031em 0 var(--laranja-3d),
+        0.028em 0.067em 0 var(--laranja-3d),
+        0.06em 0.09em 0 var(--azul-shadow),
+        0 8px 20px #000a;
+      transition: font-size 0.36s cubic-bezier(.8,0,.22,1);
     }
-    @media (max-width: 800px) {
-      .titulo-3d { font-size: 11vw; }
-      .header-3d-bg { padding-top: 20px; padding-bottom: 28px;}
-      .container { padding: 0 8px; }
+    .header-3d-bg.shrink .titulo-3d {
+      font-size: 2.1vw;
+    }
+    @media (max-width: 900px) {
+      .titulo-3d { font-size: 9vw; }
+      .header-3d-bg.shrink .titulo-3d { font-size: 4vw;}
+    }
+    @media (max-width: 600px) {
+      .titulo-3d { font-size: 13vw; }
+      .header-3d-bg.shrink .titulo-3d { font-size: 6vw;}
+      .container { padding: 0 6px;}
     }
 
+    /* MESES */
     .mes {
-      font-size: 1.35em;
+      font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
+      font-size: 1.24em;
       margin: 40px 0 10px;
       border-bottom: 2px solid #f9c74f;
       padding-bottom: 5px;
+      letter-spacing: 0.06em;
+      color: #f9c74f;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -89,6 +114,9 @@
       overflow: hidden;
       margin-left: auto;
       margin-right: auto;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-size: 1.04em;
+      font-weight: 400;
     }
     th, td {
       padding: 12px;
@@ -98,6 +126,10 @@
     th {
       background-color: #1e1e1e;
       color: #f9c74f;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-size: 1em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
     }
     tr.main-row {
       cursor: pointer;
@@ -106,46 +138,52 @@
     tr.main-row:hover {
       background-color: #1f2d3d;
     }
-    /* Dia completo: DOURADO (leve e elegante) */
+    /* Dia completo: DOURADO suave */
     .day-complete {
       background:
-        linear-gradient(90deg, var(--gold), var(--gold2) 55%, var(--gold3) 100%) !important;
+        linear-gradient(90deg, var(--gold) 10%, var(--gold2) 55%, var(--gold3) 100%) !important;
       color: #201d09 !important;
       font-weight: bold;
       letter-spacing: 1.1px;
       box-shadow:
-        0 0 12px 0 var(--gold2),
-        0 2px 22px 2px #ffe379a0,
-        0 0 0 2px #e4c14590 inset;
+        0 0 5px 0 var(--gold2),
+        0 2px 12px 2px #ffe37980,
+        0 0 0 2px #e4c14570 inset;
       text-shadow:
         0 1px 2px #fff7,
-        0 0 4px #ffe37955,
-        0 2px 4px #e4c14588;
+        0 0 4px #ffe37944,
+        0 2px 4px #e4c14566;
       border-left: 4px solid var(--gold2);
       border-right: 2px solid var(--gold3);
       border-radius: 2px;
     }
 
-    /* Dropdown (centralizado, com check à direita!) */
+    /* Dropdown (centralizado, com check à direita, animado) */
     .dropdown {
-      background: #181818;
+      background: #232323;
       border-bottom: 1px solid #333;
-      display: none;
-      animation: fadeIn 0.3s;
+      display: table-row;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.38s cubic-bezier(.85,0,.2,1), opacity 0.24s cubic-bezier(.77,0,.25,1);
+      pointer-events: none;
+    }
+    .dropdown.active {
+      opacity: 1;
+      max-height: 1000px;
+      transition: max-height 0.48s cubic-bezier(.2,0,.77,1), opacity 0.29s cubic-bezier(.85,0,.2,1);
+      pointer-events: auto;
     }
     .dropdown > td {
       padding: 0;
     }
-    @keyframes fadeIn {
-      from { opacity: 0;}
-      to { opacity: 1;}
-    }
     .habit-list {
-      margin: 12px 0 12px 0;
+      margin: 16px 0 18px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 13px;
+      gap: 14px;
       width: 100%;
     }
     .habit-item {
@@ -158,61 +196,73 @@
       justify-content: flex-start;
       background: none;
       position: relative;
+      border-radius: 9px;
+      padding: 4px 8px 4px 2px;
+      transition: background 0.22s, box-shadow 0.22s;
+    }
+    .habit-item.habit-complete {
+      background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
+      box-shadow: 0 2px 15px 0 #ffe37955;
+      color: #232201 !important;
+      font-weight: 700;
     }
     .habit-emoji {
       font-size: 1.7em;
       display: inline-block;
       margin-right: 17px;
       margin-left: 5px;
-      transition: transform 0.17s cubic-bezier(.65,-0.6,.31,1.7);
-      filter: drop-shadow(0 2px 6px #0007);
+      min-width: 38px;
+      text-align: center;
       cursor: pointer;
       will-change: transform;
       user-select: none;
-      min-width: 38px;
-      text-align: center;
+      filter: drop-shadow(0 2px 6px #0007);
+      transition: transform 0.2s, filter 0.17s, box-shadow 0.17s;
+      position: relative;
+      z-index: 3;
     }
-    .habit-emoji:hover {
-      animation: emoji-bounce 0.7s cubic-bezier(.24,-0.06,.41,1.37) 1;
-      filter: drop-shadow(0 0 10px #f0a) drop-shadow(0 0 6px #fff9);
-      transform: rotate(-18deg) scale(1.13);
+    .habit-emoji:hover, .habit-emoji.glow {
+      animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
+      filter: drop-shadow(0 0 10px #39e6ff) drop-shadow(0 0 16px #2363ffbb);
+      box-shadow: 0 0 16px 4px #49b4ff55;
     }
     @keyframes emoji-bounce {
-      0%   { transform: scale(1)    rotate(0);}
-      30%  { transform: scale(1.23) rotate(-22deg);}
-      60%  { transform: scale(0.94) rotate(17deg);}
-      90%  { transform: scale(1.12) rotate(-9deg);}
-      100% { transform: scale(1.18) rotate(-18deg);}
+      0%   { transform: scale(1) rotate(0);}
+      30%  { transform: scale(1.23) rotate(-17deg);}
+      55%  { transform: scale(0.94) rotate(15deg);}
+      70%  { transform: scale(1.13) rotate(-9deg);}
+      100% { transform: scale(1) rotate(0);}
     }
     .habit-checkbox {
-      transform: scale(1.19);
+      transform: scale(1.23);
       cursor: pointer;
       margin-left: auto;
-      margin-right: 5px;
+      margin-right: 8px;
+      accent-color: #ffe379;
     }
     .habit-label {
       flex: 1 1 auto;
-      min-width: 100px;
-      max-width: 300px;
-      margin-right: 28px;
-      font-size: 1.04em;
+      min-width: 110px;
+      max-width: 340px;
+      margin-right: 24px;
+      font-size: 1.06em;
       color: #d5d5d5;
       letter-spacing: 0.04em;
-      font-family: inherit;
-      transition: color 0.22s;
+      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
       display: flex;
       align-items: center;
+      transition: color 0.19s;
     }
     .habit-done {
       text-decoration: line-through;
-      color: #888;
+      color: #888 !important;
     }
     .expand-icon {
       display: inline-block;
       width: 16px;
       transition: transform 0.2s;
     }
-    .expanded > .expand-icon {
+    .main-row.expanded > .expand-icon {
       transform: rotate(90deg);
     }
     /* Confetti canvas */
@@ -271,36 +321,20 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
   </audio>
 <script>
-  // ---- EMOJIS para cada hábito
+  // EMOJIS para cada hábito
   const habitEmojis = [
-    "💧", // Beber 2L de água
-    "🤳", // Tirar selfie
-    "⚖️", // Verificar peso
-    "🥗", // Dieta com alimentos integrais
-    "⏰", // Acordar às 5h
-    "🧘", // Meditação
-    "🏋️", // Exercício
-    "📚", // Leitura
-    "🍫🚫", // Sem açúcar refinado
-    "🇮🇹", // Italiano
+    "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
   ];
-  // Ciclicos
-  const cycleEmojis = [
-    "💬", // Afirmações
-    "🚿", // Banho gelado
-    "🧠", // Agilidade mental
-    "🙏", // Diário e gratidão
-  ];
-  // ---------------------- CONFETTI ANIMATION (Canvas) ----------------------
+  const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
+
+  // CONFETTI
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     canvas.style.display = 'block';
-
-    let W = canvas.width;
-    let H = canvas.height;
+    let W = canvas.width, H = canvas.height;
     let particles = [];
     let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
     for (let i = 0; i < 1200; i++) {
@@ -316,7 +350,6 @@
         alpha: 0.84 + Math.random() * 0.16
       });
     }
-
     let angle = 0;
     function draw() {
       ctx.clearRect(0, 0, W, H);
@@ -345,13 +378,9 @@
         }
       }
     }
-
     let interval = setInterval(draw, 13);
-
-    // Mostra/Some texto "VAI MLK!!!"
     const celebrateText = document.getElementById('celebrate-text');
     celebrateText.style.display = 'block';
-
     setTimeout(() => {
       clearInterval(interval);
       ctx.clearRect(0, 0, W, H);
@@ -360,7 +389,7 @@
     }, 4000);
   }
 
-  // -------------------- PROGRESSO LOCALSTORAGE ----------------------
+  // PROGRESSO LOCALSTORAGE
   function getProgress() {
     const progress = localStorage.getItem('habits-progress-v1');
     return progress ? JSON.parse(progress) : {};
@@ -369,7 +398,15 @@
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
 
+  // HEADER SHRINK STICKY
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('.header-3d-bg');
+    if(window.scrollY > 60) header.classList.add('shrink');
+    else header.classList.remove('shrink');
+  });
+
   document.addEventListener("DOMContentLoaded", function() {
+    // DADOS E GERAÇÃO DA TABELA: igual antes, só mudou a renderização dos habits
     const dados = [];
     const habitos_incrementais = {
       1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
@@ -381,27 +418,14 @@
       25: ["Alimentação sem açúcar refinado"],
       29: ["Prática de italiano (20 min por dia)"]
     };
-    const habitos_ciclicos = [
-      "Afirmações",
-      "Banho gelado",
-      "Exercício de agilidade mental",
-      "Diário e gratidão"
-    ];
-
-    const inicio = new Date(2025, 4, 21);
-    const fim = new Date(2025, 7, 21);
+    const habitos_ciclicos = ["Afirmações","Banho gelado","Exercício de agilidade mental","Diário e gratidão"];
+    const inicio = new Date(2025, 4, 21), fim = new Date(2025, 7, 21);
     const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
-
     let habitos_ativos = [];
     for (let i = 1; i <= dias_total; i++) {
-      const data_atual = new Date(inicio);
-      data_atual.setDate(inicio.getDate() + i - 1);
-
-      if (habitos_incrementais[i]) {
-        habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
-      }
+      const data_atual = new Date(inicio); data_atual.setDate(inicio.getDate() + i - 1);
+      if (habitos_incrementais[i]) habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
       const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
-
       dados.push({
         data: data_atual.toLocaleDateString('pt-BR'),
         dia: `Dia ${i}`,
@@ -412,37 +436,27 @@
         id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
       });
     }
-
     const calendario = document.getElementById("calendario");
     const grupos = {};
-
     dados.forEach((obj) => {
-      const id = `${obj.mes}-${obj.ano}`;
-      if (!grupos[id]) grupos[id] = [];
-      grupos[id].push(obj);
+      const id = `${obj.mes}-${obj.ano}`; if (!grupos[id]) grupos[id] = []; grupos[id].push(obj);
     });
-
     let html = '';
-
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
       const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
-
-      html += `
-        <div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
-        <table>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Data</th>
-              <th>Dia</th>
-              <th>Hábitos Diários</th>
-              <th>Hábito Cíclico</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
+      html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Data</th>
+            <th>Dia</th>
+            <th>Hábitos Diários</th>
+            <th>Hábito Cíclico</th>
+          </tr>
+        </thead>
+        <tbody>`;
       dias.forEach((dia, i) => {
         html += `
         <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
@@ -456,32 +470,26 @@
           <td colspan="5">
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
-                <div class="habit-item">
-                  <span class="habit-emoji" tabindex="0">${habitEmojis[idx % habitEmojis.length]}</span>
+                <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
+                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
                   <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
                 </div>
               `).join('')}
-              <div class="habit-item">
-                <span class="habit-emoji" tabindex="0">${cycleEmojis[(i)%cycleEmojis.length]}</span>
+              <div class="habit-item" id="habititem-${dia.id}-ciclico">
+                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(i)%cycleEmojis.length]}</span>
                 <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
                 <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
               </div>
             </div>
           </td>
-        </tr>
-        `;
+        </tr>`;
       });
-
-      html += `
-          </tbody>
-        </table>
-      `;
+      html += `</tbody></table>`;
     });
-
     calendario.innerHTML = html;
 
-    // ---- LOAD PROGRESS
+    // LOAD PROGRESS
     const progress = getProgress();
     Object.keys(progress).forEach(checkId => {
       const checkbox = document.getElementById(checkId);
@@ -489,19 +497,28 @@
         checkbox.checked = progress[checkId];
         const label = document.getElementById('label-' + checkId);
         if (label) label.classList.toggle('habit-done', progress[checkId]);
+        const hi = document.getElementById('habititem-' + checkId);
+        if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
       }
     });
 
     // Dropdown toggle
     document.querySelectorAll('tr.main-row').forEach(row => {
-      row.addEventListener('click', function() {
+      row.addEventListener('click', function(e) {
+        // Só abre/fecha se não for um botão/habit-checkbox
+        if (e.target.tagName === 'INPUT' || e.target.classList.contains('habit-emoji')) return;
         const dropdownId = this.getAttribute('data-dropdown');
         const dropdown = document.getElementById(`dropdown-${dropdownId}`);
-        if(dropdown.style.display === 'table-row') {
-          dropdown.style.display = 'none';
+        if(dropdown.classList.contains('active')) {
+          dropdown.classList.remove('active');
           this.classList.remove('expanded');
         } else {
-          dropdown.style.display = 'table-row';
+          // Fecha outros abertos
+          document.querySelectorAll('.dropdown.active').forEach(dd=>{
+            dd.classList.remove('active');
+            document.querySelector(`.main-row[data-dropdown="${dd.id.replace('dropdown-','')}"]`).classList.remove('expanded');
+          });
+          dropdown.classList.add('active');
           this.classList.add('expanded');
         }
       });
@@ -520,47 +537,69 @@
       return complete;
     }
 
-    // Play sound (com fallback de play forçado)
+    // Play sound
     function playCelebrateSound() {
       const audio = document.getElementById('celebrate-audio');
-      audio.currentTime = 0;
-      audio.volume = 0.93;
+      audio.currentTime = 0; audio.volume = 0.95;
       let played = false;
       audio.play().then(()=>{played=true;}).catch(()=>{
         if (!played) {
-          document.body.addEventListener('pointerdown', ()=>{
-            audio.play();
-          }, {once:true});
+          document.body.addEventListener('pointerdown', ()=>{audio.play();}, {once:true});
         }
       });
     }
 
-    // Evento checkbox
+    // Checkbox logic + hábito concluído destaque individual
     document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
       checkbox.addEventListener('change', function() {
         const label = document.getElementById('label-' + this.id);
-        if(this.checked) {
-          label.classList.add('habit-done');
-        } else {
-          label.classList.remove('habit-done');
-        }
+        if(label) label.classList.toggle('habit-done', this.checked);
         let progress = getProgress();
         progress[this.id] = this.checked;
         saveProgress(progress);
+        // Destaque individual
+        const hi = document.getElementById('habititem-' + this.id);
+        if (hi) hi.classList.toggle('habit-complete', this.checked);
 
+        // Checa se todos do dia foram feitos
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if(parts) {
           const dayId = parts[0];
           const dayRow = document.getElementById(`mainrow-${dayId}`);
           const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
-          const allDone = checkAllHabitsComplete(dayId, habitCount-1); // -1 pois o último é o cíclico
+          const allDone = checkAllHabitsComplete(dayId, habitCount-1); // -1 pois último é cíclico
+          const dropdown = document.getElementById(`dropdown-${dayId}`);
           if(allDone) {
             dayRow.classList.add('day-complete');
             launchConfettiEpic();
             playCelebrateSound();
+            setTimeout(()=>{
+              if(dropdown) dropdown.classList.remove('active');
+              if(dayRow) dayRow.classList.remove('expanded');
+            }, 950);
           } else {
             dayRow.classList.remove('day-complete');
           }
+        }
+      });
+    });
+
+    // EMOJI CLICK (faz o hábito!)
+    document.querySelectorAll('.habit-emoji').forEach(emoji=>{
+      emoji.addEventListener('mouseenter', function() {
+        emoji.classList.add('glow');
+        setTimeout(()=>emoji.classList.remove('glow'), 680);
+      });
+      emoji.addEventListener('mouseleave', function() {
+        emoji.classList.remove('glow');
+      });
+      emoji.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const id = emoji.getAttribute('data-checkbox');
+        const checkbox = document.getElementById(id);
+        if(checkbox) {
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event('change'));
         }
       });
     });
