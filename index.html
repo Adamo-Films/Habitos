@@ -83,60 +83,126 @@
       transform: rotate(90deg);
     }
     .day-complete {
-      background: linear-gradient(90deg, #29291e 70%, #FFD700 100%) !important;
-      color: #ffd700 !important;
+      background: linear-gradient(90deg, #0f3 30%, #39ff90 70%, #b4ffc6 100%) !important;
+      color: #181818 !important;
       font-weight: bold;
-      box-shadow: 0 0 20px 2px #ffd70044;
+      box-shadow: 0 0 30px 5px #44ffb244;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px #0f0, 0 0 20px #4fff90;
     }
-    /* Confetti animation */
-    .confetti {
+    /* Confetti animation canvas */
+    #confetti-canvas {
       position: fixed;
       left: 0; top: 0; width: 100vw; height: 100vh;
       pointer-events: none;
       z-index: 9999;
-      overflow: hidden;
+      display: none;
     }
-    .confetti-piece {
-      position: absolute;
-      width: 12px;
-      height: 18px;
-      opacity: 0.8;
-      border-radius: 2px;
-      animation: confetti-fall 1.2s linear forwards;
+    /* Texto Parabéns */
+    #celebrate-text {
+      display: none;
+      position: fixed;
+      left: 50%; top: 38%;
+      transform: translate(-50%, -50%);
+      font-size: 4vw;
+      color: #39ff90;
+      text-shadow: 0 0 12px #fff, 0 0 40px #39ff90, 0 0 80px #1eff8b;
+      font-weight: bold;
+      z-index: 10000;
+      animation: celebrateText 1.5s ease-out;
     }
-    @keyframes confetti-fall {
-      to {
-        transform: translateY(100vh) rotateZ(720deg);
-        opacity: 0.2;
-      }
+    @keyframes celebrateText {
+      0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+      50%  { transform: translate(-50%, -55%) scale(1.1); opacity: 1;}
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1;}
     }
   </style>
 </head>
 <body>
   <h2>Calendário de Hábitos - Maio a Agosto 2025</h2>
   <div id="calendario"></div>
-  <audio id="celebrate-audio" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b9a9b.mp3"></audio>
-  <div class="confetti" id="confetti"></div>
+  <!-- Canvas para confetes -->
+  <canvas id="confetti-canvas"></canvas>
+  <!-- Texto de celebração -->
+  <div id="celebrate-text">Parabéns! Dia Concluído!</div>
+  <!-- Som de conquista -->
+  <audio id="celebrate-audio" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b2e6b8b6.mp3"></audio>
 <script>
-  // ---- Confetti
-  function launchConfetti() {
-    const confettiColors = ['#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#fff'];
-    const confettiCount = 80;
-    const confettiContainer = document.getElementById('confetti');
-    confettiContainer.innerHTML = '';
-    for (let i = 0; i < confettiCount; i++) {
-      const conf = document.createElement('div');
-      conf.className = 'confetti-piece';
-      conf.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-      conf.style.left = Math.random() * 100 + 'vw';
-      conf.style.top = (Math.random() * -30) + 'px';
-      conf.style.transform = `rotate(${Math.random()*360}deg)`;
-      confettiContainer.appendChild(conf);
+  // ---------------------- CONFETTI ANIMATION (Canvas) ----------------------
+  // Grande experiência: confetes caindo por toda tela
+  function launchConfettiEpic() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.display = 'block';
+
+    let W = canvas.width;
+    let H = canvas.height;
+    let particles = [];
+    let colors = ['#39ff90','#FFD700','#fff','#FF69B4','#00E6F6','#82FF6A','#FF6666','#b4ffc6','#ffffff'];
+
+    for (let i = 0; i < 140; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * -H,
+        r: 8 + Math.random() * 12,
+        d: Math.random() * 180,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        tilt: Math.random() * 10 - 10,
+        tiltAngle: 0,
+        tiltAngleIncremental: (Math.random() * 0.07) + .05,
+        alpha: 0.85 + Math.random() * 0.15
+      });
     }
-    setTimeout(() => { confettiContainer.innerHTML = ''; }, 1400);
+
+    let angle = 0;
+    let frame = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < particles.length; i++) {
+        ctx.beginPath();
+        ctx.lineWidth = particles[i].r / 2;
+        ctx.strokeStyle = particles[i].color;
+        ctx.globalAlpha = particles[i].alpha;
+        ctx.moveTo(particles[i].x + particles[i].tilt + particles[i].r / 4, particles[i].y);
+        ctx.lineTo(particles[i].x + particles[i].tilt, particles[i].y + particles[i].r);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      update();
+    }
+    function update() {
+      angle += 0.01;
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].y += (Math.cos(angle + particles[i].d) + 3 + particles[i].r/6) * 0.6;
+        particles[i].x += Math.sin(angle) * 2;
+        particles[i].tiltAngle += particles[i].tiltAngleIncremental;
+        particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 3)) * 15;
+        // reaproveita confete no topo
+        if (particles[i].y > H) {
+          particles[i].y = -10;
+          particles[i].x = Math.random() * W;
+        }
+      }
+    }
+
+    let interval = setInterval(draw, 16);
+
+    // Mostra/Some texto "Parabéns!"
+    const celebrateText = document.getElementById('celebrate-text');
+    celebrateText.style.display = 'block';
+
+    setTimeout(() => {
+      clearInterval(interval);
+      ctx.clearRect(0, 0, W, H);
+      canvas.style.display = 'none';
+      celebrateText.style.display = 'none';
+    }, 2100);
   }
 
-  // ---- Save/Load Progress
+  // -------------------- PROGRESSO LOCALSTORAGE ----------------------
   function getProgress() {
     const progress = localStorage.getItem('habits-progress-v1');
     return progress ? JSON.parse(progress) : {};
@@ -326,7 +392,7 @@
             // Linha colorida
             dayRow.classList.add('day-complete');
             // Animação e som
-            launchConfetti();
+            launchConfettiEpic();
             playCelebrateSound();
           } else {
             dayRow.classList.remove('day-complete');
@@ -342,6 +408,15 @@
       if(allDone) {
         const dayRow = document.getElementById(`mainrow-${dia.id}`);
         if (dayRow) dayRow.classList.add('day-complete');
+      }
+    });
+
+    // Redimensiona o canvas quando a tela mudar
+    window.addEventListener('resize', function() {
+      const canvas = document.getElementById('confetti-canvas');
+      if(canvas.style.display === 'block') {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
       }
     });
 
