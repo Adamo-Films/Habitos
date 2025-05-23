@@ -31,12 +31,12 @@
       background-color: #1e1e1e;
       color: #f9c74f;
     }
-    tr:hover {
-      background-color: #1f2d3d;
-    }
-    input[type=checkbox] {
-      transform: scale(1.4);
+    tr.main-row {
       cursor: pointer;
+      transition: background 0.2s;
+    }
+    tr.main-row:hover {
+      background-color: #1f2d3d;
     }
     .mes {
       font-size: 1.4em;
@@ -44,9 +44,43 @@
       border-bottom: 2px solid #f9c74f;
       padding-bottom: 5px;
     }
-    .feito {
+    .dropdown {
+      background: #181818;
+      border-bottom: 1px solid #333;
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0;}
+      to { opacity: 1;}
+    }
+    .habit-list {
+      margin: 10px 0 10px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .habit-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05em;
+    }
+    .habit-checkbox {
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    .habit-done {
       text-decoration: line-through;
       color: #888;
+    }
+    .expand-icon {
+      display: inline-block;
+      width: 16px;
+      transition: transform 0.2s;
+    }
+    .expanded > .expand-icon {
+      transform: rotate(90deg);
     }
   </style>
 </head>
@@ -88,59 +122,108 @@
       }
       const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
 
-      dados.push([
-        data_atual.toLocaleDateString('pt-BR'),
-        `Dia ${i}`,
-        habitos_ativos.join(', '),
-        habito_ciclico,
-        data_atual.getMonth() + 1,
-        data_atual.getFullYear()
-      ]);
+      dados.push({
+        data: data_atual.toLocaleDateString('pt-BR'),
+        dia: `Dia ${i}`,
+        habitos: [...habitos_ativos],
+        ciclico: habito_ciclico,
+        mes: data_atual.getMonth() + 1,
+        ano: data_atual.getFullYear(),
+        id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
+      });
     }
 
     const calendario = document.getElementById("calendario");
     const grupos = {};
 
-    dados.forEach(([data, dia, habitos, ciclico, mes, ano]) => {
-      const id = `${mes}-${ano}`;
+    dados.forEach((obj) => {
+      const id = `${obj.mes}-${obj.ano}`;
       if (!grupos[id]) grupos[id] = [];
-      grupos[id].push({ data, dia, habitos, ciclico });
+      grupos[id].push(obj);
     });
 
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
       const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
 
-      const html = `
+      let html = `
         <div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
         <table>
           <thead>
             <tr>
+              <th></th>
               <th>Data</th>
               <th>Dia</th>
               <th>Hábitos Diários</th>
               <th>Hábito Cíclico</th>
-              <th>Feito?</th>
             </tr>
           </thead>
           <tbody>
-            ${dias.map(({ data, dia, habitos, ciclico }) => `
-              <tr>
-                <td>${data}</td>
-                <td>${dia}</td>
-                <td>${habitos}</td>
-                <td>${ciclico}</td>
-                <td><input type="checkbox" onchange="this.parentElement.parentElement.classList.toggle('feito')"></td>
-              </tr>
-            `).join('')}
+      `;
+
+      dias.forEach((dia, i) => {
+        html += `
+        <tr class="main-row" data-dropdown="${dia.id}">
+          <td><span class="expand-icon">&#9654;</span></td>
+          <td>${dia.data}</td>
+          <td>${dia.dia}</td>
+          <td>${dia.habitos.join(', ')}</td>
+          <td>${dia.ciclico}</td>
+        </tr>
+        <tr class="dropdown" id="dropdown-${dia.id}">
+          <td colspan="5">
+            <div class="habit-list">
+              ${dia.habitos.map((h, idx) => `
+                <div class="habit-item">
+                  <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
+                  <label for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
+                </div>
+              `).join('')}
+              <div class="habit-item">
+                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
+                <label for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
+              </div>
+            </div>
+          </td>
+        </tr>
+        `;
+      });
+
+      html += `
           </tbody>
         </table>
       `;
       calendario.innerHTML += html;
     });
+
+    // Dropdown toggle
+    document.querySelectorAll('tr.main-row').forEach(row => {
+      row.addEventListener('click', function() {
+        const dropdownId = this.getAttribute('data-dropdown');
+        const dropdown = document.getElementById(`dropdown-${dropdownId}`);
+        if(dropdown.style.display === 'table-row') {
+          dropdown.style.display = 'none';
+          this.classList.remove('expanded');
+        } else {
+          dropdown.style.display = 'table-row';
+          this.classList.add('expanded');
+        }
+      });
+    });
+
+    // Checkmark: riscar hábito feito
+    document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const label = document.getElementById('label-' + this.id);
+        if(this.checked) {
+          label.classList.add('habit-done');
+        } else {
+          label.classList.remove('habit-done');
+        }
+      });
+    });
+
   });
 </script>
 </body>
 </html>
-
-
