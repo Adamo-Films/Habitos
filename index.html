@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no 🎮</title>
+  <!-- Fonte Bebas Neue -->
+  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -11,13 +13,11 @@
       --gold2: #e4c145;
       --gold3: #f7e399;
       --corpo: #191919;
-      --header-manha: #6ca2f7;
-      --header-tarde: #ffbf69;
-      --header-noite: #2c2152;
-      --header-madrugada: #38334a;
-      --logo-shadow: 0 8px 38px 0 #0008;
+      --day-inactive: #dedede;
+      --header-height: 240px;
+      --header-shrink: 68px;
     }
-    html, body { height: 100%; margin: 0; padding: 0; }
+    html, body { height: 100%; margin: 0; padding: 0;}
     body {
       font-family: 'Inter', Arial, sans-serif;
       background: var(--corpo);
@@ -30,80 +30,107 @@
       margin: 0 auto;
       padding: 0 32px;
     }
-
-    /* HEADER NOVO */
+    /* HEADER  */
     .header-3d-bg {
       width: 100vw;
-      position: sticky;
-      top: 0; left: 0; z-index: 100;
+      position: fixed;
+      top: 0; left: 0; z-index: 1001;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 210px;
-      padding-top: 28px;
-      padding-bottom: 16px;
-      background: var(--header-manha); /* será sobrescrito dinamicamente */
-      transition: background 0.8s cubic-bezier(.6,0,.18,1.2);
-      box-shadow: 0 12px 52px 0 #000a;
-      overflow: hidden;
+      min-height: var(--header-height);
+      height: var(--header-height);
+      padding-top: 30px;
+      padding-bottom: 14px;
+      box-shadow: 0 12px 52px 0 #000b;
+      overflow: visible;
+      transition: min-height 0.3s, height 0.3s, background 1.3s cubic-bezier(.6,0,.18,1.2);
+      background: linear-gradient(180deg, #95cbff 0%, #c0e5ff 70%, #fff6 100%);
+      border-bottom: 4px solid #191919;
+      will-change: background, height;
+    }
+    .header-3d-bg.shrink {
+      min-height: var(--header-shrink);
+      height: var(--header-shrink);
+      padding-top: 4px;
+      padding-bottom: 0;
+    }
+    /* Simula espaço do header para conteúdo */
+    .header-spacer {
+      height: var(--header-height);
+      transition: height 0.3s;
+    }
+    .header-3d-bg.shrink ~ .header-spacer {
+      height: var(--header-shrink);
     }
     .logo-title-group {
-      position: relative;
-      width: fit-content;
+      width: 100vw;
       margin: 0 auto;
       text-align: center;
       z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
     }
     .logo-text {
-      font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
-      font-size: 5vw;
-      font-weight: 100;
+      font-family: 'Bebas Neue', Arial, sans-serif;
+      font-size: 6vw;
       text-transform: uppercase;
-      letter-spacing: 0.13em;
       color: #fff;
+      letter-spacing: 0.13em;
+      font-weight: 400;
+      background: linear-gradient(90deg, #fff 10%, #ffe379 48%, #ff522e 70%, #36aaff 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
       line-height: 1;
       text-shadow:
-        0 2px 0 #111a,
-        0 8px 32px #ff522e80,
-        0 12px 38px #000b;
-      background: none;
-      z-index: 2;
-      position: relative;
-      margin-bottom: -2vw;
+        0 6px 18px #0008,
+        0 2px 10px #002c,
+        0 0 12px #ffca4377;
+      z-index: 3;
+      margin-bottom: -2.5vw;
       margin-top: 0;
       pointer-events: none;
-      /* Para overlap bonito */
       padding-bottom: 1vw;
+      transition: font-size 0.33s, margin-bottom 0.3s;
     }
     .logo-controller {
-      font-size: 8vw;
-      line-height: 1;
+      font-size: 13vw;
       margin: 0 auto;
-      margin-top: -2vw;
+      margin-top: -3vw;
       position: relative;
-      z-index: 1;
-      filter: drop-shadow(0 0 24px #ff522e80) drop-shadow(0 12px 24px #0009);
+      z-index: 2;
+      filter: drop-shadow(0 0 34px #ff522e80) drop-shadow(0 12px 30px #000a);
       pointer-events: none;
       user-select: none;
+      transition: font-size 0.33s, margin-top 0.3s;
       background: none;
-      /* Overlap ajustado com o texto acima */
     }
-    /* HEADER shrink responsivo */
-    .header-3d-bg.shrink { min-height: 70px; padding-top: 0; padding-bottom: 0; }
+    .header-3d-bg.shrink .logo-controller {
+      font-size: 5vw;
+      margin-top: -1vw;
+    }
+    .header-3d-bg.shrink .logo-text {
+      font-size: 2.2vw;
+      margin-bottom: -0.8vw;
+    }
     @media (max-width: 900px) {
-      .logo-text { font-size: 9vw; margin-bottom: -3vw;}
-      .logo-controller { font-size: 15vw; margin-top: -4vw;}
+      .logo-text { font-size: 9vw; margin-bottom: -4vw;}
+      .logo-controller { font-size: 21vw; margin-top: -7vw;}
+      .header-3d-bg.shrink .logo-text { font-size: 5vw; margin-bottom: -2vw;}
+      .header-3d-bg.shrink .logo-controller { font-size: 10vw; margin-top: -2vw;}
     }
     @media (max-width: 600px) {
-      .logo-text { font-size: 13vw; margin-bottom: -5vw;}
-      .logo-controller { font-size: 24vw; margin-top: -6vw;}
+      .logo-text { font-size: 14vw; margin-bottom: -6vw;}
+      .logo-controller { font-size: 32vw; margin-top: -11vw;}
+      .header-3d-bg.shrink .logo-text { font-size: 7vw; margin-bottom: -3vw;}
+      .header-3d-bg.shrink .logo-controller { font-size: 16vw; margin-top: -4vw;}
       .container { padding: 0 6px;}
     }
-
     /* MESES */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
@@ -132,6 +159,7 @@
       text-align: left;
       border-bottom: 1px solid #333;
       vertical-align: middle;
+      z-index: 2;
     }
     th {
       background-color: #1e1e1e;
@@ -139,12 +167,12 @@
       font-size: 1.06em;
       font-weight: 700;
       letter-spacing: 0.02em;
+      z-index: 2;
     }
     tr.main-row {
       cursor: pointer;
       transition: background 0.2s;
       position: relative;
-      /* Barra dourada de progresso no fundo */
       --progress: 0;
       background: linear-gradient(
         90deg,
@@ -155,22 +183,8 @@
       background-size: calc(var(--progress, 0) * 100%) 100%;
       background-repeat: no-repeat;
       background-position: left top;
-      /* Escurece se não tiver progresso */
       box-shadow: 0 2px 10px 0 #0008;
-      /* Overlay para escurecer por cima do dourado, se não completou */
-    }
-    tr.main-row:not(.day-complete)::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(32,32,32,0.87);
-      pointer-events: none;
-      z-index: 1;
-      transition: background 0.3s;
-      border-radius: 1.5px;
-    }
-    tr.main-row.day-complete::after {
-      background: transparent;
+      color: var(--day-inactive);
     }
     tr.main-row.day-complete {
       color: #201d09 !important;
@@ -181,18 +195,31 @@
       border-right: 2px solid var(--gold3);
       border-radius: 2px;
       box-shadow: 0 0 5px 0 var(--gold2), 0 2px 12px 2px #ffe37980, 0 0 0 2px #e4c14570 inset;
+      background-size: 100% 100% !important;
+      color: #222 !important;
+    }
+    tr.main-row:not(.day-complete)::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(30,30,30,0.95);
+      pointer-events: none;
+      z-index: 1;
+      border-radius: 1.5px;
+      transition: background 0.3s;
+    }
+    tr.main-row.day-complete::after {
+      background: transparent;
     }
     tr.main-row:hover { filter: brightness(1.08);}
     .expand-icon { display: inline-block; width: 16px; transition: transform 0.2s; }
     .main-row.expanded > .expand-icon { transform: rotate(90deg); }
-    /* Dropdown */
     .dropdown { display: none; transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05); animation: none; height: 0; padding: 0;}
     .dropdown.active { display: table-row; animation: slideDown 0.35s cubic-bezier(.2,1.1,.42,1.09); height: auto;}
     @keyframes slideDown {0%{opacity:0;transform:translateY(-28px)scaleY(0.7);}70%{opacity:1;transform:translateY(5px)scaleY(1.09);}100%{opacity:1;transform:translateY(0)scaleY(1);}}
     .dropdown.drop-up {animation: slideUp 0.44s cubic-bezier(.2,1.2,.42,1.01);}
     @keyframes slideUp {0%{opacity:1;transform:translateY(0)scaleY(1);}100%{opacity:0;transform:translateY(-38px)scaleY(0.65);}}
     .dropdown > td { padding: 0;}
-
     .habit-list { margin: 16px 0 18px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;}
     .habit-item {
       display: flex; align-items: center; gap: 0; font-size: 1.36em;
@@ -263,6 +290,7 @@
       <span class="logo-controller" title="Controle de videogame">🎮</span>
     </div>
   </div>
+  <div class="header-spacer"></div>
   <div class="container">
     <div id="calendario"></div>
   </div>
@@ -273,18 +301,55 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
   </audio>
 <script>
-  // HEADER DYNAMIC BG
-  function updateHeaderColor() {
-    const h = new Date().getHours();
-    let color;
-    if (h >= 6 && h < 12) color = getComputedStyle(document.documentElement).getPropertyValue('--header-manha');
-    else if (h >= 12 && h < 18) color = getComputedStyle(document.documentElement).getPropertyValue('--header-tarde');
-    else if (h >= 18 && h < 24) color = getComputedStyle(document.documentElement).getPropertyValue('--header-noite');
-    else color = getComputedStyle(document.documentElement).getPropertyValue('--header-madrugada');
-    document.getElementById('dynamic-header').style.background = color.trim();
+  // HEADER DYNAMIC SKY GRADIENT
+  function headerSkyGradient() {
+    const hour = new Date().getHours();
+    let bg;
+    if (hour >= 6 && hour < 11) // manhã
+      bg = "linear-gradient(180deg, #8fd1ff 0%, #e0f4ff 70%, #fff7 100%)";
+    else if (hour >= 11 && hour < 17) // tarde
+      bg = "linear-gradient(180deg, #ffe79e 0%, #ffd2c6 60%, #ffd999 95%, #fff5 100%)";
+    else if (hour >= 17 && hour < 20) // por do sol
+      bg = "linear-gradient(180deg, #fd978e 0%, #f4d5e2 55%, #e2a2f2 100%)";
+    else if (hour >= 20 || hour < 4) // noite
+      bg = "linear-gradient(180deg, #1a2240 0%, #373066 70%, #232330 100%)";
+    else // madrugada
+      bg = "linear-gradient(180deg, #20232c 0%, #384464 60%, #272635 100%)";
+    document.getElementById('dynamic-header').style.background = bg;
   }
-  updateHeaderColor();
-  setInterval(updateHeaderColor, 60 * 1000);
+  headerSkyGradient();
+  setInterval(headerSkyGradient, 5 * 60 * 1000);
+
+  // Shrink header on scroll, sticky always
+  let lastScroll = 0;
+  function shrinkHeaderOnScroll() {
+    const header = document.getElementById('dynamic-header');
+    const spacer = document.querySelector('.header-spacer');
+    const scroll = window.scrollY;
+    if(scroll > 30 && !header.classList.contains('shrink')) {
+      header.classList.add('shrink');
+      spacer.style.height = getComputedStyle(header).height;
+    } else if(scroll <= 30 && header.classList.contains('shrink')) {
+      header.classList.remove('shrink');
+      spacer.style.height = getComputedStyle(header).height;
+    }
+    lastScroll = scroll;
+  }
+  window.addEventListener('scroll', shrinkHeaderOnScroll);
+
+  // Ajuste inicial e on resize para header
+  function fixHeaderSpacer() {
+    const header = document.getElementById('dynamic-header');
+    document.querySelector('.header-spacer').style.height = getComputedStyle(header).height;
+  }
+  window.addEventListener('resize', fixHeaderSpacer);
+  setTimeout(fixHeaderSpacer, 300);
+
+  // Corrige bug do confetti travando scroll
+  function unlockScroll() {
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+  }
 
   // EMOJIS para cada hábito
   const habitEmojis = [
@@ -298,6 +363,7 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     canvas.style.display = 'block';
+    document.body.style.overflow = "hidden";
     let W = canvas.width, H = canvas.height;
     let particles = [];
     let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
@@ -350,8 +416,10 @@
       ctx.clearRect(0, 0, W, H);
       canvas.style.display = 'none';
       celebrateText.style.display = 'none';
+      unlockScroll();
     }, 4000);
   }
+
   // PROGRESSO LOCALSTORAGE
   function getProgress() {
     const progress = localStorage.getItem('habits-progress-v1');
@@ -360,15 +428,10 @@
   function saveProgress(progress) {
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
-  // HEADER SHRINK STICKY
-  window.addEventListener('scroll', () => {
-    const header = document.querySelector('.header-3d-bg');
-    if(window.scrollY > 60) header.classList.add('shrink');
-    else header.classList.remove('shrink');
-  });
 
   document.addEventListener("DOMContentLoaded", function() {
-    // GERAÇÃO DA TABELA
+    fixHeaderSpacer();
+    // DADOS E GERAÇÃO DA TABELA
     const dados = [];
     const habitos_incrementais = {
       1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
@@ -563,6 +626,7 @@
                 setTimeout(()=>dropdown.classList.remove('drop-up'), 400);
               }
               if(dayRow) dayRow.classList.remove('expanded');
+              unlockScroll();
             }, 950);
           } else {
             dayRow.classList.remove('day-complete');
@@ -607,6 +671,7 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       }
+      fixHeaderSpacer();
     });
   });
 </script>
