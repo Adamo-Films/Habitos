@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no 🎮</title>
-  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee:wght@700&family=Bebas+Neue&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -14,10 +13,7 @@
       --gold3: #f7e399;
       --corpo: #191919;
       --day-inactive: #f2f2f7;
-      --header-height: 190px;
-      --header-shrink: 62px;
-      --main-row-text-dark: #191919;
-      --main-row-text-light: #ffffff;
+      --header-img-height: 250px;
     }
     html, body { height: 100%; margin: 0; padding: 0;}
     body {
@@ -27,49 +23,50 @@
       min-height: 100vh;
       transition: background 0.3s;
     }
-    .banner-gamer {
+    /* ---------- BANNER GAMER ---------- */
+    .banner-gamer-wrap {
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      margin-top: 10px;
-      margin-bottom: -115px; /* This negative margin makes it touch/overlap the table */
-      z-index: 10;
+      height: var(--header-img-height);
+      position: relative;
+      margin-bottom: -18px; /* Cola a base da imagem na linha dourada da tabela */
+      z-index: 100;
       pointer-events: none;
       user-select: none;
-      position: relative;
     }
     .banner-gamer-img {
-      max-width: 840px;      /* Make the banner bigger */
-      width: 90vw;
-      height: auto;
+      height: var(--header-img-height);
+      width: auto;
+      max-width: 97vw;
       display: block;
       filter:
         drop-shadow(0 8px 38px #19e0fc88)
         drop-shadow(0 1px 18px #ff38fd88)
         drop-shadow(0 0 20px #0008);
+      position: relative;
+      z-index: 2;
       pointer-events: none;
       user-select: none;
-      margin-bottom: 0; /* No gap below the banner */
-      position: relative;
-      z-index: 1;
+      object-fit: contain;
     }
     @media (max-width: 900px) {
-      .banner-gamer-img { max-width: 98vw; }
-      .banner-gamer { margin-top: 5px; margin-bottom: -55px; }
+      .banner-gamer-img { height: 115px; max-width: 98vw; }
+      .banner-gamer-wrap { height: 115px; margin-bottom: -9px;}
     }
+    /* ---------- CONTAINER & CALENDÁRIO ---------- */
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
       position: relative;
-      z-index: 2;      /* Keeps calendar above the banner img */
+      z-index: 2;
     }
-    /* MES & TABELA */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
       font-size: 2.06em;
-      margin: 42px 0 13px;
+      margin: 0 0 13px;
       border-bottom: 2px solid #f9c74f;
       padding-bottom: 5px;
       letter-spacing: 0.11em;
@@ -121,17 +118,6 @@
       box-shadow: 0 2px 10px 0 #0008;
       color: #dedede !important;
     }
-    tr.main-row .main-row-text {
-      /* Default: Light text color */
-      color: var(--main-row-text-light);
-      font-weight: 600;
-      transition: color .16s;
-    }
-    tr.main-row .main-row-text.main-row-text-dark {
-      /* Used for contrast with gold bar */
-      color: var(--main-row-text-dark) !important;
-      text-shadow: 0 1px 2px #fff7, 0 0 4px #ffe37944, 0 2px 4px #e4c14566;
-    }
     tr.main-row.day-complete {
       color: #201d09 !important;
       font-weight: bold;
@@ -143,20 +129,28 @@
       background-size: 100% 100% !important;
       color: #222 !important;
     }
-    tr.main-row:not(.day-complete)::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(30,30,30,0.0);
-      pointer-events: none;
-      z-index: 1;
-      border-radius: 1.5px;
-      transition: background 0.3s;
+    .main-row-text {
+      font-weight: 600;
+      /* Gradiente que "tinta" o texto de preto até o ponto da barra dourada */
+      background: linear-gradient(
+        90deg,
+        #191919 calc(var(--progress, 0) * 100%),
+        #fff calc(var(--progress, 0) * 100%)
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      transition: background .28s cubic-bezier(.6,1.2,.16,1.08);
+      position: relative;
+      z-index: 2;
+      font-size: 1.08em;
     }
-    tr.main-row.day-complete::after {
-      background: transparent;
+    tr.main-row.day-complete .main-row-text {
+      background: #ffe379 !important;
+      -webkit-text-fill-color: #191919 !important;
+      color: #191919 !important;
     }
-    tr.main-row:hover { filter: brightness(1.08);}
     .expand-icon { display: inline-block; width: 16px; transition: transform 0.2s; }
     .main-row.expanded > .expand-icon { transform: rotate(90deg); }
     .dropdown { display: none; transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05); animation: none; height: 0; padding: 0;}
@@ -245,9 +239,12 @@
     #confetti-canvas { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; display: none; }
     #celebrate-text {
       display: none; position: fixed; left: 50%; top: 38%;
-      transform: translate(-50%, -50%); font-size: 5vw; color: #ffe379;
-      text-shadow: 0 0 7px #fff, 0 0 28px #ffe379, 0 0 90px #ccaa33, 2px 2px 0 #0a355b;
-      font-weight: bold; z-index: 10000; font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
+      transform: translate(-50%, -50%);
+      font-size: 5vw;
+      color: #00aaff;
+      text-shadow: 0 0 7px #ffffff, 0 0 50px #00aaff, 0 0 90px #003e7a, 2px 2px 0 #081d4e;
+      font-weight: 900;
+      font-family: 'Bungee', 'Bebas Neue', Arial Black, Arial, sans-serif;
       text-transform: uppercase; letter-spacing: 0.04em; animation: celebrateText 2.5s ease-out;
       background: none !important; border: none !important; border-radius: 0 !important; padding: 0 18px 0 18px;
     }
@@ -255,29 +252,31 @@
   </style>
 </head>
 <body>
-<div class="banner-gamer">
-  <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
-</div>
-<div class="container">
-  <div id="calendario"></div>
-</div>
-<canvas id="confetti-canvas"></canvas>
-<div id="celebrate-text">VAI MLK!!!</div>
-<audio id="celebrate-audio">
-  <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
-  <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
-</audio>
+  <div class="banner-gamer-wrap">
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+  </div>
+  <div class="container">
+    <div id="calendario"></div>
+  </div>
+  <canvas id="confetti-canvas"></canvas>
+  <div id="celebrate-text">VAI MLK!!!</div>
+  <audio id="celebrate-audio">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
+  </audio>
 <script>
-  // --- FIREBASE OMITTED IN THIS VERSION, ADD BACK IF NEEDED ---
-  function unlockScroll() {
-    document.body.style.overflow = "";
-    document.documentElement.style.overflow = "";
-  }
+  // --- HEADER DINÂMICO OMITIDO, A IMAGEM DO BANNER ESTÁ FIXA NO TOPO ---
+
+  // EMOJIS para cada hábito
   const habitEmojis = [
     "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
   ];
   const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
 
+  function unlockScroll() {
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+  }
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
@@ -341,7 +340,6 @@
     }, 4000);
   }
 
-  // Local progress only (for simplicity)
   function getProgress() {
     const progress = localStorage.getItem('habits-progress-v1');
     return progress ? JSON.parse(progress) : {};
@@ -368,27 +366,49 @@
       const habitos_ciclicos = ["Afirmações","Banho gelado","Exercício de agilidade mental","Diário e gratidão"];
       const inicio = new Date(2025, 4, 21), fim = new Date(2025, 7, 21);
       const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
+
       let habitos_ativos = [];
-      let lastDayHabits = [];
+      let currentHabit = '';
+      let lastHabitIndex = 0;
+      let currentWindow = 1;
+
+      // Cria um array para saber qual o novo hábito de cada ciclo de 4 dias
+      let habitWindows = [];
+      let idx = 1;
+      Object.keys(habitos_incrementais).forEach(key=>{
+        for(let i=0;i<4;i++){
+          habitWindows.push(habitos_incrementais[key][0] || habitos_incrementais[key]);
+        }
+        idx++;
+      });
+      // Garante que habitWindows cubra todos os dias
+      while(habitWindows.length < dias_total) {
+        habitWindows.push('');
+      }
+
       for (let i = 1; i <= dias_total; i++) {
         const data_atual = new Date(inicio); data_atual.setDate(inicio.getDate() + i - 1);
-        let novosHabitos = [];
-        if (habitos_incrementais[i]) {
-          habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
-          novosHabitos = habitos_incrementais[i];
-        }
+
+        // Incrementa hábitos conforme dia
+        if (habitos_incrementais[i]) habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
+
+        // NOVO: novoHabito é o habitWindow desse ciclo de 4 dias
+        let novoHabito = habitWindows[i-1] || '';
+        // Exibe o novo hábito por 4 dias seguidos (de cada ciclo)
+        let novosHabitos = (novoHabito && i>=1) ? [novoHabito] : [];
+
         const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
+
         dados.push({
           data: data_atual.toLocaleDateString('pt-BR'),
           dia: `Dia ${i}`,
           habitos: [...habitos_ativos],
-          novosHabitos: novosHabitos.length ? novosHabitos : [],
+          novosHabitos: novosHabitos,
           ciclico: habito_ciclico,
           mes: data_atual.getMonth() + 1,
           ano: data_atual.getFullYear(),
           id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
         });
-        lastDayHabits = [...habitos_ativos];
       }
       const calendario = document.getElementById("calendario");
       const grupos = {};
@@ -412,16 +432,16 @@
           </thead>
           <tbody>`;
         dias.forEach((dia, i) => {
-          // Get only newly added habits for that day
+          // Mostra o novo hábito para os 4 dias a partir da introdução, nunca "-"
           const habitosDisplay = dia.novosHabitos.length
-            ? dia.novosHabitos.join(', ')
-            : '-';
+            ? `<span class="main-row-text">${dia.novosHabitos.join(', ')}</span>`
+            : `<span class="main-row-text"></span>`;
           html += `
           <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
             <td><span class="expand-icon">&#9654;</span></td>
             <td>${dia.data}</td>
             <td>${dia.dia}</td>
-            <td class="main-row-text">${habitosDisplay}</td>
+            <td>${habitosDisplay}</td>
             <td>${dia.ciclico}</td>
           </tr>
           <tr class="dropdown" id="dropdown-${dia.id}">
@@ -473,12 +493,14 @@
           row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
           row.style.setProperty('--progress', pct);
 
-          // CHANGE TEXT COLOR for "Hábitos Diários" column when progress > 0.38 for contrast
+          // Faz o gradiente do texto de acordo com a barra dourada de progresso (letras cobertas ficam pretas)
           const textCell = row.querySelector('.main-row-text');
-          if (pct > 0.38) {
-            textCell.classList.add('main-row-text-dark');
-          } else {
-            textCell.classList.remove('main-row-text-dark');
+          if (textCell) {
+            textCell.style.background = `linear-gradient(90deg, #191919 ${pct*100}%, #fff ${pct*100}%)`;
+            textCell.style.webkitBackgroundClip = "text";
+            textCell.style.webkitTextFillColor = "transparent";
+            textCell.style.backgroundClip = "text";
+            textCell.style.textFillColor = "transparent";
           }
 
           if (pct === 1) row.classList.add('day-complete');
