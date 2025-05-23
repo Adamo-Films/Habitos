@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendário de Hábitos</title>
+  <title>Danilo no Controle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,11 +13,31 @@
       margin: 0;
       padding: 20px;
     }
-    h2 {
+    /* Estilo do Título Inspirado em TWENTIES */
+    .titulo-3d {
+      font-family: 'Oswald', 'Arial Black', Impact, sans-serif;
+      font-size: 3.6vw;
       text-align: center;
-      margin-bottom: 30px;
-      color: #f9c74f;
+      font-weight: 700;
+      color: #ff522e;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      position: relative;
+      margin-bottom: 38px;
+      margin-top: 28px;
+      line-height: 1.1;
+      /* Long Shadow */
+      text-shadow:
+        2px 2px 0 #5c2221,
+        4px 4px 0 #1e1a36,
+        8px 8px 0 #16163d,
+        12px 12px 0 #08081b,
+        14px 14px 10px #00000099;
     }
+    @media (max-width: 800px) {
+      .titulo-3d { font-size: 7vw; }
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -82,15 +103,18 @@
     .expanded > .expand-icon {
       transform: rotate(90deg);
     }
+    /* Verde metálico sofisticado */
     .day-complete {
-      background: linear-gradient(90deg, #0f3 30%, #39ff90 70%, #b4ffc6 100%) !important;
-      color: #181818 !important;
+      background: linear-gradient(90deg, #3a5d48 0%, #70f9a0 60%, #b5e9ca 100%) !important;
+      color: #212e25 !important;
       font-weight: bold;
-      box-shadow: 0 0 30px 5px #44ffb244;
+      box-shadow: 0 0 24px 2px #aef5ce70, 0 0 0 4px #21443670 inset;
       letter-spacing: 1px;
-      text-shadow: 0 0 10px #0f0, 0 0 20px #4fff90;
+      text-shadow: 0 1px 3px #fafff9, 0 0 14px #417b5a99, 0 0 1px #fff;
+      border-left: 7px solid #26f0a1;
+      border-right: 2px solid #b5e9ca;
     }
-    /* Confetti animation canvas */
+    /* Confetti canvas */
     #confetti-canvas {
       position: fixed;
       left: 0; top: 0; width: 100vw; height: 100vh;
@@ -104,32 +128,40 @@
       position: fixed;
       left: 50%; top: 38%;
       transform: translate(-50%, -50%);
-      font-size: 4vw;
-      color: #39ff90;
-      text-shadow: 0 0 12px #fff, 0 0 40px #39ff90, 0 0 80px #1eff8b;
+      font-size: 5vw;
+      color: #0ed156;
+      text-shadow: 0 0 8px #fff, 0 0 36px #30ff96, 0 0 80px #00491b;
       font-weight: bold;
       z-index: 10000;
+      font-family: 'Oswald', 'Arial Black', Impact, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
       animation: celebrateText 1.5s ease-out;
+      border-radius: 20px;
+      padding: 0 32px 8px 32px;
+      background: rgba(0,32,8,0.04);
+      border-bottom: 7px solid #7dffc2;
+      border-top: 2px solid #53af6c;
     }
     @keyframes celebrateText {
       0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
-      50%  { transform: translate(-50%, -55%) scale(1.1); opacity: 1;}
+      50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1;}
       100% { transform: translate(-50%, -50%) scale(1); opacity: 1;}
     }
   </style>
 </head>
 <body>
-  <h2>Calendário de Hábitos - Maio a Agosto 2025</h2>
+  <div class="titulo-3d">Danilo no Controle</div>
   <div id="calendario"></div>
   <!-- Canvas para confetes -->
   <canvas id="confetti-canvas"></canvas>
   <!-- Texto de celebração -->
-  <div id="celebrate-text">Parabéns! Dia Concluído!</div>
+  <div id="celebrate-text">VAI MLK!!!</div>
   <!-- Som de conquista -->
   <audio id="celebrate-audio" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b2e6b8b6.mp3"></audio>
 <script>
   // ---------------------- CONFETTI ANIMATION (Canvas) ----------------------
-  // Grande experiência: confetes caindo por toda tela
+  // MUITO confete, tela totalmente preenchida
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
@@ -140,25 +172,23 @@
     let W = canvas.width;
     let H = canvas.height;
     let particles = [];
-    let colors = ['#39ff90','#FFD700','#fff','#FF69B4','#00E6F6','#82FF6A','#FF6666','#b4ffc6','#ffffff'];
-
-    for (let i = 0; i < 140; i++) {
+    let colors = ['#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#00491b','#30ff96','#b5e9ca','#fd2a49'];
+    // *** 10x mais confetes ***
+    for (let i = 0; i < 1200; i++) {
       particles.push({
         x: Math.random() * W,
         y: Math.random() * -H,
-        r: 8 + Math.random() * 12,
+        r: 7 + Math.random() * 12,
         d: Math.random() * 180,
         color: colors[Math.floor(Math.random()*colors.length)],
-        tilt: Math.random() * 10 - 10,
+        tilt: Math.random() * 16 - 8,
         tiltAngle: 0,
-        tiltAngleIncremental: (Math.random() * 0.07) + .05,
-        alpha: 0.85 + Math.random() * 0.15
+        tiltAngleIncremental: (Math.random() * 0.09) + .05,
+        alpha: 0.84 + Math.random() * 0.16
       });
     }
 
     let angle = 0;
-    let frame = 0;
-
     function draw() {
       ctx.clearRect(0, 0, W, H);
       for (let i = 0; i < particles.length; i++) {
@@ -174,23 +204,23 @@
       update();
     }
     function update() {
-      angle += 0.01;
+      angle += 0.008;
       for (let i = 0; i < particles.length; i++) {
-        particles[i].y += (Math.cos(angle + particles[i].d) + 3 + particles[i].r/6) * 0.6;
-        particles[i].x += Math.sin(angle) * 2;
+        particles[i].y += (Math.cos(angle + particles[i].d) + 2.8 + particles[i].r/6) * 0.93;
+        particles[i].x += Math.sin(angle*1.18 + i) * 2.7;
         particles[i].tiltAngle += particles[i].tiltAngleIncremental;
-        particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 3)) * 15;
+        particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 3)) * 18;
         // reaproveita confete no topo
-        if (particles[i].y > H) {
-          particles[i].y = -10;
+        if (particles[i].y > H + 30) {
+          particles[i].y = -14;
           particles[i].x = Math.random() * W;
         }
       }
     }
 
-    let interval = setInterval(draw, 16);
+    let interval = setInterval(draw, 13);
 
-    // Mostra/Some texto "Parabéns!"
+    // Mostra/Some texto "VAI MLK!!!"
     const celebrateText = document.getElementById('celebrate-text');
     celebrateText.style.display = 'block';
 
@@ -199,7 +229,7 @@
       ctx.clearRect(0, 0, W, H);
       canvas.style.display = 'none';
       celebrateText.style.display = 'none';
-    }, 2100);
+    }, 2600);
   }
 
   // -------------------- PROGRESSO LOCALSTORAGE ----------------------
