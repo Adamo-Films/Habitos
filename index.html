@@ -12,8 +12,8 @@
       --gold2: #e4c145;
       --gold3: #f7e399;
       --corpo: #191919;
-      --day-inactive: #dedede;
-      --header-height: 210px;
+      --day-inactive: #f2f2f7;
+      --header-height: 190px;
       --header-shrink: 62px;
     }
     html, body { height: 100%; margin: 0; padding: 0;}
@@ -29,7 +29,7 @@
       margin: 0 auto;
       padding: 0 32px;
     }
-    /* HEADER FIXO CORRIGIDO */
+    /* HEADER NOVO */
     .header-3d-bg {
       width: 100vw;
       position: fixed;
@@ -42,12 +42,12 @@
       min-height: var(--header-height);
       height: var(--header-height);
       box-shadow: 0 8px 36px 0 #000a;
-      transition: min-height 0.3s, height 0.3s, background 1.3s cubic-bezier(.6,0,.18,1.2);
-      background: linear-gradient(180deg, #95cbff 0%, #c0e5ff 70%, #fff6 100%);
+      background: linear-gradient(180deg, #8fd1ff 0%, #e0f4ff 60%, #fff7 100%);
       border-bottom: 4px solid #191919;
       will-change: background, height;
       padding: 0;
       overflow: visible;
+      transition: min-height 0.3s, height 0.3s, background 1.3s cubic-bezier(.6,0,.18,1.2);
     }
     .header-3d-bg.shrink {
       min-height: var(--header-shrink);
@@ -63,77 +63,72 @@
     .header-3d-bg.shrink ~ .header-spacer {
       height: var(--header-shrink);
     }
-    /* LOGO E CONTROLE - EM GRUPO HARMONIOSO */
     .logo-title-group {
-      width: 100vw;
-      margin: 0 auto;
-      text-align: center;
-      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
+      width: 100vw;
       pointer-events: none;
       user-select: none;
-      height: 100%;
+      position: relative;
+      z-index: 2;
       justify-content: center;
+      height: 100%;
     }
     .logo-text {
       font-family: 'Bebas Neue', Arial, sans-serif;
-      font-size: 6vw;
+      font-size: 5vw;
       text-transform: uppercase;
       color: #fff;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.14em;
       font-weight: 400;
-      background: linear-gradient(90deg, #fff 10%, #ffe379 48%, #ff522e 70%, #36aaff 100%);
+      background: linear-gradient(90deg, #fff 10%, #ffe379 50%, #ff522e 75%, #36aaff 100%);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-fill-color: transparent;
-      line-height: 1.02;
+      line-height: 1;
       text-shadow: 0 4px 16px #000b, 0 2px 10px #0028;
-      z-index: 3;
-      margin-bottom: -2.7vw;
-      margin-top: 0;
-      pointer-events: none;
-      padding-bottom: 0.8vw;
+      margin-bottom: -2vw;
+      margin-top: 0.4vw;
+      padding-bottom: 0.5vw;
       transition: font-size 0.33s, margin-bottom 0.3s;
     }
     .logo-controller {
-      font-size: 11vw;
+      font-size: 10vw;
       margin: 0 auto;
-      margin-top: -2.7vw;
+      margin-top: -0.5vw;
       margin-bottom: 0;
-      position: relative;
-      z-index: 2;
-      filter: drop-shadow(0 0 44px #ff522e60) drop-shadow(0 10px 24px #0009);
-      pointer-events: none;
-      user-select: none;
+      z-index: 1;
+      filter: drop-shadow(0 0 30px #ff522e60) drop-shadow(0 8px 24px #0007);
       transition: font-size 0.33s, margin-top 0.3s;
       background: none;
+      pointer-events: none;
+      user-select: none;
     }
     .header-3d-bg.shrink .logo-text {
-      font-size: 2.2vw;
-      margin-bottom: -0.7vw;
+      font-size: 2vw;
+      margin-bottom: -0.2vw;
     }
     .header-3d-bg.shrink .logo-controller {
       font-size: 5vw;
-      margin-top: -0.7vw;
+      margin-top: 0vw;
     }
     @media (max-width: 900px) {
-      .logo-text { font-size: 10vw; margin-bottom: -4vw;}
-      .logo-controller { font-size: 17vw; margin-top: -6vw;}
-      .header-3d-bg.shrink .logo-text { font-size: 5vw; margin-bottom: -2vw;}
-      .header-3d-bg.shrink .logo-controller { font-size: 8vw; margin-top: -2vw;}
+      .logo-text { font-size: 9vw; margin-bottom: -4vw;}
+      .logo-controller { font-size: 16vw; margin-top: -3vw;}
+      .header-3d-bg.shrink .logo-text { font-size: 4vw; margin-bottom: -1vw;}
+      .header-3d-bg.shrink .logo-controller { font-size: 8vw; margin-top: 0;}
     }
     @media (max-width: 600px) {
-      .logo-text { font-size: 14vw; margin-bottom: -6vw;}
-      .logo-controller { font-size: 25vw; margin-top: -10vw;}
-      .header-3d-bg.shrink .logo-text { font-size: 7vw; margin-bottom: -3vw;}
-      .header-3d-bg.shrink .logo-controller { font-size: 14vw; margin-top: -4vw;}
+      .logo-text { font-size: 13vw; margin-bottom: -6vw;}
+      .logo-controller { font-size: 22vw; margin-top: -6vw;}
+      .header-3d-bg.shrink .logo-text { font-size: 6vw; margin-bottom: -2vw;}
+      .header-3d-bg.shrink .logo-controller { font-size: 13vw; margin-top: -2vw;}
       .container { padding: 0 6px;}
     }
-    /* MESES */
+
+    /* MES & TABELA */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
       font-size: 2.06em;
@@ -187,7 +182,7 @@
       background-repeat: no-repeat;
       background-position: left top;
       box-shadow: 0 2px 10px 0 #0008;
-      color: var(--day-inactive) !important;
+      color: #dedede !important;
     }
     tr.main-row.day-complete {
       color: #201d09 !important;
@@ -205,7 +200,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(30,30,30,0.88);
+      background: rgba(30,30,30,0.0);
       pointer-events: none;
       z-index: 1;
       border-radius: 1.5px;
@@ -219,17 +214,32 @@
     .main-row.expanded > .expand-icon { transform: rotate(90deg); }
     .dropdown { display: none; transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05); animation: none; height: 0; padding: 0;}
     .dropdown.active { display: table-row; animation: slideDown 0.35s cubic-bezier(.2,1.1,.42,1.09); height: auto;}
-    @keyframes slideDown {0%{opacity:0;transform:translateY(-28px)scaleY(0.7);}70%{opacity:1;transform:translateY(5px)scaleY(1.09);}100%{opacity:1;transform:translateY(0)scaleY(1);}}
+    @keyframes slideDown {0%{opacity:0;transform:translateY(-28px)scaleY(0.7);}70%{opacity:1;transform:translateY(5px)scaleY(1.09);}100%{opacity:1;transform:translateY(0)scaleY(1);} }
     .dropdown.drop-up {animation: slideUp 0.44s cubic-bezier(.2,1.2,.42,1.01);}
-    @keyframes slideUp {0%{opacity:1;transform:translateY(0)scaleY(1);}100%{opacity:0;transform:translateY(-38px)scaleY(0.65);}}
+    @keyframes slideUp {0%{opacity:1;transform:translateY(0)scaleY(1);}100%{opacity:0;transform:translateY(-38px)scaleY(0.65);} }
     .dropdown > td { padding: 0;}
-    .habit-list { margin: 16px 0 18px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;}
+    .habit-list {
+      margin: 16px 0 18px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
     .habit-item {
-      display: flex; align-items: center; gap: 0; font-size: 1.36em;
-      min-width: 390px; max-width: 98vw; justify-content: flex-start;
-      background: none; border-radius: 9px; padding: 4px 8px 4px 2px; margin-bottom: 0;
+      display: grid;
+      grid-template-columns: 52px 1fr 46px;
+      align-items: center;
+      width: 100%;
+      min-width: 340px;
+      max-width: 500px;
+      background: none;
+      border-radius: 9px;
+      padding: 4px 8px 4px 2px;
+      margin-bottom: 0;
       transition: background 0.22s, box-shadow 0.22s;
-      color: #f7f7f7 !important;
+      color: #fafbfc !important;
+      box-sizing: border-box;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
@@ -237,9 +247,9 @@
       color: #232201 !important; font-weight: 700;
     }
     .habit-emoji {
-      font-size: 1.7em; min-width: 48px; min-height: 48px;
+      font-size: 1.7em; min-width: 40px; min-height: 38px;
       display: flex; align-items: center; justify-content: center;
-      margin-right: 15px; margin-left: 2px; text-align: center;
+      margin-right: 5px; margin-left: 2px; text-align: center;
       cursor: pointer; user-select: none;
       filter: drop-shadow(0 2px 6px #0006);
       background: none !important;
@@ -249,6 +259,7 @@
       transition: transform 0.18s, filter 0.17s, box-shadow 0.17s;
       position: relative; z-index: 3; vertical-align: middle;
       color: #fff !important;
+      justify-self: start;
     }
     .habit-emoji:hover, .habit-emoji.glow {
       animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
@@ -263,18 +274,26 @@
       70%  { transform: scale(1.13) rotate(-9deg);}
       100% { transform: scale(1) rotate(0);}
     }
-    .habit-checkbox {
-      transform: scale(1.22); cursor: pointer; margin-left: auto; margin-right: 8px;
-      accent-color: #ffe379; vertical-align: middle;
-      display: flex; align-items: center; justify-content: center; min-height: 46px;
-    }
     .habit-label {
-      flex: 1 1 auto; min-width: 110px; max-width: 350px; margin-right: 24px;
-      font-size: 1.09em; color: #f7f7f7 !important; letter-spacing: 0.04em;
-      font-family: 'Inter', Arial, sans-serif; display: flex; align-items: center;
+      font-size: 1.12em;
+      color: #fff !important;
+      letter-spacing: 0.04em;
+      font-family: 'Inter', Arial, sans-serif;
+      display: flex; align-items: center;
       vertical-align: middle; transition: color 0.19s;
+      padding: 0 8px;
+      min-width: 110px; max-width: 340px;
+      flex: 1 1 auto;
+      justify-self: stretch;
+      word-break: break-word;
     }
     .habit-done { text-decoration: line-through; color: #888 !important; }
+    .habit-checkbox {
+      transform: scale(1.18); cursor: pointer; margin-left: 8px; margin-right: 8px;
+      accent-color: #ffe379; vertical-align: middle;
+      display: flex; align-items: center; justify-content: center; min-height: 38px;
+      justify-self: end;
+    }
     /* Confetti canvas */
     #confetti-canvas { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; display: none; }
     #celebrate-text {
@@ -285,7 +304,7 @@
       text-transform: uppercase; letter-spacing: 0.04em; animation: celebrateText 2.5s ease-out;
       background: none !important; border: none !important; border-radius: 0 !important; padding: 0 18px 0 18px;
     }
-    @keyframes celebrateText {0%{transform:translate(-50%,-50%)scale(0.7);opacity:0;}50%{transform:translate(-50%,-56%)scale(1.12);opacity:1;}100%{transform:translate(-50%,-50%)scale(1);opacity:1;}}
+    @keyframes celebrateText {0%{transform:translate(-50%,-50%)scale(0.7);opacity:0;}50%{transform:translate(-50%,-56%)scale(1.12);opacity:1;}100%{transform:translate(-50%,-50%)scale(1);opacity:1;} }
   </style>
 </head>
 <body>
@@ -310,15 +329,15 @@
   function headerSkyGradient() {
     const hour = new Date().getHours();
     let bg;
-    if (hour >= 6 && hour < 11) // manhã
+    if (hour >= 6 && hour < 11)
       bg = "linear-gradient(180deg, #8fd1ff 0%, #e0f4ff 70%, #fff7 100%)";
-    else if (hour >= 11 && hour < 17) // tarde
+    else if (hour >= 11 && hour < 17)
       bg = "linear-gradient(180deg, #ffe79e 0%, #ffd2c6 60%, #ffd999 95%, #fff5 100%)";
-    else if (hour >= 17 && hour < 20) // por do sol
+    else if (hour >= 17 && hour < 20)
       bg = "linear-gradient(180deg, #fd978e 0%, #f4d5e2 55%, #e2a2f2 100%)";
-    else if (hour >= 20 || hour < 4) // noite
+    else if (hour >= 20 || hour < 4)
       bg = "linear-gradient(180deg, #1a2240 0%, #373066 70%, #232330 100%)";
-    else // madrugada
+    else
       bg = "linear-gradient(180deg, #20232c 0%, #384464 60%, #272635 100%)";
     document.getElementById('dynamic-header').style.background = bg;
   }
@@ -358,6 +377,7 @@
     "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
   ];
   const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
+
   // CONFETTI
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
@@ -537,7 +557,6 @@
       }
       if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
       let pct = checked / habitCount;
-      // Atualiza CSS custom property com animação
       const row = document.getElementById(`mainrow-${dayId}`);
       if (row) {
         row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
@@ -572,7 +591,6 @@
       });
     });
 
-    // Função para verificar se todos os hábitos do dia foram concluídos
     function checkAllHabitsComplete(dayId, habitCount) {
       let complete = true;
       for(let i=0; i<habitCount; i++) {
@@ -585,7 +603,6 @@
       return complete;
     }
 
-    // Play sound
     function playCelebrateSound() {
       const audio = document.getElementById('celebrate-audio');
       audio.currentTime = 0; audio.volume = 0.97;
@@ -597,7 +614,6 @@
       });
     }
 
-    // Checkbox logic + hábito concluído destaque individual
     document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
       checkbox.addEventListener('change', function() {
         const label = document.getElementById('label-' + this.id);
@@ -607,13 +623,11 @@
         saveProgress(progress);
         const hi = document.getElementById('habititem-' + this.id);
         if (hi) hi.classList.toggle('habit-complete', this.checked);
-        // Barra dourada animada
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if(parts) {
           const dayId = parts[0];
           const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
           updateProgressBar(dayId, habitCount);
-          // Checa se todos do dia foram feitos
           const allDone = checkAllHabitsComplete(dayId, habitCount-1);
           const dropdown = document.getElementById(`dropdown-${dayId}`);
           const dayRow = document.getElementById(`mainrow-${dayId}`);
@@ -636,7 +650,7 @@
         }
       });
     });
-    // Emoji click
+
     document.querySelectorAll('.habit-emoji').forEach(emoji=>{
       emoji.addEventListener('mouseenter', function() {
         emoji.classList.add('glow');
@@ -656,7 +670,6 @@
       });
     });
 
-    // Inicializa progresso animado ao carregar
     dados.forEach((dia) => {
       const habitCount = dia.habitos.length + 1;
       updateProgressBar(dia.id, habitCount);
