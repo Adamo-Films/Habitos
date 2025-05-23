@@ -4,22 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no Controle</title>
-  <!-- Fonte ultra fina, tall e bem clara -->
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100;400;700&family=Montserrat:wght@100;200;300;700&display=swap" rel="stylesheet">
+  <!-- Fonte bem fina, alta -->
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&display=swap" rel="stylesheet">
   <style>
     :root {
       --azul-shadow: #191246;
       --header-azul: #18104b;
       --laranja-3d: #ff522e;
       --branco: #fff;
+      --neon-green: #24ff69;
+      --neon-green2: #b6ff00;
+      --neon-green3: #36fff7;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
     body {
-      font-family: 'Montserrat', 'Antonio', 'Arial Narrow', Arial, sans-serif;
+      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
       background-color: #121212;
       color: #e0e0e0;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
     }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
     .header-3d-bg {
       width: 100vw;
       background: var(--header-azul);
@@ -31,43 +47,50 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      min-height: 150px;
+      min-height: 170px;
       overflow-x: hidden;
     }
     .titulo-3d {
-      font-family: 'Antonio', 'Montserrat', 'League Gothic', 'Arial Narrow', Arial, sans-serif;
-      font-size: 7vw;
+      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
+      font-size: 6.2vw;
       font-weight: 100;
       text-transform: uppercase;
       letter-spacing: 0.14em;
       color: var(--branco);
       line-height: 1.03;
       text-align: center;
-      /* Letras super finas! */
-      font-stretch: expanded;
-      /* Long orange 3d shadow */
+      font-stretch: ultra-expanded;
+      /* Efeito 3D com shadow reta, curta */
       text-shadow:
-        0.08em 0.12em 0 var(--laranja-3d),
-        0.15em 0.23em 0 var(--laranja-3d),
-        0.22em 0.34em 0 var(--laranja-3d),
-        0.33em 0.47em 0 var(--laranja-3d),
-        0.42em 0.62em 0 var(--laranja-3d),
-        0.65em 0.93em 0 var(--laranja-3d),
-        1em 1.7em 18px var(--azul-shadow),
-        2em 3.2em 44px var(--azul-shadow),
-        0 8px 70px #0008;
-      z-index: 2;
-      padding: 0 20px;
+        0.08em 0.18em 0 var(--laranja-3d),
+        0.13em 0.28em 0 var(--laranja-3d),
+        0.19em 0.39em 0 var(--laranja-3d),
+        0.22em 0.49em 0 var(--laranja-3d),
+        0.27em 0.65em 0 var(--laranja-3d),
+        0.39em 0.93em 0 var(--azul-shadow),
+        0 14px 36px #0008;
     }
     @media (max-width: 800px) {
       .titulo-3d { font-size: 12vw; }
       .header-3d-bg { padding-top: 20px; padding-bottom: 28px;}
+      .container { padding: 0 8px; }
     }
 
+    .mes {
+      font-size: 1.35em;
+      margin: 40px 0 10px;
+      border-bottom: 2px solid #f9c74f;
+      padding-bottom: 5px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 40px;
+      background: none;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-left: auto;
+      margin-right: auto;
     }
     th, td {
       padding: 12px;
@@ -85,33 +108,62 @@
     tr.main-row:hover {
       background-color: #1f2d3d;
     }
-    .mes {
-      font-size: 1.4em;
-      margin: 40px 0 10px;
-      border-bottom: 2px solid #f9c74f;
-      padding-bottom: 5px;
+    /* Neon highlight: Dias completos */
+    .day-complete {
+      background:
+        linear-gradient(90deg, var(--neon-green), var(--neon-green2) 55%, var(--neon-green3) 100%) !important;
+      color: #050c08 !important;
+      font-weight: bold;
+      letter-spacing: 1.3px;
+      /* Neon glow + split */
+      box-shadow:
+        0 0 8px 2px var(--neon-green),
+        0 0 24px 4px var(--neon-green3),
+        0 0 5px 2px var(--neon-green2),
+        0 0 40px 2px #00ffe6b0,
+        2px 0 0 0 #fffa  inset,
+        -2px 0 0 0 #ff0a  inset;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 6px #24ff69,
+        1px 0 2px #b6ff00,
+        -1px 0 3px #36fff7,
+        0 2px 2px #fff;
+      border-left: 4px solid var(--neon-green3);
+      border-right: 2px solid var(--neon-green2);
+      border-radius: 2px;
     }
+
+    /* Dropdown (centralizado) */
     .dropdown {
       background: #181818;
       border-bottom: 1px solid #333;
       display: none;
       animation: fadeIn 0.3s;
     }
+    .dropdown > td {
+      padding: 0;
+    }
     @keyframes fadeIn {
       from { opacity: 0;}
       to { opacity: 1;}
     }
     .habit-list {
-      margin: 10px 0 10px 32px;
+      margin: 12px 0 12px 0;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      align-items: center;  /* Centraliza os hábitos */
+      gap: 12px;
+      width: 100%;
     }
     .habit-item {
       display: flex;
       align-items: center;
       gap: 16px;
-      font-size: 1.18em;
+      font-size: 1.20em;
+      min-width: 340px;
+      max-width: 98vw;
+      justify-content: center;
     }
     .habit-checkbox {
       transform: scale(1.17);
@@ -121,9 +173,8 @@
       text-decoration: line-through;
       color: #888;
     }
-    /* Emoji animado */
     .habit-emoji {
-      font-size: 1.4em;
+      font-size: 1.5em;
       display: inline-block;
       transition: transform 0.17s cubic-bezier(.65,-0.6,.31,1.7);
       filter: drop-shadow(0 2px 6px #0007);
@@ -134,7 +185,7 @@
     .habit-emoji:hover {
       animation: emoji-bounce 0.7s cubic-bezier(.24,-0.06,.41,1.37) 1;
       filter: drop-shadow(0 0 10px #f0a) drop-shadow(0 0 6px #fff9);
-      transform: rotate(-18deg) scale(1.18);
+      transform: rotate(-18deg) scale(1.19);
     }
     @keyframes emoji-bounce {
       0%   { transform: scale(1)    rotate(0);}
@@ -151,17 +202,6 @@
     .expanded > .expand-icon {
       transform: rotate(90deg);
     }
-    /* Verde metálico sofisticado */
-    .day-complete {
-      background: linear-gradient(90deg, #304d39 0%, #b6ffe5 60%, #b2c7ae 100%) !important;
-      color: #203726 !important;
-      font-weight: bold;
-      box-shadow: 0 0 22px 2px #aef5ce60, 0 0 0 3px #31604f70 inset;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 2px #e3fff5cc, 0 0 12px #89ffa099, 0 0 1px #fff;
-      border-left: 7px solid #2ff0d1;
-      border-right: 2px solid #b5e9ca;
-    }
     /* Confetti canvas */
     #confetti-canvas {
       position: fixed;
@@ -170,7 +210,7 @@
       z-index: 9999;
       display: none;
     }
-    /* Texto de celebração (sem barras) */
+    /* Texto de celebração */
     #celebrate-text {
       display: none;
       position: fixed;
@@ -185,7 +225,7 @@
         5px 5px 0 #0a355b;
       font-weight: bold;
       z-index: 10000;
-      font-family: 'Antonio', 'Montserrat', 'League Gothic', 'Arial Narrow', Arial, sans-serif;
+      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       animation: celebrateText 2.5s ease-out;
@@ -205,7 +245,9 @@
   <div class="header-3d-bg">
     <div class="titulo-3d">Danilo no Controle</div>
   </div>
-  <div id="calendario"></div>
+  <div class="container">
+    <div id="calendario"></div>
+  </div>
   <!-- Canvas para confetes -->
   <canvas id="confetti-canvas"></canvas>
   <!-- Texto de celebração -->
@@ -216,7 +258,7 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
   </audio>
 <script>
-  // ---- EMOJIS para cada hábito (ajuste se quiser outros)
+  // ---- EMOJIS para cada hábito
   const habitEmojis = [
     "💧", // Beber 2L de água
     "🤳", // Tirar selfie
@@ -247,7 +289,7 @@
     let W = canvas.width;
     let H = canvas.height;
     let particles = [];
-    let colors = ['#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#30ff96','#b5e9ca','#fd2a49'];
+    let colors = ['#24ff69','#b6ff00','#36fff7','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
     for (let i = 0; i < 1200; i++) {
       particles.push({
         x: Math.random() * W,
@@ -302,7 +344,7 @@
       ctx.clearRect(0, 0, W, H);
       canvas.style.display = 'none';
       celebrateText.style.display = 'none';
-    }, 4000); // agora dura 4 segundos!
+    }, 4000);
   }
 
   // -------------------- PROGRESSO LOCALSTORAGE ----------------------
@@ -470,10 +512,8 @@
       const audio = document.getElementById('celebrate-audio');
       audio.currentTime = 0;
       audio.volume = 0.93;
-      // Workaround para autoplay block: força play, e tenta catch
       let played = false;
       audio.play().then(()=>{played=true;}).catch(()=>{
-        // força play depois de qualquer clique futuro
         if (!played) {
           document.body.addEventListener('pointerdown', ()=>{
             audio.play();
@@ -491,12 +531,10 @@
         } else {
           label.classList.remove('habit-done');
         }
-        // Save progress
         let progress = getProgress();
         progress[this.id] = this.checked;
         saveProgress(progress);
 
-        // Verifica se completou todos hábitos do dia
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if(parts) {
           const dayId = parts[0];
@@ -516,7 +554,7 @@
 
     // Inicializa cor dos dias já completos ao carregar
     dados.forEach((dia) => {
-      const habitCount = dia.habitos.length + 1; // +1 cíclico
+      const habitCount = dia.habitos.length + 1;
       const allDone = checkAllHabitsComplete(dia.id, habitCount-1);
       if(allDone) {
         const dayRow = document.getElementById(`mainrow-${dia.id}`);
@@ -524,7 +562,6 @@
       }
     });
 
-    // Redimensiona o canvas quando a tela mudar
     window.addEventListener('resize', function() {
       const canvas = document.getElementById('confetti-canvas');
       if(canvas.style.display === 'block') {
@@ -532,7 +569,6 @@
         canvas.height = window.innerHeight;
       }
     });
-
   });
 </script>
 </body>
