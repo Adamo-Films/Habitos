@@ -7,22 +7,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --azul-shadow: #191246;
-      --header-preto: #101016;
-      --laranja-3d: #ff522e;
-      --branco: #fff;
       --gold: #ffe379;
       --gold2: #e4c145;
       --gold3: #f7e399;
       --corpo: #191919;
+      --header-manha: #6ca2f7;
+      --header-tarde: #ffbf69;
+      --header-noite: #2c2152;
+      --header-madrugada: #38334a;
+      --logo-shadow: 0 8px 38px 0 #0008;
     }
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
+    html, body { height: 100%; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-family: 'Inter', Arial, sans-serif;
       background: var(--corpo);
       color: #e0e0e0;
       min-height: 100vh;
@@ -33,101 +30,80 @@
       margin: 0 auto;
       padding: 0 32px;
     }
-    /* HEADER */
+
+    /* HEADER NOVO */
     .header-3d-bg {
       width: 100vw;
       position: sticky;
-      top: 0;
-      left: 0;
-      z-index: 100;
+      top: 0; left: 0; z-index: 100;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 220px;
-      padding-top: 32px;
+      min-height: 210px;
+      padding-top: 28px;
       padding-bottom: 16px;
-      overflow-x: hidden;
-      /* Fundo preto com textura sutil SVG inline */
-      background: var(--header-preto);
-      background-image: url("data:image/svg+xml;utf8,<svg width='100' height='100' fill='none' xmlns='http://www.w3.org/2000/svg'><rect width='100' height='100' fill='black'/><circle fill='%23151520' fill-opacity='0.11' cx='18' cy='32' r='19'/><circle fill='%23151520' fill-opacity='0.07' cx='80' cy='80' r='24'/></svg>");
-      background-size: 160px 160px;
-      box-shadow: 0 12px 52px 0 #000b;
-      transition: min-height 0.35s cubic-bezier(.8,0,.22,1);
+      background: var(--header-manha); /* será sobrescrito dinamicamente */
+      transition: background 0.8s cubic-bezier(.6,0,.18,1.2);
+      box-shadow: 0 12px 52px 0 #000a;
+      overflow: hidden;
     }
-    .header-3d-bg.shrink {
-      min-height: 70px;
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-    .header-content {
+    .logo-title-group {
       position: relative;
       width: fit-content;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      text-align: center;
       z-index: 2;
-    }
-    .emoji-controller-bg {
-      position: relative;
-      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 0.15em;
     }
-    .emoji-controller {
-      font-size: 9vw;
-      line-height: 1.08;
-      display: block;
-      margin: 0 auto;
-      z-index: 1;
-      position: relative;
-      /* Sombra sutil e menor */
-      filter: drop-shadow(0 0.16em 0.08em var(--laranja-3d)) drop-shadow(0 0.24em 0.08em var(--laranja-3d));
-      pointer-events: none;
-      user-select: none;
-      transition: font-size 0.36s cubic-bezier(.8,0,.22,1);
-    }
-    .titulo-3d {
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translate(-50%, 0);
-      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
-      font-size: 4.5vw;
+    .logo-text {
+      font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
+      font-size: 5vw;
       font-weight: 100;
       text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--branco);
-      line-height: 1.1;
-      text-align: center;
-      font-stretch: ultra-expanded;
-      z-index: 2;
-      /* Sombra laranja profunda */
+      letter-spacing: 0.13em;
+      color: #fff;
+      line-height: 1;
       text-shadow:
-        0.08em 0.19em 0 var(--laranja-3d),
-        0.14em 0.36em 0 var(--laranja-3d),
-        0 7px 22px #000a;
-      margin-bottom: 0.12em;
+        0 2px 0 #111a,
+        0 8px 32px #ff522e80,
+        0 12px 38px #000b;
+      background: none;
+      z-index: 2;
+      position: relative;
+      margin-bottom: -2vw;
+      margin-top: 0;
       pointer-events: none;
-      background: transparent;
-      width: 100%;
+      /* Para overlap bonito */
+      padding-bottom: 1vw;
     }
+    .logo-controller {
+      font-size: 8vw;
+      line-height: 1;
+      margin: 0 auto;
+      margin-top: -2vw;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 24px #ff522e80) drop-shadow(0 12px 24px #0009);
+      pointer-events: none;
+      user-select: none;
+      background: none;
+      /* Overlap ajustado com o texto acima */
+    }
+    /* HEADER shrink responsivo */
+    .header-3d-bg.shrink { min-height: 70px; padding-top: 0; padding-bottom: 0; }
     @media (max-width: 900px) {
-      .titulo-3d { font-size: 8vw; }
-      .emoji-controller { font-size: 16vw; }
-      .header-3d-bg.shrink .titulo-3d { font-size: 4vw;}
-      .header-3d-bg.shrink .emoji-controller { font-size: 7vw;}
+      .logo-text { font-size: 9vw; margin-bottom: -3vw;}
+      .logo-controller { font-size: 15vw; margin-top: -4vw;}
     }
     @media (max-width: 600px) {
-      .titulo-3d { font-size: 12vw; }
-      .emoji-controller { font-size: 24vw; }
-      .header-3d-bg.shrink .titulo-3d { font-size: 6vw;}
-      .header-3d-bg.shrink .emoji-controller { font-size: 10vw;}
+      .logo-text { font-size: 13vw; margin-bottom: -5vw;}
+      .logo-controller { font-size: 24vw; margin-top: -6vw;}
       .container { padding: 0 6px;}
     }
+
     /* MESES */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
@@ -147,9 +123,7 @@
       background: none;
       border-radius: 18px;
       overflow: hidden;
-      margin-left: auto;
-      margin-right: auto;
-      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
+      font-family: 'Inter', Arial, sans-serif;
       font-size: 1.09em;
       font-weight: 400;
     }
@@ -162,7 +136,6 @@
     th {
       background-color: #1e1e1e;
       color: #f9c74f;
-      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
       font-size: 1.06em;
       font-weight: 700;
       letter-spacing: 0.02em;
@@ -170,109 +143,86 @@
     tr.main-row {
       cursor: pointer;
       transition: background 0.2s;
+      position: relative;
+      /* Barra dourada de progresso no fundo */
+      --progress: 0;
+      background: linear-gradient(
+        90deg,
+        var(--gold) 0%,
+        var(--gold2) 45%,
+        var(--gold3) 100%
+      );
+      background-size: calc(var(--progress, 0) * 100%) 100%;
+      background-repeat: no-repeat;
+      background-position: left top;
+      /* Escurece se não tiver progresso */
+      box-shadow: 0 2px 10px 0 #0008;
+      /* Overlay para escurecer por cima do dourado, se não completou */
     }
-    tr.main-row:hover {
-      background-color: #21243e;
+    tr.main-row:not(.day-complete)::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(32,32,32,0.87);
+      pointer-events: none;
+      z-index: 1;
+      transition: background 0.3s;
+      border-radius: 1.5px;
     }
-    /* Dia completo: DOURADO suave */
-    .day-complete {
-      background:
-        linear-gradient(90deg, var(--gold) 10%, var(--gold2) 55%, var(--gold3) 100%) !important;
+    tr.main-row.day-complete::after {
+      background: transparent;
+    }
+    tr.main-row.day-complete {
       color: #201d09 !important;
       font-weight: bold;
       letter-spacing: 1.1px;
-      box-shadow:
-        0 0 5px 0 var(--gold2),
-        0 2px 12px 2px #ffe37980,
-        0 0 0 2px #e4c14570 inset;
-      text-shadow:
-        0 1px 2px #fff7,
-        0 0 4px #ffe37944,
-        0 2px 4px #e4c14566;
+      text-shadow: 0 1px 2px #fff7, 0 0 4px #ffe37944, 0 2px 4px #e4c14566;
       border-left: 4px solid var(--gold2);
       border-right: 2px solid var(--gold3);
       border-radius: 2px;
+      box-shadow: 0 0 5px 0 var(--gold2), 0 2px 12px 2px #ffe37980, 0 0 0 2px #e4c14570 inset;
     }
-    /* Dropdown (centralizado, com check à direita, animado) */
-    .dropdown {
-      display: none;
-      transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05);
-      animation: none;
-      height: 0;
-      padding: 0;
-    }
-    .dropdown.active {
-      display: table-row;
-      animation: slideDown 0.35s cubic-bezier(.2,1.1,.42,1.09);
-      height: auto;
-    }
-    @keyframes slideDown {
-      0% { opacity: 0; transform: translateY(-28px) scaleY(0.7);}
-      70% { opacity: 1; transform: translateY(5px) scaleY(1.09);}
-      100% { opacity: 1; transform: translateY(0) scaleY(1);}
-    }
-    .dropdown.drop-up {
-      animation: slideUp 0.44s cubic-bezier(.2,1.2,.42,1.01);
-    }
-    @keyframes slideUp {
-      0% { opacity: 1; transform: translateY(0) scaleY(1);}
-      100% { opacity: 0; transform: translateY(-38px) scaleY(0.65);}
-    }
-    .dropdown > td {
-      padding: 0;
-    }
-    .habit-list {
-      margin: 16px 0 18px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-    }
+    tr.main-row:hover { filter: brightness(1.08);}
+    .expand-icon { display: inline-block; width: 16px; transition: transform 0.2s; }
+    .main-row.expanded > .expand-icon { transform: rotate(90deg); }
+    /* Dropdown */
+    .dropdown { display: none; transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05); animation: none; height: 0; padding: 0;}
+    .dropdown.active { display: table-row; animation: slideDown 0.35s cubic-bezier(.2,1.1,.42,1.09); height: auto;}
+    @keyframes slideDown {0%{opacity:0;transform:translateY(-28px)scaleY(0.7);}70%{opacity:1;transform:translateY(5px)scaleY(1.09);}100%{opacity:1;transform:translateY(0)scaleY(1);}}
+    .dropdown.drop-up {animation: slideUp 0.44s cubic-bezier(.2,1.2,.42,1.01);}
+    @keyframes slideUp {0%{opacity:1;transform:translateY(0)scaleY(1);}100%{opacity:0;transform:translateY(-38px)scaleY(0.65);}}
+    .dropdown > td { padding: 0;}
+
+    .habit-list { margin: 16px 0 18px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%;}
     .habit-item {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      font-size: 1.36em;
-      min-width: 390px;
-      max-width: 98vw;
-      justify-content: flex-start;
-      background: none;
-      position: relative;
-      border-radius: 9px;
-      padding: 4px 8px 4px 2px;
-      margin-bottom: 0;
+      display: flex; align-items: center; gap: 0; font-size: 1.36em;
+      min-width: 390px; max-width: 98vw; justify-content: flex-start;
+      background: none; border-radius: 9px; padding: 4px 8px 4px 2px; margin-bottom: 0;
       transition: background 0.22s, box-shadow 0.22s;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
       box-shadow: 0 2px 15px 0 #ffe37955;
-      color: #232201 !important;
-      font-weight: 700;
+      color: #232201 !important; font-weight: 700;
     }
     .habit-emoji {
-      font-size: 1.7em;
-      min-width: 46px;
-      min-height: 46px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 15px;
-      margin-left: 2px;
-      text-align: center;
-      cursor: pointer;
-      will-change: transform;
-      user-select: none;
-      filter: drop-shadow(0 2px 6px #0007);
+      font-size: 1.7em; min-width: 48px; min-height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      margin-right: 15px; margin-left: 2px; text-align: center;
+      cursor: pointer; user-select: none;
+      filter: drop-shadow(0 2px 6px #0006);
+      background: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      border: none !important;
       transition: transform 0.18s, filter 0.17s, box-shadow 0.17s;
-      position: relative;
-      z-index: 3;
-      vertical-align: middle;
+      position: relative; z-index: 3; vertical-align: middle;
     }
     .habit-emoji:hover, .habit-emoji.glow {
       animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
       filter: drop-shadow(0 0 10px #39e6ff) drop-shadow(0 0 16px #2363ffbb);
-      box-shadow: 0 0 16px 4px #49b4ff55;
+      box-shadow: none;
+      background: none;
     }
     @keyframes emoji-bounce {
       0%   { transform: scale(1) rotate(0);}
@@ -282,89 +232,35 @@
       100% { transform: scale(1) rotate(0);}
     }
     .habit-checkbox {
-      transform: scale(1.22);
-      cursor: pointer;
-      margin-left: auto;
-      margin-right: 8px;
-      accent-color: #ffe379;
-      vertical-align: middle;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 46px;
+      transform: scale(1.22); cursor: pointer; margin-left: auto; margin-right: 8px;
+      accent-color: #ffe379; vertical-align: middle;
+      display: flex; align-items: center; justify-content: center; min-height: 46px;
     }
     .habit-label {
-      flex: 1 1 auto;
-      min-width: 110px;
-      max-width: 350px;
-      margin-right: 24px;
-      font-size: 1.09em;
-      color: #d5d5d5;
-      letter-spacing: 0.04em;
-      font-family: 'Inter', 'Nunito Sans', Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      vertical-align: middle;
-      transition: color 0.19s;
+      flex: 1 1 auto; min-width: 110px; max-width: 350px; margin-right: 24px;
+      font-size: 1.09em; color: #d5d5d5; letter-spacing: 0.04em;
+      font-family: 'Inter', Arial, sans-serif; display: flex; align-items: center;
+      vertical-align: middle; transition: color 0.19s;
     }
-    .habit-done {
-      text-decoration: line-through;
-      color: #888 !important;
-    }
-    .expand-icon {
-      display: inline-block;
-      width: 16px;
-      transition: transform 0.2s;
-    }
-    .main-row.expanded > .expand-icon {
-      transform: rotate(90deg);
-    }
+    .habit-done { text-decoration: line-through; color: #888 !important; }
     /* Confetti canvas */
-    #confetti-canvas {
-      position: fixed;
-      left: 0; top: 0; width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
-      display: none;
-    }
-    /* Texto de celebração */
+    #confetti-canvas { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; display: none; }
     #celebrate-text {
-      display: none;
-      position: fixed;
-      left: 50%; top: 38%;
-      transform: translate(-50%, -50%);
-      font-size: 5vw;
-      color: #ffe379;
-      text-shadow:
-        0 0 7px #fff,
-        0 0 28px #ffe379,
-        0 0 90px #ccaa33,
-        2px 2px 0 #0a355b;
-      font-weight: bold;
-      z-index: 10000;
-      font-family: 'Antonio', 'Arial Narrow', Arial, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      animation: celebrateText 2.5s ease-out;
-      background: none !important;
-      border: none !important;
-      border-radius: 0 !important;
-      padding: 0 18px 0 18px;
+      display: none; position: fixed; left: 50%; top: 38%;
+      transform: translate(-50%, -50%); font-size: 5vw; color: #ffe379;
+      text-shadow: 0 0 7px #fff, 0 0 28px #ffe379, 0 0 90px #ccaa33, 2px 2px 0 #0a355b;
+      font-weight: bold; z-index: 10000; font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
+      text-transform: uppercase; letter-spacing: 0.04em; animation: celebrateText 2.5s ease-out;
+      background: none !important; border: none !important; border-radius: 0 !important; padding: 0 18px 0 18px;
     }
-    @keyframes celebrateText {
-      0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
-      50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1;}
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1;}
-    }
+    @keyframes celebrateText {0%{transform:translate(-50%,-50%)scale(0.7);opacity:0;}50%{transform:translate(-50%,-56%)scale(1.12);opacity:1;}100%{transform:translate(-50%,-50%)scale(1);opacity:1;}}
   </style>
 </head>
 <body>
-  <div class="header-3d-bg">
-    <div class="header-content">
-      <div class="emoji-controller-bg">
-        <span class="emoji-controller" title="Controle de videogame" style="z-index:1; margin-top: 12px;">🎮</span>
-        <div class="titulo-3d" style="z-index:2;">Danilo no</div>
-      </div>
+  <div class="header-3d-bg" id="dynamic-header">
+    <div class="logo-title-group">
+      <div class="logo-text">Danilo no</div>
+      <span class="logo-controller" title="Controle de videogame">🎮</span>
     </div>
   </div>
   <div class="container">
@@ -377,6 +273,19 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
   </audio>
 <script>
+  // HEADER DYNAMIC BG
+  function updateHeaderColor() {
+    const h = new Date().getHours();
+    let color;
+    if (h >= 6 && h < 12) color = getComputedStyle(document.documentElement).getPropertyValue('--header-manha');
+    else if (h >= 12 && h < 18) color = getComputedStyle(document.documentElement).getPropertyValue('--header-tarde');
+    else if (h >= 18 && h < 24) color = getComputedStyle(document.documentElement).getPropertyValue('--header-noite');
+    else color = getComputedStyle(document.documentElement).getPropertyValue('--header-madrugada');
+    document.getElementById('dynamic-header').style.background = color.trim();
+  }
+  updateHeaderColor();
+  setInterval(updateHeaderColor, 60 * 1000);
+
   // EMOJIS para cada hábito
   const habitEmojis = [
     "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
@@ -457,8 +366,9 @@
     if(window.scrollY > 60) header.classList.add('shrink');
     else header.classList.remove('shrink');
   });
+
   document.addEventListener("DOMContentLoaded", function() {
-    // DADOS E GERAÇÃO DA TABELA: igual antes, só mudou a renderização dos habits
+    // GERAÇÃO DA TABELA
     const dados = [];
     const habitos_incrementais = {
       1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
@@ -511,7 +421,7 @@
         <tbody>`;
       dias.forEach((dia, i) => {
         html += `
-        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
+        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
           <td><span class="expand-icon">&#9654;</span></td>
           <td>${dia.data}</td>
           <td>${dia.dia}</td>
@@ -540,6 +450,7 @@
       html += `</tbody></table>`;
     });
     calendario.innerHTML = html;
+
     // LOAD PROGRESS
     const progress = getProgress();
     Object.keys(progress).forEach(checkId => {
@@ -552,6 +463,25 @@
         if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
       }
     });
+
+    // Atualiza barra de progresso dourada por dia
+    function updateProgressBar(dayId, habitCount) {
+      let checked = 0;
+      for (let i=0; i<habitCount; i++) {
+        if (document.getElementById(`${dayId}-habit-${i}`)?.checked) checked++;
+      }
+      if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
+      let pct = checked / habitCount;
+      // Atualiza CSS custom property com animação
+      const row = document.getElementById(`mainrow-${dayId}`);
+      if (row) {
+        row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
+        row.style.setProperty('--progress', pct);
+        if (pct === 1) row.classList.add('day-complete');
+        else row.classList.remove('day-complete');
+      }
+    }
+
     // Dropdown toggle
     document.querySelectorAll('tr.main-row').forEach(row => {
       row.addEventListener('click', function(e) {
@@ -576,18 +506,20 @@
         }
       });
     });
+
     // Função para verificar se todos os hábitos do dia foram concluídos
     function checkAllHabitsComplete(dayId, habitCount) {
       let complete = true;
       for(let i=0; i<habitCount; i++) {
-        if (!document.getElementById(`${dayId}-habit-${i}`).checked) {
+        if (!document.getElementById(`${dayId}-habit-${i}`)?.checked) {
           complete = false;
           break;
         }
       }
-      if (complete && !document.getElementById(`${dayId}-ciclico`).checked) complete = false;
+      if (complete && !document.getElementById(`${dayId}-ciclico`)?.checked) complete = false;
       return complete;
     }
+
     // Play sound
     function playCelebrateSound() {
       const audio = document.getElementById('celebrate-audio');
@@ -599,6 +531,7 @@
         }
       });
     }
+
     // Checkbox logic + hábito concluído destaque individual
     document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
       checkbox.addEventListener('change', function() {
@@ -609,13 +542,16 @@
         saveProgress(progress);
         const hi = document.getElementById('habititem-' + this.id);
         if (hi) hi.classList.toggle('habit-complete', this.checked);
+        // Barra dourada animada
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if(parts) {
           const dayId = parts[0];
-          const dayRow = document.getElementById(`mainrow-${dayId}`);
           const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
+          updateProgressBar(dayId, habitCount);
+          // Checa se todos do dia foram feitos
           const allDone = checkAllHabitsComplete(dayId, habitCount-1);
           const dropdown = document.getElementById(`dropdown-${dayId}`);
+          const dayRow = document.getElementById(`mainrow-${dayId}`);
           if(allDone) {
             dayRow.classList.add('day-complete');
             launchConfettiEpic();
@@ -634,6 +570,7 @@
         }
       });
     });
+    // Emoji click
     document.querySelectorAll('.habit-emoji').forEach(emoji=>{
       emoji.addEventListener('mouseenter', function() {
         emoji.classList.add('glow');
@@ -652,14 +589,18 @@
         }
       });
     });
+
+    // Inicializa progresso animado ao carregar
     dados.forEach((dia) => {
       const habitCount = dia.habitos.length + 1;
+      updateProgressBar(dia.id, habitCount);
       const allDone = checkAllHabitsComplete(dia.id, habitCount-1);
       if(allDone) {
         const dayRow = document.getElementById(`mainrow-${dia.id}`);
         if (dayRow) dayRow.classList.add('day-complete');
       }
     });
+
     window.addEventListener('resize', function() {
       const canvas = document.getElementById('confetti-canvas');
       if(canvas.style.display === 'block') {
