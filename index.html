@@ -4,39 +4,73 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no Controle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+  <!-- Fonte parecida com a referência: League Spartan -->
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --laranja: #FF522E;
+      --shadow: #11043a;
+      --header-azul: #1c1666;
+      --azul-shadow: #321973;
+      --header-bg-gradient: linear-gradient(160deg, #181043 40%, #1c1666 100%);
+    }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #121212;
       color: #e0e0e0;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-    /* Estilo do Título Inspirado em TWENTIES */
-    .titulo-3d {
-      font-family: 'Oswald', 'Arial Black', Impact, sans-serif;
-      font-size: 3.6vw;
-      text-align: center;
-      font-weight: 700;
-      color: #ff522e;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
+
+    /* HEADER ESTILO TWENTIES */
+    .header-3d-bg {
+      width: 100vw;
+      background: var(--header-bg-gradient);
+      margin-bottom: 36px;
+      padding-top: 36px;
+      padding-bottom: 46px;
+      box-shadow: 0 14px 70px 0 #000b  ;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       position: relative;
-      margin-bottom: 38px;
-      margin-top: 28px;
-      line-height: 1.1;
-      /* Long Shadow */
+      min-height: 150px;
+    }
+    .titulo-3d {
+      font-family: 'League Spartan', Impact, 'Arial Black', Arial, sans-serif;
+      font-size: 6vw;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--laranja);
+      position: relative;
+      line-height: 1.03;
+      text-align: center;
+      /* Long blue shadow layers */
       text-shadow:
-        2px 2px 0 #5c2221,
-        4px 4px 0 #1e1a36,
-        8px 8px 0 #16163d,
-        12px 12px 0 #08081b,
-        14px 14px 10px #00000099;
+        1px 1px 0 var(--azul-shadow),
+        2px 2px 0 var(--azul-shadow),
+        3px 3px 0 var(--azul-shadow),
+        4px 4px 0 var(--azul-shadow),
+        5px 5px 0 var(--azul-shadow),
+        6px 6px 0 var(--azul-shadow),
+        7px 7px 0 var(--azul-shadow),
+        8px 8px 0 var(--azul-shadow),
+        9px 9px 0 var(--azul-shadow),
+        10px 10px 0 var(--azul-shadow),
+        16px 16px 16px #000a,
+        24px 24px 32px #0009;
+      /* Simulando linhas finas e altas */
+      letter-spacing: 0.09em;
+      padding: 0 16px;
+      z-index: 2;
+      /* Liga mais a altura do texto na responsividade */
     }
-    @media (max-width: 800px) {
-      .titulo-3d { font-size: 7vw; }
+    @media (max-width: 600px) {
+      .titulo-3d { font-size: 9vw; }
+      .header-3d-bg { padding-top: 20px; padding-bottom: 28px;}
     }
+    /* FIM HEADER ESTILO TWENTIES */
 
     table {
       width: 100%;
@@ -105,13 +139,13 @@
     }
     /* Verde metálico sofisticado */
     .day-complete {
-      background: linear-gradient(90deg, #3a5d48 0%, #70f9a0 60%, #b5e9ca 100%) !important;
-      color: #212e25 !important;
+      background: linear-gradient(90deg, #304d39 0%, #b6ffe5 60%, #b2c7ae 100%) !important;
+      color: #203726 !important;
       font-weight: bold;
-      box-shadow: 0 0 24px 2px #aef5ce70, 0 0 0 4px #21443670 inset;
+      box-shadow: 0 0 22px 2px #aef5ce60, 0 0 0 3px #31604f70 inset;
       letter-spacing: 1px;
-      text-shadow: 0 1px 3px #fafff9, 0 0 14px #417b5a99, 0 0 1px #fff;
-      border-left: 7px solid #26f0a1;
+      text-shadow: 0 2px 2px #e3fff5cc, 0 0 12px #89ffa099, 0 0 1px #fff;
+      border-left: 7px solid #2ff0d1;
       border-right: 2px solid #b5e9ca;
     }
     /* Confetti canvas */
@@ -122,26 +156,29 @@
       z-index: 9999;
       display: none;
     }
-    /* Texto Parabéns */
+    /* Texto de celebração (sem barras) */
     #celebrate-text {
       display: none;
       position: fixed;
       left: 50%; top: 38%;
       transform: translate(-50%, -50%);
       font-size: 5vw;
-      color: #0ed156;
-      text-shadow: 0 0 8px #fff, 0 0 36px #30ff96, 0 0 80px #00491b;
+      color: #15ffb6;
+      text-shadow:
+        0 0 8px #fff,
+        0 0 36px #44ffa6,
+        0 0 110px #001130,
+        5px 5px 0 #0a355b;
       font-weight: bold;
       z-index: 10000;
-      font-family: 'Oswald', 'Arial Black', Impact, sans-serif;
+      font-family: 'League Spartan', Impact, 'Arial Black', Arial, sans-serif;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       animation: celebrateText 1.5s ease-out;
-      border-radius: 20px;
-      padding: 0 32px 8px 32px;
-      background: rgba(0,32,8,0.04);
-      border-bottom: 7px solid #7dffc2;
-      border-top: 2px solid #53af6c;
+      background: none !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 18px 0 18px;
     }
     @keyframes celebrateText {
       0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
@@ -151,17 +188,18 @@
   </style>
 </head>
 <body>
-  <div class="titulo-3d">Danilo no Controle</div>
+  <div class="header-3d-bg">
+    <div class="titulo-3d">Danilo no Controle</div>
+  </div>
   <div id="calendario"></div>
   <!-- Canvas para confetes -->
   <canvas id="confetti-canvas"></canvas>
   <!-- Texto de celebração -->
   <div id="celebrate-text">VAI MLK!!!</div>
   <!-- Som de conquista -->
-  <audio id="celebrate-audio" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b2e6b8b6.mp3"></audio>
+  <audio id="celebrate-audio" src="https://cdn.jsdelivr.net/gh/danilopaiva-ai/confetti-celebrate/victory.mp3"></audio>
 <script>
   // ---------------------- CONFETTI ANIMATION (Canvas) ----------------------
-  // MUITO confete, tela totalmente preenchida
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
@@ -172,8 +210,7 @@
     let W = canvas.width;
     let H = canvas.height;
     let particles = [];
-    let colors = ['#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#00491b','#30ff96','#b5e9ca','#fd2a49'];
-    // *** 10x mais confetes ***
+    let colors = ['#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#30ff96','#b5e9ca','#fd2a49'];
     for (let i = 0; i < 1200; i++) {
       particles.push({
         x: Math.random() * W,
