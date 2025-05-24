@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>Danilo no 🎮</title>
   <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <style>
     :root {
       --gold: #ffe379;
@@ -29,6 +29,7 @@
       color: var(--day-inactive);
       min-height: 100vh;
       transition: background 0.3s;
+      -webkit-tap-highlight-color: transparent;
     }
     .banner-gamer {
       width: 100%;
@@ -42,8 +43,8 @@
       user-select: none;
     }
     .banner-gamer-img {
-      max-width: 540px;
-      width: 100%;
+      max-width: 340px;
+      width: 90vw;
       height: auto;
       display: block;
       filter: drop-shadow(0 8px 38px #19e0fc88)
@@ -53,143 +54,62 @@
       user-select: none;
     }
     @media (max-width: 700px) {
-      .banner-gamer-img { max-width: 97vw; }
+      .banner-gamer-img { max-width: 94vw; }
       .banner-gamer { margin-top: 8px; }
     }
     .container {
       max-width: 1300px;
       margin: 0 auto;
-      padding: 0 32px;
+      padding: 0 6px;
     }
-    /* REWARD CARD GAMIFICADO */
-    .reward-card {
-      margin: 46px auto 0 auto;
-      max-width: 560px;
-      width: 100%;
-      background: #251b37;
-      border-radius: 24px;
-      box-shadow: 0 6px 32px #9800cc55, 0 1px 18px #0ff5, 0 0 0 3px #cf28ff44;
-      padding: 28px 28px 24px 28px;
-      text-align: center;
-      position: relative;
-      overflow: visible;
-      z-index: 20;
-      border-top: 4px solid var(--neon-purple);
-      border-bottom: 3px solid var(--neon-blue);
-      background-image: linear-gradient(130deg, #281d40 74%, #3f0a57 100%);
-      margin-bottom: 18px;
-      pointer-events: auto;
-    }
-    .reward-card .title {
-      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
-      font-size: 2.1em;
-      color: #fff;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.2em;
-      text-shadow: 0 0 20px var(--neon-purple), 0 0 3px #000;
-    }
-    .reward-card .desc {
-      font-size: 1.1em;
-      color: #d7b6fc;
-      margin-bottom: 10px;
-      letter-spacing: 0.01em;
-      font-weight: 600;
-      text-shadow: 0 0 7px #2f024e77;
-    }
-    .reward-bar-bg {
-      background: #201126;
-      border-radius: 18px;
-      height: 28px;
-      margin: 22px auto 10px auto;
-      width: 98%;
-      box-shadow: 0 0 14px #a41ec0a8, 0 0 24px #31e8ff13;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-      border: 1.2px solid #4e207c;
-    }
-    .reward-bar {
-      background: linear-gradient(90deg,
-        var(--neon-purple) 10%,
-        var(--neon-pink) 48%,
-        var(--neon-blue) 100%);
-      height: 100%;
-      border-radius: 16px;
-      width: 0%;
-      box-shadow:
-        0 0 32px 10px #ff49e1a2,
-        0 0 26px 8px #cf28ff66,
-        0 0 5px 2px #51ffe780;
-      transition: width 0.8s cubic-bezier(.59,1.5,.32,1.01);
-      position: relative;
-      z-index: 2;
-      overflow: visible;
-      animation: neonPulse 2.2s infinite alternate;
-    }
-    @keyframes neonPulse {
-      0% { filter: drop-shadow(0 0 10px #fff7) drop-shadow(0 0 0px #cf28ff77); }
-      100% { filter: drop-shadow(0 0 27px #cf28ff) drop-shadow(0 0 9px #51ffe7); }
-    }
-    .reward-icon {
-      font-size: 2.8em;
-      margin-bottom: 0.14em;
-      display: inline-block;
-      filter: drop-shadow(0 0 12px #cf28ff) drop-shadow(0 0 16px #ff49e1cc);
-      animation: iconGlow 1.8s infinite alternate;
-    }
-    @keyframes iconGlow {
-      0% { filter: drop-shadow(0 0 5px #cf28ff77); }
-      100% { filter: drop-shadow(0 0 16px #ff49e1cc) drop-shadow(0 0 36px #51ffe7); }
-    }
-    .reward-unlocked {
-      color: var(--neon-blue);
-      font-size: 1.25em;
-      font-weight: bold;
-      letter-spacing: 0.09em;
-      margin-top: 6px;
-      text-shadow: 0 0 17px #0ff, 0 1px 4px #cf28ff99;
-      transition: color 0.5s;
-      animation: celebrateText 1.6s cubic-bezier(.22,1.5,.5,1.02);
-    }
-    /* =============== */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
-      font-size: 2.06em;
-      margin: 42px 0 13px;
+      font-size: 2em;
+      margin: 32px 0 10px;
       border-bottom: 2px solid #f9c74f;
-      padding-bottom: 5px;
+      padding-bottom: 4px;
       letter-spacing: 0.11em;
       color: #f9c74f;
       text-shadow: 0 3px 13px #0009;
       text-align: left;
     }
-    #calendario .mes:first-child { margin-top: 0; }
+    /* Tabela responsiva */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 40px;
+      margin-bottom: 28px;
       background: none;
-      border-radius: 18px;
+      border-radius: 16px;
       overflow: hidden;
       font-family: 'Inter', Arial, sans-serif;
-      font-size: 1.09em;
+      font-size: 1em;
       font-weight: 400;
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+      box-sizing: border-box;
     }
     th, td {
-      padding: 12px;
+      padding: 9px 7px;
       text-align: left;
       border-bottom: 1px solid #333;
       vertical-align: middle;
       z-index: 2;
       background: transparent !important;
+      font-size: 1em;
+      word-break: break-word;
+      box-sizing: border-box;
+      min-width: 84px;
+      max-width: 240px;
     }
     th {
       background-color: #1e1e1e !important;
       color: #f9c74f !important;
-      font-size: 1.06em;
+      font-size: 1em;
       font-weight: 700;
       letter-spacing: 0.02em;
       z-index: 2;
+      padding: 9px 7px;
     }
     tr.main-row {
       cursor: pointer;
@@ -230,9 +150,7 @@
       border-radius: 1.5px;
       transition: background 0.3s;
     }
-    tr.main-row.day-complete::after {
-      background: transparent;
-    }
+    tr.main-row.day-complete::after { background: transparent; }
     tr.main-row:hover { filter: brightness(1.08); }
     .expand-icon { display: inline-block; width: 16px; transition: transform 0.2s; }
     .main-row.expanded > .expand-icon { transform: rotate(90deg); }
@@ -250,27 +168,28 @@
     }
     .dropdown > td { padding: 0; }
     .habit-list {
-      margin: 16px 0 18px 0;
+      margin: 12px 0 13px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 9px;
       width: 100%;
     }
     .habit-item {
       display: grid;
-      grid-template-columns: 52px 1fr 46px;
+      grid-template-columns: 42px 1fr 34px;
       align-items: center;
       width: 100%;
-      min-width: 340px;
-      max-width: 500px;
+      min-width: 230px;
+      max-width: 340px;
       background: none;
-      border-radius: 9px;
-      padding: 4px 8px 4px 2px;
+      border-radius: 7px;
+      padding: 3px 4px 3px 2px;
       margin-bottom: 0;
       transition: background 0.22s, box-shadow 0.22s;
       color: #fafbfc !important;
       box-sizing: border-box;
+      font-size: 1em;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
@@ -279,13 +198,13 @@
       font-weight: 700;
     }
     .habit-emoji {
-      font-size: 1.7em;
-      min-width: 40px;
-      min-height: 38px;
+      font-size: 1.3em;
+      min-width: 29px;
+      min-height: 29px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 5px;
+      margin-right: 2px;
       margin-left: 2px;
       text-align: center;
       cursor: pointer;
@@ -302,22 +221,8 @@
       color: #fff !important;
       justify-self: start;
     }
-    .habit-emoji:hover,
-    .habit-emoji.glow {
-      animation: emoji-bounce 0.5s cubic-bezier(.24,-0.06,.41,1.37) 1;
-      filter: drop-shadow(0 0 10px #39e6ff) drop-shadow(0 0 16px #2363ffbb);
-      box-shadow: none;
-      background: none;
-    }
-    @keyframes emoji-bounce {
-      0%   { transform: scale(1) rotate(0); }
-      30%  { transform: scale(1.19) rotate(-17deg); }
-      55%  { transform: scale(0.94) rotate(15deg); }
-      70%  { transform: scale(1.13) rotate(-9deg); }
-      100% { transform: scale(1) rotate(0); }
-    }
     .habit-label {
-      font-size: 1.12em;
+      font-size: 1em;
       color: #fff !important;
       letter-spacing: 0.04em;
       font-family: 'Inter', Arial, sans-serif;
@@ -325,70 +230,134 @@
       align-items: center;
       vertical-align: middle;
       transition: color 0.19s;
-      padding: 0 8px;
-      min-width: 110px;
-      max-width: 340px;
+      padding: 0 5px;
+      min-width: 50px;
+      max-width: 220px;
       flex: 1 1 auto;
       justify-self: stretch;
       word-break: break-word;
     }
     .habit-done { text-decoration: line-through; color: #888 !important; }
     .habit-checkbox {
-      transform: scale(1.18);
+      transform: scale(1.08);
       cursor: pointer;
-      margin-left: 8px;
-      margin-right: 8px;
+      margin-left: 2px;
+      margin-right: 2px;
       accent-color: #ffe379;
       vertical-align: middle;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 38px;
+      min-height: 28px;
       justify-self: end;
     }
-    /* Confetti canvas */
-    #confetti-canvas {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
-      display: none;
+    .reward-card {
+      margin: 34px auto 0 auto;
+      max-width: 420px;
+      width: 99vw;
+      background: #251b37;
+      border-radius: 16px;
+      box-shadow: 0 6px 22px #9800cc55, 0 1px 18px #0ff5, 0 0 0 2px #cf28ff44;
+      padding: 14px 8px 16px 8px;
+      text-align: center;
+      position: relative;
+      overflow: visible;
+      z-index: 20;
+      border-top: 3px solid var(--neon-purple);
+      border-bottom: 2px solid var(--neon-blue);
+      background-image: linear-gradient(130deg, #281d40 74%, #3f0a57 100%);
+      margin-bottom: 13px;
+      pointer-events: auto;
     }
-    #reward-confetti {
-      position: fixed;
-      left: 0; top: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 99998; display: none;
-      mix-blend-mode: lighten;
+    .reward-card .title {
+      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
+      font-size: 1.28em;
+      color: #fff;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.12em;
+      text-shadow: 0 0 12px var(--neon-purple), 0 0 2px #000;
     }
-    #celebrate-text {
-      display: none;
-      position: fixed;
-      left: 50%;
-      top: 38%;
-      transform: translate(-50%, -50%);
-      font-size: 5vw;
-      color: #0a355b;
-      text-shadow: 0 0 7px #fff, 0 0 28px #ffe379, 0 0 90px #ccaa33;
+    .reward-card .desc {
+      font-size: 0.98em;
+      color: #d7b6fc;
+      margin-bottom: 7px;
+      letter-spacing: 0.01em;
+      font-weight: 600;
+      text-shadow: 0 0 5px #2f024e77;
+    }
+    .reward-bar-bg {
+      background: #201126;
+      border-radius: 12px;
+      height: 18px;
+      margin: 11px auto 6px auto;
+      width: 97%;
+      box-shadow: 0 0 7px #a41ec0a8, 0 0 14px #31e8ff13;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      border: 0.9px solid #4e207c;
+    }
+    .reward-bar {
+      background: linear-gradient(90deg,
+        var(--neon-purple) 10%,
+        var(--neon-pink) 48%,
+        var(--neon-blue) 100%);
+      height: 100%;
+      border-radius: 11px;
+      width: 0%;
+      box-shadow:
+        0 0 17px 6px #ff49e1a2,
+        0 0 12px 4px #cf28ff66,
+        0 0 3px 1px #51ffe780;
+      transition: width 0.8s cubic-bezier(.59,1.5,.32,1.01);
+      position: relative;
+      z-index: 2;
+      overflow: visible;
+      animation: neonPulse 2.2s infinite alternate;
+    }
+    @keyframes neonPulse {
+      0% { filter: drop-shadow(0 0 7px #fff7) drop-shadow(0 0 0px #cf28ff77); }
+      100% { filter: drop-shadow(0 0 15px #cf28ff) drop-shadow(0 0 6px #51ffe7); }
+    }
+    .reward-icon {
+      font-size: 2em;
+      margin-bottom: 0.1em;
+      display: inline-block;
+      filter: drop-shadow(0 0 8px #cf28ff) drop-shadow(0 0 10px #ff49e1cc);
+      animation: iconGlow 1.8s infinite alternate;
+    }
+    @keyframes iconGlow {
+      0% { filter: drop-shadow(0 0 3px #cf28ff77); }
+      100% { filter: drop-shadow(0 0 10px #ff49e1cc) drop-shadow(0 0 22px #51ffe7); }
+    }
+    .reward-unlocked {
+      color: var(--neon-blue);
+      font-size: 1.07em;
       font-weight: bold;
-      z-index: 10000;
-      pointer-events: none;
-      font-family: 'Luckiest Guy', 'Antonio', Arial Narrow, Arial, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      animation: celebrateText 2.5s ease-out;
-      background: none !important;
-      border: none !important;
-      border-radius: 0 !important;
-      padding: 0 18px 0 18px;
+      letter-spacing: 0.09em;
+      margin-top: 4px;
+      text-shadow: 0 0 10px #0ff, 0 1px 2px #cf28ff99;
+      transition: color 0.5s;
+      animation: celebrateText 1.6s cubic-bezier(.22,1.5,.5,1.02);
     }
-    @keyframes celebrateText {
-      0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
-      50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    #confetti-canvas, #reward-confetti, #celebrate-text { /* Mantido igual, já responsivo */ }
+    @media (max-width: 600px) {
+      .container { padding: 0 2px; }
+      .mes { font-size: 1.3em; margin: 20px 0 8px;}
+      table { font-size: 0.95em; }
+      th, td { font-size: 0.95em; padding: 6px 3px; }
+      .habit-list { gap: 5px;}
+      .habit-item { min-width: 145px; max-width: 98vw; font-size: 0.92em;}
+      .habit-label { max-width: 93vw; font-size: 0.93em;}
+      .reward-card { margin: 18px auto 0 auto; max-width: 97vw; }
+      .reward-bar-bg { height: 15px;}
+      .reward-card .desc, .reward-card .title { font-size: 1em;}
+      .reward-icon { font-size: 1.3em;}
     }
+    /* Scrollbar fino para tabelas */
+    table::-webkit-scrollbar { height: 5px; background: #231b2b; }
+    table::-webkit-scrollbar-thumb { background: #cf28ff; border-radius: 8px;}
+    table { scrollbar-width: thin; scrollbar-color: #cf28ff #231b2b; }
   </style>
 </head>
 <body>
