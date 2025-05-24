@@ -660,7 +660,7 @@
     const calendario = document.getElementById("calendario");
     const grupos = {};
     dados.forEach((obj) => {
-      const id = `${obj.mes}-${obj.ano}`;
+    const id = `${(obj.mes).toString().padStart(2, '0')}-${obj.ano}`;
       if (!grupos[id]) grupos[id] = [];
       grupos[id].push(obj);
     });
