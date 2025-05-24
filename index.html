@@ -618,8 +618,8 @@
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
-    // DADOS E GERAÇÃO DA TABELA
+ document.addEventListener("DOMContentLoaded", async function() {
+  const progress = await getProgress();
     const dados = [];
     const habitos_incrementais = {
       1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
