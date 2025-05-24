@@ -856,15 +856,18 @@ Object.keys(progress).forEach(checkId => {
       });
     }
 
-    document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
-      checkbox.addEventListener('change', function() {
-        const label = document.getElementById('label-' + this.id);
-        if (label) label.classList.toggle('habit-done', this.checked);
-       getProgress().then(progress => {
+   document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
+  checkbox.addEventListener('change', function() {
+    const label = document.getElementById('label-' + this.id);
+    if (label) label.classList.toggle('habit-done', this.checked);
+
+    getProgress().then(progress => {
       progress[this.id] = this.checked;
-       saveProgress(progress);
-        const hi = document.getElementById('habititem-' + this.id);
-        if (hi) hi.classList.toggle('habit-complete', this.checked);
+      saveProgress(progress);
+    });
+
+    const hi = document.getElementById('habititem-' + this.id);
+    if (hi) hi.classList.toggle('habit-complete', this.checked);
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if (parts) {
           const dayId = parts[0];
