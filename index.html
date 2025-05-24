@@ -61,7 +61,6 @@
       margin: 0 auto;
       padding: 0 32px;
     }
-
     /* REWARD CARD GAMIFICADO */
     .reward-card {
       margin: 46px auto 0 auto;
@@ -478,6 +477,13 @@
   ];
   const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
 
+  // Array de nomes dos meses fixos em PT-BR
+  const monthNames = [
+    "Janeiro", "Fevereiro", "Março", "Abril",
+    "Maio", "Junho", "Julho", "Agosto",
+    "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+
   // CONFETTI
   function launchConfettiEpic() {
     const canvas = document.getElementById('confetti-canvas');
@@ -665,37 +671,12 @@
     let html = '';
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
-     const mesDoisDigitos = mes.toString().padStart(2, '0');
-const nomeMes = new Date(`${ano}-${mesDoisDigitos}-01`).toLocaleString('pt-BR', { month: 'long' });
+      const mesNum = Number(mes);
+      const anoNum = Number(ano);
+      const nomeMes = monthNames[mesNum - 1].toUpperCase();
 
-      // Card de prêmio do mês (exceto aniversário)
-      const reward = getRewardFor(Number(mes), Number(ano));
-      if(reward) {
-        html += `
-        <div class="reward-card" data-reward="${mes}-${ano}">
-          <div class="reward-icon">${reward.icon}</div>
-          <div class="title">${reward.title}</div>
-          <div class="desc">${reward.desc}</div>
-          <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mes}-${ano}"></div></div>
-          <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
-        </div>`;
-      }
-      // Card de prêmio especial de aniversário
-      if(mes == 8 && ano == 2025) {
-        const annivReward = getRewardFor(Number(mes), Number(ano), 21);
-        if(annivReward) {
-          html += `
-            <div class="reward-card" data-reward="birthday-2025">
-              <div class="reward-icon">${annivReward.icon}</div>
-              <div class="title">${annivReward.title}</div>
-              <div class="desc">${annivReward.desc}</div>
-              <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-birthday"></div></div>
-              <div class="reward-unlocked" id="reward-unlocked-birthday" style="display:none">Prêmio desbloqueado: <span>${annivReward.label}</span></div>
-            </div>
-          `;
-        }
-      }
-      html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
+      // MÊS HEADER PRIMEIRO
+      html += `<div class='mes'>${nomeMes} ${ano}</div>
       <table>
         <thead>
           <tr>
@@ -748,6 +729,34 @@ const nomeMes = new Date(`${ano}-${mesDoisDigitos}-01`).toLocaleString('pt-BR', 
         </tr>`;
       });
       html += `</tbody></table>`;
+
+      // Card de prêmio do mês (exceto aniversário) DEPOIS do mês
+      const reward = getRewardFor(mesNum, anoNum);
+      if(reward) {
+        html += `
+        <div class="reward-card" data-reward="${mes}-${ano}">
+          <div class="reward-icon">${reward.icon}</div>
+          <div class="title">${reward.title}</div>
+          <div class="desc">${reward.desc}</div>
+          <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mes}-${ano}"></div></div>
+          <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
+        </div>`;
+      }
+      // Card de prêmio especial de aniversário DEPOIS do mês agosto/2025
+      if(mesNum === 8 && anoNum === 2025) {
+        const annivReward = getRewardFor(mesNum, anoNum, 21);
+        if(annivReward) {
+          html += `
+            <div class="reward-card" data-reward="birthday-2025">
+              <div class="reward-icon">${annivReward.icon}</div>
+              <div class="title">${annivReward.title}</div>
+              <div class="desc">${annivReward.desc}</div>
+              <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-birthday"></div></div>
+              <div class="reward-unlocked" id="reward-unlocked-birthday" style="display:none">Prêmio desbloqueado: <span>${annivReward.label}</span></div>
+            </div>
+          `;
+        }
+      }
     });
     calendario.innerHTML = html;
 
