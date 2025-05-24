@@ -664,14 +664,20 @@
       if (!grupos[id]) grupos[id] = [];
       grupos[id].push(obj);
     });
-    let html = '';
+       let html = '';
+    // Nomes dos meses fixos, 0-based
+    const mesNomes = [
+      "JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO",
+      "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"
+    ];
+
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
-      const mesDoisDigitos = mes.toString().padStart(2, '0');
-      const nomeMes = new Date(`${ano}-${mesDoisDigitos}-01`).toLocaleString('pt-BR', { month: 'long' });
+      // Usa array de nomes de mês fixo, corrige qualquer bug de data!
+      const nomeMes = mesNomes[parseInt(mes, 10) - 1];
 
       // Adiciona o nome do mês e a tabela normalmente:
-      html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
+      html += `<div class='mes'>${nomeMes} ${ano}</div>
       <table>
         <thead>
           <tr>
@@ -886,8 +892,14 @@
 
     function updateAllRewardProgress() {
       // Atualiza a barra de cada mês
-      Object.entries(grupos).forEach(([id, dias]) => {
-        const [mes, ano] = id.split("-");
+const mesNomes = [
+  "JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO",
+  "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"
+];
+
+Object.entries(grupos).forEach(([id, dias]) => {
+  const [mes, ano] = id.split("-");
+  const nomeMes = mesNomes[parseInt(mes, 10) - 1];
         const reward = getRewardFor(Number(mes), Number(ano));
         if (!reward) return;
         let diasCompletos = 0;
