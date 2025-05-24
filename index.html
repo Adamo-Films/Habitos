@@ -886,8 +886,14 @@
 
     function updateAllRewardProgress() {
       // Atualiza a barra de cada mês
-      Object.entries(grupos).forEach(([id, dias]) => {
-        const [mes, ano] = id.split("-");
+const mesNomes = [
+  "JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO",
+  "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"
+];
+
+Object.entries(grupos).forEach(([id, dias]) => {
+  const [mes, ano] = id.split("-");
+  const nomeMes = mesNomes[parseInt(mes, 10) - 1];
         const reward = getRewardFor(Number(mes), Number(ano));
         if (!reward) return;
         let diasCompletos = 0;
