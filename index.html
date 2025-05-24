@@ -663,153 +663,103 @@
       grupos[id].push(obj);
     });
     let html = '';
-    Object.entries(grupos).forEach(([id, dias]) => {
-      const [mes, ano] = id.split("-");
-     const mesDoisDigitos = mes.toString().padStart(2, '0');
-const nomeMes = new Date(`${ano}-${mesDoisDigitos}-01`).toLocaleString('pt-BR', { month: 'long' });
+ Object.entries(grupos).forEach(([id, dias]) => {
+  const [mes, ano] = id.split("-");
+  // Garante mês com 2 dígitos para Safari/iOS
+  const mesDoisDigitos = mes.toString().padStart(2, '0');
+  const nomeMes = new Date(`${ano}-${mesDoisDigitos}-01`).toLocaleString('pt-BR', { month: 'long' });
 
-      // Card de prêmio do mês (exceto aniversário)
-      const reward = getRewardFor(Number(mes), Number(ano));
-      if(reward) {
-        html += `
-        <div class="reward-card" data-reward="${mes}-${ano}">
-          <div class="reward-icon">${reward.icon}</div>
-          <div class="title">${reward.title}</div>
-          <div class="desc">${reward.desc}</div>
-          <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mes}-${ano}"></div></div>
-          <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
-        </div>`;
-      }
-      // Card de prêmio especial de aniversário
-      if(mes == 8 && ano == 2025) {
-        const annivReward = getRewardFor(Number(mes), Number(ano), 21);
-        if(annivReward) {
-          html += `
-            <div class="reward-card" data-reward="birthday-2025">
-              <div class="reward-icon">${annivReward.icon}</div>
-              <div class="title">${annivReward.title}</div>
-              <div class="desc">${annivReward.desc}</div>
-              <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-birthday"></div></div>
-              <div class="reward-unlocked" id="reward-unlocked-birthday" style="display:none">Prêmio desbloqueado: <span>${annivReward.label}</span></div>
-            </div>
-          `;
-        }
-      }
-      html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Data</th>
-            <th>Dia</th>
-            <th>Hábitos Diários</th>
-            <th>Hábito Cíclico</th>
-          </tr>
-        </thead>
-        <tbody>`;
-      dias.forEach((dia) => {
-        const dayNum = parseInt(dia.dia.substring(4));
-        let habitosCellText;
-        if (dayNum <= 4) {
-          habitosCellText = dia.habitos.join(', ');
-        } else if (habitos_incrementais[dayNum]) {
-          const newHabs = habitos_incrementais[dayNum];
-          const totalBefore = dia.habitos.length - newHabs.length;
-          habitosCellText = `${totalBefore} ${totalBefore > 1 ? 'hábitos' : 'hábito'} + ${newHabs.join(', ')}`;
-        } else {
-          const total = dia.habitos.length;
-          habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
-        }
-        html += `
-        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
-          <td><span class="expand-icon">&#9654;</span></td>
-          <td class="progress-text gold">${dia.data}</td>
-          <td class="progress-text gold">${dia.dia}</td>
-          <td class="progress-text gold">${habitosCellText}</td>
-          <td class="progress-text gold">${dia.ciclico}</td>
-        </tr>
-        <tr class="dropdown" id="dropdown-${dia.id}">
-          <td colspan="5">
-            <div class="habit-list">
-              ${dia.habitos.map((h, idx) => `
-                <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
-                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
-                  <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
-                  <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
-                </div>
-              `).join('')}
-              <div class="habit-item" id="habititem-${dia.id}-ciclico">
-                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(dia.mes + dia.ano) % cycleEmojis.length]}</span>
-                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
-                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
-              </div>
-            </div>
-          </td>
-        </tr>`;
-      });
-      html += `</tbody></table>`;
-    });
-    calendario.innerHTML = html;
+  // Adiciona o nome do mês e a tabela normalmente:
+  html += `<div class='mes'>${nomeMes.toUpperCase()} ${ano}</div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Data</th>
+        <th>Dia</th>
+        <th>Hábitos Diários</th>
+        <th>Hábito Cíclico</th>
+      </tr>
+    </thead>
+    <tbody>`;
 
-Object.keys(progress).forEach(checkId => {
-  const checkbox = document.getElementById(checkId);
-  if (checkbox) {
-    checkbox.checked = progress[checkId];
-    const label = document.getElementById('label-' + checkId);
-    if (label) label.classList.toggle('habit-done', progress[checkId]);
-    const hi = document.getElementById('habititem-' + checkId);
-    if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
+  dias.forEach((dia) => {
+    const dayNum = parseInt(dia.dia.substring(4));
+    let habitosCellText;
+    if (dayNum <= 4) {
+      habitosCellText = dia.habitos.join(', ');
+    } else if (habitos_incrementais[dayNum]) {
+      const newHabs = habitos_incrementais[dayNum];
+      const totalBefore = dia.habitos.length - newHabs.length;
+      habitosCellText = `${totalBefore} ${totalBefore > 1 ? 'hábitos' : 'hábito'} + ${newHabs.join(', ')}`;
+    } else {
+      const total = dia.habitos.length;
+      habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
+    }
+    html += `
+    <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
+      <td><span class="expand-icon">&#9654;</span></td>
+      <td class="progress-text gold">${dia.data}</td>
+      <td class="progress-text gold">${dia.dia}</td>
+      <td class="progress-text gold">${habitosCellText}</td>
+      <td class="progress-text gold">${dia.ciclico}</td>
+    </tr>
+    <tr class="dropdown" id="dropdown-${dia.id}">
+      <td colspan="5">
+        <div class="habit-list">
+          ${dia.habitos.map((h, idx) => `
+            <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
+              <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
+              <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
+              <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
+            </div>
+          `).join('')}
+          <div class="habit-item" id="habititem-${dia.id}-ciclico">
+            <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(dia.mes + dia.ano) % cycleEmojis.length]}</span>
+            <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
+            <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+
+  // Depois da tabela, adiciona o card do prêmio (se existir):
+  const reward = getRewardFor(Number(mes), Number(ano));
+  if (reward) {
+    html += `
+      <div class="reward-card" data-reward="${mes}-${ano}">
+        <div class="reward-icon">${reward.icon}</div>
+        <div class="title">${reward.title}</div>
+        <div class="desc">${reward.desc}</div>
+        <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mes}-${ano}"></div></div>
+        <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">
+          Prêmio desbloqueado: <span>${reward.label}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // Card de aniversário (se for agosto 2025):
+  if (mes == 8 && ano == 2025) {
+    const annivReward = getRewardFor(Number(mes), Number(ano), 21);
+    if (annivReward) {
+      html += `
+        <div class="reward-card" data-reward="birthday-2025">
+          <div class="reward-icon">${annivReward.icon}</div>
+          <div class="title">${annivReward.title}</div>
+          <div class="desc">${annivReward.desc}</div>
+          <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-birthday"></div></div>
+          <div class="reward-unlocked" id="reward-unlocked-birthday" style="display:none">
+            Prêmio desbloqueado: <span>${annivReward.label}</span>
+          </div>
+        </div>
+      `;
+    }
   }
 });
-
-    // Atualiza barra de progresso dourada por dia
-    function updateProgressBar(dayId, habitCount) {
-      let checked = 0;
-      for (let i = 0; i < habitCount; i++) {
-        if (document.getElementById(`${dayId}-habit-${i}`)?.checked) checked++;
-      }
-      if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
-      let pct = checked / habitCount;
-      const row = document.getElementById(`mainrow-${dayId}`);
-      if (row) {
-        row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
-        row.style.setProperty('--progress', pct);
-        if (pct === 1) row.classList.add('day-complete');
-        else row.classList.remove('day-complete');
-      }
-    }
-
-    // Barra de progresso de recompensa por mês
-    function updateRewardProgress(month, year, totalDias, diasCompletos) {
-      const pct = diasCompletos / totalDias;
-      const bar = document.getElementById(`reward-bar-${month}-${year}`);
-      const unlocked = document.getElementById(`reward-unlocked-${month}-${year}`);
-      if(bar) {
-        bar.style.width = (pct * 100) + "%";
-        if(pct === 1) {
-          if(unlocked.style.display !== "block") {
-            unlocked.style.display = "block";
-            launchRewardConfetti();
-          }
-        } else {
-          unlocked.style.display = "none";
-        }
-      }
-    }
-    // Barra de recompensa especial do aniversário
-    function updateBirthdayRewardProgress(diasCompletos) {
-      const bar = document.getElementById(`reward-bar-birthday`);
-      const unlocked = document.getElementById(`reward-unlocked-birthday`);
-      if(bar) {
-        bar.style.width = (diasCompletos ? 100 : 0) + "%";
-        if(diasCompletos) {
-          unlocked.style.display = "block";
-          launchRewardConfetti();
-        } else {
-          unlocked.style.display = "none";
-        }
-      }
-    }
 
     // Dropdown toggle
     document.querySelectorAll('tr.main-row').forEach(row => {
