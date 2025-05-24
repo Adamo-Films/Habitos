@@ -747,15 +747,16 @@
     });
     calendario.innerHTML = html;
 
-    // LOAD PROGRESS
-      if (checkbox) {
-        checkbox.checked = progress[checkId];
-        const label = document.getElementById('label-' + checkId);
-        if (label) label.classList.toggle('habit-done', progress[checkId]);
-        const hi = document.getElementById('habititem-' + checkId);
-        if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
-      }
-    });
+Object.keys(progress).forEach(checkId => {
+  const checkbox = document.getElementById(checkId);
+  if (checkbox) {
+    checkbox.checked = progress[checkId];
+    const label = document.getElementById('label-' + checkId);
+    if (label) label.classList.toggle('habit-done', progress[checkId]);
+    const hi = document.getElementById('habititem-' + checkId);
+    if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
+  }
+});
 
     // Atualiza barra de progresso dourada por dia
     function updateProgressBar(dayId, habitCount) {
