@@ -405,6 +405,21 @@
   <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
   <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
 </audio>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAMnk4nDBd6nbvt9ElZeKDlJA7cp2vYfIk",
+    authDomain: "habitos-danilo.firebaseapp.com",
+    projectId: "habitos-danilo",
+    storageBucket: "habitos-danilo.appspot.com",
+    messagingSenderId: "342699648229",
+    appId: "1:342699648229:web:a22b4706e2dde3c1c1200c",
+    measurementId: "G-5589029JGV"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
 <script>
   // Recompensas do mês
   const rewards = [
