@@ -584,14 +584,61 @@
     }, 3400);
   }
 
-  // PROGRESSO LOCALSTORAGE
-  function getProgress() {
-    const progress = localStorage.getItem('habits-progress-v1');
-    return progress ? JSON.parse(progress) : {};
-  }
-  function saveProgress(progress) {
-    localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
-  }
+ {
+apiKey: "AIzaSyAMnk4nDBd6nbvt9ElZeKDlJA7cp2vYfIk",
+authDomain: "habitos-danilo.firebaseapp.com",
+projectId: "habitos-danilo",
+storageBucket: "habitos-danilo.firebasestorage.app",
+messagingSenderId: "342699648229",
+appId: "1:342699648229:web:a22b4706e2dde3c1c1200c",
+measurementId: "G-5589029JGV"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Funções Firebase para salvar e carregar progresso
+async function saveProgressToCloud(progress) {
+try {
+await setDoc(doc(db, "users", "danilo"), {
+progress: progress,
+updatedAt: new Date().toISOString()
+});
+} catch (e) {
+console.error("Erro ao salvar progresso na nuvem:", e);
+}
+}
+async function loadProgressFromCloud() {
+try {
+const docSnap = await getDoc(doc(db, "users", "danilo"));
+if (docSnap.exists()) {
+return docSnap.data().progress || {};
+} else {
+return {};
+}
+} catch (e) {
+console.error("Erro ao carregar progresso da nuvem:", e);
+return {};
+}
+}
+
+// Progresso LocalStorage fallback
+function getProgress() {
+const progress = localStorage.getItem('habits-progress-v1');
+return progress ? JSON.parse(progress) : {};
+}
+function saveProgress(progress) {
+localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
+// Também salva na nuvem!
+saveProgressToCloud(progress);
+}
+
+// Aguarda DOM
+document.addEventListener("DOMContentLoaded", async function() {
+// Carrega progresso da nuvem e sobrescreve localStorage
+const cloudProgress = await loadProgressFromCloud();
+if (Object.keys(cloudProgress).length > 0) {
+localStorage.setItem('habits-progress-v1', JSON.stringify(cloudProgress));
+}
 
   document.addEventListener("DOMContentLoaded", function() {
     // DADOS E GERAÇÃO DA TABELA
