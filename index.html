@@ -664,7 +664,9 @@
     let html = '';
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
-      const nomeMes = new Date(`${ano}-${mes}-01`).toLocaleString('pt-BR', { month: 'long' });
+     const mesDoisDigitos = mes.toString().padStart(2, '0');
+const nomeMes = new Date(`${ano}-${mesDoisDigitos}-01`).toLocaleString('pt-BR', { month: 'long' });
+
       // Card de prêmio do mês (exceto aniversário)
       const reward = getRewardFor(Number(mes), Number(ano));
       if(reward) {
