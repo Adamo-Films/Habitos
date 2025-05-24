@@ -748,9 +748,6 @@
     calendario.innerHTML = html;
 
     // LOAD PROGRESS
-    const progress = getProgress();
-    Object.keys(progress).forEach(checkId => {
-      const checkbox = document.getElementById(checkId);
       if (checkbox) {
         checkbox.checked = progress[checkId];
         const label = document.getElementById('label-' + checkId);
