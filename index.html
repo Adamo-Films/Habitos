@@ -599,12 +599,22 @@
     }, 3400);
   }
 
-  // PROGRESSO LOCALSTORAGE
-  function getProgress() {
-    const progress = localStorage.getItem('habits-progress-v1');
-    return progress ? JSON.parse(progress) : {};
+ async function getProgress() {
+    try {
+      const doc = await db.collection("usuarios").doc("danilo").get();
+      return doc.exists ? doc.data() : {};
+    } catch (e) {
+      console.error("Erro ao buscar dados do Firebase:", e);
+      return JSON.parse(localStorage.getItem('habits-progress-v1')) || {};
+    }
   }
-  function saveProgress(progress) {
+
+  async function saveProgress(progress) {
+    try {
+      await db.collection("usuarios").doc("danilo").set(progress);
+    } catch (e) {
+      console.error("Erro ao salvar no Firebase:", e);
+    }
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
 
