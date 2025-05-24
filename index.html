@@ -621,6 +621,61 @@
     }
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
+// Atualiza a barra de progresso dos dias
+function updateProgressBar(dayId, habitCount) {
+  let complete = 0;
+  for (let i = 0; i < habitCount; i++) {
+    if (document.getElementById(`${dayId}-habit-${i}`)?.checked) {
+      complete++;
+    }
+  }
+  if (document.getElementById(`${dayId}-ciclico`)?.checked) {
+    complete++;
+  }
+  // Progresso em 0~1
+  const progress = complete / habitCount;
+  const row = document.getElementById(`mainrow-${dayId}`);
+  if (row) row.style.setProperty('--progress', progress);
+}
+
+// Atualiza a barra de progresso da recompensa mensal
+function updateRewardProgress(mes, ano, totalDias, diasCompletos) {
+  const percent = diasCompletos / totalDias;
+  const bar = document.getElementById(`reward-bar-${mes}-${ano}`);
+  const unlocked = document.getElementById(`reward-unlocked-${mes}-${ano}`);
+  if (bar) {
+    bar.style.width = (percent * 100) + "%";
+    if (percent === 1) {
+      bar.style.filter = "drop-shadow(0 0 24px #cf28ff88) drop-shadow(0 0 28px #51ffe7cc)";
+      if (unlocked && unlocked.style.display !== "block") {
+        unlocked.style.display = "block";
+        launchRewardConfetti();
+      }
+    } else {
+      bar.style.filter = "";
+      if (unlocked) unlocked.style.display = "none";
+    }
+  }
+}
+
+// Atualiza a barra de progresso da recompensa do aniversário
+function updateBirthdayRewardProgress(done) {
+  const bar = document.getElementById(`reward-bar-birthday`);
+  const unlocked = document.getElementById(`reward-unlocked-birthday`);
+  if (bar) {
+    bar.style.width = done ? "100%" : "0%";
+    if (done) {
+      bar.style.filter = "drop-shadow(0 0 24px #cf28ff88) drop-shadow(0 0 28px #51ffe7cc)";
+      if (unlocked && unlocked.style.display !== "block") {
+        unlocked.style.display = "block";
+        launchRewardConfetti();
+      }
+    } else {
+      bar.style.filter = "";
+      if (unlocked) unlocked.style.display = "none";
+    }
+  }
+}
 
  document.addEventListener("DOMContentLoaded", async function() {
   const progress = await getProgress();
