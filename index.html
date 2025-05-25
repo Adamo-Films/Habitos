@@ -10,160 +10,166 @@
   <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <style>
     :root {
-      --neon-purple: #cf28ff;
-      --neon-blue: #51ffe7;
-      --neon-pink: #ff49e1;
-      --gold: #ffe379;
-      --gold2: #e4c145;
-      --gold3: #f7e399;
-      --corpo: #191919;
-      --day-inactive: #f2f2f7;
-      --header-height: 250px;
-      --header-shrink: 115px;
-      --counter-width: 220px;
-      --counter-height: 140px;
+      --main-pink: #ff49e1;
+      --main-cyan: #51ffe7;
+      --main-purple: #cf28ff;
+      --main-blue: #37d5ff;
+      --main-dark: #22172e;
+      --main-bg: #191919;
+      --main-header-huge: 320px;
+      --main-header-shrink: 110px;
+      --counter-bg: linear-gradient(135deg, #381aa3 10%, #0ff6 90%);
+      --counter-bg2: linear-gradient(120deg, #221852 30%, #cf28ff 100%);
+      --counter-radius: 2.1em;
+      --counter-shadow: 0 0 22px #ff49e1bb, 0 0 17px #51ffe7b8, 0 1px 14px #191941;
     }
     html, body { height: 100%; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', Arial, sans-serif;
-      background: var(--corpo);
-      color: var(--day-inactive);
+      background: var(--main-bg);
+      color: #f2f2f7;
       min-height: 100vh;
       transition: background 0.3s;
     }
+    /* HEADER - sem cor de fundo, grande, centralizado */
     .main-header {
       position: sticky;
       top: 0;
       width: 100%;
       z-index: 100;
-      background: linear-gradient(90deg, #231435 10%, #2c015a 90%);
-      box-shadow: 0 10px 54px #48003b8a, 0 3px 22px #00e8ff44, 0 0 0 3px #cf28ff33;
+      background: transparent;
+      box-shadow: none;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
-      height: var(--header-height);
-      transition: height 0.44s cubic-bezier(.5,1.6,.18,.98), box-shadow 0.38s, background 0.33s;
+      height: var(--main-header-huge);
+      transition: height 0.48s cubic-bezier(.5,1.6,.18,.98), box-shadow 0.38s;
       overflow: visible;
       will-change: height;
       padding: 0 16px;
       user-select: none;
-      gap: 0px;
+      gap: 0;
     }
     .main-header.shrunk {
-      height: var(--header-shrink);
-      box-shadow: 0 1px 12px #cf28ff4b;
-      background: linear-gradient(90deg, #241638 30%, #2c015a 100%);
+      height: var(--main-header-shrink);
+      align-items: center;
     }
     .main-header .counter {
-      flex: 0 0 var(--counter-width);
-      min-width: var(--counter-width);
-      max-width: var(--counter-width);
-      height: var(--counter-height);
-      min-height: var(--counter-height);
-      max-height: var(--counter-height);
-      margin: 0 18px 0 18px;
+      flex: 0 0 215px;
+      min-width: 215px;
+      max-width: 215px;
+      height: 135px;
+      min-height: 135px;
+      max-height: 135px;
+      margin: 0 30px 34px 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 13px 10px 12px 10px;
-      border-radius: 24px;
-      background: linear-gradient(120deg, #2e004e 30%, #482ba2 100%);
-      box-shadow: 0 0 44px #51ffe766, 0 0 17px #cf28ffb0 inset, 0 2px 16px #191941;
-      border: 2.8px solid var(--neon-purple);
+      border-radius: var(--counter-radius);
+      background: var(--counter-bg2);
+      box-shadow: var(--counter-shadow);
+      border: 2.4px solid var(--main-cyan);
       color: #fff;
       font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
-      font-size: 1.35em;
+      font-size: 1.45em;
       position: relative;
-      text-shadow: 0 0 16px #51ffe7, 0 0 3px #fff, 0 1px 1px #29215290;
+      text-shadow: 0 0 10px #0ffb, 0 0 3px #fff, 0 1px 1px #222c;
       letter-spacing: 0.05em;
-      transition: font-size 0.38s, padding 0.42s, margin 0.32s, min-height 0.38s;
-      gap: 6px;
+      transition: font-size 0.38s, min-width 0.3s, min-height 0.3s, padding 0.34s, margin 0.3s;
+      gap: 4px;
       user-select: none;
     }
     .main-header.shrunk .counter {
       font-size: 1em;
-      padding: 6px 7px 6px 7px;
-      min-width: 120px;
-      max-width: 130px;
-      min-height: 70px;
-      max-height: 80px;
-      margin: 0 10px;
+      min-width: 110px;
+      max-width: 110px;
+      min-height: 65px;
+      max-height: 65px;
+      margin: 0 8px;
+      padding: 6px 5px 6px 5px;
     }
     .counter-label {
-      font-size: 1.10em;
+      font-size: 1.14em;
       font-family: 'Antonio', Arial, sans-serif;
       letter-spacing: 0.07em;
       opacity: 1;
-      color: var(--neon-blue);
-      text-shadow: 0 0 14px #0ff9, 0 0 2px #fff, 0 1px 1px #290025;
-      margin-top: 4px;
-      margin-bottom: 0px;
-      font-weight: 600;
+      color: var(--main-cyan);
+      text-shadow: 0 0 8px #0ff7, 0 1px 1px #290025;
+      margin-top: 3px;
+      margin-bottom: 0;
+      font-weight: 800;
       text-align: center;
     }
     .counter-number {
-      font-size: 4.7em;
+      font-size: 5.5em;
       font-family: 'Luckiest Guy', 'Bebas Neue', cursive;
-      line-height: 1.08;
+      line-height: 1.03;
       color: #fff;
-      text-shadow: 0 0 40px #ffe379, 0 0 35px #51ffe7, 0 2px 12px #0ff9, 0 0 4px #fff, 0 0 2px #0ff;
-      letter-spacing: 0.06em;
-      margin-bottom: 0;
-      margin-top: -6px;
-      transition: font-size 0.3s, color 0.3s;
+      text-shadow: 0 0 30px #cf28ff, 0 0 8px #51ffe7, 0 0 16px #ff49e1cc, 0 1px 7px #000a;
+      letter-spacing: 0.05em;
+      margin: 0 0 0 0;
+      padding: 0;
       font-weight: bold;
       text-align: center;
+      filter: none;
+      transition: font-size 0.32s, color 0.26s;
     }
     .main-header.shrunk .counter-number {
-      font-size: 2.3em;
+      font-size: 2.7em;
     }
     .main-header .banner-gamer-header {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       flex: 1 1 auto;
       min-width: 0;
-      margin: 0 20px;
+      margin: 0 20px 38px 20px;
       padding: 0;
       height: 100%;
+      transition: margin 0.5s, height 0.5s;
     }
     .banner-gamer-img {
-      max-width: 520px;
-      width: 100%;
-      min-width: 180px;
-      max-height: 180px;
-      height: 180px;
+      max-width: 750px;
+      width: 44vw;
+      min-width: 260px;
+      max-height: 300px;
+      height: 240px;
       object-fit: contain;
       display: block;
       pointer-events: none;
       user-select: none;
-      filter: drop-shadow(0 10px 55px #19e0fcaa)
-              drop-shadow(0 2px 30px #ff38fd99)
-              drop-shadow(0 0 40px #0008);
+      filter: drop-shadow(0 0px 48px #ff49e1aa)
+              drop-shadow(0 2px 60px #51ffe799)
+              drop-shadow(0 0 22px #cf28ff88);
       margin: 0 auto;
-      transition: max-width 0.42s, filter 0.25s, margin 0.4s, height 0.4s;
+      transition: max-width 0.42s, height 0.5s, filter 0.3s, margin 0.5s;
+    }
+    .main-header.shrunk .banner-gamer-header {
+      margin: 0 12px 6px 12px;
+      height: 82px;
     }
     .main-header.shrunk .banner-gamer-img {
-      max-width: 210px;
-      max-height: 80px;
-      height: 80px;
+      max-width: 170px;
+      max-height: 74px;
+      height: 56px;
+      min-width: 80px;
       margin: 0 auto;
-      filter: drop-shadow(0 0 15px #51ffe7);
+      filter: drop-shadow(0 0 14px #51ffe7);
     }
     @media (max-width: 1100px) {
-      .main-header { padding: 0 3vw; }
-      .main-header .banner-gamer-header { margin: 0 2vw; }
-      .main-header .counter { margin: 0 5px; }
-      .banner-gamer-img { max-width: 260px; min-width: 90px; }
+      .main-header { padding: 0 2vw; }
+      .main-header .banner-gamer-header { margin: 0 2vw 25px 2vw; }
+      .main-header .counter { margin: 0 3vw 18px 3vw; }
+      .banner-gamer-img { max-width: 420px; min-width: 120px; height: 120px; }
     }
     @media (max-width: 700px) {
       .main-header { flex-direction: column; align-items: center; height: auto; }
       .main-header.shrunk { height: auto; }
-      .main-header .counter { margin: 12px 0 0 0; }
+      .main-header .counter { margin: 13px 0 0 0; }
       .main-header .banner-gamer-header { margin-bottom: 0; }
-      .banner-gamer-img { height: 60px; max-height: 60px; }
+      .banner-gamer-img { max-width: 92vw; min-width: 60vw; height: 60px; }
       .main-header.shrunk .banner-gamer-img { height: 28px; max-height: 28px; }
     }
     .container {
@@ -506,7 +512,6 @@
   <div class="counter counter-streak">
     <div class="counter-label">Sequência</div>
     <div class="counter-number" id="streak-counter">0</div>
-    <div class="counter-label" style="font-size:1.05em; color: #fff8;">dias</div>
   </div>
   <div class="banner-gamer-header">
     <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
@@ -579,10 +584,10 @@
       label: "Turing Machine!"
     }
   ];
-  // Função contadores (NÃO MUDE):
+  // Função contadores AJUSTADA (não muda streak, só hábitos feitos!)
   function atualizarContadores(progressData, dadosDias) {
     // Calcula streak (dias seguidos completos)
-    let streak = 0, atual = 0, totalHabitos = 0, habitosMarcados = 0;
+    let streak = 0, atual = 0, habitosMarcados = 0;
     const diasOrdem = [...dadosDias].sort((a, b) => {
       const aParts = a.id.split('-'), bParts = b.id.split('-');
       const ad = new Date(+aParts[1], +aParts[2]-1, +aParts[3]);
@@ -597,14 +602,16 @@
       else { break; }
     }
     streak = atual;
-    Object.keys(progressData).forEach(k => {
-      if (progressData[k]) habitosMarcados++;
+    // Agora só conta checkboxes marcados existentes:
+    dadosDias.forEach(dia => {
+      dia.habitos.forEach((_, idx) => {
+        if (progressData[`${dia.id}-habit-${idx}`]) habitosMarcados++;
+      });
+      if (progressData[`${dia.id}-ciclico`]) habitosMarcados++;
     });
-    totalHabitos = dadosDias.reduce((soma, dia) => soma + dia.habitos.length + 1, 0);
     document.getElementById('streak-counter').textContent = streak;
     document.getElementById('total-counter').textContent = habitosMarcados;
   }
-  // Header shrink ao rolar
   (function() {
     const header = document.getElementById('main-header');
     window.addEventListener('scroll', function() {
