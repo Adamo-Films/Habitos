@@ -10,18 +10,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <style>
     :root {
-      --main-pink: #ff49e1;
-      --main-cyan: #51ffe7;
       --main-purple: #cf28ff;
-      --main-blue: #37d5ff;
-      --main-dark: #22172e;
+      --main-blue: #51ffe7;
+      --main-pink: #ff49e1;
       --main-bg: #191919;
-      --main-header-huge: 320px;
-      --main-header-shrink: 110px;
-      --counter-bg: linear-gradient(135deg, #381aa3 10%, #0ff6 90%);
-      --counter-bg2: linear-gradient(120deg, #221852 30%, #cf28ff 100%);
-      --counter-radius: 2.1em;
-      --counter-shadow: 0 0 22px #ff49e1bb, 0 0 17px #51ffe7b8, 0 1px 14px #191941;
+      --main-card-bg: linear-gradient(120deg, #2c1749 30%, #3e1e65 100%);
+      --main-card-shadow: 0 0 36px #cf28ff70, 0 0 14px #0ff9, 0 2px 14px #191941;
+      --main-card-border: 2.6px solid #cf28ff;
+      --main-card-radius: 2.4em;
+      --main-gold: #ffe379;
+      --main-gold2: #e4c145;
+      --main-gold3: #f7e399;
+      --header-sticky-height: 112px;
     }
     html, body { height: 100%; margin: 0; padding: 0; }
     body {
@@ -31,168 +31,129 @@
       min-height: 100vh;
       transition: background 0.3s;
     }
-    /* HEADER - sem cor de fundo, grande, centralizado */
-    .main-header {
-      position: sticky;
-      top: 0;
+    /* LOGO PRINCIPAL */
+    .main-logo-section {
       width: 100%;
-      z-index: 100;
-      background: transparent;
-      box-shadow: none;
       display: flex;
+      justify-content: center;
       align-items: flex-end;
-      justify-content: center;
-      height: var(--main-header-huge);
-      transition: height 0.48s cubic-bezier(.5,1.6,.18,.98), box-shadow 0.38s;
-      overflow: visible;
-      will-change: height;
-      padding: 0 16px;
-      user-select: none;
-      gap: 0;
+      margin: 0 auto 12px auto;
+      min-height: 310px;
+      padding-top: 24px;
     }
-    .main-header.shrunk {
-      height: var(--main-header-shrink);
-      align-items: center;
-    }
-    .main-header .counter {
-      flex: 0 0 215px;
-      min-width: 215px;
-      max-width: 215px;
-      height: 135px;
-      min-height: 135px;
-      max-height: 135px;
-      margin: 0 30px 34px 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-radius: var(--counter-radius);
-      background: var(--counter-bg2);
-      box-shadow: var(--counter-shadow);
-      border: 2.4px solid var(--main-cyan);
-      color: #fff;
-      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
-      font-size: 1.45em;
-      position: relative;
-      text-shadow: 0 0 10px #0ffb, 0 0 3px #fff, 0 1px 1px #222c;
-      letter-spacing: 0.05em;
-      transition: font-size 0.38s, min-width 0.3s, min-height 0.3s, padding 0.34s, margin 0.3s;
-      gap: 4px;
-      user-select: none;
-    }
-    .main-header.shrunk .counter {
-      font-size: 1em;
-      min-width: 110px;
-      max-width: 110px;
-      min-height: 65px;
-      max-height: 65px;
-      margin: 0 8px;
-      padding: 6px 5px 6px 5px;
-    }
-    .counter-label {
-      font-size: 1.14em;
-      font-family: 'Antonio', Arial, sans-serif;
-      letter-spacing: 0.07em;
-      opacity: 1;
-      color: var(--main-cyan);
-      text-shadow: 0 0 8px #0ff7, 0 1px 1px #290025;
-      margin-top: 3px;
-      margin-bottom: 0;
-      font-weight: 800;
-      text-align: center;
-    }
-    .counter-number {
-      font-size: 5.5em;
-      font-family: 'Luckiest Guy', 'Bebas Neue', cursive;
-      line-height: 1.03;
-      color: #fff;
-      text-shadow: 0 0 30px #cf28ff, 0 0 8px #51ffe7, 0 0 16px #ff49e1cc, 0 1px 7px #000a;
-      letter-spacing: 0.05em;
-      margin: 0 0 0 0;
-      padding: 0;
-      font-weight: bold;
-      text-align: center;
-      filter: none;
-      transition: font-size 0.32s, color 0.26s;
-    }
-    .main-header.shrunk .counter-number {
-      font-size: 2.7em;
-    }
-    .main-header .banner-gamer-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      flex: 1 1 auto;
-      min-width: 0;
-      margin: 0 20px 38px 20px;
-      padding: 0;
-      height: 100%;
-      transition: margin 0.5s, height 0.5s;
-    }
-    .banner-gamer-img {
-      max-width: 750px;
-      width: 44vw;
-      min-width: 260px;
-      max-height: 300px;
-      height: 240px;
+    .main-logo-img {
+      max-width: 560px;
+      width: 80vw;
+      min-width: 250px;
+      height: auto;
       object-fit: contain;
       display: block;
       pointer-events: none;
       user-select: none;
-      filter: drop-shadow(0 0px 48px #ff49e1aa)
-              drop-shadow(0 2px 60px #51ffe799)
-              drop-shadow(0 0 22px #cf28ff88);
+      filter: drop-shadow(0 4px 85px #ff49e1dd)
+              drop-shadow(0 2px 62px #51ffe7cc)
+              drop-shadow(0 0 44px #cf28ffcc);
       margin: 0 auto;
-      transition: max-width 0.42s, height 0.5s, filter 0.3s, margin 0.5s;
     }
-    .main-header.shrunk .banner-gamer-header {
-      margin: 0 12px 6px 12px;
-      height: 82px;
+
+    /* CONTADORES FIXOS NO TOPO */
+    .sticky-counters {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      width: 100%;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 22px;
+      transition: box-shadow 0.38s;
+      padding-top: 6px;
+      padding-bottom: 0;
+      pointer-events: none; /* só pointer-events para o container, card tem pointer */
     }
-    .main-header.shrunk .banner-gamer-img {
-      max-width: 170px;
-      max-height: 74px;
-      height: 56px;
-      min-width: 80px;
-      margin: 0 auto;
-      filter: drop-shadow(0 0 14px #51ffe7);
+    .counter-card {
+      min-width: 230px;
+      max-width: 250px;
+      min-height: 112px;
+      max-height: 135px;
+      background: var(--main-card-bg);
+      border-radius: var(--main-card-radius);
+      box-shadow: var(--main-card-shadow);
+      border: var(--main-card-border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bungee', 'Luckiest Guy', Arial, sans-serif;
+      margin: 0 10px;
+      padding: 18px 10px 10px 10px;
+      user-select: none;
+      pointer-events: auto;
+      position: relative;
+      overflow: visible;
+      transition: box-shadow 0.24s, min-width 0.24s, min-height 0.24s, padding 0.24s;
+      border: 2.2px solid #985eff;
     }
-    @media (max-width: 1100px) {
-      .main-header { padding: 0 2vw; }
-      .main-header .banner-gamer-header { margin: 0 2vw 25px 2vw; }
-      .main-header .counter { margin: 0 3vw 18px 3vw; }
-      .banner-gamer-img { max-width: 420px; min-width: 120px; height: 120px; }
+    .counter-title {
+      font-size: 1.13em;
+      font-family: 'Antonio', Arial, sans-serif;
+      color: var(--main-blue);
+      text-shadow: 0 0 13px #51ffe7, 0 1px 1px #290025;
+      margin-bottom: 3px;
+      font-weight: bold;
+      letter-spacing: 0.07em;
+      text-align: center;
+      width: 100%;
+    }
+    .counter-number {
+      font-size: 4.3em;
+      font-family: 'Luckiest Guy', 'Bebas Neue', cursive;
+      color: #fff;
+      text-shadow:
+        0 0 33px #51ffe7, 
+        0 0 33px #cf28ffbb, 
+        0 0 18px #ff49e1cc, 
+        0 2px 7px #000a;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      margin-bottom: 0;
+      margin-top: 0;
+      transition: font-size 0.22s, color 0.22s;
+      text-align: center;
+      width: 100%;
+    }
+    @media (max-width: 850px) {
+      .main-logo-img { max-width: 98vw; }
+      .sticky-counters { gap: 12vw; }
+      .counter-card { min-width: 138px; font-size: 0.96em;}
     }
     @media (max-width: 700px) {
-      .main-header { flex-direction: column; align-items: center; height: auto; }
-      .main-header.shrunk { height: auto; }
-      .main-header .counter { margin: 13px 0 0 0; }
-      .main-header .banner-gamer-header { margin-bottom: 0; }
-      .banner-gamer-img { max-width: 92vw; min-width: 60vw; height: 60px; }
-      .main-header.shrunk .banner-gamer-img { height: 28px; max-height: 28px; }
+      .main-logo-section { min-height: 140px; }
+      .main-logo-img { max-width: 96vw; min-width: 62vw; }
+      .sticky-counters { flex-direction: column; gap: 14px; }
+      .counter-card { margin: 0; min-width: 82vw; max-width: 98vw; }
     }
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
     }
-    /* REWARD CARD GAMIFICADO */
+   /* Card de prêmio (MANTÉM O SEU DESIGN) */
     .reward-card {
       margin: 46px auto 0 auto;
       max-width: 560px;
       width: 100%;
-      background: #251b37;
-      border-radius: 24px;
-      box-shadow: 0 6px 32px #9800cc55, 0 1px 18px #0ff5, 0 0 0 3px #cf28ff44;
+      background: var(--main-card-bg);
+      border-radius: var(--main-card-radius);
+      box-shadow: var(--main-card-shadow);
+      border: var(--main-card-border);
       padding: 28px 28px 24px 28px;
       text-align: center;
       position: relative;
       overflow: visible;
       z-index: 20;
-      border-top: 4px solid var(--neon-purple);
-      border-bottom: 3px solid var(--neon-blue);
-      background-image: linear-gradient(130deg, #281d40 74%, #3f0a57 100%);
       margin-bottom: 18px;
       pointer-events: auto;
     }
@@ -202,7 +163,7 @@
       color: #fff;
       letter-spacing: 0.06em;
       margin-bottom: 0.2em;
-      text-shadow: 0 0 20px var(--neon-purple), 0 0 3px #000;
+      text-shadow: 0 0 20px var(--main-purple), 0 0 3px #000;
     }
     .reward-card .desc {
       font-size: 1.1em;
@@ -226,9 +187,9 @@
     }
     .reward-bar {
       background: linear-gradient(90deg,
-        var(--neon-purple) 10%,
-        var(--neon-pink) 48%,
-        var(--neon-blue) 100%);
+        var(--main-purple) 10%,
+        var(--main-pink) 48%,
+        var(--main-blue) 100%);
       height: 100%;
       border-radius: 16px;
       width: 0%;
@@ -307,34 +268,72 @@
       letter-spacing: 0.02em;
       z-index: 2;
     }
-    tr.main-row {
-      cursor: pointer;
-      transition: background 0.2s;
+   /* Card de prêmio (MANTÉM O SEU DESIGN) */
+    .reward-card {
+      margin: 46px auto 0 auto;
+      max-width: 560px;
+      width: 100%;
+      background: var(--main-card-bg);
+      border-radius: var(--main-card-radius);
+      box-shadow: var(--main-card-shadow);
+      border: var(--main-card-border);
+      padding: 28px 28px 24px 28px;
+      text-align: center;
       position: relative;
-      --progress: 0;
-      background: linear-gradient(
-        90deg,
-        var(--gold) 0%,
-        var(--gold2) 45%,
-        var(--gold3) 100%
-      );
-      background-size: calc(var(--progress, 0) * 100%) 100%;
-      background-repeat: no-repeat;
-      background-position: left top;
-      box-shadow: 0 2px 10px 0 #0008;
-      color: hsl(0, 0%, calc(87% - 74% * var(--progress)));
-      transition: color 0.3s, background-size 0.7s cubic-bezier(.6,1.2,.16,1.08);
+      overflow: visible;
+      z-index: 20;
+      margin-bottom: 18px;
+      pointer-events: auto;
     }
-    tr.main-row.day-complete {
-      color: #222 !important;
-      font-weight: bold;
-      letter-spacing: 1.1px;
-      text-shadow: 0 1px 2px #fff7, 0 0 4px #ffe37944, 0 2px 4px #e4c14566;
-      border-left: 4px solid var(--gold2);
-      border-right: 2px solid var(--gold3);
-      border-radius: 2px;
-      box-shadow: 0 0 5px 0 var(--gold2), 0 2px 12px 2px #ffe37980, 0 0 0 2px #e4c14570 inset;
-      background-size: 100% 100% !important;
+    .reward-card .title {
+      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
+      font-size: 2.1em;
+      color: #fff;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.2em;
+      text-shadow: 0 0 20px var(--main-purple), 0 0 3px #000;
+    }
+    .reward-card .desc {
+      font-size: 1.1em;
+      color: #d7b6fc;
+      margin-bottom: 10px;
+      letter-spacing: 0.01em;
+      font-weight: 600;
+      text-shadow: 0 0 7px #2f024e77;
+    }
+    .reward-bar-bg {
+      background: #201126;
+      border-radius: 18px;
+      height: 28px;
+      margin: 22px auto 10px auto;
+      width: 98%;
+      box-shadow: 0 0 14px #a41ec0a8, 0 0 24px #31e8ff13;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      border: 1.2px solid #4e207c;
+    }
+    .reward-bar {
+      background: linear-gradient(90deg,
+        var(--main-purple) 10%,
+        var(--main-pink) 48%,
+        var(--main-blue) 100%);
+      height: 100%;
+      border-radius: 16px;
+      width: 0%;
+      box-shadow:
+        0 0 32px 10px #ff49e1a2,
+        0 0 26px 8px #cf28ff66,
+        0 0 5px 2px #51ffe780;
+      transition: width 0.8s cubic-bezier(.59,1.5,.32,1.01);
+      position: relative;
+      z-index: 2;
+      overflow: visible;
+      animation: neonPulse 2.2s infinite alternate;
+    }
+    @keyframes neonPulse {
+      0% { filter: drop-shadow(0 0 10px #fff7) drop-shadow(0 0 0px #cf28ff77); }
+      100% { filter: drop-shadow(0 0 27px #cf28ff) drop-shadow(0 0 9px #51ffe7); }
     }
     tr.main-row:not(.day-complete)::after {
       content: "";
@@ -505,35 +504,37 @@
       50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1; }
       100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
- </style>
+  </style>
 </head>
 <body>
-<header class="main-header" id="main-header">
-  <div class="counter counter-streak">
-    <div class="counter-label">Sequência</div>
-    <div class="counter-number" id="streak-counter">0</div>
+  <!-- Logo central gigante -->
+  <div class="main-logo-section">
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="main-logo-img">
   </div>
-  <div class="banner-gamer-header">
-    <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+  <!-- Contadores sticky -->
+  <div class="sticky-counters" id="sticky-counters">
+    <div class="counter-card">
+      <div class="counter-title">Sequência</div>
+      <div class="counter-number" id="streak-counter">0</div>
+    </div>
+    <div class="counter-card">
+      <div class="counter-title">Hábitos feitos</div>
+      <div class="counter-number" id="total-counter">0</div>
+    </div>
   </div>
-  <div class="counter counter-total">
-    <div class="counter-label">Hábitos feitos</div>
-    <div class="counter-number" id="total-counter">0</div>
+  <div class="container">
+    <div id="calendario"></div>
   </div>
-</header>
-<div class="container">
-  <div id="calendario"></div>
-</div>
-<canvas id="confetti-canvas"></canvas>
-<canvas id="reward-confetti"></canvas>
-<div id="celebrate-text">VAI MLK!!!</div>
-<audio id="celebrate-audio">
-  <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
-  <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
-</audio>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script>
+  <canvas id="confetti-canvas"></canvas>
+  <canvas id="reward-confetti"></canvas>
+  <div id="celebrate-text">VAI MLK!!!</div>
+  <audio id="celebrate-audio">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
+  </audio>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
   const firebaseConfig = {
     apiKey: "AIzaSyAMnk4nDBd6nbvt9ElZeKDlJA7cp2vYfIk",
     authDomain: "habitos-danilo.firebaseapp.com",
@@ -584,34 +585,33 @@
       label: "Turing Machine!"
     }
   ];
-  // Função contadores AJUSTADA (não muda streak, só hábitos feitos!)
-  function atualizarContadores(progressData, dadosDias) {
-    // Calcula streak (dias seguidos completos)
-    let streak = 0, atual = 0, habitosMarcados = 0;
-    const diasOrdem = [...dadosDias].sort((a, b) => {
-      const aParts = a.id.split('-'), bParts = b.id.split('-');
-      const ad = new Date(+aParts[1], +aParts[2]-1, +aParts[3]);
-      const bd = new Date(+bParts[1], +bParts[2]-1, +bParts[3]);
-      return ad - bd;
-    });
-    for (let i = 0; i < diasOrdem.length; i++) {
-      const dia = diasOrdem[i];
-      const checks = dia.habitos.map((_, idx) => progressData[`${dia.id}-habit-${idx}`]);
-      checks.push(progressData[`${dia.id}-ciclico`]);
-      if (checks.every(Boolean)) { atual++; }
-      else { break; }
-    }
-    streak = atual;
-    // Agora só conta checkboxes marcados existentes:
-    dadosDias.forEach(dia => {
-      dia.habitos.forEach((_, idx) => {
-        if (progressData[`${dia.id}-habit-${idx}`]) habitosMarcados++;
+    // Função contadores (AJUSTADO PARA ATUALIZAR EM TEMPO REAL E SÓ HÁBITOS MARCADOS)
+    function atualizarContadores(progressData, dadosDias) {
+      // Calcula streak (dias seguidos completos)
+      let streak = 0, atual = 0, habitosMarcados = 0;
+      const diasOrdem = [...dadosDias].sort((a, b) => {
+        const aParts = a.id.split('-'), bParts = b.id.split('-');
+        const ad = new Date(+aParts[1], +aParts[2]-1, +aParts[3]);
+        const bd = new Date(+bParts[1], +bParts[2]-1, +bParts[3]);
+        return ad - bd;
       });
-      if (progressData[`${dia.id}-ciclico`]) habitosMarcados++;
-    });
-    document.getElementById('streak-counter').textContent = streak;
-    document.getElementById('total-counter').textContent = habitosMarcados;
-  }
+      for (let i = 0; i < diasOrdem.length; i++) {
+        const dia = diasOrdem[i];
+        const checks = dia.habitos.map((_, idx) => progressData[`${dia.id}-habit-${idx}`]);
+        checks.push(progressData[`${dia.id}-ciclico`]);
+        if (checks.every(Boolean)) { atual++; }
+        else { break; }
+      }
+      streak = atual;
+      dadosDias.forEach(dia => {
+        dia.habitos.forEach((_, idx) => {
+          if (progressData[`${dia.id}-habit-${idx}`]) habitosMarcados++;
+        });
+        if (progressData[`${dia.id}-ciclico`]) habitosMarcados++;
+      });
+      document.getElementById('streak-counter').textContent = streak;
+      document.getElementById('total-counter').textContent = habitosMarcados;
+    }
   (function() {
     const header = document.getElementById('main-header');
     window.addEventListener('scroll', function() {
