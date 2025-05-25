@@ -734,14 +734,26 @@ tr.main-row:hover { filter: brightness(1.08); }
           habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
         }
         html += `
-        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
-          <td><span class="expand-icon">&#9654;</span></td>
-          <td class="progress-text gold" data-text="${dia.data}">${dia.data}</td>
-          <td class="progress-text gold" data-text="${dia.dia}">${dia.dia}</td>
-          <td class="progress-text gold" data-text="${habitosCellText}">${habitosCellText}</td>
-          <td class="progress-text gold" data-text="${dia.ciclico}">${dia.ciclico}</td>
-        </tr>
-        <tr class="dropdown" id="dropdown-${dia.id}">
+<tr>
+  <td colspan="5">
+    <div class="progress-row" data-progress style="--progress:0.75">
+      <div class="progress-bar-overlay"></div>
+      <div class="progress-row-content">
+        <div>DATA</div>
+        <div>DIA</div>
+        <div>HÁBITOS</div>
+        <div>CÍCLICO</div>
+      </div>
+      <div class="progress-bar-overlay-text">
+        <div>DATA</div>
+        <div>DIA</div>
+        <div>HÁBITOS</div>
+        <div>CÍCLICO</div>
+      </div>
+    </div>
+  </td>
+</tr>
+<tr class="dropdown">...</tr>
           <td colspan="5">
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
