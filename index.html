@@ -55,11 +55,71 @@
     @media (max-width: 700px) {
       .banner-gamer-img { max-width: 97vw; }
       .banner-gamer { margin-top: 8px; }
+      .sticky-counter { max-width: 48vw; }
     }
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
+    }
+    /* COUNTERS STICKY */
+    .counters-top-bar {
+      position: sticky;
+      top: 0;
+      width: 100vw;
+      z-index: 101;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      pointer-events: none;
+      margin-bottom: -42px;
+      margin-top: 12px;
+    }
+    .sticky-counter {
+      min-width: 180px;
+      max-width: 210px;
+      background: #251b37;
+      border-radius: 18px;
+      box-shadow: 0 4px 22px #9800cc33, 0 1px 8px #0ff5, 0 0 0 2px #cf28ff33;
+      padding: 16px 14px 14px 18px;
+      text-align: left;
+      margin: 16px 24px 0 24px;
+      border-top: 3px solid var(--neon-purple);
+      border-bottom: 2px solid var(--neon-blue);
+      background-image: linear-gradient(130deg, #281d40 74%, #3f0a57 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      pointer-events: auto;
+      user-select: none;
+      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
+      color: #fff;
+      font-size: 1.1em;
+      gap: 7px;
+      transition: box-shadow 0.16s;
+    }
+    .sticky-counter .counter-label {
+      color: #ffe379;
+      font-size: 0.96em;
+      text-shadow: 0 0 5px #cf28ff44, 0 1px 4px #ffe37922;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.11em;
+      font-family: 'Bungee', Arial, sans-serif;
+    }
+    .sticky-counter .counter-value {
+      font-size: 2.1em;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 0 12px #cf28ff, 0 0 5px #ffe379;
+      letter-spacing: 0.05em;
+      margin-bottom: 0;
+      line-height: 1.07em;
+    }
+    .sticky-counter .counter-emoji {
+      font-size: 1.45em;
+      margin-right: 7px;
+      vertical-align: middle;
+      filter: drop-shadow(0 0 7px #cf28ff99);
     }
     /* REWARD CARD GAMIFICADO */
     .reward-card {
@@ -212,6 +272,7 @@
       color: hsl(0, 0%, calc(87% - 74% * var(--progress)));
       transition: color 0.3s, background-size 0.7s cubic-bezier(.6,1.2,.16,1.08);
       /* 87% (off-white) até 13% (quase preto) conforme avança */
+      user-select: none;
     }
     tr.main-row.day-complete {
       color: #222 !important;
@@ -238,7 +299,7 @@
       background: transparent;
     }
     tr.main-row:hover { filter: brightness(1.08); }
-    .expand-icon { display: inline-block; width: 16px; transition: transform 0.2s; }
+    .expand-icon { display: inline-block; width: 16px; transition: transform 0.2s; pointer-events: none; }
     .main-row.expanded > .expand-icon { transform: rotate(90deg); }
     .dropdown { display: none; transition: all 0.45s cubic-bezier(.4,1.2,.23,1.05); animation: none; height: 0; padding: 0; }
     .dropdown.active { display: table-row; animation: slideDown 0.35s cubic-bezier(.2,1.1,.42,1.09); height: auto; }
@@ -275,6 +336,7 @@
       transition: background 0.22s, box-shadow 0.22s;
       color: #fafbfc !important;
       box-sizing: border-box;
+      user-select: none;
     }
     .habit-item.habit-complete {
       background: linear-gradient(90deg, var(--gold3) 2%, var(--gold2) 40%, var(--gold) 99%);
@@ -305,6 +367,12 @@
       vertical-align: middle;
       color: #fff !important;
       justify-self: start;
+      outline: none;
+    }
+    .habit-emoji:focus {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
     }
     .habit-emoji:hover,
     .habit-emoji.glow {
@@ -335,6 +403,8 @@
       flex: 1 1 auto;
       justify-self: stretch;
       word-break: break-word;
+      user-select: none;
+      cursor: pointer;
     }
     .habit-done { text-decoration: line-through; color: #888 !important; }
     .habit-checkbox {
@@ -396,6 +466,17 @@
   </style>
 </head>
 <body>
+<!-- Counters Sticky -->
+<div class="counters-top-bar">
+  <div class="sticky-counter" id="counter-complete">
+    <div class="counter-label"><span class="counter-emoji">🏅</span>Hábitos completos</div>
+    <div class="counter-value" id="counter-complete-value">0</div>
+  </div>
+  <div class="sticky-counter" id="counter-sequence">
+    <div class="counter-label"><span class="counter-emoji">🔥</span>Sequência máxima</div>
+    <div class="counter-value" id="counter-sequence-value">0</div>
+  </div>
+</div>
 <div class="banner-gamer">
   <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
 </div>
@@ -424,7 +505,6 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 </script>
-
 <script>
   // Recompensas do mês
   const rewards = [
@@ -718,13 +798,13 @@
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
                 <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
-                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
+                  <span class="habit-emoji" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
                   <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
                 </div>
               `).join('')}
               <div class="habit-item" id="habititem-${dia.id}-ciclico">
-                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(dia.mes + dia.ano) % cycleEmojis.length]}</span>
+                <span class="habit-emoji" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(dia.mes + dia.ano) % cycleEmojis.length]}</span>
                 <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
                 <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
               </div>
@@ -909,8 +989,9 @@ Object.keys(progress).forEach(checkId => {
           } else {
             dayRow.classList.remove('day-complete');
           }
-          // Atualizar barras de recompensa
+          // Atualizar barras de recompensa e counters
           updateAllRewardProgress();
+          updateCounters();
         }
       });
     });
@@ -972,7 +1053,37 @@ Object.keys(progress).forEach(checkId => {
         updateBirthdayRewardProgress(birthdayDone);
       }
     }
+
+    // ==== CONTADOR GAMIFICADO (LATERAIS) ====
+    function updateCounters() {
+      // Contador 1: Hábitos completos (total de checkboxes marcados)
+      let totalCompletos = 0;
+      document.querySelectorAll('.habit-checkbox').forEach(cb => { if (cb.checked) totalCompletos++; });
+      document.getElementById('counter-complete-value').textContent = totalCompletos;
+
+      // Contador 2: Sequência máxima de dias 100% completos
+      let maxSeq = 0, currentSeq = 0;
+      let inSequence = false;
+      // Percorre todos os dias na ordem (dados)
+      dados.forEach((dia, idx) => {
+        const habitCount = dia.habitos.length + 1;
+        const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
+        if (allDone) {
+          currentSeq++;
+          if (currentSeq > maxSeq) maxSeq = currentSeq;
+        } else {
+          currentSeq = 0;
+        }
+      });
+      document.getElementById('counter-sequence-value').textContent = maxSeq;
+    }
     updateAllRewardProgress();
+    updateCounters();
+
+    // Atualizar counters sempre que algo mudar (caso carregue dos dados)
+    document.querySelectorAll('.habit-checkbox').forEach(cb => {
+      cb.addEventListener('change', updateCounters);
+    });
 
     window.addEventListener('resize', function() {
       const canvas = document.getElementById('confetti-canvas');
@@ -983,3 +1094,5 @@ Object.keys(progress).forEach(checkId => {
     });
   });
 </script>
+</body>
+</html>
