@@ -18,8 +18,8 @@
       --gold3: #f7e399;
       --corpo: #191919;
       --day-inactive: #f2f2f7;
-      --header-height: 132px;
-      --header-shrink: 62px;
+      --header-height: 210px;
+      --header-shrink: 90px;
     }
     html, body { height: 100%; margin: 0; padding: 0; }
     body {
@@ -29,114 +29,125 @@
       min-height: 100vh;
       transition: background 0.3s;
     }
-    /* HEADER STICKY COM CONTADORES */
+    /* HEADER MAIOR E CONTADORES LEGÍVEIS */
     .main-header {
       position: sticky;
       top: 0;
       width: 100%;
       z-index: 100;
       background: linear-gradient(90deg, #231435 10%, #2c015a 90%);
-      box-shadow: 0 6px 44px #48003b8a, 0 1px 8px #00e8ff44, 0 0 0 3px #cf28ff33;
+      box-shadow: 0 8px 50px #48003b8a, 0 2px 20px #00e8ff44, 0 0 0 3px #cf28ff33;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
       height: var(--header-height);
       transition: height 0.44s cubic-bezier(.5,1.6,.18,.98), box-shadow 0.38s, background 0.33s;
       overflow: visible;
       will-change: height;
-      padding: 0 16px;
+      padding: 0 16px 0 16px;
       user-select: none;
     }
     .main-header.shrunk {
       height: var(--header-shrink);
       box-shadow: 0 1px 12px #cf28ff4b;
       background: linear-gradient(90deg, #241638 30%, #2c015a 100%);
+      align-items: center;
     }
     .main-header .counter {
-      flex: 0 0 132px;
-      min-width: 90px;
-      max-width: 155px;
-      margin: 0 16px;
+      flex: 0 0 200px;
+      min-width: 120px;
+      max-width: 230px;
+      margin: 0 20px 28px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 8px 12px 7px 12px;
-      border-radius: 19px;
-      background: linear-gradient(120deg, #26003a 40%, #482ba2 100%);
-      box-shadow: 0 0 24px #51ffe766, 0 0 8px #cf28ff70 inset, 0 2px 10px #2229;
-      border: 2px solid var(--neon-purple);
+      justify-content: flex-end;
+      padding: 16px 18px 14px 18px;
+      border-radius: 22px;
+      background: linear-gradient(120deg, #2e004e 30%, #482ba2 100%);
+      box-shadow: 0 0 50px #51ffe766, 0 0 14px #cf28ff90 inset, 0 2px 14px #191941;
+      border: 2.8px solid var(--neon-purple);
       color: #fff;
       font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
-      font-size: 1.18em;
+      font-size: 1.38em;
       position: relative;
-      text-shadow: 0 0 9px #51ffe7bb, 0 0 3px #fff, 0 1px 1px #29215290;
-      letter-spacing: 0.02em;
-      transition: font-size 0.38s;
-      gap: 2px;
+      text-shadow: 0 0 16px #51ffe7, 0 0 3px #fff, 0 1px 1px #29215290;
+      letter-spacing: 0.04em;
+      transition: font-size 0.38s, padding 0.42s;
+      gap: 6px;
       user-select: none;
     }
     .main-header.shrunk .counter {
-      font-size: 0.93em;
-      padding: 4px 10px 3px 10px;
+      font-size: 1.02em;
+      padding: 7px 7px 7px 7px;
       min-width: 76px;
-      max-width: 110px;
+      max-width: 130px;
+      margin-bottom: 5px;
     }
     .counter-label {
-      font-size: 0.92em;
+      font-size: 1.08em;
       font-family: 'Antonio', Arial, sans-serif;
-      letter-spacing: 0.04em;
-      opacity: 0.92;
+      letter-spacing: 0.07em;
+      opacity: 1;
       color: var(--neon-blue);
-      text-shadow: 0 0 7px #0ff9;
+      text-shadow: 0 0 14px #0ff9, 0 0 2px #fff, 0 1px 1px #290025;
     }
     .counter-number {
-      font-size: 2.6em;
+      font-size: 4.2em;
       font-family: 'Luckiest Guy', 'Bebas Neue', cursive;
-      line-height: 1.04;
+      line-height: 1.03;
       color: var(--gold);
-      text-shadow: 0 0 11px #ffe379, 0 0 44px #51ffe7, 0 2px 8px #0ff9;
-      filter: drop-shadow(0 1px 9px #cf28ff88);
-      letter-spacing: 0.03em;
-      margin-bottom: 2px;
-      margin-top: -2px;
+      text-shadow: 0 0 22px #ffe379, 0 0 60px #51ffe7, 0 2px 14px #0ff9;
+      filter: drop-shadow(0 2px 20px #cf28ff88);
+      letter-spacing: 0.06em;
+      margin-bottom: 0;
+      margin-top: -3px;
+      transition: font-size 0.3s;
     }
     .main-header.shrunk .counter-number {
-      font-size: 1.5em;
+      font-size: 2.2em;
     }
     .main-header .banner-gamer-header {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       flex: 1 1 auto;
       min-width: 0;
-      margin: 0 20px;
+      margin: 0 20px 15px 20px;
+      padding: 0;
     }
     .banner-gamer-img {
-      max-width: 360px;
-      width: 70vw;
-      min-width: 160px;
+      max-width: 440px;
+      width: 100%;
+      min-width: 180px;
       height: auto;
       display: block;
-      margin-top: 0;
-      margin-bottom: 0;
       pointer-events: none;
       user-select: none;
-      filter: drop-shadow(0 8px 38px #19e0fc88)
-              drop-shadow(0 1px 18px #ff38fd88)
-              drop-shadow(0 0 20px #0008);
-      transition: max-width 0.42s, filter 0.25s;
+      filter: drop-shadow(0 10px 55px #19e0fcaa)
+              drop-shadow(0 2px 30px #ff38fd99)
+              drop-shadow(0 0 40px #0008);
+      margin-bottom: -16px;
+      margin-top: 0;
+      transition: max-width 0.42s, filter 0.25s, margin 0.4s;
     }
     .main-header.shrunk .banner-gamer-img {
-      max-width: 170px;
-      filter: drop-shadow(0 0 16px #51ffe7);
+      max-width: 220px;
+      margin-bottom: -6px;
+      filter: drop-shadow(0 0 18px #51ffe7);
     }
-    @media (max-width: 700px) {
-      .main-header { padding: 0 4px; }
-      .main-header .banner-gamer-header { margin: 0 5px; }
-      .main-header .counter { margin: 0 6px; }
-      .banner-gamer-img { width: 55vw; min-width: 88px; }
+    @media (max-width: 900px) {
+      .main-header { padding: 0 3vw; }
+      .main-header .banner-gamer-header { margin: 0 2vw 10px 2vw; }
+      .main-header .counter { margin: 0 6px 18px 6px; }
+      .banner-gamer-img { width: 60vw; min-width: 90px; }
+    }
+    @media (max-width: 600px) {
+      .main-header { flex-direction: column; align-items: center; height: auto; }
+      .main-header.shrunk { height: auto; }
+      .main-header .counter { margin: 15px 0 0 0; }
+      .main-header .banner-gamer-header { margin-bottom: 0; }
     }
     .container {
       max-width: 1300px;
@@ -478,7 +489,7 @@
   <div class="counter counter-streak">
     <div class="counter-label">Sequência</div>
     <div class="counter-number" id="streak-counter">0</div>
-    <div class="counter-label" style="font-size:0.84em; color: #fff8;">dias</div>
+    <div class="counter-label" style="font-size:0.95em; color: #fff8;">dias</div>
   </div>
   <div class="banner-gamer-header">
     <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
@@ -551,11 +562,10 @@
       label: "Turing Machine!"
     }
   ];
- // Função para atualizar os contadores no header
+  // Função contadores (NÃO MUDE):
   function atualizarContadores(progressData, dadosDias) {
-    // Cálculo do streak (sequência de dias completos)
+    // Calcula streak (dias seguidos completos)
     let streak = 0, atual = 0, totalHabitos = 0, habitosMarcados = 0;
-    // Dias na ordem cronológica
     const diasOrdem = [...dadosDias].sort((a, b) => {
       const aParts = a.id.split('-'), bParts = b.id.split('-');
       const ad = new Date(+aParts[1], +aParts[2]-1, +aParts[3]);
@@ -577,7 +587,7 @@
     document.getElementById('streak-counter').textContent = streak;
     document.getElementById('total-counter').textContent = habitosMarcados;
   }
-   // Header shrink ao rolar
+  // Header shrink ao rolar
   (function() {
     const header = document.getElementById('main-header');
     window.addEventListener('scroll', function() {
@@ -751,9 +761,9 @@
     }
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
-
- document.addEventListener("DOMContentLoaded", async function() {
-  const progress = await getProgress();
+  // --- Seu sistema de calendário/hábitos ---
+  document.addEventListener("DOMContentLoaded", async function() {
+    const progress = await getProgress();
     const dados = [];
     const habitos_incrementais = {
       1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
@@ -787,8 +797,19 @@
         id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
       });
     }
+    // <-- Linha importante para os contadores funcionarem SEMPRE:
     window.__dadosHabitosDias = dados;
     const calendario = document.getElementById("calendario");
+      function refreshContadoresAlways() {
+          // Garante atualização toda vez que renderizar/marcar/desmarcar qualquer hábito
+      getProgress().then(progress => {
+        atualizarContadores(progress, window.__dadosHabitosDias);
+      });
+    }
+    refreshContadoresAlways();
+    document.body.addEventListener('change', function(e){
+      if (e.target.classList.contains('habit-checkbox')) refreshContadoresAlways();
+    });
     const grupos = {};
     dados.forEach((obj) => {
       const id = `${obj.mes}-${obj.ano}`;
