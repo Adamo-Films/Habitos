@@ -15,12 +15,13 @@
       --gold3: #f7e399;
       --corpo: #191919;
       --day-inactive: #f2f2f7;
-      --header-height: 190px;
-      --header-shrink: 62px;
       --neon-purple: #cf28ff;
       --neon-pink: #ff49e1;
       --neon-blue: #51ffe7;
       --shadow-purple: #9800cc;
+      --counter-size: 205px;
+      --counter-mobile-size: 46vw;
+      --counter-gap: 24px;
     }
     html, body { height: 100%; margin: 0; padding: 0; }
     body {
@@ -30,7 +31,7 @@
       min-height: 100vh;
       transition: background 0.3s;
     }
-    .banner-gamer {
+    .header-wrap {
       width: 100%;
       display: flex;
       justify-content: center;
@@ -38,8 +39,17 @@
       margin-top: 32px;
       margin-bottom: 0px;
       z-index: 10;
+      position: relative;
+    }
+    .banner-gamer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
       pointer-events: none;
       user-select: none;
+      position: relative;
+      z-index: 3;
     }
     .banner-gamer-img {
       max-width: 540px;
@@ -54,9 +64,9 @@
     }
     @media (max-width: 700px) {
       .banner-gamer-img { max-width: 97vw; }
-      .banner-gamer { margin-top: 8px; }
-      .sticky-counter { max-width: 48vw; }
+      .header-wrap { margin-top: 10px; }
     }
+
     .container {
       max-width: 1300px;
       margin: 0 auto;
@@ -71,55 +81,112 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      gap: var(--counter-gap);
       pointer-events: none;
-      margin-bottom: -42px;
-      margin-top: 12px;
+      margin-top: 0;
+      background: linear-gradient(180deg, #0e0a14f7 90%, #0000 100%);
+      padding: 0 2vw 0 2vw;
+      box-sizing: border-box;
+      min-height: calc(var(--counter-size) + 18px);
+      transition: box-shadow 0.2s;
     }
     .sticky-counter {
-      min-width: 180px;
-      max-width: 210px;
-      background: #251b37;
-      border-radius: 18px;
-      box-shadow: 0 4px 22px #9800cc33, 0 1px 8px #0ff5, 0 0 0 2px #cf28ff33;
-      padding: 16px 14px 14px 18px;
-      text-align: left;
-      margin: 16px 24px 0 24px;
-      border-top: 3px solid var(--neon-purple);
-      border-bottom: 2px solid var(--neon-blue);
-      background-image: linear-gradient(130deg, #281d40 74%, #3f0a57 100%);
+      min-width: var(--counter-size);
+      max-width: var(--counter-size);
+      min-height: var(--counter-size);
+      max-height: var(--counter-size);
+      aspect-ratio: 1/1;
+      background: linear-gradient(135deg,#2d1e46 70%, #322154 100%);
+      border-radius: 22px;
+      box-shadow: 0 4px 25px #9800cc33, 0 1px 18px #0ff5, 0 0 0 2.5px #cf28ff33;
+      padding: 23px 14px 16px 14px;
+      text-align: center;
+      margin-top: 18px;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
+      justify-content: center;
       pointer-events: auto;
-      user-select: none;
       font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
       color: #fff;
-      font-size: 1.1em;
-      gap: 7px;
+      font-size: 1.09em;
+      gap: 11px;
+      border-top: 3px solid var(--neon-purple);
+      border-bottom: 2.5px solid var(--neon-blue);
+      background-blend-mode: lighten;
+      border-right: none;
+      border-left: none;
       transition: box-shadow 0.16s;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      animation: counterAppear 1.5s cubic-bezier(.44,1.4,.18,1.01);
+    }
+    @keyframes counterAppear {
+      0% { opacity: 0; transform: scale(0.9) translateY(-24px);}
+      100% { opacity: 1; transform: scale(1) translateY(0);}
     }
     .sticky-counter .counter-label {
       color: #ffe379;
-      font-size: 0.96em;
-      text-shadow: 0 0 5px #cf28ff44, 0 1px 4px #ffe37922;
+      font-size: 1.09em;
+      text-shadow: 0 0 7px #cf28ff44, 0 1px 4px #ffe37922;
       letter-spacing: 0.04em;
-      margin-bottom: 0.11em;
       font-family: 'Bungee', Arial, sans-serif;
+      line-height: 1.1;
+      margin-bottom: 0.12em;
+      margin-top: 0.14em;
     }
     .sticky-counter .counter-value {
-      font-size: 2.1em;
+      font-size: 2.8em;
+      font-family: 'Luckiest Guy', 'Bungee', Arial, sans-serif;
       font-weight: 700;
       color: #fff;
-      text-shadow: 0 0 12px #cf28ff, 0 0 5px #ffe379;
-      letter-spacing: 0.05em;
+      text-shadow: 0 0 22px #cf28ff, 0 0 10px #ffe379, 0 0 25px #51ffe7bb;
+      letter-spacing: 0.04em;
       margin-bottom: 0;
       line-height: 1.07em;
+      transition: text-shadow 0.18s, color 0.18s;
+      position: relative;
+      z-index: 2;
     }
     .sticky-counter .counter-emoji {
-      font-size: 1.45em;
+      font-size: 1.55em;
       margin-right: 7px;
       vertical-align: middle;
-      filter: drop-shadow(0 0 7px #cf28ff99);
+      filter: drop-shadow(0 0 11px #cf28ff88);
+    }
+    /* Choque elétrico animação */
+    .counter-shock {
+      animation: shock-effect 0.5s cubic-bezier(.7,0,.16,1.33);
+    }
+    @keyframes shock-effect {
+      0% { color: #fff; text-shadow: 0 0 22px #fff, 0 0 33px #51ffe7cc, 0 0 12px #ff49e1cc; transform: scale(1.13) skew(-2deg); }
+      28% { color: #ffe379; text-shadow: 0 0 30px #fff, 0 0 36px #cf28ff, 0 0 22px #51ffe7cc; transform: scale(1.12) skew(2deg);}
+      70% { color: #fff; text-shadow: 0 0 22px #cf28ff, 0 0 10px #ffe379, 0 0 19px #51ffe7cc; transform: scale(1.06) skew(-1.7deg);}
+      100% { color: #fff; text-shadow: 0 0 22px #cf28ff, 0 0 10px #ffe379, 0 0 25px #51ffe7bb; transform: scale(1) skew(0);}
+    }
+    @media (max-width: 900px) {
+      .counters-top-bar {
+        min-height: calc(var(--counter-mobile-size) + 8vw);
+        gap: 3vw;
+      }
+      .sticky-counter {
+        min-width: var(--counter-mobile-size);
+        max-width: var(--counter-mobile-size);
+        min-height: var(--counter-mobile-size);
+        max-height: var(--counter-mobile-size);
+        font-size: 1.01em;
+      }
+      .sticky-counter .counter-value {
+        font-size: 2.1em;
+      }
+    }
+    @media (max-width: 700px) {
+      .counters-top-bar {
+        min-height: calc(var(--counter-mobile-size) + 2vw);
+        gap: 2vw;
+        padding: 0 0.5vw 0 0.5vw;
+      }
     }
     /* REWARD CARD GAMIFICADO */
     .reward-card {
@@ -466,19 +533,20 @@
   </style>
 </head>
 <body>
-<!-- Counters Sticky -->
 <div class="counters-top-bar">
   <div class="sticky-counter" id="counter-complete">
-    <div class="counter-label"><span class="counter-emoji">🏅</span>Hábitos completos</div>
+    <div class="counter-label"><span class="counter-emoji">🏅</span>HÁBITOS<br>COMPLETOS</div>
     <div class="counter-value" id="counter-complete-value">0</div>
   </div>
   <div class="sticky-counter" id="counter-sequence">
-    <div class="counter-label"><span class="counter-emoji">🔥</span>Sequência máxima</div>
+    <div class="counter-label"><span class="counter-emoji">🔥</span>SEQUÊNCIA<br>MÁXIMA</div>
     <div class="counter-value" id="counter-sequence-value">0</div>
   </div>
 </div>
-<div class="banner-gamer">
-  <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+<div class="header-wrap">
+  <div class="banner-gamer">
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+  </div>
 </div>
 <div class="container">
   <div id="calendario"></div>
@@ -1054,29 +1122,43 @@ Object.keys(progress).forEach(checkId => {
       }
     }
 
-    // ==== CONTADOR GAMIFICADO (LATERAIS) ====
-    function updateCounters() {
-      // Contador 1: Hábitos completos (total de checkboxes marcados)
-      let totalCompletos = 0;
-      document.querySelectorAll('.habit-checkbox').forEach(cb => { if (cb.checked) totalCompletos++; });
-      document.getElementById('counter-complete-value').textContent = totalCompletos;
-
-      // Contador 2: Sequência máxima de dias 100% completos
-      let maxSeq = 0, currentSeq = 0;
-      let inSequence = false;
-      // Percorre todos os dias na ordem (dados)
-      dados.forEach((dia, idx) => {
-        const habitCount = dia.habitos.length + 1;
-        const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
-        if (allDone) {
-          currentSeq++;
-          if (currentSeq > maxSeq) maxSeq = currentSeq;
-        } else {
-          currentSeq = 0;
-        }
-      });
-      document.getElementById('counter-sequence-value').textContent = maxSeq;
+ // ==== CONTADOR GAMIFICADO (LATERAIS) COM ANIMAÇÃO ====
+  function animateShock(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('counter-shock');
+    // Força o reflow para permitir reanimar mesmo que já esteja animando
+    void el.offsetWidth;
+    el.classList.add('counter-shock');
+  }
+  // Substitua a função updateCounters pela versão abaixo:
+  function updateCounters() {
+    // Contador 1: Hábitos completos (total de checkboxes marcados)
+    let totalCompletos = 0;
+    document.querySelectorAll('.habit-checkbox').forEach(cb => { if (cb.checked) totalCompletos++; });
+    let el1 = document.getElementById('counter-complete-value');
+    if (el1) {
+      if (Number(el1.textContent) !== totalCompletos) animateShock('counter-complete-value');
+      el1.textContent = totalCompletos;
     }
+    // Contador 2: Sequência máxima de dias 100% completos
+    let maxSeq = 0, currentSeq = 0;
+    dados.forEach((dia, idx) => {
+      const habitCount = dia.habitos.length + 1;
+      const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
+      if (allDone) {
+        currentSeq++;
+        if (currentSeq > maxSeq) maxSeq = currentSeq;
+      } else {
+        currentSeq = 0;
+      }
+    });
+    let el2 = document.getElementById('counter-sequence-value');
+    if (el2) {
+      if (Number(el2.textContent) !== maxSeq) animateShock('counter-sequence-value');
+      el2.textContent = maxSeq;
+    }
+  }
     updateAllRewardProgress();
     updateCounters();
 
