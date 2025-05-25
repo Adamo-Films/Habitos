@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no 🎮</title>
+  <!-- FONTES -->
   <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
   <style>
@@ -18,10 +19,11 @@
       --neon-purple: #cf28ff;
       --neon-pink: #ff49e1;
       --neon-blue: #51ffe7;
-      --shadow-purple: #9800cc;
-      --counter-size: 205px;
-      --counter-mobile-size: 46vw;
-      --counter-gap: 24px;
+      --counter-size: 270px;
+      --counter-gap: 18vw;
+      --banner-size: 600px;
+      --banner-max: 720px;
+      --counter-z: 13;
     }
     html, body { height: 100%; margin: 0; padding: 0; }
     body {
@@ -29,79 +31,88 @@
       background: var(--corpo);
       color: var(--day-inactive);
       min-height: 100vh;
-      transition: background 0.3s;
+      overflow-x: hidden;
     }
-    .header-wrap {
-      width: 100%;
-      display: flex;
+    .top-supergrid {
+      width: 100vw;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: start;
       justify-content: center;
-      align-items: flex-start;
-      margin-top: 32px;
-      margin-bottom: 0px;
-      z-index: 10;
+      margin: 0;
+      padding: 0;
+      margin-top: 28px;
       position: relative;
+      z-index: 10;
+    }
+    .top-counters-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-width: var(--counter-size);
+      width: 100%;
+      margin: 0;
+      z-index: var(--counter-z);
+    }
+    .center-banner-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      z-index: 1;
+      width: 100%;
+      min-width: 240px;
     }
     .banner-gamer {
-      width: 100%;
       display: flex;
       justify-content: center;
       align-items: flex-start;
       pointer-events: none;
       user-select: none;
-      position: relative;
-      z-index: 3;
+      width: 100%;
+      margin: 0;
+      z-index: 2;
     }
     .banner-gamer-img {
-      max-width: 540px;
-      width: 100%;
+      width: min(var(--banner-size), 92vw, var(--banner-max));
+      max-width: var(--banner-max);
+      min-width: 260px;
       height: auto;
       display: block;
       filter: drop-shadow(0 8px 38px #19e0fc88)
               drop-shadow(0 1px 18px #ff38fd88)
-              drop-shadow(0 0 20px #0008);
+              drop-shadow(0 0 30px #1f144f)
+              drop-shadow(0 0 20px #000b);
       pointer-events: none;
       user-select: none;
+      margin-bottom: 0;
+      margin-top: 0;
+      z-index: 3;
+      transition: width 0.28s;
+    }
+    @media (max-width: 900px) {
+      :root { --counter-size: 39vw; --banner-size: 56vw; }
     }
     @media (max-width: 700px) {
-      .banner-gamer-img { max-width: 97vw; }
-      .header-wrap { margin-top: 10px; }
+      :root { --counter-size: 38vw; --banner-size: 77vw; }
+      .banner-gamer-img { min-width: 120px; }
     }
-
     .container {
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 32px;
     }
-    /* COUNTERS STICKY */
-    .counters-top-bar {
-      position: sticky;
-      top: 0;
-      width: 100vw;
-      z-index: 101;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: var(--counter-gap);
-      pointer-events: none;
-      margin-top: 0;
-      background: linear-gradient(180deg, #0e0a14f7 90%, #0000 100%);
-      padding: 0 2vw 0 2vw;
-      box-sizing: border-box;
-      min-height: calc(var(--counter-size) + 18px);
-      transition: box-shadow 0.2s;
-    }
+    /* COUNTER CARDS */
     .sticky-counter {
-      min-width: var(--counter-size);
-      max-width: var(--counter-size);
-      min-height: var(--counter-size);
-      max-height: var(--counter-size);
+      width: var(--counter-size);
+      height: var(--counter-size);
       aspect-ratio: 1/1;
-      background: linear-gradient(135deg,#2d1e46 70%, #322154 100%);
-      border-radius: 22px;
+      background: linear-gradient(135deg, #2d1e46 70%, #322154 100%);
+      border-radius: 26px;
       box-shadow: 0 4px 25px #9800cc33, 0 1px 18px #0ff5, 0 0 0 2.5px #cf28ff33;
-      padding: 23px 14px 16px 14px;
+      padding: 24px 8px 18px 8px;
       text-align: center;
-      margin-top: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -109,176 +120,113 @@
       pointer-events: auto;
       font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
       color: #fff;
-      font-size: 1.09em;
-      gap: 11px;
+      font-size: 1.12em;
+      gap: 13px;
       border-top: 3px solid var(--neon-purple);
       border-bottom: 2.5px solid var(--neon-blue);
       background-blend-mode: lighten;
       border-right: none;
       border-left: none;
-      transition: box-shadow 0.16s;
+      transition: box-shadow 0.16s, border 0.19s, filter 0.18s;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       user-select: none;
-      animation: counterAppear 1.5s cubic-bezier(.44,1.4,.18,1.01);
+      margin: 0 0 0 0;
+      margin-top: 0;
+      z-index: var(--counter-z);
+      animation: counterAppear 1.3s cubic-bezier(.44,1.4,.18,1.01);
+      will-change: filter, transform;
     }
     @keyframes counterAppear {
-      0% { opacity: 0; transform: scale(0.9) translateY(-24px);}
+      0% { opacity: 0; transform: scale(0.85) translateY(-30px);}
       100% { opacity: 1; transform: scale(1) translateY(0);}
     }
     .sticky-counter .counter-label {
       color: #ffe379;
-      font-size: 1.09em;
-      text-shadow: 0 0 7px #cf28ff44, 0 1px 4px #ffe37922;
+      font-size: 1.17em;
+      text-shadow: 0 0 9px #cf28ff44, 0 1px 6px #ffe37922;
       letter-spacing: 0.04em;
       font-family: 'Bungee', Arial, sans-serif;
-      line-height: 1.1;
-      margin-bottom: 0.12em;
-      margin-top: 0.14em;
+      line-height: 1.15;
+      margin-bottom: 0.16em;
+      margin-top: 0.15em;
+      word-break: break-word;
     }
     .sticky-counter .counter-value {
-      font-size: 2.8em;
+      font-size: 3.5em;
       font-family: 'Luckiest Guy', 'Bungee', Arial, sans-serif;
       font-weight: 700;
       color: #fff;
-      text-shadow: 0 0 22px #cf28ff, 0 0 10px #ffe379, 0 0 25px #51ffe7bb;
+      text-shadow: 0 0 30px #cf28ff, 0 0 20px #ffe379, 0 0 28px #51ffe7bb;
       letter-spacing: 0.04em;
       margin-bottom: 0;
       line-height: 1.07em;
       transition: text-shadow 0.18s, color 0.18s;
       position: relative;
-      z-index: 2;
+      z-index: 3;
+      filter: drop-shadow(0 0 8px #fff);
     }
     .sticky-counter .counter-emoji {
       font-size: 1.55em;
       margin-right: 7px;
       vertical-align: middle;
-      filter: drop-shadow(0 0 11px #cf28ff88);
+      filter: drop-shadow(0 0 13px #cf28ff88);
     }
-    /* Choque elétrico animação */
+    /* EFEITO DE CHOQUE */
     .counter-shock {
-      animation: shock-effect 0.5s cubic-bezier(.7,0,.16,1.33);
+      animation: shock-effect 0.38s cubic-bezier(.7,0,.16,1.33), flashglow 0.38s linear;
+      filter: drop-shadow(0 0 18px #fff) drop-shadow(0 0 50px #0ff) drop-shadow(0 0 14px #cf28ffcc);
+    }
+    .counter-shock:after {
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      inset: -7px;
+      border-radius: 36px;
+      background: repeating-conic-gradient(from 0deg, #fff6 0deg 4deg, #fff0 6deg 22deg),
+        radial-gradient(ellipse at 40% 85%, #51ffe744 0 65%, #0000 80%);
+      box-shadow: 0 0 80px 25px #51ffe7aa, 0 0 12px #ff49e1a6, 0 0 100px #fff6;
+      z-index: 7;
+      animation: shock-flare 0.36s linear;
     }
     @keyframes shock-effect {
-      0% { color: #fff; text-shadow: 0 0 22px #fff, 0 0 33px #51ffe7cc, 0 0 12px #ff49e1cc; transform: scale(1.13) skew(-2deg); }
-      28% { color: #ffe379; text-shadow: 0 0 30px #fff, 0 0 36px #cf28ff, 0 0 22px #51ffe7cc; transform: scale(1.12) skew(2deg);}
-      70% { color: #fff; text-shadow: 0 0 22px #cf28ff, 0 0 10px #ffe379, 0 0 19px #51ffe7cc; transform: scale(1.06) skew(-1.7deg);}
-      100% { color: #fff; text-shadow: 0 0 22px #cf28ff, 0 0 10px #ffe379, 0 0 25px #51ffe7bb; transform: scale(1) skew(0);}
+      0% { transform: scale(1.12) skew(-2deg,3deg) rotate(-1.4deg); }
+      15% { transform: scale(0.98) skew(2deg,-2deg) rotate(2deg);}
+      23% { transform: scale(1.05) skew(-4deg,3deg) rotate(-3.4deg);}
+      40% { transform: scale(0.98) skew(1deg,0deg) rotate(1.4deg);}
+      55% { transform: scale(1.09) skew(-2deg,4deg) rotate(-4.6deg);}
+      72% { transform: scale(1.08) skew(-4deg,1deg) rotate(3.4deg);}
+      92% { transform: scale(0.98) skew(1deg,0deg) rotate(0.7deg);}
+      100% { transform: scale(1) skew(0) rotate(0);}
     }
-    @media (max-width: 900px) {
-      .counters-top-bar {
-        min-height: calc(var(--counter-mobile-size) + 8vw);
-        gap: 3vw;
-      }
-      .sticky-counter {
-        min-width: var(--counter-mobile-size);
-        max-width: var(--counter-mobile-size);
-        min-height: var(--counter-mobile-size);
-        max-height: var(--counter-mobile-size);
-        font-size: 1.01em;
-      }
-      .sticky-counter .counter-value {
-        font-size: 2.1em;
-      }
+    @keyframes flashglow {
+      0% { filter: brightness(2.5) drop-shadow(0 0 60px #51ffe7ee);}
+      100% { filter: brightness(1) drop-shadow(0 0 8px #fff);}
     }
-    @media (max-width: 700px) {
-      .counters-top-bar {
-        min-height: calc(var(--counter-mobile-size) + 2vw);
-        gap: 2vw;
-        padding: 0 0.5vw 0 0.5vw;
-      }
+    @keyframes shock-flare {
+      0% { opacity: 0.91;}
+      90% { opacity: 0.85;}
+      100% { opacity: 0;}
     }
-    /* REWARD CARD GAMIFICADO */
-    .reward-card {
-      margin: 46px auto 0 auto;
-      max-width: 560px;
-      width: 100%;
-      background: #251b37;
-      border-radius: 24px;
-      box-shadow: 0 6px 32px #9800cc55, 0 1px 18px #0ff5, 0 0 0 3px #cf28ff44;
-      padding: 28px 28px 24px 28px;
-      text-align: center;
-      position: relative;
-      overflow: visible;
-      z-index: 20;
-      border-top: 4px solid var(--neon-purple);
-      border-bottom: 3px solid var(--neon-blue);
-      background-image: linear-gradient(130deg, #281d40 74%, #3f0a57 100%);
-      margin-bottom: 18px;
-      pointer-events: auto;
+    /* RAIO SVG */
+    .lightning-effect {
+      position: absolute;
+      left: 50%;
+      top: 13%;
+      width: 78%;
+      height: 40%;
+      transform: translate(-50%, 0) scaleX(1.04) scaleY(1.15);
+      pointer-events: none;
+      z-index: 8;
+      opacity: 0.72;
+      animation: bolt 0.31s cubic-bezier(.44,1.7,.32,1.07);
     }
-    .reward-card .title {
-      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
-      font-size: 2.1em;
-      color: #fff;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.2em;
-      text-shadow: 0 0 20px var(--neon-purple), 0 0 3px #000;
+    @keyframes bolt {
+      0% { opacity: 0; }
+      32% { opacity: 1;}
+      90% { opacity: 0.5;}
+      100% { opacity: 0; }
     }
-    .reward-card .desc {
-      font-size: 1.1em;
-      color: #d7b6fc;
-      margin-bottom: 10px;
-      letter-spacing: 0.01em;
-      font-weight: 600;
-      text-shadow: 0 0 7px #2f024e77;
-    }
-    .reward-bar-bg {
-      background: #201126;
-      border-radius: 18px;
-      height: 28px;
-      margin: 22px auto 10px auto;
-      width: 98%;
-      box-shadow: 0 0 14px #a41ec0a8, 0 0 24px #31e8ff13;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-      border: 1.2px solid #4e207c;
-    }
-    .reward-bar {
-      background: linear-gradient(90deg,
-        var(--neon-purple) 10%,
-        var(--neon-pink) 48%,
-        var(--neon-blue) 100%);
-      height: 100%;
-      border-radius: 16px;
-      width: 0%;
-      box-shadow:
-        0 0 32px 10px #ff49e1a2,
-        0 0 26px 8px #cf28ff66,
-        0 0 5px 2px #51ffe780;
-      transition: width 0.8s cubic-bezier(.59,1.5,.32,1.01);
-      position: relative;
-      z-index: 2;
-      overflow: visible;
-      animation: neonPulse 2.2s infinite alternate;
-    }
-    @keyframes neonPulse {
-      0% { filter: drop-shadow(0 0 10px #fff7) drop-shadow(0 0 0px #cf28ff77); }
-      100% { filter: drop-shadow(0 0 27px #cf28ff) drop-shadow(0 0 9px #51ffe7); }
-    }
-    .reward-icon {
-      font-size: 2.8em;
-      margin-bottom: 0.14em;
-      display: inline-block;
-      filter: drop-shadow(0 0 12px #cf28ff) drop-shadow(0 0 16px #ff49e1cc);
-      animation: iconGlow 1.8s infinite alternate;
-    }
-    @keyframes iconGlow {
-      0% { filter: drop-shadow(0 0 5px #cf28ff77); }
-      100% { filter: drop-shadow(0 0 16px #ff49e1cc) drop-shadow(0 0 36px #51ffe7); }
-    }
-    .reward-unlocked {
-      color: var(--neon-blue);
-      font-size: 1.25em;
-      font-weight: bold;
-      letter-spacing: 0.09em;
-      margin-top: 6px;
-      text-shadow: 0 0 17px #0ff, 0 1px 4px #cf28ff99;
-      transition: color 0.5s;
-      animation: celebrateText 1.6s cubic-bezier(.22,1.5,.5,1.02);
-    }
-    /* =============== */
     .mes {
       font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
       font-size: 2.06em;
@@ -533,19 +481,32 @@
   </style>
 </head>
 <body>
-<div class="counters-top-bar">
-  <div class="sticky-counter" id="counter-complete">
-    <div class="counter-label"><span class="counter-emoji">🏅</span>HÁBITOS<br>COMPLETOS</div>
-    <div class="counter-value" id="counter-complete-value">0</div>
+<!-- GRID: Contadores e Banner -->
+<div class="top-supergrid">
+  <div class="top-counters-col">
+    <div class="sticky-counter" id="counter-complete">
+      <div class="counter-label"><span class="counter-emoji">🏅</span>HÁBITOS<br>COMPLETOS</div>
+      <div class="counter-value" id="counter-complete-value">0</div>
+      <svg class="lightning-effect" id="bolt-complete" style="display:none" viewBox="0 0 80 40">
+        <polyline points="10,20 23,10 35,35 47,5 62,32 70,20" stroke="#51ffe7" stroke-width="4.3" fill="none"/>
+        <polyline points="17,17 25,15 37,29 49,9 60,28" stroke="#fff" stroke-width="2.1" fill="none" opacity="0.65"/>
+      </svg>
+    </div>
   </div>
-  <div class="sticky-counter" id="counter-sequence">
-    <div class="counter-label"><span class="counter-emoji">🔥</span>SEQUÊNCIA<br>MÁXIMA</div>
-    <div class="counter-value" id="counter-sequence-value">0</div>
+  <div class="center-banner-col">
+    <div class="banner-gamer">
+      <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+    </div>
   </div>
-</div>
-<div class="header-wrap">
-  <div class="banner-gamer">
-    <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+  <div class="top-counters-col">
+    <div class="sticky-counter" id="counter-sequence">
+      <div class="counter-label"><span class="counter-emoji">🔥</span>SEQUÊNCIA<br>MÁXIMA</div>
+      <div class="counter-value" id="counter-sequence-value">0</div>
+      <svg class="lightning-effect" id="bolt-sequence" style="display:none" viewBox="0 0 80 40">
+        <polyline points="10,20 23,10 35,35 47,5 62,32 70,20" stroke="#ff49e1" stroke-width="4.3" fill="none"/>
+        <polyline points="17,17 25,15 37,29 49,9 60,28" stroke="#fff" stroke-width="2.1" fill="none" opacity="0.7"/>
+      </svg>
+    </div>
   </div>
 </div>
 <div class="container">
@@ -1122,43 +1083,48 @@ Object.keys(progress).forEach(checkId => {
       }
     }
 
- // ==== CONTADOR GAMIFICADO (LATERAIS) COM ANIMAÇÃO ====
-  function animateShock(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.remove('counter-shock');
-    // Força o reflow para permitir reanimar mesmo que já esteja animando
-    void el.offsetWidth;
-    el.classList.add('counter-shock');
+function animateShock(id, boltId) {
+  const el = document.getElementById(id);
+  const bolt = document.getElementById(boltId);
+  if (!el) return;
+  el.classList.remove('counter-shock');
+  void el.offsetWidth;
+  el.classList.add('counter-shock');
+  if (bolt) {
+    bolt.style.display = 'block';
+    bolt.classList.remove('bolt-anim');
+    void bolt.offsetWidth;
+    setTimeout(() => { bolt.style.display = 'none'; }, 310);
   }
-  // Substitua a função updateCounters pela versão abaixo:
-  function updateCounters() {
-    // Contador 1: Hábitos completos (total de checkboxes marcados)
-    let totalCompletos = 0;
-    document.querySelectorAll('.habit-checkbox').forEach(cb => { if (cb.checked) totalCompletos++; });
-    let el1 = document.getElementById('counter-complete-value');
-    if (el1) {
-      if (Number(el1.textContent) !== totalCompletos) animateShock('counter-complete-value');
-      el1.textContent = totalCompletos;
-    }
-    // Contador 2: Sequência máxima de dias 100% completos
-    let maxSeq = 0, currentSeq = 0;
-    dados.forEach((dia, idx) => {
-      const habitCount = dia.habitos.length + 1;
-      const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
-      if (allDone) {
-        currentSeq++;
-        if (currentSeq > maxSeq) maxSeq = currentSeq;
-      } else {
-        currentSeq = 0;
-      }
-    });
-    let el2 = document.getElementById('counter-sequence-value');
-    if (el2) {
-      if (Number(el2.textContent) !== maxSeq) animateShock('counter-sequence-value');
-      el2.textContent = maxSeq;
-    }
+}
+function updateCounters() {
+  // Contador 1: Hábitos completos (total de checkboxes marcados)
+  let totalCompletos = 0;
+  document.querySelectorAll('.habit-checkbox').forEach(cb => { if (cb.checked) totalCompletos++; });
+  let el1 = document.getElementById('counter-complete-value');
+  if (el1) {
+    if (Number(el1.textContent) !== totalCompletos) animateShock('counter-complete-value', 'bolt-complete');
+    el1.textContent = totalCompletos;
   }
+  // Contador 2: Sequência máxima de dias 100% completos
+  let maxSeq = 0, currentSeq = 0;
+  dados.forEach((dia, idx) => {
+    const habitCount = dia.habitos.length + 1;
+    const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
+    if (allDone) {
+      currentSeq++;
+      if (currentSeq > maxSeq) maxSeq = currentSeq;
+    } else {
+      currentSeq = 0;
+    }
+  });
+  let el2 = document.getElementById('counter-sequence-value');
+  if (el2) {
+    if (Number(el2.textContent) !== maxSeq) animateShock('counter-sequence-value', 'bolt-sequence');
+    el2.textContent = maxSeq;
+  }
+}
+
     updateAllRewardProgress();
     updateCounters();
 
