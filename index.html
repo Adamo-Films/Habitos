@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Danilo no 🎮</title>
   <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <style>
     :root {
+      --neon-purple: #cf28ff;
+      --neon-blue: #51ffe7;
+      --neon-pink: #ff49e1;
       --gold: #ffe379;
       --gold2: #e4c145;
       --gold3: #f7e399;
       --corpo: #191919;
       --day-inactive: #f2f2f7;
-      --header-height: 190px;
+      --header-height: 132px;
       --header-shrink: 62px;
-      --neon-purple: #cf28ff;
-      --neon-pink: #ff49e1;
-      --neon-blue: #51ffe7;
-      --shadow-purple: #9800cc;
     }
     html, body { height: 100%; margin: 0; padding: 0; }
     body {
@@ -30,31 +29,114 @@
       min-height: 100vh;
       transition: background 0.3s;
     }
-    .banner-gamer {
+    /* HEADER STICKY COM CONTADORES */
+    .main-header {
+      position: sticky;
+      top: 0;
       width: 100%;
+      z-index: 100;
+      background: linear-gradient(90deg, #231435 10%, #2c015a 90%);
+      box-shadow: 0 6px 44px #48003b8a, 0 1px 8px #00e8ff44, 0 0 0 3px #cf28ff33;
       display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: flex-start;
-      margin-top: 32px;
-      margin-bottom: 0px;
-      z-index: 10;
-      pointer-events: none;
+      height: var(--header-height);
+      transition: height 0.44s cubic-bezier(.5,1.6,.18,.98), box-shadow 0.38s, background 0.33s;
+      overflow: visible;
+      will-change: height;
+      padding: 0 16px;
       user-select: none;
     }
+    .main-header.shrunk {
+      height: var(--header-shrink);
+      box-shadow: 0 1px 12px #cf28ff4b;
+      background: linear-gradient(90deg, #241638 30%, #2c015a 100%);
+    }
+    .main-header .counter {
+      flex: 0 0 132px;
+      min-width: 90px;
+      max-width: 155px;
+      margin: 0 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px 7px 12px;
+      border-radius: 19px;
+      background: linear-gradient(120deg, #26003a 40%, #482ba2 100%);
+      box-shadow: 0 0 24px #51ffe766, 0 0 8px #cf28ff70 inset, 0 2px 10px #2229;
+      border: 2px solid var(--neon-purple);
+      color: #fff;
+      font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
+      font-size: 1.18em;
+      position: relative;
+      text-shadow: 0 0 9px #51ffe7bb, 0 0 3px #fff, 0 1px 1px #29215290;
+      letter-spacing: 0.02em;
+      transition: font-size 0.38s;
+      gap: 2px;
+      user-select: none;
+    }
+    .main-header.shrunk .counter {
+      font-size: 0.93em;
+      padding: 4px 10px 3px 10px;
+      min-width: 76px;
+      max-width: 110px;
+    }
+    .counter-label {
+      font-size: 0.92em;
+      font-family: 'Antonio', Arial, sans-serif;
+      letter-spacing: 0.04em;
+      opacity: 0.92;
+      color: var(--neon-blue);
+      text-shadow: 0 0 7px #0ff9;
+    }
+    .counter-number {
+      font-size: 2.6em;
+      font-family: 'Luckiest Guy', 'Bebas Neue', cursive;
+      line-height: 1.04;
+      color: var(--gold);
+      text-shadow: 0 0 11px #ffe379, 0 0 44px #51ffe7, 0 2px 8px #0ff9;
+      filter: drop-shadow(0 1px 9px #cf28ff88);
+      letter-spacing: 0.03em;
+      margin-bottom: 2px;
+      margin-top: -2px;
+    }
+    .main-header.shrunk .counter-number {
+      font-size: 1.5em;
+    }
+    .main-header .banner-gamer-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      min-width: 0;
+      margin: 0 20px;
+    }
     .banner-gamer-img {
-      max-width: 540px;
-      width: 100%;
+      max-width: 360px;
+      width: 70vw;
+      min-width: 160px;
       height: auto;
       display: block;
+      margin-top: 0;
+      margin-bottom: 0;
+      pointer-events: none;
+      user-select: none;
       filter: drop-shadow(0 8px 38px #19e0fc88)
               drop-shadow(0 1px 18px #ff38fd88)
               drop-shadow(0 0 20px #0008);
-      pointer-events: none;
-      user-select: none;
+      transition: max-width 0.42s, filter 0.25s;
+    }
+    .main-header.shrunk .banner-gamer-img {
+      max-width: 170px;
+      filter: drop-shadow(0 0 16px #51ffe7);
     }
     @media (max-width: 700px) {
-      .banner-gamer-img { max-width: 97vw; }
-      .banner-gamer { margin-top: 8px; }
+      .main-header { padding: 0 4px; }
+      .main-header .banner-gamer-header { margin: 0 5px; }
+      .main-header .counter { margin: 0 6px; }
+      .banner-gamer-img { width: 55vw; min-width: 88px; }
     }
     .container {
       max-width: 1300px;
@@ -191,8 +273,6 @@
       letter-spacing: 0.02em;
       z-index: 2;
     }
-
-    /* =========== NOVO: COR DO TEXTO DINÂMICA =========== */
     tr.main-row {
       cursor: pointer;
       transition: background 0.2s;
@@ -208,10 +288,8 @@
       background-repeat: no-repeat;
       background-position: left top;
       box-shadow: 0 2px 10px 0 #0008;
-      /* COR DO TEXTO VARIÁVEL BASEADA NO PROGRESSO */
       color: hsl(0, 0%, calc(87% - 74% * var(--progress)));
       transition: color 0.3s, background-size 0.7s cubic-bezier(.6,1.2,.16,1.08);
-      /* 87% (off-white) até 13% (quase preto) conforme avança */
     }
     tr.main-row.day-complete {
       color: #222 !important;
@@ -396,9 +474,20 @@
   </style>
 </head>
 <body>
-<div class="banner-gamer">
-  <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
-</div>
+<header class="main-header" id="main-header">
+  <div class="counter counter-streak">
+    <div class="counter-label">Sequência</div>
+    <div class="counter-number" id="streak-counter">0</div>
+    <div class="counter-label" style="font-size:0.84em; color: #fff8;">dias</div>
+  </div>
+  <div class="banner-gamer-header">
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+  </div>
+  <div class="counter counter-total">
+    <div class="counter-label">Hábitos feitos</div>
+    <div class="counter-number" id="total-counter">0</div>
+  </div>
+</header>
 <div class="container">
   <div id="calendario"></div>
 </div>
@@ -462,7 +551,40 @@
       label: "Turing Machine!"
     }
   ];
-
+ // Função para atualizar os contadores no header
+  function atualizarContadores(progressData, dadosDias) {
+    // Cálculo do streak (sequência de dias completos)
+    let streak = 0, atual = 0, totalHabitos = 0, habitosMarcados = 0;
+    // Dias na ordem cronológica
+    const diasOrdem = [...dadosDias].sort((a, b) => {
+      const aParts = a.id.split('-'), bParts = b.id.split('-');
+      const ad = new Date(+aParts[1], +aParts[2]-1, +aParts[3]);
+      const bd = new Date(+bParts[1], +bParts[2]-1, +bParts[3]);
+      return ad - bd;
+    });
+    for (let i = 0; i < diasOrdem.length; i++) {
+      const dia = diasOrdem[i];
+      const checks = dia.habitos.map((_, idx) => progressData[`${dia.id}-habit-${idx}`]);
+      checks.push(progressData[`${dia.id}-ciclico`]);
+      if (checks.every(Boolean)) { atual++; }
+      else { break; }
+    }
+    streak = atual;
+    Object.keys(progressData).forEach(k => {
+      if (progressData[k]) habitosMarcados++;
+    });
+    totalHabitos = dadosDias.reduce((soma, dia) => soma + dia.habitos.length + 1, 0);
+    document.getElementById('streak-counter').textContent = streak;
+    document.getElementById('total-counter').textContent = habitosMarcados;
+  }
+   // Header shrink ao rolar
+  (function() {
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 22) header.classList.add('shrunk');
+      else header.classList.remove('shrunk');
+    });
+  })();
   function getRewardFor(month, year, day = null) {
     if(day) {
       return rewards.find(r => r.day === day && r.month === month && r.year === year);
@@ -665,6 +787,7 @@
         id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
       });
     }
+    window.__dadosHabitosDias = dados;
     const calendario = document.getElementById("calendario");
     const grupos = {};
     dados.forEach((obj) => {
