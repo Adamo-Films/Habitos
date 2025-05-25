@@ -389,6 +389,14 @@
       50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1; }
       100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
+    .progress-text-gradient {
+  background: linear-gradient(90deg, #ffe379 0%, #191919 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  transition: background 0.5s;
+}
   </style>
 </head>
 <body>
@@ -704,10 +712,10 @@
         html += `
         <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
           <td><span class="expand-icon">&#9654;</span></td>
-          <td class="progress-text gold">${dia.data}</td>
-          <td class="progress-text gold">${dia.dia}</td>
-          <td class="progress-text gold">${habitosCellText}</td>
-          <td class="progress-text gold">${dia.ciclico}</td>
+          <td class="progress-text progress-text-gradient" id="pt-${dia.id}-data">${dia.data}</td>
+          <td class="progress-text progress-text-gradient" id="pt-${dia.id}-dia">${dia.dia}</td>
+          <td class="progress-text progress-text-gradient" id="pt-${dia.id}-habitos">${habitosCellText}</td>
+          <td class="progress-text progress-text-gradient" id="pt-${dia.id}-ciclico">${dia.ciclico}</td>
         </tr>
         <tr class="dropdown" id="dropdown-${dia.id}">
           <td colspan="5">
@@ -780,6 +788,18 @@ Object.keys(progress).forEach(checkId => {
       if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
       let pct = checked / habitCount;
       const row = document.getElementById(`mainrow-${dayId}`);
+      // Atualiza gradiente do texto para acompanhar a barra de progresso
+const prog = Math.max(0.001, pct); // nunca deixa em 0 pra não sumir tudo
+['data', 'dia', 'habitos', 'ciclico'].forEach(field => {
+  const el = document.getElementById(`pt-${dayId}-${field}`);
+  if (el) {
+    el.style.background = `linear-gradient(90deg, #ffe379 0%, #ffe379 ${prog*100}%, #191919 ${prog*100}%, #191919 100%)`;
+    el.style.webkitBackgroundClip = "text";
+    el.style.webkitTextFillColor = "transparent";
+    el.style.backgroundClip = "text";
+    el.style.textFillColor = "transparent";
+  }
+});
       if (row) {
         row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08)';
         row.style.setProperty('--progress', pct);
