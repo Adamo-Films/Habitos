@@ -215,7 +215,6 @@ tr.main-row {
   color: #fff;
   font-weight: bold;
   z-index: 1;
-  /* No background! */
 }
 .progress-text.gold::before {
   content: attr(data-text);
@@ -226,7 +225,6 @@ tr.main-row {
   overflow: hidden;
   z-index: 2;
   pointer-events: none;
-  /* Dynamically reveal dark text under the progress bar: */
   width: calc(var(--progress, 0) * 100%);
   max-width: 100%;
   display: block;
@@ -739,9 +737,9 @@ tr.main-row:hover { filter: brightness(1.08); }
         <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
           <td><span class="expand-icon">&#9654;</span></td>
           <td class="progress-text gold" data-text="${dia.data}">${dia.data}</td>
-          <td class="progress-text gold">${dia.dia}</td>
-          <td class="progress-text gold">${habitosCellText}</td>
-          <td class="progress-text gold">${dia.ciclico}</td>
+          <td class="progress-text gold" data-text="${dia.dia}">${dia.dia}</td>
+          <td class="progress-text gold" data-text="${habitosCellText}">${habitosCellText}</td>
+          <td class="progress-text gold" data-text="${dia.ciclico}">${dia.ciclico}</td>
         </tr>
         <tr class="dropdown" id="dropdown-${dia.id}">
           <td colspan="5">
