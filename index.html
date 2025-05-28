@@ -661,7 +661,26 @@
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
 
+<script>
 document.addEventListener("DOMContentLoaded", async function() {
+  // Função para obter progresso (do Firestore ou localStorage)
+  async function getProgress() {
+    try {
+      // Se não quiser usar Firebase, basta retornar um objeto vazio:
+      // return {};
+      // Senão, use Firebase (mantendo seu config e inicialização no topo do arquivo)
+      const doc = await db.collection("usuarios").doc("danilo").get();
+      return doc.exists ? doc.data() : {};
+    } catch (e) {
+      console.error("Erro ao buscar dados do Firebase:", e);
+      return JSON.parse(localStorage.getItem('habits-progress-v1')) || {};
+    }
+  }
+
+  // ===============================
+  // Geração dos dados do calendário
+  // ===============================
+
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = [
@@ -713,46 +732,50 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
   }
 
-    const calendario = document.getElementById("calendario");
-    const grupos = {};
-    dados.forEach((obj) => {
-      const id = `${obj.mes}-${obj.ano}`;
-      if (!grupos[id]) grupos[id] = [];
-      grupos[id].push(obj);
-    });
-    let html = '';
-    Object.entries(grupos).forEach(([id, dias]) => {
-      const [mes, ano] = id.split("-");
-      const mesNum = Number(mes);
-      const anoNum = Number(ano);
-      const nomeMes = monthNames[mesNum - 1].toUpperCase();
+  // Agrupa por mês
+  const grupos = {};
+  dados.forEach(obj => {
+    const id = `${obj.mes}-${obj.ano}`;
+    if (!grupos[id]) grupos[id] = [];
+    grupos[id].push(obj);
+  });
 
-      // MÊS HEADER PRIMEIRO
-      html += `<div class='mes'>${nomeMes} ${ano}</div>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Data</th>
-            <th>Dia</th>
-            <th>Hábitos Diários</th>
-            <th>Hábito Cíclico</th>
-          </tr>
-        </thead>
-        <tbody>`;
-      dias.forEach((dia) => {
-        const dayNum = parseInt(dia.dia.substring(4));
-        let habitosCellText;
-        if (dayNum <= 4) {
-          habitosCellText = dia.habitos.join(', ');
-        } else if (habitos_incrementais[dayNum]) {
-          const newHabs = habitos_incrementais[dayNum];
-          const totalBefore = dia.habitos.length - newHabs.length;
-          habitosCellText = `${totalBefore} ${totalBefore > 1 ? 'hábitos' : 'hábito'} + ${newHabs.join(', ')}`;
-        } else {
-          const total = dia.habitos.length;
-          habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
-        }
+  // Renderização
+  const calendario = document.getElementById("calendario");
+  calendario.innerHTML = ""; // limpa antes de renderizar
+  Object.entries(grupos).forEach(([id, dias]) => {
+    const [mes, ano] = id.split("-");
+    const nomeMes = new Date(Number(ano), Number(mes)-1).toLocaleString("pt-BR", { month: "long" });
+
+    // Cria título do mês
+    const titulo = document.createElement("h2");
+    titulo.textContent = `${nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1)} de ${ano}`;
+    calendario.appendChild(titulo);
+
+    // Cria tabela
+    const tabela = document.createElement("table");
+    const header = document.createElement("tr");
+    header.innerHTML = "<th>Dia</th><th>Data</th><th>Hábitos do Dia</th><th>Cíclico</th>";
+    tabela.appendChild(header);
+
+    dias.forEach((diaObj) => {
+      const linha = document.createElement("tr");
+      // Verifica se completou todos hábitos
+      const completou = progress[diaObj.id + "-habit-0"] || false;
+      linha.style.background = completou ? "#2e7d32" : "transparent";
+      linha.style.color = completou ? "#fff" : "#eee";
+      linha.innerHTML = `<td>${diaObj.dia}</td>
+                         <td>${diaObj.data}</td>
+                         <td>${diaObj.habitos.join(", ")}</td>
+                         <td>${diaObj.ciclico}</td>`;
+      tabela.appendChild(linha);
+    });
+
+    calendario.appendChild(tabela);
+  });
+});
+</script>
+
         html += `
         <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
           <td><span class="expand-icon">&#9654;</span></td>
