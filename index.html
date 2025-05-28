@@ -393,7 +393,7 @@
       50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1; }
       100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
-  </style>
+ </style>
 </head>
 <body>
 <div class="banner-gamer">
@@ -661,10 +661,9 @@
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
 
- document.addEventListener("DOMContentLoaded", async function() {
+document.addEventListener("DOMContentLoaded", async function() {
   const progress = await getProgress();
-    const dados = [];
-   // NOVOS HÁBITOS INCREMENTAIS
+  const dados = [];
   const habitos_incrementais = [
     "Beber 2L de água",
     "Dieta com alimentos integrais",
@@ -683,41 +682,36 @@
     "90 min de hiperfoco",
     "Exercicio 90min"
   ];
-
-  // HÁBITOS CÍCLICOS
   const habitos_ciclicos = [
     "Banho gelado",
     "Agilidade mental",
     "Diário & gratidão",
     "Peso e Selfie"
   ];
-
-    // ======== LÓGICA DOS HÁBITOS INCREMENTAIS ===========
-    const inicio = new Date(2025, 4, 1); // 1 de maio de 2025
-    const fim = new Date(2025, 11, 31); // 31 de dezembro de 2025
-    const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
-
-    let habitos_ativos = [];
-    for (let i = 1; i <= dias_total; i++) {
-      const data_atual = new Date(inicio);
-      data_atual.setDate(inicio.getDate() + i - 1);
-      // Adiciona novo hábito a cada 4 dias
-      const indexNovoHabito = Math.floor((i - 1) / 4);
-      if (habitos_incrementais[indexNovoHabito] && !habitos_ativos.includes(habitos_incrementais[indexNovoHabito])) {
-        habitos_ativos.push(habitos_incrementais[indexNovoHabito]);
-      }
-      const habito_ciclico = habitos_ciclicos[(i - 1) % habitos_ciclicos.length];
-      dados.push({
-        data: data_atual.toLocaleDateString('pt-BR'),
-        dia: `Dia ${i}`,
-        habitos: [...habitos_ativos],
-        ciclico: habito_ciclico,
-        mes: data_atual.getMonth() + 1,
-        ano: data_atual.getFullYear(),
-        diaDoMes: data_atual.getDate(),
-        id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
-      });
+  const inicio = new Date(2025, 4, 1); // 1 maio
+  const fim = new Date(2025, 11, 31); // 31 dez
+  const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
+  let habitos_ativos = [];
+  for (let i = 1; i <= dias_total; i++) {
+    const data_atual = new Date(inicio);
+    data_atual.setDate(inicio.getDate() + i - 1);
+    // A cada 4 dias, ativa novo hábito
+    const indexNovoHabito = Math.floor((i - 1) / 4);
+    if (habitos_incrementais[indexNovoHabito] && !habitos_ativos.includes(habitos_incrementais[indexNovoHabito])) {
+      habitos_ativos.push(habitos_incrementais[indexNovoHabito]);
     }
+    const habito_ciclico = habitos_ciclicos[(i - 1) % habitos_ciclicos.length];
+    dados.push({
+      data: data_atual.toLocaleDateString('pt-BR'),
+      dia: `Dia ${i}`,
+      habitos: [...habitos_ativos],
+      ciclico: habito_ciclico,
+      mes: data_atual.getMonth() + 1,
+      ano: data_atual.getFullYear(),
+      diaDoMes: data_atual.getDate(),
+      id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
+    });
+  }
 
     const calendario = document.getElementById("calendario");
     const grupos = {};
