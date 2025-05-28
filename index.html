@@ -427,39 +427,70 @@
 
 <script>
   // Recompensas do mês
-  const rewards = [
+ const rewards = [
     {
       month: 5,
       year: 2025,
-      icon: "🛋️",
+      icon: "🍩",
       title: "Prêmio Maio",
-      desc: "Um dia só pra curtir e não fazer nada.",
-      label: "Dia de folga!"
+      desc: "Donuts Krispy Kreme.",
+      label: "Donuts Krispy Kreme!"
     },
     {
       month: 6,
       year: 2025,
-      icon: "🍝",
+      icon: "📽️",
       title: "Prêmio Junho",
-      desc: "Jantar especial no restaurante Rascal.",
-      label: "Rascal!"
+      desc: "Dia pra finalizar Valentina.",
+      label: "Valentina Finalizada!"
     },
     {
       month: 7,
       year: 2025,
-      icon: "🏡",
+      icon: "🍝",
       title: "Prêmio Julho",
-      desc: "Airbnb relaxante para recarregar as energias.",
-      label: "Airbnb relax!"
+      desc: "Jantar especial no Rascal.",
+      label: "Jantar no Rascal!"
     },
     {
-      day: 21,
       month: 8,
       year: 2025,
+      icon: "🏡",
+      title: "Prêmio Agosto",
+      desc: "Airbnb relaxante para recarregar as energias.",
+      label: "Airbnb relaxante!"
+    },
+    {
+      month: 9,
+      year: 2025,
       icon: "🧠🎲",
-      title: "Meu Aniversário!",
+      title: "Prêmio Setembro",
       desc: "Jogo Turing Machine.",
       label: "Turing Machine!"
+    },
+    {
+      month: 10,
+      year: 2025,
+      icon: "🛍️",
+      title: "Prêmio Outubro",
+      desc: "Um dia de compras.",
+      label: "Compras liberadas!"
+    },
+    {
+      month: 11,
+      year: 2025,
+      icon: "🌊",
+      title: "Prêmio Novembro",
+      desc: "Tanque de privação sensorial.",
+      label: "Privação sensorial!"
+    },
+    {
+      month: 12,
+      year: 2025,
+      icon: "⌚",
+      title: "Prêmio Dezembro",
+      desc: "Relógio Ingersoll.",
+      label: "Relógio Ingersoll!"
     }
   ];
 
@@ -475,11 +506,11 @@
     document.documentElement.style.overflow = "";
   }
 
-  // EMOJIS para cada hábito
+  // EMOJIS PARA HÁBITOS
   const habitEmojis = [
-    "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
+    "💧", "🥗", "🎮❌", "💬", "📆", "📚", "⏰", "🧘", "🍽️", "🏃", "⏰", "🚫", "🏋️", "🇮🇹", "⚡", "💪"
   ];
-  const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
+  const cycleEmojis = ["🚿", "🧠", "📔", "⚖️🤳"];
 
   // Array de nomes dos meses fixos em PT-BR
   const monthNames = [
@@ -633,27 +664,49 @@
  document.addEventListener("DOMContentLoaded", async function() {
   const progress = await getProgress();
     const dados = [];
-    const habitos_incrementais = {
-      1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
-      5: ["Dieta com alimentos integrais"],
-      9: ["Acordar às 5h"],
-      13: ["Meditação (10 min por dia)"],
-      17: ["Exercício (60 min)"],
-      21: ["Leitura (30 min)"],
-      25: ["Alimentação sem açúcar refinado"],
-      29: ["Prática de italiano (20 min por dia)"]
-    };
-    const habitos_ciclicos = ["Afirmações", "Banho gelado", "Exercício de agilidade mental", "Diário e gratidão"];
-    const inicio = new Date(2025, 4, 21), fim = new Date(2025, 7, 21);
+   // NOVOS HÁBITOS INCREMENTAIS
+  const habitos_incrementais = [
+    "Beber 2L de água",
+    "Dieta com alimentos integrais",
+    "Eliminar Jogos",
+    "Afirmações",
+    "Planejar dia",
+    "Leitura 30 min",
+    "Acordar 6hs",
+    "Meditação 10min",
+    "1700 calorias",
+    "Exercicio 30 min",
+    "Acordar 5hs",
+    "Eliminar vicios",
+    "Exercicio 60min",
+    "Praticar Italiano",
+    "90 min de hiperfoco",
+    "Exercicio 90min"
+  ];
+
+  // HÁBITOS CÍCLICOS
+  const habitos_ciclicos = [
+    "Banho gelado",
+    "Agilidade mental",
+    "Diário & gratidão",
+    "Peso e Selfie"
+  ];
+
+    // ======== LÓGICA DOS HÁBITOS INCREMENTAIS ===========
+    const inicio = new Date(2025, 4, 1); // 1 de maio de 2025
+    const fim = new Date(2025, 11, 31); // 31 de dezembro de 2025
     const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
+
     let habitos_ativos = [];
     for (let i = 1; i <= dias_total; i++) {
       const data_atual = new Date(inicio);
       data_atual.setDate(inicio.getDate() + i - 1);
-      if (habitos_incrementais[i]) {
-        habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
+      // Adiciona novo hábito a cada 4 dias
+      const indexNovoHabito = Math.floor((i - 1) / 4);
+      if (habitos_incrementais[indexNovoHabito] && !habitos_ativos.includes(habitos_incrementais[indexNovoHabito])) {
+        habitos_ativos.push(habitos_incrementais[indexNovoHabito]);
       }
-      const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
+      const habito_ciclico = habitos_ciclicos[(i - 1) % habitos_ciclicos.length];
       dados.push({
         data: data_atual.toLocaleDateString('pt-BR'),
         dia: `Dia ${i}`,
@@ -665,6 +718,7 @@
         id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth()+1}-${data_atual.getDate()}`
       });
     }
+
     const calendario = document.getElementById("calendario");
     const grupos = {};
     dados.forEach((obj) => {
