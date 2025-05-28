@@ -191,7 +191,6 @@
       letter-spacing: 0.02em;
       z-index: 2;
     }
-
     /* =========== NOVO: COR DO TEXTO DINÂMICA =========== */
     tr.main-row {
       cursor: pointer;
@@ -431,35 +430,66 @@
     {
       month: 5,
       year: 2025,
-      icon: "🛋️",
+      icon: "🍩",
       title: "Prêmio Maio",
-      desc: "Um dia só pra curtir e não fazer nada.",
-      label: "Dia de folga!"
+      desc: "Uma caixa de donuts Krispy Kreme.",
+      label: "Donuts!"
     },
     {
       month: 6,
       year: 2025,
-      icon: "🍝",
+      icon: "🏁",
       title: "Prêmio Junho",
-      desc: "Jantar especial no restaurante Rascal.",
-      label: "Rascal!"
+      desc: "Um dia pra finalizar Valentina.",
+      label: "Valentina!"
     },
     {
       month: 7,
       year: 2025,
-      icon: "🏡",
+      icon: "🍝",
       title: "Prêmio Julho",
+      desc: "Jantar especial no restaurante Rascal.",
+      label: "Rascal!"
+    },
+    {
+      month: 8,
+      year: 2025,
+      icon: "🏡",
+      title: "Prêmio Agosto",
       desc: "Airbnb relaxante para recarregar as energias.",
       label: "Airbnb relax!"
     },
     {
-      day: 21,
-      month: 8,
+      month: 9,
       year: 2025,
       icon: "🧠🎲",
-      title: "Meu Aniversário!",
+      title: "Prêmio Setembro",
       desc: "Jogo Turing Machine.",
       label: "Turing Machine!"
+    },
+    {
+      month: 10,
+      year: 2025,
+      icon: "🛍️",
+      title: "Prêmio Outubro",
+      desc: "Um dia de compras.",
+      label: "Compras!"
+    },
+    {
+      month: 11,
+      year: 2025,
+      icon: "🛀",
+      title: "Prêmio Novembro",
+      desc: "Sessão em um tanque de privação sensorial.",
+      label: "Zen!"
+    },
+    {
+      month: 12,
+      year: 2025,
+      icon: "⌚",
+      title: "Prêmio Dezembro",
+      desc: "Relógio Ingersoll.",
+      label: "Ingersoll!"
     }
   ];
 
@@ -477,9 +507,10 @@
 
   // EMOJIS para cada hábito
   const habitEmojis = [
-    "💧", "🤳", "⚖️", "🥗", "⏰", "🧘", "🏋️", "📚", "🍫🚫", "🇮🇹",
+    "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
+    "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪",
   ];
-  const cycleEmojis = ["💬", "🚿", "🧠", "🙏"];
+  const cycleEmojis = ["🚿", "🧠", "🙏", "⚖️"];
 
   // Array de nomes dos meses fixos em PT-BR
   const monthNames = [
@@ -611,7 +642,7 @@
     }, 3400);
   }
 
- async function getProgress() {
+  async function getProgress() {
     try {
       const doc = await db.collection("usuarios").doc("danilo").get();
       return doc.exists ? doc.data() : {};
@@ -630,21 +661,29 @@
     localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
   }
 
- document.addEventListener("DOMContentLoaded", async function() {
-  const progress = await getProgress();
+  document.addEventListener("DOMContentLoaded", async function() {
+    const progress = await getProgress();
     const dados = [];
     const habitos_incrementais = {
-      1: ["Beber 2L de água", "Tirar selfie", "Verificar peso"],
+      1: ["Beber 2L de água"],
       5: ["Dieta com alimentos integrais"],
-      9: ["Acordar às 5h"],
-      13: ["Meditação (10 min por dia)"],
-      17: ["Exercício (60 min)"],
+      9: ["Eliminar jogos"],
+      13: ["Afirmações"],
+      17: ["Planejar dia"],
       21: ["Leitura (30 min)"],
-      25: ["Alimentação sem açúcar refinado"],
-      29: ["Prática de italiano (20 min por dia)"]
+      25: ["Acordar às 6h"],
+      29: ["Meditação (10 min)"],
+      33: ["1700 calorias"],
+      37: ["Exercício (30 min)"],
+      41: ["Acordar às 5h"],
+      45: ["Eliminar vícios"],
+      49: ["Exercício (60 min)"],
+      53: ["Praticar italiano"],
+      57: ["90 min de hiperfoco"],
+      61: ["Exercício (90 min)"]
     };
-    const habitos_ciclicos = ["Afirmações", "Banho gelado", "Exercício de agilidade mental", "Diário e gratidão"];
-    const inicio = new Date(2025, 4, 21), fim = new Date(2025, 7, 21);
+    const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário &amp; gratidão", "Peso e Selfie"];
+    const inicio = new Date(2025, 4, 21), fim = new Date(2025, 11, 31);
     const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
     let habitos_ativos = [];
     for (let i = 1; i <= dias_total; i++) {
@@ -764,16 +803,16 @@
     });
     calendario.innerHTML = html;
 
-Object.keys(progress).forEach(checkId => {
-  const checkbox = document.getElementById(checkId);
-  if (checkbox) {
-    checkbox.checked = progress[checkId];
-    const label = document.getElementById('label-' + checkId);
-    if (label) label.classList.toggle('habit-done', progress[checkId]);
-    const hi = document.getElementById('habititem-' + checkId);
-    if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
-  }
-});
+    Object.keys(progress).forEach(checkId => {
+      const checkbox = document.getElementById(checkId);
+      if (checkbox) {
+        checkbox.checked = progress[checkId];
+        const label = document.getElementById('label-' + checkId);
+        if (label) label.classList.toggle('habit-done', progress[checkId]);
+        const hi = document.getElementById('habititem-' + checkId);
+        if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
+      }
+    });
 
     // Atualiza barra de progresso dourada por dia
     function updateProgressBar(dayId, habitCount) {
@@ -868,23 +907,23 @@ Object.keys(progress).forEach(checkId => {
       let played = false;
       audio.play().then(() => { played = true; }).catch(() => {
         if (!played) {
-          document.body.addEventListener('pointerdown', () => { audio.play(); }, { once: true });
+          document.body.addEventListener('pointerdown', () => { audio.play(); },  { once: true });
         }
       });
     }
 
-   document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', function() {
-    const label = document.getElementById('label-' + this.id);
-    if (label) label.classList.toggle('habit-done', this.checked);
+    document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', function() {
+        const label = document.getElementById('label-' + this.id);
+        if (label) label.classList.toggle('habit-done', this.checked);
 
-    getProgress().then(progress => {
-      progress[this.id] = this.checked;
-      saveProgress(progress);
-    });
+        getProgress().then(progress => {
+          progress[this.id] = this.checked;
+          saveProgress(progress);
+        });
 
-    const hi = document.getElementById('habititem-' + this.id);
-    if (hi) hi.classList.toggle('habit-complete', this.checked);
+        const hi = document.getElementById('habititem-' + this.id);
+        if (hi) hi.classList.toggle('habit-complete', this.checked);
         const parts = this.id.match(/^dia-\d+-\d+-\d+/);
         if (parts) {
           const dayId = parts[0];
@@ -983,3 +1022,5 @@ Object.keys(progress).forEach(checkId => {
     });
   });
 </script>
+</body>
+</html>
