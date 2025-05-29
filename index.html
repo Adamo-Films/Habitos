@@ -11,21 +11,24 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="banner-gamer">
-  <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
-</div>
-<div class="container">
-  <div id="calendario"></div>
-</div>
-<canvas id="confetti-canvas"></canvas>
-<canvas id="reward-confetti"></canvas>
-<div id="celebrate-text">VAI MLK!!!</div>
-<audio id="celebrate-audio">
-  <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
-  <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
-</audio>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="script.js"></script>
+  <div class="sticky-header">
+    <div class="banner-gamer">
+      <img src="https://i.imgur.com/Krb7yXe.png" alt="" class="banner-gamer-img">
+    </div>
+  </div>
+  <div class="arcade-bg"></div>
+  <div class="arcade-screen-container">
+    <div id="calendario"></div>
+  </div>
+  <canvas id="confetti-canvas"></canvas>
+  <canvas id="reward-confetti"></canvas>
+  <div id="celebrate-text">VAI MLK!!!</div>
+  <audio id="celebrate-audio">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
+  </audio>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
