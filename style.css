@@ -1,14 +1,23 @@
-body {
+:root {
+  --gold: #ffe379;
+  --gold2: #e4c145;
+  --gold3: #f7e399;
+  --corpo: #191919;
+  --day-inactive: #f2f2f7;
+  --neon-purple: #cf28ff;
+  --neon-pink: #ff49e1;
+  --neon-blue: #51ffe7;
+  --shadow-purple: #9800cc;
+}
+
+body, html {
+  width: 100vw;
+  height: 100vh;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  overflow: hidden !important; /* Remove rolagem global */
+  box-sizing: border-box;
   background: #161042;
-  /* Arcade background fixo */
-  background-image: url('Artboard%201@33.33x.png'); /* se o arquivo está na raiz */
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  overflow-x: hidden;
 }
 
 .arcade-bg {
@@ -25,27 +34,27 @@ body {
 }
 
 .sticky-header {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 20;
-  background: transparent;
   width: 100vw;
-}
-
-.banner-gamer {
+  z-index: 20;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin-top: 18px;
-  margin-bottom: 0;
+  background: none;
+  pointer-events: none;
+  user-select: none;
+}
+.banner-gamer {
+  width: 380px;
+  max-width: 35vw;
+  min-width: 220px;
+  margin-top: 24px;
   z-index: 22;
   pointer-events: none;
   user-select: none;
-  position: relative;
 }
-
 .banner-gamer-img {
-  max-width: 540px;
   width: 100%;
   height: auto;
   display: block;
@@ -57,118 +66,99 @@ body {
 }
 
 .arcade-screen-container {
-  /* Centralizar na tela */
   position: absolute;
   left: 50%;
-  top: 245px;
-  transform: translateX(-50%);
-  width: 700px;
-  height: 400px;
-  background: rgba(40,240,255,0.12);
-  border-radius: 32px;
-  box-shadow: 0 0 90px #08f7fe33, 0 1px 40px #2fc3ff77;
+  top: 50%;
+  width: 620px;
+  height: 340px;
+  max-width: 86vw;
+  max-height: 53vh;
+  transform: translate(-50%, -47%);
+  background: rgba(22,240,255,0.13);
+  border-radius: 38px;
+  box-shadow: 0 0 90px #08f7fe33, 0 1px 40px #2fc3ff77, 0 0 0 6px #0ecffb15 inset;
   z-index: 10;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 42px 32px 32px 32px;
-  /* Limitar só ao tamanho da tela azul! */
-  border: 6px solid #13a7ff44;
-  /* Opcional: recorte para parecer que está dentro da tela azul */
+  padding: 28px 16px 24px 16px;
+  border: 4px solid #0dcffb80;
 }
 
 #calendario {
   width: 100%;
-  max-width: 610px;
+  max-width: 570px;
   margin: 0 auto;
   background: transparent;
 }
 
-/* Responsivo */
-@media (max-width: 850px) {
-  .arcade-screen-container {
-    width: 94vw;
-    min-width: 0;
-    height: 58vw;
-    min-height: 240px;
-    padding: 5vw 3vw;
-    border-radius: 3vw;
-    top: 24vw;
-  }
-}
-
-@media (max-width: 540px) {
-  .arcade-screen-container {
-    top: 28vw;
-    padding: 2vw 1vw;
-    border-radius: 2vw;
-    min-height: 150px;
-    height: 54vw;
-    width: 98vw;
-  }
-}
-
-/* Oculta qualquer conteúdo que passar dos limites da tela */
-.arcade-screen-container {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-:root {
-  --gold: #ffe379;
-  --gold2: #e4c145;
-  --gold3: #f7e399;
-  --corpo: #191919;
-  --day-inactive: #f2f2f7;
-  --header-height: 190px;
-  --header-shrink: 62px;
-  --neon-purple: #cf28ff;
-  --neon-pink: #ff49e1;
-  --neon-blue: #51ffe7;
-  --shadow-purple: #9800cc;
-}
-html, body { height: 100%; margin: 0; padding: 0; }
-body {
+table {
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,210,0.9);
+  color: #222;
   font-family: 'Inter', Arial, sans-serif;
-  background: var(--corpo);
-  color: var(--day-inactive);
-  min-height: 100vh;
-  transition: background 0.3s;
+  font-size: 1.02em;
+  box-shadow: 0 2px 10px #0007;
 }
-.banner-gamer {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 32px;
-  margin-bottom: 0px;
-  z-index: 10;
-  pointer-events: none;
-  user-select: none;
+th, td {
+  padding: 10px 12px;
+  background: transparent !important;
 }
-.banner-gamer-img {
-  max-width: 540px;
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 8px 38px #19e0fc88)
-          drop-shadow(0 1px 18px #ff38fd88)
-          drop-shadow(0 0 20px #0008);
-  pointer-events: none;
-  user-select: none;
+
+.arcade-screen-container::-webkit-scrollbar {
+  width: 10px;
+  background: #0dcffb33;
+  border-radius: 10px;
 }
-@media (max-width: 700px) {
-  .banner-gamer-img { max-width: 97vw; }
-  .banner-gamer { margin-top: 8px; }
+.arcade-screen-container::-webkit-scrollbar-thumb {
+  background: #5cf6ff99;
+  border-radius: 10px;
 }
-.container {
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 0 32px;
+
+@media (max-width: 950px) {
+  .arcade-screen-container {
+    width: 93vw;
+    height: 52vw;
+    min-width: 0;
+    min-height: 170px;
+    border-radius: 5vw;
+    top: 49vw;
+    padding: 3vw 2vw;
+    max-height: 54vw;
+  }
+  .banner-gamer { width: 37vw; max-width: 92vw; }
 }
-/* REWARD CARD GAMIFICADO */
+@media (max-width: 650px) {
+  .arcade-screen-container {
+    top: 54vw;
+    padding: 2vw 1vw;
+    border-radius: 3vw;
+    min-height: 110px;
+    height: 46vw;
+    width: 99vw;
+    max-height: 49vw;
+  }
+  .banner-gamer { margin-top: 9vw; width: 59vw; }
+}
+@media (max-width: 500px) {
+  .arcade-screen-container {
+    width: 98vw;
+    min-height: 80px;
+    max-width: 100vw;
+    padding: 2vw 0.7vw;
+    height: 44vw;
+    max-height: 46vw;
+    border-radius: 2vw;
+    top: 49vw;
+  }
+  .banner-gamer { margin-top: 11vw; width: 62vw; }
+}
+
+/* --- Gamificado original: habits, rewards, confetti, etc --- */
+
 .reward-card {
   margin: 46px auto 0 auto;
   max-width: 560px;
@@ -258,7 +248,7 @@ body {
   transition: color 0.5s;
   animation: celebrateText 1.6s cubic-bezier(.22,1.5,.5,1.02);
 }
-/* =============== */
+
 .mes {
   font-family: 'Antonio', Arial Narrow, Arial, sans-serif;
   font-size: 2.06em;
@@ -271,33 +261,7 @@ body {
   text-align: left;
 }
 #calendario .mes:first-child { margin-top: 0; }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 40px;
-  background: none;
-  border-radius: 18px;
-  overflow: hidden;
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1.09em;
-  font-weight: 400;
-}
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #333;
-  vertical-align: middle;
-  z-index: 2;
-  background: transparent !important;
-}
-th {
-  background-color: #1e1e1e !important;
-  color: #f9c74f !important;
-  font-size: 1.06em;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  z-index: 2;
-}
+
 tr.main-row {
   cursor: pointer;
   transition: background 0.2s;
@@ -453,7 +417,7 @@ tr.main-row:hover { filter: brightness(1.08); }
   min-height: 38px;
   justify-self: end;
 }
-/* Confetti canvas */
+
 #confetti-canvas {
   position: fixed;
   left: 0;
