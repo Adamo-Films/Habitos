@@ -1,3 +1,121 @@
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: #161042;
+  /* Arcade background fixo */
+  background-image: url('Artboard%201@33.33x.png'); /* se o arquivo está na raiz */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  overflow-x: hidden;
+}
+
+.arcade-bg {
+  position: fixed;
+  z-index: 0;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background-image: url('Artboard%201@33.33x.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: transparent;
+  width: 100vw;
+}
+
+.banner-gamer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 18px;
+  margin-bottom: 0;
+  z-index: 22;
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+}
+
+.banner-gamer-img {
+  max-width: 540px;
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 8px 38px #19e0fc88)
+          drop-shadow(0 1px 18px #ff38fd88)
+          drop-shadow(0 0 20px #0008);
+  pointer-events: none;
+  user-select: none;
+}
+
+.arcade-screen-container {
+  /* Centralizar na tela */
+  position: absolute;
+  left: 50%;
+  top: 245px;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 400px;
+  background: rgba(40,240,255,0.12);
+  border-radius: 32px;
+  box-shadow: 0 0 90px #08f7fe33, 0 1px 40px #2fc3ff77;
+  z-index: 10;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 42px 32px 32px 32px;
+  /* Limitar só ao tamanho da tela azul! */
+  border: 6px solid #13a7ff44;
+  /* Opcional: recorte para parecer que está dentro da tela azul */
+}
+
+#calendario {
+  width: 100%;
+  max-width: 610px;
+  margin: 0 auto;
+  background: transparent;
+}
+
+/* Responsivo */
+@media (max-width: 850px) {
+  .arcade-screen-container {
+    width: 94vw;
+    min-width: 0;
+    height: 58vw;
+    min-height: 240px;
+    padding: 5vw 3vw;
+    border-radius: 3vw;
+    top: 24vw;
+  }
+}
+
+@media (max-width: 540px) {
+  .arcade-screen-container {
+    top: 28vw;
+    padding: 2vw 1vw;
+    border-radius: 2vw;
+    min-height: 150px;
+    height: 54vw;
+    width: 98vw;
+  }
+}
+
+/* Oculta qualquer conteúdo que passar dos limites da tela */
+.arcade-screen-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 :root {
   --gold: #ffe379;
   --gold2: #e4c145;
