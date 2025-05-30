@@ -26,7 +26,7 @@ html, body {
   background-size: cover;
 }
 
-/* Banner topo */
+/* Banner e logo */
 .banner-gamer {
   width: 370px;
   margin: 22px auto 0 auto;
@@ -46,7 +46,7 @@ html, body {
 /* CONTADORES */
 .arcade-counters {
   position: fixed;
-  top: 116px;
+  top: 116px; /* altura para tela azul lateral */
   width: 100vw;
   left: 0;
   z-index: 30;
@@ -92,7 +92,7 @@ html, body {
   -webkit-text-fill-color: transparent;
 }
 
-/* TELA CURVADA ARCADE */
+/* CONTAINER DA TELA AZUL ARCADE */
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
@@ -103,12 +103,11 @@ html, body {
   max-height: 670px;
   min-width: 470px;
   min-height: 300px;
-  transform: translate(-50%, -54%) perspective(1200px) rotateX(11deg) scaleY(1.1);
+  transform: translate(-50%, -54%);
   z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
-  box-shadow: 0 0 200px 70px #32caff36, 0 0 50px 4px #21e3ff14, 
-              0 8px 95px 8px #1a2032 inset;
+  box-shadow: 0 0 200px 70px #32caff36, 0 0 50px 4px #21e3ff14;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -118,20 +117,16 @@ html, body {
   overflow: visible;
 }
 
+/* Overlay vidro CRT, opcional */
 .crt-glass-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
-  background: radial-gradient(ellipse 110% 87% at 50% 33%,rgba(255,255,255,0.08) 0%,rgba(0,0,0,0.02) 80%,rgba(0,0,0,0.17) 100%),
-              linear-gradient(135deg,rgba(255,255,255,0.10) 12%,rgba(0,0,0,0.00) 75%);
+  background: rgba(0, 0, 0, 0.03);
   mix-blend-mode: lighten;
-  animation: crt-reflex 5s infinite linear alternate;
-}
-@keyframes crt-reflex {
-  0% { background-position: 50% 32%, 100% 12%; }
-  100% { background-position: 51% 36%, 50% 17%; }
+  /* brilho/reflexo leve: pode adicionar linear-gradient ou linhas de scanline */
 }
 
 /* CALENDÁRIO INTEIRO */
@@ -148,31 +143,25 @@ html, body {
   padding: 0 2vw 0 2vw;
   overflow-y: auto;
   text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
-  transform: perspective(1100px) rotateX(8deg) scaleY(1.04);
-  filter: drop-shadow(0 0 11px #39e6ff22);
+  /* CRT EFEITO: */
+  filter: url(#crt-convex);
+  /* Distorção convexa visível em navegadores Chromium */
+  /* Caso queira mais força, aumente o scale do SVG */
 }
 
-/* Simulação linhas CRT */
 #calendario::before {
   content: '';
-  pointer-events: none;
   position: absolute;
   left: 0; top: 0; width: 100%; height: 100%;
-  z-index: 20;
+  pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,
-    rgba(30,60,100,0.09) 0px,
-    rgba(30,60,100,0.09) 2px,
+    rgba(30,60,100,0.07) 0px,
+    rgba(30,60,100,0.07) 2px,
     transparent 2px,
-    transparent 7px
+    transparent 6px
   );
-  mix-blend-mode: lighten;
-  opacity: 0.49;
-  animation: scanlines 2.9s linear infinite;
-}
-@keyframes scanlines {
-  0% { background-position-y: 0; }
-  100% { background-position-y: 7px; }
+  z-index: 20;
 }
 
 /* LISTA DE MESES SEMPRE VISÍVEL */
