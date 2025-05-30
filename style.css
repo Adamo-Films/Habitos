@@ -1,5 +1,4 @@
-/* CSS Completo para Substituir o Atual */
-
+/* ROOT E GERAIS */
 :root {
   --neon: #51ffe7;
   --gold: #ffe379;
@@ -18,6 +17,7 @@ html, body {
   overflow: hidden;
 }
 
+/* Fundo arcade */
 .arcade-bg {
   position: fixed;
   z-index: 0;
@@ -27,6 +27,7 @@ html, body {
   background-size: cover;
 }
 
+/* Banner topo */
 .banner-gamer {
   width: 370px;
   margin: 22px auto 0 auto;
@@ -37,40 +38,53 @@ html, body {
 }
 .banner-gamer-img {
   width: 100%;
+  height: auto;
+  display: block;
   filter: drop-shadow(0 0 20px #19e0fcaa) drop-shadow(0 0 30px #ff38fdaa);
 }
 
+/* CONTADORES */
 .arcade-counters {
   position: fixed;
   top: 116px;
   width: 100vw;
+  left: 0;
+  z-index: 30;
   display: flex;
   justify-content: space-between;
-  z-index: 30;
+  pointer-events: none;
+  background: none !important;
 }
 .counter {
   margin: 0 52px;
   min-width: 132px;
   text-align: center;
-  color: #fff;
+  pointer-events: none;
 }
 .counter-label {
   font-family: 'Bungee', sans-serif;
   font-size: 1.09em;
+  color: #fff;
   text-shadow: 0 1px 2px #19e0fcaa, 0 1px 8px #000d, 0 1px 20px #ffe379bb;
+  font-weight: 900;
   letter-spacing: 0.13em;
+  margin-bottom: 0.25em;
   transform: perspective(220px) rotateX(7deg);
 }
 .counter-value {
   font-family: 'Luckiest Guy', cursive;
   font-size: 2.8em;
-  background: linear-gradient(90deg,#ffe379,#51ffe7,#d6e4ff);
-  color: transparent;
-  -webkit-background-clip: text;
+  background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
+  color: #fdf5c6;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 7px #ffe379, 0 0 18px #1ffbf4bb, 0 7px 35px #1fc8ffd0;
   background-clip: text;
-  text-shadow: 0 2px 7px #ffe379;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* CONTAINER DA TELA AZUL ARCADE */
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
@@ -79,112 +93,94 @@ html, body {
   height: 58vh;
   max-width: 1120px;
   max-height: 670px;
-  transform: translate(-50%, -54%) perspective(700px) rotateX(7deg) skewY(-2deg);
-  border-radius: 80px;
-  box-shadow: 0 0 200px 70px #32caff36;
+  min-width: 470px;
+  min-height: 300px;
+  transform: translate(-50%, -54%);
+  z-index: 10;
+  border-radius: 80px 70px 80px 80px / 90px 100px 85px 78px;
   overflow: hidden;
   filter: url(#crt-barrel);
+  background: transparent !important;
 }
 
+/* Overlay do CRT (opcional efeito vidro) */
 .crt-glass-overlay {
   position: absolute;
   inset: 0;
-  border-radius: 80px;
-  background: rgba(0, 0, 0, 0.05);
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: rgba(0,0,0,0.04);
+  mix-blend-mode: lighten;
 }
 
-#calendario {
+/* CALENDÁRIO TRANSPARENTE SEM FILTRO INDIVIDUAL */
+#calendario, .calendario-container {
   position: relative;
   z-index: 3;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  background: transparent !important;
+  color: #ffe379;
+  font-family: 'Antonio', 'Bebas Neue', sans-serif;
   padding: 0 2vw;
-  text-shadow: 0 2px 18px #43f2ffcc;
+  overflow-y: auto;
+  transform: none !important;
+  filter: none !important;
 }
 
+/* LISTA MESES */
 .mes {
   font-size: 2.18em;
   color: var(--gold);
-  text-shadow: 0 0 12px #ffe379cc;
   cursor: pointer;
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.mes::after {
-  content: "▼";
-  font-size: 0.8em;
-  color: var(--neon);
-  transition: transform 0.3s;
-}
-
-.mes.open::after {
-  transform: rotate(180deg);
-}
-
+/* TABELA TRANSPARENTE */
 table {
   width: 100%;
-  background: none;
+  background: none !important;
   color: #fff;
 }
 
-th, td {
-  padding: 7px 10px;
-  background: transparent;
-}
-
-tr.main-row {
-  cursor: pointer;
-  transition: color 0.25s;
-}
-
-tr.main-row.day-complete {
-  background: linear-gradient(90deg, #23e2f9, #ffe379);
-  color: #283a1e;
-  text-shadow: 0 1px 3px #fff;
-}
-
-.progress-text.gold {
-  color: #ffe379;
-}
-
-.habit-item {
-  display: grid;
-  grid-template-columns: 42px 1fr 36px;
-  background: rgba(41, 133, 188, 0.13);
-  padding: 8px 14px;
-  border-radius: 13px;
-}
-
+/* PRÊMIOS */
 .reward-card {
   background: rgba(30,70,150,0.07);
   border-radius: 17px;
-  padding: 19px 22px;
+  box-shadow: 0 0 60px 15px #ffe37944;
+  padding: 19px;
+  margin: 34px auto;
   width: 85%;
-  margin: auto;
   filter: drop-shadow(0 0 22px #ffe379cc);
 }
 
 .reward-bar-bg {
+  width: 89%;
   height: 15px;
   background: #17305299;
   border-radius: 7px;
+  overflow: hidden;
 }
 
 .reward-bar {
   height: 100%;
   background: linear-gradient(90deg, #cf28ff, #51ffe7);
-  border-radius: 8px;
 }
 
 .reward-unlocked {
+  color: #fff;
   background: #19e0fc;
   border-radius: 8px;
   padding: 3px 16px;
+  box-shadow: 0 0 16px #cf28ff33;
 }
 
+/* Scrollbar customizada */
 #calendario::-webkit-scrollbar { width: 7px; }
 #calendario::-webkit-scrollbar-thumb {
   background-color: #0ef5;
