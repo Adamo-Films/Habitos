@@ -1,90 +1,60 @@
+/* Reset e variáveis */
 :root {
   --gold: #ffe379;
-  --gold2: #e4c145;
-  --gold3: #f7e399;
-  --corpo: #191919;
-  --day-inactive: #f2f2f7;
-  --neon-purple: #cf28ff;
-  --neon-pink: #ff49e1;
-  --neon-blue: #51ffe7;
-  --shadow-purple: #9800cc;
+  --neon: #51ffe7;
+  --highlight: #0ff9;
+  --glow: #ffe379cc;
+  --dark-bg: #0b0f1a;
+  --text-glow: 0 0 6px var(--gold), 0 0 12px var(--neon);
+  --shadow: 0 0 18px #000c;
 }
 
-body, html {
+html, body {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+  background: var(--dark-bg);
   font-family: 'Inter', sans-serif;
-  background: #000;
 }
 
 .arcade-bg {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 0;
-  background: url('Artboard 1.png') no-repeat center center fixed;
+  background: url('Artboard 1.png') no-repeat center center;
   background-size: cover;
+  z-index: 0;
 }
 
 .sticky-header {
   position: fixed;
   top: 0;
   width: 100vw;
-  z-index: 10;
+  z-index: 20;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  background: none;
   pointer-events: none;
-  user-select: none;
 }
 
 .banner-gamer {
   width: 380px;
   max-width: 35vw;
-  min-width: 220px;
-  margin-top: 24px;
-  z-index: 11;
-  pointer-events: none;
-  user-select: none;
+  margin-top: 16px;
 }
 
 .banner-gamer-img {
   width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 8px 38px #19e0fc88)
-          drop-shadow(0 1px 18px #ff38fd88)
-          drop-shadow(0 0 20px #0008);
+  filter: drop-shadow(0 0 20px #19e0fcaa)
+          drop-shadow(0 0 30px #ff38fdaa);
 }
 
-.arcade-screen-container {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 620px;
-  height: 340px;
-  max-width: 86vw;
-  max-height: 53vh;
-  transform: translate(-50%, -47%);
-  background: rgba(22,240,255,0.13);
-  border-radius: 38px;
-  box-shadow: 0 0 90px #08f7fe33, 0 1px 40px #2fc3ff77, 0 0 0 6px #0ecffb15 inset;
-  z-index: 5;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 28px 16px 24px 16px;
-  border: 4px solid #0dcffb80;
-}
-
+/* Contadores laterais estilizados */
 #habit-counters {
   position: absolute;
   top: 50%;
@@ -93,94 +63,193 @@ body, html {
   display: flex;
   justify-content: space-between;
   transform: translateY(-50%);
-  padding: 0 6vw;
+  padding: 0 3vw;
   pointer-events: none;
 }
 
 .habit-counter {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 12px 18px;
-  border-radius: 14px;
+  width: 220px;
+  transform: perspective(800px) rotateY(8deg);
+}
+
+.habit-counter.right {
+  transform: perspective(800px) rotateY(-8deg);
+  text-align: right;
+}
+
+.counter-glow {
+  background: rgba(0, 0, 0, 0.65);
+  padding: 16px 20px;
+  border-radius: 16px;
   color: #fff;
-  font-size: 1.25em;
   font-weight: bold;
-  box-shadow: 0 0 12px #000a;
-  text-shadow: 0 0 6px #0008;
-  max-width: 220px;
+  text-shadow: var(--text-glow);
+  box-shadow: var(--shadow);
+  font-size: 1.3em;
+  pointer-events: none;
 }
 
-.habit-counter span {
+.counter-label {
+  display: block;
+  font-size: 0.9em;
+  opacity: 0.85;
+}
+
+.counter-value {
+  font-size: 2em;
   color: var(--gold);
-  font-size: 1.4em;
-  margin-left: 6px;
+  font-weight: 900;
+  text-shadow: 0 0 8px var(--gold), 0 0 20px var(--neon);
 }
 
-@media (max-width: 650px) {
-  .habit-counter {
-    font-size: 0.85em;
-    padding: 10px 14px;
-  }
-
-  .habit-counter span {
-    font-size: 1.1em;
-  }
+/* Tela da arcade */
+.arcade-screen-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 620px;
+  height: 370px;
+  max-width: 85vw;
+  max-height: 53vh;
+  transform: translate(-50%, -47%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 20px;
+  background: none;
+  z-index: 10;
 }
 
-/* Scrollbar estilizado para a tela da arcade */
-.arcade-screen-container::-webkit-scrollbar {
-  width: 10px;
-  background: #0dcffb33;
-  border-radius: 10px;
-}
-.arcade-screen-container::-webkit-scrollbar-thumb {
-  background: #5cf6ff99;
-  border-radius: 10px;
-}
-
-/* Calendário fica dentro da tela azul */
 #calendario {
   width: 100%;
-  max-width: 570px;
-  margin: 0 auto;
+  max-width: 580px;
+  color: #fdfdfd;
+  text-shadow: 0 0 8px #00f8, 0 0 2px #000;
+}
+
+.mes {
+  font-family: 'Antonio', sans-serif;
+  font-size: 1.8em;
+  margin: 24px 0 10px;
+  color: var(--gold);
+  cursor: pointer;
+  text-shadow: var(--text-glow);
+  transition: transform 0.3s;
+}
+
+.mes:hover {
+  transform: scale(1.03);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  box-shadow: inset 0 0 10px #00ffee44;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 8px 12px;
+  font-size: 0.95em;
+  text-align: left;
   background: transparent;
 }
 
-/* Confetti canvas */
+tr.main-row {
+  cursor: pointer;
+  transition: background 0.2s;
+  --progress: 0;
+  background: linear-gradient(90deg, #161e26 0%, #1e2b3a 100%);
+  background-size: calc(var(--progress, 0) * 100%) 100%;
+  background-repeat: no-repeat;
+  background-position: left top;
+  color: hsl(0, 0%, calc(95% - 65% * var(--progress)));
+  box-shadow: 0 2px 6px #0006;
+  border-bottom: 1px solid #0004;
+}
+
+tr.main-row.day-complete {
+  background: linear-gradient(90deg, var(--gold) 0%, #f7e399 100%) !important;
+  color: #000;
+  font-weight: bold;
+  text-shadow: none;
+}
+
+.habit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.habit-item {
+  display: grid;
+  grid-template-columns: 40px 1fr 30px;
+  align-items: center;
+  background: rgba(0,0,0,0.3);
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px #000a;
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.habit-complete {
+  background: rgba(255, 255, 255, 0.2);
+  color: #000;
+  font-weight: bold;
+}
+
+.habit-emoji {
+  font-size: 1.4em;
+  filter: drop-shadow(0 0 5px #00f5ffcc);
+}
+
+.habit-label {
+  padding-left: 8px;
+  font-size: 1em;
+}
+
+.habit-checkbox {
+  transform: scale(1.3);
+}
+
+/* Scrollbar personalizada */
+.arcade-screen-container::-webkit-scrollbar {
+  width: 10px;
+}
+.arcade-screen-container::-webkit-scrollbar-thumb {
+  background-color: #0ef;
+  border-radius: 10px;
+}
+
+/* Confetti */
 #confetti-canvas, #reward-confetti {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
   z-index: 9999;
-  display: none;
   pointer-events: none;
+  display: none;
 }
 
 #celebrate-text {
-  display: none;
   position: fixed;
-  left: 50%;
-  top: 38%;
+  left: 50%; top: 40%;
   transform: translate(-50%, -50%);
-  font-size: 5vw;
-  color: #0a355b;
-  text-shadow: 0 0 7px #fff, 0 0 28px #ffe379, 0 0 90px #ccaa33;
-  font-weight: bold;
+  font-size: 4vw;
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--neon), 0 0 30px #fff;
   z-index: 10000;
-  pointer-events: none;
-  font-family: 'Luckiest Guy', 'Antonio', Arial Narrow, Arial, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  animation: celebrateText 2.5s ease-out;
-  background: none !important;
-  border: none !important;
-  border-radius: 0 !important;
-  padding: 0 18px 0 18px;
+  font-family: 'Luckiest Guy';
+  display: none;
+  animation: pop 1.6s ease;
 }
 
-@keyframes celebrateText {
-  0%   { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
-  50%  { transform: translate(-50%, -56%) scale(1.12); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+@keyframes pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  50% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
 }
