@@ -3,7 +3,7 @@
   --neon: #51ffe7;
   --highlight: #0ff9;
   --glow: #ffe379cc;
-  --dark-bg: #0b0f1a;
+  --corpo: #191919;
   --text-glow: 0 0 8px var(--neon), 0 0 20px var(--gold);
   --shadow: 0 0 38px #000c;
 }
@@ -13,40 +13,32 @@ html, body {
   padding: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  background: var(--dark-bg);
+  background: var(--corpo);
   font-family: 'Inter', sans-serif;
+  overflow: hidden;
 }
 
+/* Fundo Arcade */
 .arcade-bg {
   position: fixed;
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background: url('Artboard%201.png') no-repeat center center;
+  background: url('https://github.com/Adamo-Films/Habitos/raw/main/Artboard%201.png') no-repeat center center;
   background-size: cover;
   z-index: 0;
 }
 
-
-/* LOGO */
-.sticky-header {
-  position: fixed;
-  top: 0;
-  width: 100vw;
-  z-index: 20;
+/* Banner topo */
+.banner-gamer {
+  width: 370px;
+  max-width: 33vw;
+  margin: 22px auto 0 auto;
+  z-index: 22;
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  pointer-events: none;
 }
-
-.banner-gamer {
-  width: 380px;
-  max-width: 35vw;
-  margin-top: 16px;
-}
-
 .banner-gamer-img {
   width: 100%;
   height: auto;
@@ -55,121 +47,108 @@ html, body {
           drop-shadow(0 0 30px #ff38fdaa);
 }
 
-/* CONTADORES (laterais) arcade screen */
-#habit-counters {
+/* Contadores Arcade 3D */
+.arcade-counters {
   position: absolute;
-  top: 38%;
+  left: 0;
+  top: 0;
   width: 100vw;
-  z-index: 9;
+  height: 0;
+  z-index: 22;
   display: flex;
   justify-content: space-between;
   pointer-events: none;
+  font-family: 'Bungee', 'Luckiest Guy', sans-serif;
 }
-
-.habit-counter {
-  width: 260px;
-  perspective: 1200px;
-}
-
-.habit-counter.left .counter-glow {
-  transform: skewY(-7deg) rotateY(15deg) scale(1.15);
-  background: linear-gradient(90deg, #212c35cc 65%, #4efcff22 100%);
-}
-.habit-counter.right .counter-glow {
-  transform: skewY(7deg) rotateY(-15deg) scale(1.15);
-  background: linear-gradient(270deg, #212c35cc 65%, #f980ff22 100%);
-}
-.counter-glow {
-  min-width: 180px;
-  min-height: 92px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: rgba(10,25,30,0.76);
-  border-radius: 22px;
-  color: #fff;
-  font-weight: bold;
-  text-shadow: var(--text-glow), 0 0 30px #fff7;
-  box-shadow: var(--shadow);
-  font-size: 1.32em;
-  pointer-events: none;
-  border: 4px solid #00eaff22;
-  margin: 6px 0;
-  letter-spacing: 0.02em;
-  filter: blur(0.5px) contrast(1.25) drop-shadow(0 0 30px #00f5);
-  /* Arcade glass overlay */
-  position: relative;
-  overflow: hidden;
-}
-
-.counter-glow:after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  background: linear-gradient(100deg, rgba(255,255,255,0.09) 25%, transparent 65%);
+.counter {
+  margin-top: 31px;
+  margin-left: 40px;
+  margin-right: 40px;
+  text-align: center;
+  filter: drop-shadow(0 6px 26px #01c8ff) drop-shadow(0 0 16px #3cf8f7) drop-shadow(0 1px 3px #202065);
   pointer-events: none;
 }
-
+.counter.right {
+  margin-left: 0;
+  margin-right: 48px;
+}
 .counter-label {
-  display: block;
-  font-size: 0.96em;
-  color: var(--neon);
-  opacity: 0.98;
-  font-family: 'Bungee', cursive;
-  text-shadow: var(--text-glow);
-  margin-bottom: 7px;
-}
-
-.counter-value {
-  font-size: 2.6em;
-  color: var(--gold);
+  font-size: 1.13em;
+  color: #fff;
+  text-shadow: 0 3px 0 #4cf2ff, 0 1px 12px #051946, 0 1px 2px #000;
   font-weight: 900;
-  font-family: 'Luckiest Guy', cursive;
-  text-shadow: 0 0 10px var(--gold), 0 0 16px var(--neon);
-  letter-spacing: 2px;
-  margin-top: -5px;
-  filter: brightness(1.1) contrast(1.2) drop-shadow(0 0 12px #ffe37966);
+  letter-spacing: 0.12em;
+  transform: perspective(250px) rotateY(10deg);
+}
+.counter-value {
+  display: block;
+  font-size: 3.4em;
+  background: linear-gradient(80deg,#ffe379 25%,#51ffe7 65%,#d6e4ff 100%);
+  color: #fdf5c6;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-shadow:
+    0 0 15px #ffe379dd,
+    0 2px 4px #2199f066,
+    0 8px 36px #01e4fd88;
+  /* Efeito 3D: letras próximas maiores, distantes menores */
+  transform: perspective(200px) rotateY(-9deg) scale(1.18,1.13);
+  padding: 0 9px;
+  border-radius: 11px;
 }
 
-.arcade-screen-container {
+/* Container Central (tela arcade) com 3D */
+.container {
   position: absolute;
   left: 50%;
-  top: 49.7%;
-  width: 820px;
-  height: 480px;
-  max-width: 70vw;
-  max-height: 54vw;
-  transform: translate(-50%, -50%);
+  top: 52.6%;
+  width: 870px;
+  height: 474px;
+  max-width: 72vw;
+  max-height: 40vw;
+  transform: translate(-50%, -50%) perspective(900px) rotateX(8deg);
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 36px 40px 24px 40px;
-  background: none;
+  padding: 18px 25px 14px 25px;
+  background: rgba(16,28,67, 0.91);
   z-index: 10;
-  border-radius: 40px;
-  box-shadow: none;
+  border-radius: 52px 54px 48px 62px/48px 68px 56px 60px;
+  box-shadow:
+    0 0 64px 18px #0ff4 inset,
+    0 0 66px 2px #0ff2 inset,
+    0 12px 34px 12px #112c3a77;
+  border: 2.8px solid #21e3ff55;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+@media (max-width: 1100px) {
+  .container {
+    width: 99vw;
+    max-width: 99vw;
+    padding: 4vw 2vw;
+    height: 58vw;
+    top: 51.3%;
+    border-radius: 7vw;
+  }
 }
 
-  /* Glass effect */
-  backdrop-filter: blur(1.5px) brightness(1.09);
-}
-
+/* Calendário e Meses */
 #calendario {
   width: 100%;
   color: #e9faff;
   text-shadow: 0 0 10px #0ff8, 0 0 2px #111;
+  flex: 1;
+  overflow-x: auto;
 }
-
-/* MÊS e DROPDOWNS */
 .mes {
   font-family: 'Antonio', sans-serif;
-  font-size: 2.1em;
-  margin: 20px 0 13px 0;
+  font-size: 2em;
+  margin: 18px 0 8px 0;
   color: var(--gold);
   text-shadow: 0 0 10px #ffe379aa, 0 0 20px #61fcff88;
   cursor: pointer;
-  padding-left: 20px;
+  padding-left: 16px;
   user-select: none;
   transition: transform 0.3s cubic-bezier(.47,1.64,.41,.88);
   position: relative;
@@ -178,7 +157,7 @@ html, body {
 }
 .mes::after {
   content: "▼";
-  font-size: 0.85em;
+  font-size: 0.8em;
   margin-left: 13px;
   color: var(--neon);
   text-shadow: 0 0 8px #31f2f5;
@@ -210,11 +189,13 @@ html, body {
   box-shadow: 0 0 38px #00d7ff66;
 }
 
+/* Tabela de dias */
 table {
   border-collapse: collapse;
   width: 100%;
   background: none;
   color: #fff;
+  margin-bottom: 18px;
 }
 
 th, td {
@@ -246,12 +227,10 @@ tr.main-row.day-complete {
   text-shadow: 0 0 5px #fff8;
   box-shadow: 0 0 32px #ffe379cc, 0 0 42px #54fff733;
 }
-
 tr.main-row.expanded {
   border: 2.5px solid #ffe37999;
   box-shadow: 0 0 32px #fff07b99;
 }
-
 tr.drop-up {
   animation: dropUp .45s cubic-bezier(.45,2,.27,1.1);
 }
@@ -271,13 +250,13 @@ tr.drop-up {
   font-size: 1.3em;
 }
 
+/* Hábitos */
 .habit-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin: 16px 0;
 }
-
 .habit-item {
   display: grid;
   grid-template-columns: 42px 1fr 36px;
@@ -311,25 +290,83 @@ tr.drop-up {
   filter: drop-shadow(0 0 18px #ffe379cc) drop-shadow(0 0 32px #51ffe7bb);
   transform: scale(1.17);
 }
-
 .habit-label {
   padding-left: 8px;
   font-size: 1.09em;
   font-family: 'Bebas Neue', cursive;
   letter-spacing: 0.01em;
 }
-
 .habit-checkbox {
   transform: scale(1.33);
   accent-color: var(--neon);
   border-radius: 8px;
 }
 
-/* Scrollbar personalizada */
-.arcade-screen-container::-webkit-scrollbar {
-  width: 10px;
+/* Prêmios */
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: rgba(20,42,90,0.95);
+  border-radius: 14px;
+  box-shadow: 0 2px 18px #33fcff36, 0 0 32px #ffe37924;
+  padding: 18px 22px 15px 22px;
+  margin: 22px 0 0 0;
+  width: 94%;
+  max-width: 650px;
+  border: 1.8px solid #22e8ffd1;
 }
-.arcade-screen-container::-webkit-scrollbar-thumb {
+.reward-icon {
+  font-size: 2.1em;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 0 6px #ffe379cc);
+}
+.reward-card .title {
+  color: #ffe379;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.25em;
+  margin-bottom: 3px;
+}
+.reward-card .desc {
+  color: #dffbff;
+  font-size: 1em;
+  margin-bottom: 7px;
+}
+.reward-bar-bg {
+  width: 90%;
+  height: 15px;
+  background: #173052;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  box-shadow: 0 0 10px #51ffe7bb;
+}
+.reward-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #cf28ff 10%, #51ffe7 90%);
+  border-radius: 8px;
+  transition: width 0.55s cubic-bezier(.6,1.2,.16,1.08);
+  width: 0;
+}
+.reward-unlocked {
+  margin-top: 5px;
+  color: #fff;
+  background: #19e0fc;
+  border-radius: 6px;
+  padding: 2px 12px;
+  font-weight: bold;
+  box-shadow: 0 0 14px #cf28ff33;
+  font-family: 'Bungee', cursive;
+  font-size: 1em;
+  display: inline-block;
+}
+
+/* Scrollbar custom */
+.container::-webkit-scrollbar {
+  width: 8px;
+}
+.container::-webkit-scrollbar-thumb {
   background-color: #0ef;
   border-radius: 10px;
 }
@@ -343,7 +380,6 @@ tr.drop-up {
   pointer-events: none;
   display: none;
 }
-
 #celebrate-text {
   position: fixed;
   left: 50%; top: 41%;
