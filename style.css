@@ -114,14 +114,14 @@ html, body {
   position: absolute;
   left: 50%;
   top: 53.8%;
-  width: 97vw;
-  max-width: 1050px;
-  height: 67vh;
-  max-height: 625px;
-  min-height: 340px;
-  transform: translate(-50%, -51%) perspective(1100px) scaleY(1.04) scaleX(1.22)
-             matrix3d(1, 0, 0, 0.00088, 0, 1, 0, 0.00055, 0, 0, 1, 0, 0, 0, 0, 1.09);
-  /* O truque da matrix3d simula um abaulamento tipo CRT: só o meio expande */
+  width: 81vw;
+  height: 62vh;
+  max-width: 1120px;
+  max-height: 700px;
+  min-width: 500px;
+  min-height: 320px;
+  transform: translate(-50%, -51%) perspective(1100px) scaleY(1.06) scaleX(1.16)
+             matrix3d(1, 0, 0, 0.00080, 0, 1, 0, 0.00052, 0, 0, 1, 0, 0, 0, 0, 1.09);
   overflow: visible;
   z-index: 10;
   border-radius: 68px 63px 80px 75px/80px 93px 82px 76px;
@@ -135,6 +135,32 @@ html, body {
   pointer-events: auto;
 }
 
+.crt-glass-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 68px 63px 80px 75px/80px 93px 82px 76px;
+  filter: url(#crt-barrel);
+  background: rgba(0, 0, 0, 0.03);
+  mix-blend-mode: lighten;
+}
+
+#calendario {
+  position: relative;
+  z-index: 3;
+  width: 99%;
+  height: 99%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  color: #e9faff;
+  overflow-x: auto;
+  padding: 0 3vw;
+  background: none !important;
+}
+
 @media (max-width: 1100px) {
   .container.arcade-screen-curve {
     max-width: 99vw;
@@ -146,18 +172,12 @@ html, body {
     transform: translate(-50%, -52%) perspective(700px) scaleY(1.07) scaleX(1.11)
                matrix3d(1, 0, 0, 0.00088, 0, 1, 0, 0.00047, 0, 0, 1, 0, 0, 0, 0, 1.08);
   }
+  #calendario {
+    padding: 0 1vw;
+  }
 }
 
 /* CALENDÁRIO, TABELA E MESES - SEM FUNDO, SEM BORDAS */
-#calendario {
-  width: 100%;
-  height: 100%;
-  color: #e9faff;
-  flex: 1;
-  overflow-x: auto;
-  padding: 0 3vw;
-  background: none !important;
-}
 .mes {
   font-family: 'Antonio', sans-serif;
   font-size: 2.15em;
@@ -248,7 +268,6 @@ tr.main-row.day-complete {
   text-shadow: 0 1px 3px #fff, 0 0 25px #000c;
   box-shadow: 0 0 36px #0ff6, 0 0 20px #ffe37966;
   border-radius: 21px 18px 21px 18px;
-  /* Efeito de vidro com blend para leitura */
   mix-blend-mode: screen;
 }
 tr.main-row.expanded {
@@ -424,8 +443,4 @@ tr.drop-up {
   0% { transform: scale(0.7); opacity: 0; }
   50% { transform: scale(1.13); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
-}
-
-.arcade-screen-curve {
-  filter: url(#crt-barrel);
 }
