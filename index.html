@@ -2,34 +2,59 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Danilo no 🎮</title>
-  <!-- ...demais links de fontes e css... -->
+  <!-- FONTES -->
+  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Fundo arcade -->
   <div class="arcade-bg"></div>
 
+  <!-- Banner topo -->
   <div class="banner-gamer">
-    <img src="https://i.imgur.com/Krb7yXe.png" class="banner-gamer-img" />
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img">
   </div>
 
+  <!-- Contadores (ajustados para tela azul lateral) -->
   <div class="arcade-counters transparent">
-    <!-- ...contadores aqui... -->
+    <div class="counter left">
+      <span class="counter-label">Dias Seguidos</span>
+      <span class="counter-value" id="seqCount">0</span>
+    </div>
+    <div class="counter right">
+      <span class="counter-label">Hábitos Feitos</span>
+      <span class="counter-value" id="doneCount">0</span>
+    </div>
   </div>
 
+  <!-- Tela principal arcade com efeito CRT -->
   <div class="container arcade-screen-curve">
     <div class="crt-glass-overlay"></div>
     <div id="calendario"></div>
   </div>
 
-  <!-- outros elementos como confetti, celebrate-text, audios, etc -->
+  <!-- Confetti, celebração e audio -->
+  <canvas id="confetti-canvas"></canvas>
+  <canvas id="reward-confetti"></canvas>
+  <div id="celebrate-text">VAI MLK!!!</div>
+  <audio id="celebrate-audio">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
+  </audio>
 
-  <!-- Firebase scripts e script.js -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <!-- Script principal -->
   <script src="script.js"></script>
 
-  <!-- Coloque O SVG filter aqui, ANTES do fechamento do body -->
+  <!-- SVG Filter para barrel distortion CRT (convexo) -->
   <svg width="0" height="0" style="position:absolute;">
     <filter id="crt-barrel">
       <feTurbulence baseFrequency="0.02 0.07" seed="8" type="fractalNoise" numOctaves="2" result="turb"/>
