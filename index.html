@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Fundo da arcade -->
+  <!-- Fundo arcade -->
   <div class="arcade-bg"></div>
 
   <!-- Banner topo -->
@@ -20,8 +20,8 @@
     <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img">
   </div>
 
-  <!-- Contadores arcade 3D -->
-  <div class="arcade-counters">
+  <!-- Contadores (com fundo transparente e sem box visível) -->
+  <div class="arcade-counters transparent">
     <div class="counter left">
       <span class="counter-label">Dias Seguidos</span>
       <span class="counter-value" id="seqCount">0</span>
@@ -32,12 +32,12 @@
     </div>
   </div>
 
-  <!-- Tela principal com efeito curvatura (container) -->
-  <div class="container">
+  <!-- Tela principal, sem fundo nem borda, centralizada e responsiva -->
+  <div class="container arcade-screen-curve">
     <div id="calendario"></div>
   </div>
 
-  <!-- Elementos visuais e som para celebração -->
+  <!-- Confetti, celebração e audio -->
   <canvas id="confetti-canvas"></canvas>
   <canvas id="reward-confetti"></canvas>
   <div id="celebrate-text">VAI MLK!!!</div>
