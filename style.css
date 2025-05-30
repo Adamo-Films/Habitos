@@ -171,8 +171,6 @@ html, body {
     border-radius: 10vw;
     left: 50%;
     top: 52.3%;
-    transform: translate(-50%, -52%) perspective(700px) scaleY(1.07) scaleX(1.11)
-               matrix3d(1, 0, 0, 0.00088, 0, 1, 0, 0.00047, 0, 0, 1, 0, 0, 0, 0, 1.08);
   }
   #calendario {
     padding: 0 1vw;
