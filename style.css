@@ -113,15 +113,15 @@ html, body {
 .container.arcade-screen-curve {
   position: absolute;
   left: 50%;
-  top: 53.8%;
-  width: 81vw;
-  height: 62vh;
-  max-width: 1120px;
-  max-height: 700px;
-  min-width: 500px;
-  min-height: 320px;
-  transform: translate(-50%, -51%) perspective(1100px) scaleY(1.06) scaleX(1.16)
-             matrix3d(1, 0, 0, 0.00080, 0, 1, 0, 0.00052, 0, 0, 1, 0, 0, 0, 0, 1.09);
+  top: 54%;
+  width: 75vw;
+  height: 64vh;
+  max-width: 1040px;
+  max-height: 720px;
+  min-width: 440px;
+  min-height: 300px;
+  /* REMOVA transform!!! */
+  /* transform: ... */
   overflow: visible;
   z-index: 10;
   border-radius: 68px 63px 80px 75px/80px 93px 82px 76px;
@@ -131,9 +131,10 @@ html, body {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  padding: 0;
+  padding: 3vw 2vw 2vw 4vw;  /* padding lateral e superior para centralizar melhor */
   pointer-events: auto;
 }
+
 
 /* Vidro CRT overlay - só o overlay tem o filtro CRT/convexidade! */
 .crt-glass-overlay {
