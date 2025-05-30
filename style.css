@@ -4,7 +4,7 @@
   --highlight: #0ff9;
   --glow: #ffe379cc;
   --corpo: #191919;
-  --text-glow: 0 0 8px var(--neon), 0 0 20px var(--gold);
+  --text-glow: 0 0 12px var(--neon), 0 0 32px var(--gold);
   --shadow: 0 0 38px #000c;
 }
 
@@ -18,7 +18,6 @@ html, body {
   overflow: hidden;
 }
 
-/* Fundo Arcade */
 .arcade-bg {
   position: fixed;
   top: 0; left: 0;
@@ -29,7 +28,6 @@ html, body {
   z-index: 0;
 }
 
-/* Banner topo */
 .banner-gamer {
   width: 370px;
   max-width: 33vw;
@@ -47,113 +45,133 @@ html, body {
           drop-shadow(0 0 30px #ff38fdaa);
 }
 
-/* Contadores Arcade 3D */
+/* CONTADORES - FUNDO 100% TRANSPARENTE E TEXTO 3D */
 .arcade-counters {
-  position: absolute;
+  position: fixed;
+  top: 48px;
   left: 0;
-  top: 0;
   width: 100vw;
-  height: 0;
-  z-index: 22;
+  z-index: 30;
   display: flex;
   justify-content: space-between;
   pointer-events: none;
-  font-family: 'Bungee', 'Luckiest Guy', sans-serif;
+}
+.arcade-counters.transparent {
+  background: none !important;
 }
 .counter {
-  margin-top: 31px;
-  margin-left: 40px;
-  margin-right: 40px;
+  margin: 0 60px;
   text-align: center;
-  filter: drop-shadow(0 6px 26px #01c8ff) drop-shadow(0 0 16px #3cf8f7) drop-shadow(0 1px 3px #202065);
+  background: none !important;
   pointer-events: none;
+  min-width: 132px;
+}
+.counter.left {
+  align-items: flex-start;
 }
 .counter.right {
-  margin-left: 0;
-  margin-right: 48px;
+  align-items: flex-end;
 }
 .counter-label {
-  font-size: 1.13em;
+  font-family: 'Bungee', 'Luckiest Guy', sans-serif;
+  font-size: 1.2em;
   color: #fff;
-  text-shadow: 0 3px 0 #4cf2ff, 0 1px 12px #051946, 0 1px 2px #000;
+  text-shadow:
+    0 1px 1px #19e0fcaa,
+    0 3px 7px #000d,
+    0 1px 20px #ffe379bb;
   font-weight: 900;
-  letter-spacing: 0.12em;
-  transform: perspective(250px) rotateY(10deg);
+  letter-spacing: 0.13em;
+  margin-bottom: 0.25em;
+  transform: perspective(220px) rotateX(9deg);
 }
 .counter-value {
-  display: block;
-  font-size: 3.4em;
-  background: linear-gradient(80deg,#ffe379 25%,#51ffe7 65%,#d6e4ff 100%);
+  font-family: 'Luckiest Guy', 'Bungee', cursive;
+  font-size: 3.3em;
+  background: linear-gradient(90deg,#ffe379 45%,#51ffe7 80%,#d6e4ff 100%);
   color: #fdf5c6;
   font-weight: 900;
   letter-spacing: 0.04em;
   text-shadow:
-    0 0 15px #ffe379dd,
-    0 2px 4px #2199f066,
-    0 8px 36px #01e4fd88;
-  /* Efeito 3D: letras próximas maiores, distantes menores */
-  transform: perspective(200px) rotateY(-9deg) scale(1.18,1.13);
-  padding: 0 9px;
-  border-radius: 11px;
+    0 2px 7px #ffe379,
+    0 0 18px #1ffbf4bb,
+    0 7px 35px #1fc8ffd0;
+  border-radius: 12px;
+  display: inline-block;
+  padding: 0 12px 0 12px;
+  /* Efeito de perspectiva do texto 3D */
+  transform: perspective(200px) scaleX(1.13) scaleY(1.07);
+  filter: blur(0.2px) brightness(1.18);
+  margin-bottom: 0.15em;
+  margin-top: 0.15em;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Container Central (tela arcade) com 3D */
-.container {
+/* CONTAINER CENTRAL - LENTE CONVEXA 3D E PREENCHE TELA AZUL */
+.container.arcade-screen-curve {
   position: absolute;
   left: 50%;
-  top: 52.6%;
-  width: 870px;
-  height: 474px;
-  max-width: 72vw;
-  max-height: 40vw;
-  transform: translate(-50%, -50%) perspective(900px) rotateX(8deg);
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 18px 25px 14px 25px;
-  background: rgba(16,28,67, 0.91);
+  top: 53.8%;
+  width: 97vw;
+  max-width: 1050px;
+  height: 67vh;
+  max-height: 625px;
+  min-height: 340px;
+  transform: translate(-50%, -51%) perspective(1100px) scaleY(1.04) scaleX(1.22)
+             matrix3d(1, 0, 0, 0.00088, 0, 1, 0, 0.00055, 0, 0, 1, 0, 0, 0, 0, 1.09);
+  /* O truque da matrix3d simula um abaulamento tipo CRT: só o meio expande */
+  overflow: visible;
   z-index: 10;
-  border-radius: 52px 54px 48px 62px/48px 68px 56px 60px;
-  box-shadow:
-    0 0 64px 18px #0ff4 inset,
-    0 0 66px 2px #0ff2 inset,
-    0 12px 34px 12px #112c3a77;
-  border: 2.8px solid #21e3ff55;
+  border-radius: 68px 63px 80px 75px/80px 93px 82px 76px;
+  background: none !important;
+  box-shadow: 0 0 210px 70px #32caff36, 0 0 80px 4px #21e3ff14;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: stretch;
+  padding: 0;
+  pointer-events: auto;
 }
+
 @media (max-width: 1100px) {
-  .container {
-    width: 99vw;
+  .container.arcade-screen-curve {
     max-width: 99vw;
-    padding: 4vw 2vw;
-    height: 58vw;
-    top: 51.3%;
-    border-radius: 7vw;
+    width: 99vw;
+    min-width: 0;
+    border-radius: 10vw;
+    left: 50%;
+    top: 52.3%;
+    transform: translate(-50%, -52%) perspective(700px) scaleY(1.07) scaleX(1.11)
+               matrix3d(1, 0, 0, 0.00088, 0, 1, 0, 0.00047, 0, 0, 1, 0, 0, 0, 0, 1.08);
   }
 }
 
-/* Calendário e Meses */
+/* CALENDÁRIO, TABELA E MESES - SEM FUNDO, SEM BORDAS */
 #calendario {
   width: 100%;
+  height: 100%;
   color: #e9faff;
-  text-shadow: 0 0 10px #0ff8, 0 0 2px #111;
   flex: 1;
   overflow-x: auto;
+  padding: 0 3vw;
+  background: none !important;
 }
 .mes {
   font-family: 'Antonio', sans-serif;
-  font-size: 2em;
-  margin: 18px 0 8px 0;
+  font-size: 2.15em;
+  margin: 22px 0 10px 0;
   color: var(--gold);
-  text-shadow: 0 0 10px #ffe379aa, 0 0 20px #61fcff88;
+  text-shadow: 0 0 11px #ffe379cc, 0 0 25px #31fcffbb;
   cursor: pointer;
-  padding-left: 16px;
   user-select: none;
-  transition: transform 0.3s cubic-bezier(.47,1.64,.41,.88);
-  position: relative;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  background: none !important;
+  border: none !important;
+  transition: transform 0.3s cubic-bezier(.47,1.64,.41,.88);
 }
 .mes::after {
   content: "▼";
@@ -189,57 +207,63 @@ html, body {
   box-shadow: 0 0 38px #00d7ff66;
 }
 
-/* Tabela de dias */
+/* Tabela de dias - SEM FUNDO, SEM BORDA */
 table {
   border-collapse: collapse;
   width: 100%;
-  background: none;
+  background: none !important;
   color: #fff;
   margin-bottom: 18px;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 th, td {
   padding: 7px 10px;
   font-size: 1em;
   text-align: left;
-  background: transparent;
+  background: none !important;
+  border: none !important;
 }
 
 tr.main-row {
   cursor: pointer;
   transition: background 0.22s, color 0.3s, box-shadow 0.3s;
   --progress: 0;
-  background: 
-    linear-gradient(90deg, #173052 0%, #1c2b48 100%) no-repeat,
-    rgba(0,0,0,0.06);
+  background:
+    linear-gradient(90deg, rgba(24,48,97,0.12) 0%, rgba(41,110,255,0.08) 100%) no-repeat,
+    rgba(0,0,0,0.02);
   background-size: calc(var(--progress, 0) * 100%) 100%;
-  color: hsl(186, 85%, calc(90% - 50% * var(--progress)));
-  box-shadow: 0 4px 16px #162c5140;
-  border-radius: 16px 24px 18px 13px / 13px 14px 20px 12px;
-  border-bottom: 1.5px solid #0ee6;
-  filter: blur(0.05px) brightness(1.02) contrast(1.13);
+  color: hsl(186, 95%, calc(97% - 60% * var(--progress)));
+  border-radius: 17px;
+  border-bottom: none !important;
+  box-shadow: none;
+  filter: blur(0.02px) brightness(1.05) contrast(1.12);
 }
 tr.main-row.day-complete {
-  background: 
-    linear-gradient(90deg, #55fff9 0%, #ffe379 60%, #c3f5ff 100%) !important;
-  color: #170e06;
+  background:
+    linear-gradient(90deg, #a1f1ff 0%, #ffe379 60%, #c3f5ff 100%) !important;
+  color: #23221d;
   font-weight: bold;
-  text-shadow: 0 0 5px #fff8;
-  box-shadow: 0 0 32px #ffe379cc, 0 0 42px #54fff733;
+  text-shadow: 0 1px 3px #fff, 0 0 25px #000c;
+  box-shadow: 0 0 36px #0ff6, 0 0 20px #ffe37966;
+  border-radius: 21px 18px 21px 18px;
+  /* Efeito de vidro com blend para leitura */
+  mix-blend-mode: screen;
 }
 tr.main-row.expanded {
-  border: 2.5px solid #ffe37999;
-  box-shadow: 0 0 32px #fff07b99;
+  border: 2px solid #ffe37966;
+  box-shadow: 0 0 22px #fff07b55;
 }
 tr.drop-up {
-  animation: dropUp .45s cubic-bezier(.45,2,.27,1.1);
+  animation: dropUp .43s cubic-bezier(.45,2,.27,1.1);
 }
 @keyframes dropUp {
   0% { opacity: 1; max-height: 100px;}
   100% { opacity: 0; max-height: 0; }
 }
 
-.progress-text.gold { 
+.progress-text.gold {
   color: #ffe379;
   text-shadow: 0 0 8px #ffe379cc;
 }
@@ -247,10 +271,9 @@ tr.drop-up {
 .expand-icon {
   filter: drop-shadow(0 0 8px #51ffe7cc);
   color: var(--neon);
-  font-size: 1.3em;
+  font-size: 1.1em;
 }
 
-/* Hábitos */
 .habit-list {
   display: flex;
   flex-direction: column;
@@ -261,86 +284,89 @@ tr.drop-up {
   display: grid;
   grid-template-columns: 42px 1fr 36px;
   align-items: center;
-  background: rgba(17, 62, 86, 0.23);
+  background: rgba(41, 133, 188, 0.13);
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 1px 6px #0af6;
   color: #fff;
   transition: background 0.25s;
   position: relative;
 }
 .habit-complete {
-  background: rgba(81,255,231,0.26);
+  background: rgba(81,255,231,0.17);
   color: #00132b;
   font-weight: bold;
-  box-shadow: 0 0 20px #51ffe7;
+  box-shadow: 0 0 14px #51ffe7;
 }
 .habit-done {
   color: #fff;
   font-weight: bold;
-  text-shadow: 0 0 14px #f1fafd;
+  text-shadow: 0 0 16px #f1fafd;
 }
 .habit-emoji {
-  font-size: 1.72em;
-  filter: drop-shadow(0 0 6px #52f7fc) drop-shadow(0 0 12px #fffa);
+  font-size: 1.65em;
+  filter: drop-shadow(0 0 7px #52f7fc) drop-shadow(0 0 12px #fffa);
   transition: filter 0.19s, transform 0.17s;
   user-select: none;
 }
 .habit-emoji.glow {
-  filter: drop-shadow(0 0 18px #ffe379cc) drop-shadow(0 0 32px #51ffe7bb);
-  transform: scale(1.17);
+  filter: drop-shadow(0 0 22px #ffe379cc) drop-shadow(0 0 42px #51ffe7bb);
+  transform: scale(1.13);
 }
 .habit-label {
   padding-left: 8px;
-  font-size: 1.09em;
+  font-size: 1.07em;
   font-family: 'Bebas Neue', cursive;
   letter-spacing: 0.01em;
 }
 .habit-checkbox {
-  transform: scale(1.33);
+  transform: scale(1.23);
   accent-color: var(--neon);
   border-radius: 8px;
 }
 
-/* Prêmios */
+/* Prêmios Centralizados */
 .reward-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  background: rgba(20,42,90,0.95);
-  border-radius: 14px;
-  box-shadow: 0 2px 18px #33fcff36, 0 0 32px #ffe37924;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30,70,150,0.10);
+  border-radius: 17px;
+  box-shadow: 0 2px 24px #33fcff16, 0 0 42px #ffe37919;
   padding: 18px 22px 15px 22px;
-  margin: 22px 0 0 0;
-  width: 94%;
+  margin: 36px auto 10px auto;
+  width: 78%;
   max-width: 650px;
-  border: 1.8px solid #22e8ffd1;
+  border: none !important;
 }
 .reward-icon {
-  font-size: 2.1em;
-  margin-bottom: 4px;
-  filter: drop-shadow(0 0 6px #ffe379cc);
+  font-size: 2.4em;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 0 11px #ffe379bb);
 }
 .reward-card .title {
   color: #ffe379;
   font-family: 'Luckiest Guy', cursive;
-  font-size: 1.25em;
-  margin-bottom: 3px;
+  font-size: 1.21em;
+  margin-bottom: 2px;
+  text-align: center;
 }
 .reward-card .desc {
   color: #dffbff;
   font-size: 1em;
   margin-bottom: 7px;
+  text-align: center;
 }
 .reward-bar-bg {
-  width: 90%;
-  height: 15px;
-  background: #173052;
+  width: 85%;
+  height: 16px;
+  background: #17305255;
   border-radius: 8px;
   overflow: hidden;
   margin-top: 7px;
   margin-bottom: 7px;
-  box-shadow: 0 0 10px #51ffe7bb;
+  box-shadow: 0 0 13px #51ffe799;
 }
 .reward-bar {
   height: 100%;
@@ -353,25 +379,27 @@ tr.drop-up {
   margin-top: 5px;
   color: #fff;
   background: #19e0fc;
-  border-radius: 6px;
-  padding: 2px 12px;
+  border-radius: 8px;
+  padding: 2px 16px;
   font-weight: bold;
-  box-shadow: 0 0 14px #cf28ff33;
+  box-shadow: 0 0 16px #cf28ff33;
   font-family: 'Bungee', cursive;
-  font-size: 1em;
+  font-size: 1.03em;
   display: inline-block;
 }
 
 /* Scrollbar custom */
-.container::-webkit-scrollbar {
-  width: 8px;
+.container::-webkit-scrollbar,
+#calendario::-webkit-scrollbar {
+  width: 7px;
 }
-.container::-webkit-scrollbar-thumb {
-  background-color: #0ef;
-  border-radius: 10px;
+.container::-webkit-scrollbar-thumb,
+#calendario::-webkit-scrollbar-thumb {
+  background-color: #0ef5;
+  border-radius: 11px;
 }
 
-/* Confetti */
+/* Confetti & celebração */
 #confetti-canvas, #reward-confetti {
   position: fixed;
   left: 0; top: 0;
@@ -386,7 +414,7 @@ tr.drop-up {
   transform: translate(-50%, -50%);
   font-size: 4vw;
   color: var(--gold);
-  text-shadow: 0 0 12px var(--neon), 0 0 40px #fff;
+  text-shadow: 0 0 15px var(--neon), 0 0 40px #fff;
   z-index: 10000;
   font-family: 'Luckiest Guy';
   display: none;
