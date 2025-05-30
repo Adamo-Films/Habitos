@@ -46,7 +46,7 @@ html, body {
 /* CONTADORES */
 .arcade-counters {
   position: fixed;
-  top: 116px; /* altura para tela azul lateral */
+  top: 116px;
   width: 100vw;
   left: 0;
   z-index: 30;
@@ -92,7 +92,7 @@ html, body {
   -webkit-text-fill-color: transparent;
 }
 
-/* CONTAINER DA TELA ARCADE COM FILTRO CONVEX */
+/* CONTAINER DA TELA AZUL ARCADE */
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
@@ -103,10 +103,10 @@ html, body {
   max-height: 670px;
   min-width: 470px;
   min-height: 300px;
-  transform: translate(-50%, -54%);
+  transform: translate(-50%, -54%) perspective(700px) scaleX(1.07) scaleY(1.06) rotateX(7deg) skewY(-2deg);
   z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
-  background: transparent !important;
+  background: none !important;
   box-shadow: 0 0 200px 70px #32caff36, 0 0 50px 4px #21e3ff14;
   display: flex;
   flex-direction: column;
@@ -115,21 +115,35 @@ html, body {
   padding: 0;
   pointer-events: auto;
   overflow: visible;
-  filter: url(#arcade-convex); /* Aplica o efeito CRT convex */
 }
 
-/* Overlay de vidro CRT */
 .crt-glass-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
-  background: none;
-  /* DICA: Se quiser um leve brilho ou reflexo, pode usar um linear-gradient semi-transparente aqui */
+  background: rgba(0, 0, 0, 0.04);
+  mix-blend-mode: lighten;
 }
 
-/* CALENDÁRIO INTEIRO: sem fundo, com tudo transparente */
+.crt-noise {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  background: url('https://media.githubusercontent.com/media/aniftyco/awesome-noise-textures/main/noise-512x512.png?raw=true');
+  opacity: 0.08;
+  mix-blend-mode: screen;
+  background-size: 180px 180px;
+  animation: noiseMove 1.4s steps(8) infinite;
+}
+@keyframes noiseMove {
+  0% {background-position: 0 0;}
+  100% {background-position: 80px 30px;}
+}
+
+/* CALENDÁRIO INTEIRO COM EFEITO CRT CONVEX */
 #calendario {
   position: relative;
   z-index: 3;
@@ -143,26 +157,11 @@ html, body {
   padding: 0 2vw 0 2vw;
   overflow-y: auto;
   text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
+  /* CRT convex effect aqui! */
+  filter: url(#arcade-convex);
 }
 
-/* Linhas horizontais CRT */
-#calendario::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; width: 100%; height: 100%;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(90,200,255,0.05) 0px,
-    rgba(90,200,255,0.09) 2px,
-    transparent 3px,
-    transparent 8px
-  );
-  z-index: 20;
-  opacity: 0.5;
-}
-
-/* LISTA DE MESES */
+/* LISTA DE MESES SEMPRE VISÍVEL */
 .mes {
   font-family: 'Antonio', sans-serif;
   font-size: 2.18em;
@@ -241,7 +240,6 @@ tr.main-row.expanded {
   box-shadow: 0 0 22px #fff07b66;
 }
 
-/* DIAS COM HIGHLIGHT - COR DO TEXTO MUDA */
 tr.main-row.day-complete .progress-text,
 tr.main-row.day-complete td {
   color: #171818 !important;
@@ -279,7 +277,7 @@ tr.dropdown {
 }
 .habit-emoji { font-size: 1.6em; }
 
-/* PRÊMIOS */
+/* PRÊMIOS MAIS CHAMATIVOS */
 .reward-card {
   display: flex;
   flex-direction: column;
