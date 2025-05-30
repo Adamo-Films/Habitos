@@ -135,6 +135,7 @@ html, body {
   pointer-events: auto;
 }
 
+/* Vidro CRT overlay - só o overlay tem o filtro CRT/convexidade! */
 .crt-glass-overlay {
   position: absolute;
   inset: 0;
