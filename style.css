@@ -23,10 +23,11 @@ html, body {
   top: 0; left: 0;
   width: 100vw;
   height: 100vh;
-  background: url('https://raw.githubusercontent.com/Adamo-Films/Habitos/main/f0b77d6b-4bee-4778-b741-9d6a92d1d52f.png') no-repeat center center;
+  background: url('Artboard%201.png') no-repeat center center;
   background-size: cover;
   z-index: 0;
 }
+
 
 /* LOGO */
 .sticky-header {
