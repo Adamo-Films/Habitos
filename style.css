@@ -95,15 +95,15 @@ html, body {
 /* CONTAINER DA TELA AZUL ARCADE */
 .arcade-screen-curve {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 74vw;
-  height: 58vh;
-  max-width: 1120px;
-  max-height: 670px;
-  min-width: 470px;
-  min-height: 300px;
-  transform: translate(-50%, -50%) perspective(700px) scaleX(1.07) scaleY(1.06) rotateX(0deg) skewY(0deg);
+  left: 14vw;   /* MAIS À ESQUERDA */
+  top: 26vh;    /* MAIS PARA BAIXO */
+  width: 67vw;
+  height: 54vh;
+  max-width: 1080px;
+  max-height: 630px;
+  min-width: 420px;
+  min-height: 290px;
+  transform: perspective(700px) scaleX(1.06) scaleY(1.04) rotateX(0deg) skewY(0deg);
   z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
@@ -113,15 +113,47 @@ html, body {
   align-items: stretch;
   padding: 0;
   pointer-events: auto;
-  overflow: invisible;
+  overflow: visible;
+  box-shadow: none;
+  /* Remove o highlight/overflow do container */
+}
+
+/* CAMADA DE VIDRO CRT */
+.crt-glass-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 2px, transparent 2px, transparent 6px),
+    radial-gradient(ellipse at center, rgba(0,0,0,0) 70%, rgba(0,0,0,0.39) 100%);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+
+/* CRT NOISE */
+.crt-noise {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: url('https://media.githubusercontent.com/media/aniftyco/awesome-noise-textures/main/noise-512x512.png?raw=true');
+  opacity: 0.07;
+  mix-blend-mode: screen;
+  background-size: 180px 180px;
+  animation: noiseMove 1.4s steps(8) infinite;
+}
+@keyframes noiseMove {
+  0% {background-position: 0 0;}
+  100% {background-position: 80px 30px;}
 }
 
 /* CALENDÁRIO INTEIRO COM EFEITO CRT CONVEX */
 #calendario {
   position: relative;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
+  z-index: 10;
+  width: 99%;
+  height: 98%;
   display: flex;
   flex-direction: column;
   background: transparent !important;
@@ -130,15 +162,15 @@ html, body {
   padding: 0 2vw 0 2vw;
   overflow-y: auto;
   text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
-  /* CRT convex effect aqui! */
   filter: url(#arcade-convex);
+  box-shadow: none;
 }
 
-/* LISTA DE MESES SEMPRE VISÍVEL */
+/* Meses fixos (apenas o aberto fica sticky) */
 .mes {
   font-family: 'Antonio', sans-serif;
   font-size: 2.18em;
-  margin: 18px 0 11px 0;
+  margin: 24px 0 12px 0;
   color: var(--gold);
   text-shadow: 0 0 12px #ffe379cc, 0 0 19px #31fcffbb, 0 0 45px #31fcff77;
   background: none !important;
@@ -148,11 +180,18 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  position: static; /* default: não sticky */
+  z-index: 11;
   transition: transform 0.3s cubic-bezier(.47,1.64,.41,.88);
 }
+.mes.open {
+  position: sticky;
+  top: 0;
+  background: rgba(24, 24, 30, 0.12);
+  z-index: 15;
+}
+
+/* SETA */
 .mes::after {
   content: "▼";
   font-size: 0.8em;
@@ -173,6 +212,7 @@ table {
   margin-bottom: 18px;
   border: none !important;
   box-shadow: none !important;
+  overflow: hidden;
 }
 
 /* CABEÇALHO E DIAS */
@@ -336,4 +376,31 @@ tr.dropdown {
 #calendario::-webkit-scrollbar-thumb {
   background-color: transparent;
   border-radius: 11px;
+}
+
+/* MOBILE (pequenos ajustes responsivos) */
+@media (max-width: 950px) {
+  .arcade-screen-curve {
+    left: 2vw;
+    top: 18vh;
+    width: 96vw;
+    min-width: 0;
+    max-width: 99vw;
+    height: 68vh;
+    max-height: 79vh;
+    padding: 0;
+  }
+  #calendario {
+    padding: 0 1vw;
+  }
+  .reward-card {
+    width: 98%;
+    padding: 16px 5px 11px 5px;
+  }
+}
+
+/* Corrige highlight/table */
+table, .main-row, tr.main-row.day-complete, .reward-card, .crt-glass-overlay {
+  box-shadow: none !important;
+  background: none !important;
 }
