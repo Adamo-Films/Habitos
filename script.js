@@ -12,90 +12,35 @@ const db = firebase.firestore();
 
 // Recompensas do mês
 const rewards = [
-  {
-    month: 5,
-    year: 2025,
-    icon: "🍩",
-    title: "Prêmio Maio",
-    desc: "Uma caixa de donuts Krispy Kreme.",
-    label: "Donuts!"
-  },
-  {
-    month: 6,
-    year: 2025,
-    icon: "🏁",
-    title: "Prêmio Junho",
-    desc: "Um dia pra finalizar Valentina.",
-    label: "Valentina!"
-  },
-  {
-    month: 7,
-    year: 2025,
-    icon: "🍝",
-    title: "Prêmio Julho",
-    desc: "Jantar especial no restaurante Rascal.",
-    label: "Rascal!"
-  },
-  {
-    month: 8,
-    year: 2025,
-    icon: "🏡",
-    title: "Prêmio Agosto",
-    desc: "Airbnb relaxante para recarregar as energias.",
-    label: "Airbnb relax!"
-  },
-  {
-    month: 9,
-    year: 2025,
-    icon: "🧠🎲",
-    title: "Prêmio Setembro",
-    desc: "Jogo Turing Machine.",
-    label: "Turing Machine!"
-  },
-  {
-    month: 10,
-    year: 2025,
-    icon: "🛍️",
-    title: "Prêmio Outubro",
-    desc: "Um dia de compras.",
-    label: "Compras!"
-  },
-  {
-    month: 11,
-    year: 2025,
-    icon: "🛀",
-    title: "Prêmio Novembro",
-    desc: "Sessão em um tanque de privação sensorial.",
-    label: "Zen!"
-  },
-  {
-    month: 12,
-    year: 2025,
-    icon: "⌚",
-    title: "Prêmio Dezembro",
-    desc: "Relógio Ingersoll.",
-    label: "Ingersoll!"
-  }
+  { month: 5, year: 2025, icon: "🍩", title: "Prêmio Maio", desc: "Uma caixa de donuts Krispy Kreme.", label: "Donuts!" },
+  { month: 6, year: 2025, icon: "🏁", title: "Prêmio Junho", desc: "Um dia pra finalizar Valentina.", label: "Valentina!" },
+  { month: 7, year: 2025, icon: "🍝", title: "Prêmio Julho", desc: "Jantar especial no restaurante Rascal.", label: "Rascal!" },
+  { month: 8, year: 2025, icon: "🏡", title: "Prêmio Agosto", desc: "Airbnb relaxante para recarregar as energias.", label: "Airbnb relax!" },
+  { month: 9, year: 2025, icon: "🧠🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine.", label: "Turing Machine!" },
+  { month: 10, year: 2025, icon: "🛍️", title: "Prêmio Outubro", desc: "Um dia de compras.", label: "Compras!" },
+  { month: 11, year: 2025, icon: "🛀", title: "Prêmio Novembro", desc: "Sessão em um tanque de privação sensorial.", label: "Zen!" },
+  { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll.", label: "Ingersoll!" }
 ];
 
 function getRewardFor(month, year, day = null) {
-  if(day) {
-    return rewards.find(r => r.day === day && r.month === month && r.year === year);
-  }
+  if (day) return rewards.find(r => r.day === day && r.month === month && r.year === year);
   return rewards.find(r => r.month === month && r.year === year && !r.day);
 }
 
-function unlockScroll() {
-  document.body.style.overflow = "";
-  document.documentElement.style.overflow = "";
-}
-
-// EMOJIS para cada hábito
+// EMOJIS para cada hábito incremental
 const habitEmojis = [
   "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
   "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪",
 ];
-const cycleEmojis = ["🚿", "🧠", "🙏", "⚖️"];
+
+// Função para pegar o emoji cíclico certo:
+function getCiclicoEmoji(habito) {
+  if (habito.includes("Banho gelado")) return "🚿";
+  if (habito.includes("Agilidade")) return "🧠";
+  if (habito.includes("Diário")) return "🙏";
+  if (habito.includes("Peso")) return "⚖️";
+  return "🎯";
+}
 
 // Array de nomes dos meses fixos em PT-BR
 const monthNames = [
@@ -104,7 +49,7 @@ const monthNames = [
   "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-// CONFETTI
+// --------- CELEBRAÇÃO ---------
 function launchConfettiEpic() {
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
@@ -164,11 +109,10 @@ function launchConfettiEpic() {
     ctx.clearRect(0, 0, W, H);
     canvas.style.display = 'none';
     celebrateText.style.display = 'none';
-    unlockScroll();
+    document.body.style.overflow = "";
   }, 4000);
 }
 
-// Confetti especial (roxo) para recompensa
 function launchRewardConfetti() {
   const canvas = document.getElementById('reward-confetti');
   const ctx = canvas.getContext('2d');
@@ -227,6 +171,7 @@ function launchRewardConfetti() {
   }, 3400);
 }
 
+// --- PROGRESSO SALVO ---
 async function getProgress() {
   try {
     const doc = await db.collection("usuarios").doc("danilo").get();
@@ -246,6 +191,7 @@ async function saveProgress(progress) {
   localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
 }
 
+// --- DOMContentLoaded ---
 document.addEventListener("DOMContentLoaded", async function() {
   const progress = await getProgress();
   const dados = [];
@@ -274,9 +220,7 @@ document.addEventListener("DOMContentLoaded", async function() {
   for (let i = 1; i <= dias_total; i++) {
     const data_atual = new Date(inicio);
     data_atual.setDate(inicio.getDate() + i - 1);
-    if (habitos_incrementais[i]) {
-      habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
-    }
+    if (habitos_incrementais[i]) habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
     const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
     dados.push({
       data: data_atual.toLocaleDateString('pt-BR'),
@@ -296,6 +240,8 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (!grupos[id]) grupos[id] = [];
     grupos[id].push(obj);
   });
+
+  // === CALENDARIO HTML (com meses colapsáveis) ===
   let html = '';
   Object.entries(grupos).forEach(([id, dias]) => {
     const [mes, ano] = id.split("-");
@@ -303,7 +249,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     const anoNum = Number(ano);
     const nomeMes = monthNames[mesNum - 1].toUpperCase();
 
-    // MÊS HEADER PRIMEIRO
     html += `<div class='mes'>${nomeMes} ${ano}</div>
       <table>
         <thead>
@@ -348,7 +293,7 @@ document.addEventListener("DOMContentLoaded", async function() {
                 </div>
               `).join('')}
               <div class="habit-item" id="habititem-${dia.id}-ciclico">
-                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${cycleEmojis[(dia.mes + dia.ano) % cycleEmojis.length]}</span>
+                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${getCiclicoEmoji(dia.ciclico)}</span>
                 <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
                 <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
               </div>
@@ -358,9 +303,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
     html += `</tbody></table>`;
 
-    // Card de prêmio do mês (exceto aniversário) DEPOIS do mês
+    // Card de prêmio do mês (exceto aniversário)
     const reward = getRewardFor(mesNum, anoNum);
-    if(reward) {
+    if (reward) {
       html += `
         <div class="reward-card" data-reward="${mes}-${ano}">
           <div class="reward-icon">${reward.icon}</div>
@@ -370,10 +315,10 @@ document.addEventListener("DOMContentLoaded", async function() {
           <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
         </div>`;
     }
-    // Card de prêmio especial de aniversário DEPOIS do mês agosto/2025
-    if(mesNum === 8 && anoNum === 2025) {
+    // Card de prêmio especial de aniversário
+    if (mesNum === 8 && anoNum === 2025) {
       const annivReward = getRewardFor(mesNum, anoNum, 21);
-      if(annivReward) {
+      if (annivReward) {
         html += `
             <div class="reward-card" data-reward="birthday-2025">
               <div class="reward-icon">${annivReward.icon}</div>
@@ -388,6 +333,7 @@ document.addEventListener("DOMContentLoaded", async function() {
   });
   calendario.innerHTML = html;
 
+  // === Atribui progresso salvo ===
   Object.keys(progress).forEach(checkId => {
     const checkbox = document.getElementById(checkId);
     if (checkbox) {
@@ -399,7 +345,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
   });
 
-  // Atualiza barra de progresso dourada por dia
+  // === Barra de progresso dourada por dia ===
   function updateProgressBar(dayId, habitCount) {
     let checked = 0;
     for (let i = 0; i < habitCount; i++) {
@@ -421,10 +367,10 @@ document.addEventListener("DOMContentLoaded", async function() {
     const pct = diasCompletos / totalDias;
     const bar = document.getElementById(`reward-bar-${month}-${year}`);
     const unlocked = document.getElementById(`reward-unlocked-${month}-${year}`);
-    if(bar) {
+    if (bar) {
       bar.style.width = (pct * 100) + "%";
-      if(pct === 1) {
-        if(unlocked.style.display !== "block") {
+      if (pct === 1) {
+        if (unlocked.style.display !== "block") {
           unlocked.style.display = "block";
           launchRewardConfetti();
         }
@@ -437,9 +383,9 @@ document.addEventListener("DOMContentLoaded", async function() {
   function updateBirthdayRewardProgress(diasCompletos) {
     const bar = document.getElementById(`reward-bar-birthday`);
     const unlocked = document.getElementById(`reward-unlocked-birthday`);
-    if(bar) {
+    if (bar) {
       bar.style.width = (diasCompletos ? 100 : 0) + "%";
-      if(diasCompletos) {
+      if (diasCompletos) {
         unlocked.style.display = "block";
         launchRewardConfetti();
       } else {
@@ -448,9 +394,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
   }
 
-  // Dropdown toggle
+  // --- Dropdown de dias (habitual) ---
   document.querySelectorAll('tr.main-row').forEach(row => {
-    row.addEventListener('click', function(e) {
+    row.addEventListener('click', function (e) {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL' || e.target.classList.contains('habit-emoji')) return;
       const dropdownId = this.getAttribute('data-dropdown');
       const dropdown = document.getElementById(`dropdown-${dropdownId}`);
@@ -464,7 +410,7 @@ document.addEventListener("DOMContentLoaded", async function() {
           dd.classList.remove('active');
           dd.classList.add('drop-up');
           setTimeout(() => dd.classList.remove('drop-up'), 400);
-          document.querySelector(`.main-row[data-dropdown="${dd.id.replace('dropdown-','')}"]`).classList.remove('expanded');
+          document.querySelector(`.main-row[data-dropdown="${dd.id.replace('dropdown-', '')}"]`).classList.remove('expanded');
         });
         dropdown.classList.add('active');
         dropdown.classList.remove('drop-up');
@@ -473,6 +419,26 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
   });
 
+  // --- Dropdown animado de meses ---
+  function buildDropdowns() {
+    const meses = [...document.querySelectorAll('.mes')];
+    meses.forEach(mesEl => {
+      mesEl.addEventListener('click', function () {
+        this.classList.toggle('open');
+        let next = this.nextElementSibling;
+        if (!next) return;
+        // Esconde/mostra todas as tabelas e cards até encontrar o próximo .mes ou fim
+        while (next && !next.classList.contains('mes')) {
+          if (next.style.display === 'none') next.style.display = '';
+          else next.style.display = 'none';
+          next = next.nextElementSibling;
+        }
+      });
+    });
+  }
+  buildDropdowns();
+
+  // Checagem de hábitos concluídos
   function checkAllHabitsComplete(dayId, habitCount) {
     let complete = true;
     for (let i = 0; i < habitCount; i++) {
@@ -485,6 +451,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     return complete;
   }
 
+  // Som de celebração
   function playCelebrateSound() {
     const audio = document.getElementById('celebrate-audio');
     audio.currentTime = 0;
@@ -497,8 +464,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
   }
 
+  // Checkbox logic
   document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
+    checkbox.addEventListener('change', function () {
       const label = document.getElementById('label-' + this.id);
       if (label) label.classList.toggle('habit-done', this.checked);
 
@@ -528,7 +496,7 @@ document.addEventListener("DOMContentLoaded", async function() {
               setTimeout(() => dropdown.classList.remove('drop-up'), 400);
             }
             if (dayRow) dayRow.classList.remove('expanded');
-            unlockScroll();
+            document.body.style.overflow = "";
           }, 950);
         } else {
           dayRow.classList.remove('day-complete');
@@ -539,15 +507,16 @@ document.addEventListener("DOMContentLoaded", async function() {
     });
   });
 
+  // Emoji interativo
   document.querySelectorAll('.habit-emoji').forEach(emoji => {
-    emoji.addEventListener('mouseenter', function() {
+    emoji.addEventListener('mouseenter', function () {
       emoji.classList.add('glow');
       setTimeout(() => emoji.classList.remove('glow'), 680);
     });
-    emoji.addEventListener('mouseleave', function() {
+    emoji.addEventListener('mouseleave', function () {
       emoji.classList.remove('glow');
     });
-    emoji.addEventListener('click', function(e) {
+    emoji.addEventListener('click', function (e) {
       e.stopPropagation();
       const id = emoji.getAttribute('data-checkbox');
       const checkbox = document.getElementById(id);
@@ -570,7 +539,6 @@ document.addEventListener("DOMContentLoaded", async function() {
   });
 
   function updateAllRewardProgress() {
-    // Atualiza a barra de cada mês
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
       const reward = getRewardFor(Number(mes), Number(ano));
@@ -584,11 +552,10 @@ document.addEventListener("DOMContentLoaded", async function() {
       updateRewardProgress(mes, ano, dias.length, diasCompletos);
     });
     // Aniversário
-    if(document.getElementById("reward-bar-birthday")) {
-      // Só desbloqueia se dia 21/08/2025 for completado
+    if (document.getElementById("reward-bar-birthday")) {
       let birthdayDone = false;
-      dados.forEach((dia)=>{
-        if(dia.ano == 2025 && dia.mes == 8 && dia.diaDoMes == 21) {
+      dados.forEach((dia) => {
+        if (dia.ano == 2025 && dia.mes == 8 && dia.diaDoMes == 21) {
           const habitCount = dia.habitos.length + 1;
           birthdayDone = checkAllHabitsComplete(dia.id, habitCount - 1);
         }
@@ -598,7 +565,8 @@ document.addEventListener("DOMContentLoaded", async function() {
   }
   updateAllRewardProgress();
 
-  window.addEventListener('resize', function() {
+  // Redimensiona confetti se precisar
+  window.addEventListener('resize', function () {
     const canvas = document.getElementById('confetti-canvas');
     if (canvas.style.display === 'block') {
       canvas.width = window.innerWidth;
@@ -606,3 +574,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     }
   });
 });
+
+// --- Contadores estilizados/atualização visual (opcional extra) ---
+// Você pode incrementar aqui efeitos de animar número ou ajustar a posição via JS se desejar.
