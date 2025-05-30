@@ -4,8 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Danilo no 🎮</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+  <!-- FONTES -->
   <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -14,31 +15,25 @@
   <!-- Fundo da arcade -->
   <div class="arcade-bg"></div>
 
-  <!-- Logo superior fixa -->
-  <div class="sticky-header">
-    <div class="banner-gamer">
-      <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img">
+  <!-- Banner topo -->
+  <div class="banner-gamer">
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img">
+  </div>
+
+  <!-- Contadores arcade 3D -->
+  <div class="arcade-counters">
+    <div class="counter left">
+      <span class="counter-label">Dias Seguidos</span>
+      <span class="counter-value" id="seqCount">0</span>
+    </div>
+    <div class="counter right">
+      <span class="counter-label">Hábitos Feitos</span>
+      <span class="counter-value" id="doneCount">0</span>
     </div>
   </div>
 
-  <!-- Contadores estilizados nas laterais -->
-  <div id="habit-counters">
-    <div class="habit-counter left">
-      <div class="counter-glow">
-        <span class="counter-label">Dias Seguidos</span>
-        <span class="counter-value" id="seqCount">0</span>
-      </div>
-    </div>
-    <div class="habit-counter right">
-      <div class="counter-glow">
-        <span class="counter-label">Hábitos Feitos</span>
-        <span class="counter-value" id="doneCount">0</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tela da arcade com conteúdo scrollável -->
-  <div class="arcade-screen-container">
+  <!-- Tela principal com efeito curvatura (container) -->
+  <div class="container">
     <div id="calendario"></div>
   </div>
 
