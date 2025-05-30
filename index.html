@@ -2,64 +2,66 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Danilo no 🎮</title>
-  <!-- FONTES -->
-  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <title>Calendário Arcade</title>
+  <style>
+    /* CSS será inserido posteriormente */
+  </style>
 </head>
 <body>
-  <!-- Fundo arcade -->
-  <div class="arcade-bg"></div>
 
-  <!-- Banner topo -->
-  <div class="banner-gamer">
-    <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img">
+  <!-- Contêiner principal da máquina de arcade -->
+  <div class="arcade-container">
+    <!-- Tela do arcade onde o conteúdo será exibido -->
+    <div class="arcade-screen">
+      <!-- Calendário dentro da tela do arcade -->
+      <div class="calendar-container">
+        <!-- Lista de meses sempre visível no topo -->
+        <div class="month-list">
+          <span>Jan</span> | <span>Fev</span> | <span>Mar</span> | 
+          <span>Abr</span> | <span>Mai</span> | <span>Jun</span> | 
+          <span>Jul</span> | <span>Ago</span> | <span>Set</span> | 
+          <span>Out</span> | <span>Nov</span> | <span>Dez</span>
+        </div>
+        <!-- Conteúdo do calendário (tabela de dias) -->
+        <div class="calendar-content">
+          <table class="calendar-grid">
+            <thead>
+              <tr>
+                <th>Dom</th><th>Seg</th><th>Ter</th>
+                <th>Qua</th><th>Qui</th><th>Sex</th><th>Sáb</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <!-- Exemplo de primeira semana (dias vazios antes do dia 1) -->
+                <td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td>
+              </tr>
+              <!-- ... outras semanas do mês ... -->
+              <tr>
+                <td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- .calendar-content -->
+      </div> <!-- .calendar-container -->
+    </div> <!-- .arcade-screen -->
+  </div> <!-- .arcade-container -->
+
+  <!-- Definição do filtro SVG para efeito CRT convexo (mantido oculto) -->
+  <div style="display:none;">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Filtro de distorção convexa -->
+        <filter id="crtWarp" filterUnits="objectBoundingBox"
+                x="-0.3" y="-0.3" width="1.6" height="1.6">
+          <!-- Mapa de deslocamento (imagem RG) para distorção -->
+          <feImage xlink:href="distortion-map.png" result="map" />
+          <feDisplacementMap in="SourceGraphic" in2="map" scale="60"
+                             xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
   </div>
 
-  <!-- Contadores (dentro das telas azuis laterais) -->
-  <div class="arcade-counters transparent">
-    <div class="counter left">
-      <span class="counter-label">Dias Seguidos</span>
-      <span class="counter-value" id="seqCount">0</span>
-    </div>
-    <div class="counter right">
-      <span class="counter-label">Hábitos Feitos</span>
-      <span class="counter-value" id="doneCount">0</span>
-    </div>
-  </div>
-
-  <!-- Tela principal: overlay CRT + conteúdo centralizado -->
-  <div class="container arcade-screen-curve">
-    <div class="crt-glass-overlay"></div>
-    <div id="calendario"></div>
-  </div>
-
-  <!-- Confetti, celebração e audio -->
-  <canvas id="confetti-canvas"></canvas>
-  <canvas id="reward-confetti"></canvas>
-  <div id="celebrate-text">VAI MLK!!!</div>
-  <audio id="celebrate-audio">
-    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
-    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
-  </audio>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-  <!-- Script principal -->
-  <script src="script.js"></script>
-
-  <!-- SVG Filter para barrel distortion CRT (convexo) -->
-  <svg width="0" height="0" style="position:absolute;">
-    <filter id="crt-barrel">
-      <feTurbulence baseFrequency="0.02 0.07" seed="7" type="fractalNoise" numOctaves="2" result="turb"/>
-      <feDisplacementMap in2="turb" in="SourceGraphic" scale="24" xChannelSelector="R" yChannelSelector="B"/>
-    </filter>
-  </svg>
 </body>
 </html>
