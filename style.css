@@ -132,26 +132,24 @@ html, body {
   filter: brightness(1.1) contrast(1.2) drop-shadow(0 0 12px #ffe37966);
 }
 
-/* CENTRAL SCREEN - tela arcade */
 .arcade-screen-container {
   position: absolute;
   left: 50%;
-  top: 51.7%;
-  width: 930px;
-  height: 522px;
-  max-width: 87vw;
-  max-height: 77vh;
-  transform: translate(-50%, -52%) perspective(780px) rotateX(5deg) skewY(2deg);
+  top: 49.7%;
+  width: 820px;
+  height: 480px;
+  max-width: 70vw;
+  max-height: 54vw;
+  transform: translate(-50%, -50%);
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 12px 8px 18px 18px;
-  background: 
-    radial-gradient(ellipse at 56% 42%, #31f2f540 59%, #0d113b 99%),
-    rgba(20,45,60,0.88);
-  box-shadow: 0 14px 90px #000b, 0 0 120px #00d7ff36, 0 0 10px #2bdffb9c inset;
-  border-radius: 60px;
-  border: 8px solid #212c35;
+  padding: 36px 40px 24px 40px;
+  background: none;
   z-index: 10;
+  border-radius: 40px;
+  box-shadow: none;
+}
+
   /* Glass effect */
   backdrop-filter: blur(1.5px) brightness(1.09);
 }
