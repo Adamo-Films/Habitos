@@ -4,12 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Danilo no 🎮</title>
-  <!-- FONTES -->
-  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue:400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Fontes -->
+  <link href="https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <!-- Fundo arcade -->
@@ -17,10 +20,10 @@
 
   <!-- Banner topo -->
   <div class="banner-gamer">
-    <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img">
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img" />
   </div>
 
-  <!-- Contadores (ajustados para tela azul lateral) -->
+  <!-- Contadores -->
   <div class="arcade-counters transparent">
     <div class="counter left">
       <span class="counter-label">Dias Seguidos</span>
@@ -32,33 +35,33 @@
     </div>
   </div>
 
-  <!-- Tela principal arcade com efeito CRT -->
+  <!-- Tela principal: efeito CRT com container -->
   <div class="container arcade-screen-curve">
     <div class="crt-glass-overlay"></div>
-    <div id="calendario"></div>
+    <div id="calendario" class="calendario-container"></div>
   </div>
 
-  <!-- Confetti, celebração e audio -->
+  <!-- Confetti e celebração -->
   <canvas id="confetti-canvas"></canvas>
   <canvas id="reward-confetti"></canvas>
   <div id="celebrate-text">VAI MLK!!!</div>
   <audio id="celebrate-audio">
-    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg">
-    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg" />
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg" />
   </audio>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <!-- Script principal -->
   <script src="script.js"></script>
 
-  <!-- SVG Filter para barrel distortion CRT (convexo) -->
-  <svg width="0" height="0" style="position:absolute;">
-    <filter id="crt-barrel">
-      <feTurbulence baseFrequency="0.02 0.07" seed="8" type="fractalNoise" numOctaves="2" result="turb"/>
-      <feDisplacementMap in2="turb" in="SourceGraphic" scale="37" xChannelSelector="R" yChannelSelector="B"/>
+  <!-- Filtro CRT (curvatura estilo arcade) -->
+  <svg width="0" height="0" style="position:absolute; visibility:hidden;">
+    <filter id="crt-barrel" filterUnits="objectBoundingBox" x="-0.3" y="-0.3" width="1.6" height="1.6">
+      <feTurbulence baseFrequency="0.02 0.07" seed="7" type="fractalNoise" numOctaves="2" result="turb" />
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="60" xChannelSelector="R" yChannelSelector="G" />
     </filter>
   </svg>
 </body>
