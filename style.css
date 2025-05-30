@@ -16,7 +16,6 @@ html, body {
   overflow: hidden;
 }
 
-/* Fundo arcade */
 .arcade-bg {
   position: fixed;
   z-index: 0;
@@ -92,7 +91,7 @@ html, body {
   -webkit-text-fill-color: transparent;
 }
 
-/* CONTAINER DA TELA AZUL ARCADE */
+/* TELA PRINCIPAL (EFEITO CRT) */
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
@@ -103,7 +102,7 @@ html, body {
   max-height: 670px;
   min-width: 470px;
   min-height: 300px;
-  transform: translate(-50%, -54%) perspective(700px) scaleX(1.07) scaleY(1.06) rotateX(7deg) skewY(-2deg);
+  transform: translate(-50%, -54%);
   z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
@@ -114,7 +113,8 @@ html, body {
   align-items: stretch;
   padding: 0;
   pointer-events: auto;
-  overflow: visible;
+  overflow: hidden;
+  filter: url(#arcade-convex); /* Filtro convex só no container! */
 }
 
 .crt-glass-overlay {
@@ -143,7 +143,7 @@ html, body {
   100% {background-position: 80px 30px;}
 }
 
-/* CALENDÁRIO INTEIRO COM EFEITO CRT CONVEX */
+/* CALENDÁRIO INTEIRO 100% TRANSPARENTE */
 #calendario {
   position: relative;
   z-index: 3;
@@ -157,8 +157,60 @@ html, body {
   padding: 0 2vw 0 2vw;
   overflow-y: auto;
   text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
-  /* CRT convex effect aqui! */
-  filter: url(#arcade-convex);
+}
+
+/* BARRA DE HIGHLIGHT AJUSTADA (NÃO VAZA MAIS) */
+tr.main-row.day-complete {
+  background: linear-gradient(90deg, #23e2f9 0%, #ffe379 60%, #f7d865 100%) !important;
+  color: #283a1e !important;
+  font-weight: bold;
+  text-shadow: 0 1px 3px #fff, 0 0 20px #000b;
+  box-shadow: 0 0 22px #0ff6, 0 0 12px #ffe37999;
+  border-radius: 18px;
+  mix-blend-mode: screen;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+tr.main-row.expanded {
+  border: 2px solid #ffe37966;
+  box-shadow: 0 0 12px #fff07b66;
+}
+
+tr.main-row.day-complete .progress-text,
+tr.main-row.day-complete td {
+  color: #171818 !important;
+  text-shadow: 0 0 12px #fff5, 0 0 4px #ffe37933;
+}
+
+/* LINHAS TABELA - EVITA EFEITO SAIR DA TELA */
+tr.main-row, tr.dropdown {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: none !important;
+  color: #fff;
+  margin-bottom: 18px;
+  border: none !important;
+  box-shadow: none !important;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* CELULAS */
+th, td {
+  padding: 7px 10px;
+  font-size: 1em;
+  text-align: left;
+  background: transparent !important;
+  border: none !important;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* LISTA DE MESES SEMPRE VISÍVEL */
@@ -190,61 +242,6 @@ html, body {
   transform: rotate(0deg);
 }
 .mes.open::after { transform: rotate(180deg); }
-
-/* TABELA */
-table {
-  border-collapse: collapse;
-  width: 100%;
-  background: none !important;
-  color: #fff;
-  margin-bottom: 18px;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* CABEÇALHO E DIAS */
-th, td {
-  padding: 7px 10px;
-  font-size: 1em;
-  text-align: left;
-  background: transparent !important;
-  border: none !important;
-}
-
-/* LINHAS PRINCIPAIS */
-tr.main-row {
-  cursor: pointer;
-  --progress: 0;
-  background: transparent !important;
-  color: #ffe379;
-  border-radius: 17px;
-  border-bottom: none !important;
-  box-shadow: none;
-  filter: brightness(1.05) contrast(1.12);
-  transition: color 0.25s;
-}
-
-/* LINHA COMPLETA */
-tr.main-row.day-complete {
-  background: linear-gradient(90deg, #23e2f9 0%, #ffe379 60%, #f7d865 100%) !important;
-  color: #283a1e !important;
-  font-weight: bold;
-  text-shadow: 0 1px 3px #fff, 0 0 20px #000b;
-  box-shadow: 0 0 36px #0ff6, 0 0 20px #ffe37999;
-  border-radius: 22px 20px 22px 20px;
-  mix-blend-mode: screen;
-}
-
-tr.main-row.expanded {
-  border: 2px solid #ffe37966;
-  box-shadow: 0 0 22px #fff07b66;
-}
-
-tr.main-row.day-complete .progress-text,
-tr.main-row.day-complete td {
-  color: #171818 !important;
-  text-shadow: 0 0 12px #fff5, 0 0 4px #ffe37933;
-}
 
 /* EFEITO NEON DOS DIAS/MESES */
 .progress-text.gold {
@@ -285,15 +282,15 @@ tr.dropdown {
   justify-content: center;
   background: rgba(30,70,150,0.07);
   border-radius: 17px;
-  box-shadow: 0 0 60px 15px #ffe37944, 0 0 32px #51ffe788, 0 0 80px 20px #cf28ff33;
+  box-shadow: 0 0 30px 10px #ffe37933, 0 0 14px #51ffe733, 0 0 36px 8px #cf28ff22;
   margin: 34px auto 12px auto;
   padding: 19px 22px 13px 22px;
   width: 85%;
   max-width: 650px;
   border: none !important;
-  filter: drop-shadow(0 0 22px #ffe379cc)
-          drop-shadow(0 0 50px #51ffe799)
-          drop-shadow(0 0 35px #cf28ff77);
+  filter: drop-shadow(0 0 12px #ffe379aa)
+          drop-shadow(0 0 20px #51ffe755)
+          drop-shadow(0 0 12px #cf28ff33);
   position: relative;
   z-index: 5;
 }
@@ -301,8 +298,8 @@ tr.dropdown {
   font-size: 2.6em;
   margin-bottom: 5px;
   filter: drop-shadow(0 0 20px #ffe379aa)
-          drop-shadow(0 0 35px #cf28ff99)
-          drop-shadow(0 0 32px #51ffe799);
+          drop-shadow(0 0 18px #cf28ff44)
+          drop-shadow(0 0 18px #51ffe755);
   animation: reward-pop 1.1s cubic-bezier(.44,1.3,.5,1.11);
 }
 @keyframes reward-pop {
