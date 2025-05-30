@@ -28,8 +28,8 @@ html, body {
 
 /* Banner e logo */
 .banner-gamer {
-  width: 370px;
-  margin: 22px auto 0 auto;
+  width: 400px;
+  margin: 18px auto 0 auto;
   z-index: 22;
   position: relative;
   display: flex;
@@ -66,7 +66,7 @@ html, body {
 .counter.right { right: 0; color: #fff; }
 .counter-label {
   font-family: 'Bungee', 'Luckiest Guy', sans-serif;
-  font-size: 1.09em;
+  font-size: 1.5em;
   color: #fff;
   text-shadow: 0 1px 2px #19e0fcaa, 0 1px 8px #000d, 0 1px 20px #ffe379bb;
   font-weight: 900;
@@ -96,51 +96,24 @@ html, body {
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
-  top: 54%;
+  top: 50%;
   width: 74vw;
   height: 58vh;
   max-width: 1120px;
   max-height: 670px;
   min-width: 470px;
   min-height: 300px;
-  transform: translate(-50%, -54%) perspective(700px) scaleX(1.07) scaleY(1.06) rotateX(7deg) skewY(-2deg);
+  transform: translate(-50%, -50%) perspective(700px) scaleX(1.07) scaleY(1.06) rotateX(0deg) skewY(0deg);
   z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
-  box-shadow: 0 0 200px 70px #32caff36, 0 0 50px 4px #21e3ff14;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
   padding: 0;
   pointer-events: auto;
-  overflow: visible;
-}
-
-.crt-glass-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
-  background: rgba(0, 0, 0, 0.04);
-  mix-blend-mode: lighten;
-}
-
-.crt-noise {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 12;
-  background: url('https://media.githubusercontent.com/media/aniftyco/awesome-noise-textures/main/noise-512x512.png?raw=true');
-  opacity: 0.08;
-  mix-blend-mode: screen;
-  background-size: 180px 180px;
-  animation: noiseMove 1.4s steps(8) infinite;
-}
-@keyframes noiseMove {
-  0% {background-position: 0 0;}
-  100% {background-position: 80px 30px;}
+  overflow: invisible;
 }
 
 /* CALENDÁRIO INTEIRO COM EFEITO CRT CONVEX */
@@ -265,7 +238,7 @@ tr.dropdown {
   padding: 8px 14px;
   border-radius: 13px;
   box-shadow: 0 1px 6px #0af6;
-  color: #fff;
+  color: none;
   transition: background 0.25s;
   position: relative;
 }
@@ -361,6 +334,6 @@ tr.dropdown {
 /* Scrollbar custom para calendário */
 #calendario::-webkit-scrollbar { width: 7px; }
 #calendario::-webkit-scrollbar-thumb {
-  background-color: #0ef5;
+  background-color: transparent;
   border-radius: 11px;
 }
