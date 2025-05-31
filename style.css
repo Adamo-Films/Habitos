@@ -456,3 +456,29 @@ tr.dropdown {
   .counter-value { font-size: 1.35em; }
   .counter { min-height: 25px; }
 }
+
+/* Glow Realista - Luz de monitor para textos e emojis do calendário */
+#calendario,
+#calendario th,
+#calendario td,
+#calendario .progress-text,
+#calendario .mes,
+#calendario .habit-label,
+#calendario .habit-emoji,
+#calendario .habit-item,
+#calendario .reward-card,
+#calendario .reward-icon,
+#calendario .reward-card .title,
+#calendario .reward-card .desc,
+#calendario .reward-unlocked {
+  text-shadow:
+    0 0 18px #31fcff99,
+    0 0 32px #ffe37988,
+    0 0 7px #19e0fc66,
+    0 0 2px #fff4;
+}
+
+#calendario .habit-emoji {
+  filter: drop-shadow(0 0 10px #51ffe7bb)
+          drop-shadow(0 0 22px #ffe37988);
+}
