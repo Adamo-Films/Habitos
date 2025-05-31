@@ -114,10 +114,12 @@ html, body {
 .counter.left .counter-label {
   transform: perspective(1000px) scaleX(1.33) skewY(-7deg) translateX(-50%);
   text-align: center;
+   margin-left: 4vw;
 }
 .counter.right .counter-label {
   transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(50%);
   text-align: center;
+  margin-right: 4vw;
 }
 
 .counter-value {
@@ -146,10 +148,12 @@ html, body {
 .counter.left .counter-value {
   transform: perspective(350px) scaleX(1.33) skewY(-7deg) translateX(-8%);
   text-align: center;
+  margin-left: 4vw;
 }
 .counter.right .counter-value {
   transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(8%);
   text-align: center;
+  margin-right: 4vw;
 }
 
 /* Arcade principal: container limitado à tela azul */
