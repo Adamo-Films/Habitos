@@ -58,41 +58,48 @@ html, body {
 
 /* CONTADORES SEM FUNDO */
 .arcade-counters {
-  position: fixed;
-  top: 130px;
-  width: 95vw;
+  position: absolute;        /* Centraliza verticalmente */
+  top: 50%;
   left: 0;
+  width: 100vw;
+  height: 0;
   z-index: 30;
   display: flex;
   justify-content: space-between;
+  align-items: center;       /* Centraliza o conteúdo verticalmente */
   pointer-events: none;
-  height: 68vh;
-  align-items: center;
+  transform: translateY(-50%);
   background: none !important;
 }
 
 .counter {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;   /* Centraliza o texto do contador */
   width: 16vw;
   max-width: 310px;
   min-width: 80px;
   min-height: 210px;
-  height: 74%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  height: 100%;
   pointer-events: none;
+  background: none !important;
   box-sizing: border-box;
   padding: 0 0.2vw;
-  background: none !important;  /* sem fundo! */
+  margin: 0;
 }
 
 .counter.left, .counter.right {
-  clip-path: none !important; /* Remove trapézio */
+  clip-path: none !important;
+  margin: 0;
 }
 
-/* Texto 100% reto */
+.counter-label, .counter-value {
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+}
+
 .counter-label {
   font-family: 'Bungee', 'Luckiest Guy', sans-serif;
   font-size: 2.1em;
@@ -101,25 +108,17 @@ html, body {
   font-weight: 900;
   letter-spacing: 0.09em;
   line-height: 1.12;
-  margin-top: 36px;
+  margin-top: 0;
   margin-bottom: 16px;
-  pointer-events: none;
   text-transform: uppercase;
-  text-align: center;
-  width: 100%;
-  /* efeito de perspectiva só no texto */
-  transform: perspective(300px) scaleX(1.22);
+  transform: none;
 }
 
-.counter.left .counter-label {
-  transform: perspective(1000px) scaleX(1.33) skewY(-7deg) translateX(-50%);
-  text-align: center;
-   margin-left: 40vw;
-}
+.counter.left .counter-label,
 .counter.right .counter-label {
-  transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(50%);
-  text-align: center;
-  margin-right: 40vw;
+  transform: none;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .counter-value {
@@ -133,27 +132,21 @@ html, body {
   border-radius: 16px;
   display: inline-block;
   padding: 0 10px 0 10px;
-  margin-top: 16px;
+  margin-top: 0;
   margin-bottom: 0;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  pointer-events: none;
   line-height: 1;
-  text-align: center;
   width: 100%;
-  transform: perspective(350px) scaleX(1.18);
+  transform: none;
 }
 
-.counter.left .counter-value {
-  transform: perspective(350px) scaleX(1.33) skewY(-7deg) translateX(-8%);
-  text-align: center;
-  margin-left: 4vw;
-}
+.counter.left .counter-value,
 .counter.right .counter-value {
-  transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(8%);
-  text-align: center;
-  margin-right: 4vw;
+  transform: none;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Arcade principal: container limitado à tela azul */
@@ -203,7 +196,6 @@ html, body {
   filter: url(#arcade-convex);
   box-sizing: border-box;
   border: none !important;
-  /* Fade nas letras usando mask */
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
@@ -271,7 +263,6 @@ tr.main-row {
   transition: color 0.25s;
 }
 
-/* LINHA COMPLETA */
 tr.main-row.day-complete {
   background: linear-gradient(90deg, #23e2f9 0%, #ffe379 60%, #f7d865 100%) !important;
   color: #283a1e !important;
@@ -432,7 +423,11 @@ tr.dropdown {
     top: 54%;
   }
   .arcade-counters {
-    height: 31vh;
+    width: 100vw;
+    height: 0;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
   }
   .counter-label { font-size: 1.08em; }
   .counter-value { font-size: 2.8em; }
@@ -450,7 +445,13 @@ tr.dropdown {
     font-size: 0.77em;
     padding: 0 1vw 0 1vw;
   }
-  .arcade-counters { height: 17vh; }
+  .arcade-counters {
+    width: 100vw;
+    height: 0;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
   .counter-label { font-size: 0.87em; }
   .counter-value { font-size: 1.35em; }
   .counter { min-height: 25px; }
