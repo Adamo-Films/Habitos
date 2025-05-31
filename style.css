@@ -155,12 +155,12 @@ html, body {
 /* Arcade principal: container limitado à tela azul */
 .arcade-screen-curve {
   position: absolute;
-  left: 46%;
+  left: 49%;
   top: 54%;
   width: 100vw;
   height: 75vh;
-  max-width: 850px;
-  max-height: 470px;
+  max-width: 870px;
+  max-height: 490px;
   min-width: 240px;
   min-height: 120px;
   transform: translate(-50%, -50%);
@@ -183,8 +183,8 @@ html, body {
   top: 50%;
   width: 110%;
   height: 110%;
-  max-width: 99%;
-  max-height: 99%;
+  max-width: 110%;
+  max-height: 110%;
   min-width: 120px;
   min-height: 70px;
   transform: translate(-50%, -50%);
