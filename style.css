@@ -155,10 +155,10 @@ html, body {
 /* Arcade principal: container limitado à tela azul */
 .arcade-screen-curve {
   position: absolute;
-  left: 49%;
+  left: 50%;
   top: 54%;
-  width: 100vw;
-  height: 75vh;
+  width: 90vw;
+  height: 70vh;
   max-width: 870px;
   max-height: 490px;
   min-width: 240px;
@@ -183,8 +183,8 @@ html, body {
   top: 50%;
   width: 110%;
   height: 110%;
-  max-width: 110%;
-  max-height: 110%;
+  max-width: 99%;
+  max-height: 99%;
   min-width: 120px;
   min-height: 70px;
   transform: translate(-50%, -50%);
@@ -200,8 +200,8 @@ html, body {
   box-sizing: border-box;
   border: none !important;
   /* Fade nas letras usando mask */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
 /* LISTA DE MESES SEMPRE VISÍVEL */
