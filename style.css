@@ -30,7 +30,7 @@ html, body {
 .banner-gamer {
   position: absolute;
   left: 50%;
-  top: 22px;
+  top: 18px;
   width: 98vw;
   max-width: 770px;
   min-width: 160px;
@@ -157,8 +157,8 @@ html, body {
   position: absolute;
   left: 50%;
   top: 54%;
-  width: 75vw;
-  height: 56vh;
+  width: 82vw;
+  height: 63vh;
   max-width: 850px;
   max-height: 470px;
   min-width: 240px;
