@@ -61,7 +61,7 @@ html, body {
   position: fixed;
   top: 130px;
   width: 100vw;
-  left: 200px;
+  left: 0;
   z-index: 30;
   display: flex;
   justify-content: space-between;
@@ -112,11 +112,11 @@ html, body {
 }
 
 .counter.left .counter-label {
-  transform: perspective(350px) scaleX(1.33) skewY(-7deg) translateX(-8%);
+  transform: perspective(350px) scaleX(1.33) skewY(-7deg) translateX(-50%);
   text-align: left;
 }
 .counter.right .counter-label {
-  transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(8%);
+  transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(50%);
   text-align: right;
 }
 
