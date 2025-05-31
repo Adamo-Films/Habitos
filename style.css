@@ -265,6 +265,7 @@ html, body {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
+/* GLOW ILUMINADO REALISTA DENTRO DO CALENDÁRIO */
 #calendario,
 #calendario th,
 #calendario td,
@@ -286,16 +287,22 @@ html, body {
     drop-shadow(0 0 14px #ffe37966);
 }
 
-/* PRÊMIOS - Glow RGB, pulsante, super vibrante no container, texto RGB, emoji pulsante */
-#calendario .reward-card,
-#calendario .reward-bar-bg {
-  animation: rgb-glow-pulse 2.6s infinite linear;
+/* PRÊMIOS - Glow RGB, pulsante só no container, barra estática, emoji pulsante */
+#calendario .reward-card {
+  animation: rgb-glow-pulse 5.2s infinite linear;
   box-shadow:
     0 0 22px 8px #cf28ff,
     0 0 28px 16px #51ffe7,
     0 0 16px 10px #00f0ff,
     0 0 18px 12px #ff00ff;
   filter: brightness(1.2) contrast(1.2) saturate(2.8);
+}
+
+#calendario .reward-bar-bg {
+  box-shadow:
+    0 0 10px 2px #51ffe7bb,
+    0 0 13px 3px #cf28ff99;
+  filter: none;
 }
 
 #calendario .reward-icon {
@@ -477,7 +484,8 @@ tr.dropdown {
   overflow: hidden;
   margin-top: 7px;
   margin-bottom: 7px;
-  box-shadow: 0 0 17px #51ffe77a;
+  box-shadow: 0 0 10px 2px #51ffe7bb, 0 0 13px 3px #cf28ff99;
+  filter: none;
 }
 .reward-bar {
   height: 100%;
