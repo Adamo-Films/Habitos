@@ -26,15 +26,15 @@ html, body {
   background-size: cover;
 }
 
-/* HEADER + LOGO */
+/* Logo grande e centralizada */
 .banner-gamer {
   position: absolute;
   left: 50%;
-  top: 24px;
-  width: 450px;
-  max-width: 40vw;
-  min-width: 280px;
-  height: 104px;
+  top: 22px;
+  width: 70vw;
+  max-width: 530px;
+  min-width: 180px;
+  height: auto;
   transform: translateX(-50%);
   z-index: 22;
   display: flex;
@@ -45,7 +45,8 @@ html, body {
 .banner-gamer-img {
   width: 100%;
   height: auto;
-  max-height: 104px;
+  max-height: 135px;
+  min-height: 85px;
   display: block;
   object-fit: contain;
   filter: drop-shadow(0 0 20px #19e0fcaa)
@@ -53,10 +54,10 @@ html, body {
   pointer-events: none;
 }
 
-/* CONTADORES 3D LATERAIS */
+/* CONTADORES LATERAIS ARCADE PERSPECTIVA */
 .arcade-counters {
   position: fixed;
-  top: 116px;
+  top: 130px;
   width: 100vw;
   left: 0;
   z-index: 30;
@@ -69,94 +70,85 @@ html, body {
 }
 
 .counter {
-  width: 16vw;
-  max-width: 340px;
-  min-width: 130px;
-  min-height: 330px;
-  height: 96%;
+  position: relative;
+  width: 18vw;
+  max-width: 370px;
+  min-width: 80px;
+  min-height: 280px;
+  height: 88%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  background: none !important;
   pointer-events: none;
   box-sizing: border-box;
-  padding: 0 0.5vw;
+  padding: 0 0.4vw;
+  background: linear-gradient(155deg, #0e55a5 75%, #243986 100%);
+  box-shadow: 0 0 30px #1fc8ff55, 0 8px 48px #000b;
 }
 
+/* Trapézio visual — esquerda maior */
+.counter.left {
+  margin-left: 0.7vw;
+  clip-path: polygon(22% 0%, 100% 0, 78% 100%, 0% 100%);
+}
+
+/* Trapézio visual — direita maior */
+.counter.right {
+  margin-right: 0.7vw;
+  clip-path: polygon(0 0, 78% 0, 100% 100%, 22% 100%);
+}
+
+/* Texto 100% reto dentro do trapézio */
 .counter-label {
   font-family: 'Bungee', 'Luckiest Guy', sans-serif;
-  font-size: 2.5em;
+  font-size: 2.05em;
   color: #fff;
   text-shadow: 0 1px 2px #19e0fcaa, 0 1px 8px #000d, 0 1px 20px #ffe379bb;
   font-weight: 900;
-  letter-spacing: 0.12em;
-  margin-bottom: 0.07em;
-  margin-top: 0.09em;
-  line-height: 1.0;
+  letter-spacing: 0.08em;
+  line-height: 1.03;
+  margin-top: 28px;
+  margin-bottom: 14px;
   pointer-events: none;
   text-transform: uppercase;
+  text-align: center;
+  width: 100%;
 }
-
 .counter-value {
   font-family: 'Luckiest Guy', 'Bungee', cursive;
-  font-size: 6.8em;
+  font-size: 6.2em;
   background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
   color: #fdf5c6;
   font-weight: 900;
   letter-spacing: 0.04em;
   text-shadow: 0 2px 7px #ffe379, 0 0 18px #1ffbf4bb, 0 7px 35px #1fc8ffd0;
-  border-radius: 20px;
+  border-radius: 16px;
   display: inline-block;
-  padding: 0 24px 0 24px;
-  margin-top: 0.18em;
-  margin-bottom: 0.15em;
+  padding: 0 16px 0 16px;
+  margin-top: 15px;
+  margin-bottom: 0;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   pointer-events: none;
   line-height: 1;
-}
-
-.counter.left {
-  align-items: flex-start;
-  text-align: left;
-  transform-origin: right center;
-  transform: skewX(-22deg) scaleX(0.86) scaleY(1.05);
-  /* sombra azul simulando luz do painel */
-  filter: drop-shadow(0 0 30px #51ffe755) drop-shadow(8px 0 50px #0ff2);
-}
-
-.counter.right {
-  align-items: flex-end;
-  text-align: right;
-  transform-origin: left center;
-  transform: skewX(22deg) scaleX(0.86) scaleY(1.05);
-  /* sombra azul simulando luz do painel */
-  filter: drop-shadow(0 0 30px #51ffe755) drop-shadow(-8px 0 50px #0ff2);
-}
-
-/* EFEITO DE BLOCOS NAS LINHAS DOS CONTADORES */
-.counter-label,
-.counter-value {
+  text-align: center;
   width: 100%;
-  display: block;
-  word-break: break-all;
-  pointer-events: none;
 }
 
-/* CONTAINER DA TELA AZUL ARCADE */
+/* Arcade principal: container limitado à tela azul */
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
   top: 54%;
-  width: 74vw;
-  height: 58vh;
+  width: 71vw;
+  height: 56vh;
   max-width: 1120px;
-  max-height: 670px;
-  min-width: 370px;
-  min-height: 300px;
-  transform: translate(-50%, -50%) perspective(700px) scaleX(1.07) scaleY(1.06) rotateX(0deg) skewY(0deg);
+  max-height: 610px;
+  min-width: 300px;
+  min-height: 200px;
+  transform: translate(-50%, -50%);
   z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
@@ -170,15 +162,21 @@ html, body {
   box-shadow: 0 0 70px 5px #31fcff33;
 }
 
-/* CALENDÁRIO INTEIRO COM EFEITO CRT CONVEX */
+/* CALENDÁRIO — 100% transparente e SEMPRE contido! */
 #calendario {
-  position: relative;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 97%;
+  height: 97%;
+  max-width: 97%;
+  max-height: 97%;
+  min-width: 160px;
+  min-height: 110px;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  background: transparent !important;
+  background: none !important;
   color: #ffe379;
   font-family: 'Antonio', 'Bebas Neue', Arial, sans-serif;
   padding: 0 2vw 0 2vw;
@@ -186,24 +184,10 @@ html, body {
   text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
   filter: url(#arcade-convex);
   box-sizing: border-box;
-}
-
-#calendario::before, #calendario::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 48px;
-  pointer-events: none;
-  z-index: 9;
-}
-#calendario::before {
-  top: 0;
-  background: linear-gradient(to bottom, rgba(10,24,59,0.86) 0%, rgba(10,24,59,0.13) 88%, rgba(10,24,59,0) 100%);
-}
-#calendario::after {
-  bottom: 0;
-  background: linear-gradient(to top, rgba(10,24,59,0.86) 0%, rgba(10,24,59,0.13) 88%, rgba(10,24,59,0) 100%);
+  border: none !important;
+  /* Fade nas letras usando mask */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
 }
 
 /* LISTA DE MESES SEMPRE VISÍVEL */
@@ -414,42 +398,42 @@ tr.dropdown {
 @media (max-width: 980px) {
   .banner-gamer {
     width: 85vw;
-    min-width: 180px;
+    min-width: 130px;
     max-width: 96vw;
-    height: 76px;
-    top: 10px;
+    top: 8px;
   }
   .banner-gamer-img {
-    max-height: 76px;
+    max-height: 78px;
+    min-height: 48px;
   }
   .arcade-screen-curve {
     width: 98vw;
-    min-width: 220px;
+    min-width: 140px;
     max-width: 99vw;
     left: 50%;
     top: 54%;
   }
   .arcade-counters {
-    height: 44vh;
+    height: 34vh;
   }
-  .counter-label { font-size: 1.3em; }
-  .counter-value { font-size: 4em; }
-  .counter { min-height: 140px; }
+  .counter-label { font-size: 1.1em; }
+  .counter-value { font-size: 3.2em; }
+  .counter { min-height: 110px; }
 }
 @media (max-width: 650px) {
   .arcade-screen-curve {
     width: 99vw;
-    min-width: 120px;
+    min-width: 70px;
     left: 50%;
     top: 54%;
     border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;
   }
   #calendario {
-    font-size: 0.92em;
+    font-size: 0.82em;
     padding: 0 1vw 0 1vw;
   }
-  .arcade-counters { height: 30vh; }
-  .counter-label { font-size: 1em; }
-  .counter-value { font-size: 2.5em; }
-  .counter { min-height: 60px; }
+  .arcade-counters { height: 21vh; }
+  .counter-label { font-size: 0.95em; }
+  .counter-value { font-size: 2.2em; }
+  .counter { min-height: 36px; }
 }
