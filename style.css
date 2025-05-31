@@ -61,7 +61,7 @@ html, body {
   position: fixed;
   top: 130px;
   width: 100vw;
-  left: 0;
+  left: 20;
   z-index: 30;
   display: flex;
   justify-content: space-between;
