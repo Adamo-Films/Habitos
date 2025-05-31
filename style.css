@@ -58,7 +58,7 @@ html, body {
 
 /* CONTADORES SEM FUNDO */
 .arcade-counters {
-  position: absolute;        /* Centraliza verticalmente */
+  position: absolute;
   top: 50%;
   left: 0;
   width: 100vw;
@@ -66,7 +66,7 @@ html, body {
   z-index: 30;
   display: flex;
   justify-content: space-between;
-  align-items: center;       /* Centraliza o conteúdo verticalmente */
+  align-items: center;
   pointer-events: none;
   transform: translateY(-50%);
   background: none !important;
@@ -76,7 +76,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;   /* Centraliza o texto do contador */
+  justify-content: center;
   width: 16vw;
   max-width: 310px;
   min-width: 80px;
@@ -198,6 +198,34 @@ html, body {
   border: none !important;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
+}
+
+/* GLOW ILUMINADO REALISTA DENTRO DO CALENDÁRIO */
+#calendario,
+#calendario th,
+#calendario td,
+#calendario .progress-text,
+#calendario .mes,
+#calendario .habit-label,
+#calendario .habit-emoji,
+#calendario .habit-item,
+#calendario .reward-card,
+#calendario .reward-icon,
+#calendario .reward-card .title,
+#calendario .reward-card .desc,
+#calendario .reward-unlocked {
+  text-shadow:
+    0 0 14px #51ffe7bb,
+    0 0 28px #ffe37955,
+    0 0 8px #fff9,
+    0 0 2px #fff7;
+}
+
+/* Reforça o brilho só para o emoji dos hábitos */
+#calendario .habit-emoji {
+  filter:
+    drop-shadow(0 0 7px #51ffe7cc)
+    drop-shadow(0 0 18px #ffe37966);
 }
 
 /* LISTA DE MESES SEMPRE VISÍVEL */
@@ -455,30 +483,4 @@ tr.dropdown {
   .counter-label { font-size: 0.87em; }
   .counter-value { font-size: 1.35em; }
   .counter { min-height: 25px; }
-}
-
-/* Glow Realista - Luz de monitor para textos e emojis do calendário */
-#calendario,
-#calendario th,
-#calendario td,
-#calendario .progress-text,
-#calendario .mes,
-#calendario .habit-label,
-#calendario .habit-emoji,
-#calendario .habit-item,
-#calendario .reward-card,
-#calendario .reward-icon,
-#calendario .reward-card .title,
-#calendario .reward-card .desc,
-#calendario .reward-unlocked {
-  text-shadow:
-    0 0 18px #31fcff99,
-    0 0 32px #ffe37988,
-    0 0 7px #19e0fc66,
-    0 0 2px #fff4;
-}
-
-#calendario .habit-emoji {
-  filter: drop-shadow(0 0 10px #51ffe7bb)
-          drop-shadow(0 0 22px #ffe37988);
 }
