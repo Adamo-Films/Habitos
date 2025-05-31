@@ -26,14 +26,14 @@ html, body {
   background-size: cover;
 }
 
-/* Logo grande e centralizada */
+/* Logo ainda maior, centralizada */
 .banner-gamer {
   position: absolute;
   left: 50%;
   top: 22px;
-  width: 70vw;
-  max-width: 530px;
-  min-width: 180px;
+  width: 98vw;
+  max-width: 770px;
+  min-width: 160px;
   height: auto;
   transform: translateX(-50%);
   z-index: 22;
@@ -43,18 +43,20 @@ html, body {
   pointer-events: none;
 }
 .banner-gamer-img {
-  width: 100%;
+  width: 98%;
+  max-width: 750px;
+  min-width: 120px;
   height: auto;
-  max-height: 135px;
-  min-height: 85px;
+  max-height: 240px;
+  min-height: 75px;
   display: block;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px #19e0fcaa)
-          drop-shadow(0 0 30px #ff38fdaa);
+  filter: drop-shadow(0 0 30px #19e0fcaa)
+          drop-shadow(0 0 60px #ff38fdaa);
   pointer-events: none;
 }
 
-/* CONTADORES LATERAIS ARCADE PERSPECTIVA */
+/* CONTADORES SEM FUNDO */
 .arcade-counters {
   position: fixed;
   top: 130px;
@@ -71,62 +73,65 @@ html, body {
 
 .counter {
   position: relative;
-  width: 18vw;
-  max-width: 370px;
+  width: 16vw;
+  max-width: 310px;
   min-width: 80px;
-  min-height: 280px;
-  height: 88%;
+  min-height: 210px;
+  height: 74%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   pointer-events: none;
   box-sizing: border-box;
-  padding: 0 0.4vw;
-  background: linear-gradient(155deg, #0e55a5 75%, #243986 100%);
-  box-shadow: 0 0 30px #1fc8ff55, 0 8px 48px #000b;
+  padding: 0 0.2vw;
+  background: none !important;  /* sem fundo! */
 }
 
-/* Trapézio visual — esquerda maior */
-.counter.left {
-  margin-left: 0.7vw;
-  clip-path: polygon(22% 0%, 100% 0, 78% 100%, 0% 100%);
+.counter.left, .counter.right {
+  clip-path: none !important; /* Remove trapézio */
 }
 
-/* Trapézio visual — direita maior */
-.counter.right {
-  margin-right: 0.7vw;
-  clip-path: polygon(0 0, 78% 0, 100% 100%, 22% 100%);
-}
-
-/* Texto 100% reto dentro do trapézio */
+/* Texto 100% reto */
 .counter-label {
   font-family: 'Bungee', 'Luckiest Guy', sans-serif;
-  font-size: 2.05em;
+  font-size: 2.1em;
   color: #fff;
-  text-shadow: 0 1px 2px #19e0fcaa, 0 1px 8px #000d, 0 1px 20px #ffe379bb;
+  text-shadow: 0 2px 14px #19e0fcaa, 0 1px 12px #000d, 0 1px 30px #ffe379bb;
   font-weight: 900;
-  letter-spacing: 0.08em;
-  line-height: 1.03;
-  margin-top: 28px;
-  margin-bottom: 14px;
+  letter-spacing: 0.09em;
+  line-height: 1.12;
+  margin-top: 36px;
+  margin-bottom: 16px;
   pointer-events: none;
   text-transform: uppercase;
   text-align: center;
   width: 100%;
+  /* efeito de perspectiva só no texto */
+  transform: perspective(300px) scaleX(1.22);
 }
+
+.counter.left .counter-label {
+  transform: perspective(350px) scaleX(1.33) skewY(-7deg) translateX(-8%);
+  text-align: left;
+}
+.counter.right .counter-label {
+  transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(8%);
+  text-align: right;
+}
+
 .counter-value {
   font-family: 'Luckiest Guy', 'Bungee', cursive;
-  font-size: 6.2em;
+  font-size: 6.6em;
   background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
   color: #fdf5c6;
   font-weight: 900;
-  letter-spacing: 0.04em;
-  text-shadow: 0 2px 7px #ffe379, 0 0 18px #1ffbf4bb, 0 7px 35px #1fc8ffd0;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 12px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
   border-radius: 16px;
   display: inline-block;
-  padding: 0 16px 0 16px;
-  margin-top: 15px;
+  padding: 0 10px 0 10px;
+  margin-top: 16px;
   margin-bottom: 0;
   background-clip: text;
   -webkit-background-clip: text;
@@ -135,6 +140,16 @@ html, body {
   line-height: 1;
   text-align: center;
   width: 100%;
+  transform: perspective(350px) scaleX(1.18);
+}
+
+.counter.left .counter-value {
+  transform: perspective(350px) scaleX(1.33) skewY(-7deg) translateX(-8%);
+  text-align: left;
+}
+.counter.right .counter-value {
+  transform: perspective(350px) scaleX(1.33) skewY(7deg) translateX(8%);
+  text-align: right;
 }
 
 /* Arcade principal: container limitado à tela azul */
@@ -142,12 +157,12 @@ html, body {
   position: absolute;
   left: 50%;
   top: 54%;
-  width: 71vw;
+  width: 75vw;
   height: 56vh;
-  max-width: 1120px;
-  max-height: 610px;
-  min-width: 300px;
-  min-height: 200px;
+  max-width: 850px;
+  max-height: 470px;
+  min-width: 240px;
+  min-height: 120px;
   transform: translate(-50%, -50%);
   z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
@@ -162,32 +177,32 @@ html, body {
   box-shadow: 0 0 70px 5px #31fcff33;
 }
 
-/* CALENDÁRIO — 100% transparente e SEMPRE contido! */
+/* CALENDÁRIO — menor, contido e transparente */
 #calendario {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 97%;
-  height: 97%;
-  max-width: 97%;
-  max-height: 97%;
-  min-width: 160px;
-  min-height: 110px;
+  width: 99%;
+  height: 99%;
+  max-width: 99%;
+  max-height: 99%;
+  min-width: 120px;
+  min-height: 70px;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   background: none !important;
   color: #ffe379;
   font-family: 'Antonio', 'Bebas Neue', Arial, sans-serif;
-  padding: 0 2vw 0 2vw;
+  padding: 0 1.5vw 0 1.5vw;
   overflow-y: auto;
   text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
   filter: url(#arcade-convex);
   box-sizing: border-box;
   border: none !important;
   /* Fade nas letras usando mask */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 13%, #000 87%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 88%, transparent 100%);
 }
 
 /* LISTA DE MESES SEMPRE VISÍVEL */
@@ -397,43 +412,43 @@ tr.dropdown {
 /* Responsividade para telas pequenas */
 @media (max-width: 980px) {
   .banner-gamer {
-    width: 85vw;
-    min-width: 130px;
-    max-width: 96vw;
+    width: 95vw;
+    min-width: 80px;
+    max-width: 99vw;
     top: 8px;
   }
   .banner-gamer-img {
-    max-height: 78px;
-    min-height: 48px;
+    max-height: 110px;
+    min-height: 44px;
   }
   .arcade-screen-curve {
-    width: 98vw;
-    min-width: 140px;
+    width: 99vw;
+    min-width: 80px;
     max-width: 99vw;
     left: 50%;
     top: 54%;
   }
   .arcade-counters {
-    height: 34vh;
+    height: 31vh;
   }
-  .counter-label { font-size: 1.1em; }
-  .counter-value { font-size: 3.2em; }
-  .counter { min-height: 110px; }
+  .counter-label { font-size: 1.08em; }
+  .counter-value { font-size: 2.8em; }
+  .counter { min-height: 72px; }
 }
 @media (max-width: 650px) {
   .arcade-screen-curve {
     width: 99vw;
-    min-width: 70px;
+    min-width: 40px;
     left: 50%;
     top: 54%;
     border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;
   }
   #calendario {
-    font-size: 0.82em;
+    font-size: 0.77em;
     padding: 0 1vw 0 1vw;
   }
-  .arcade-counters { height: 21vh; }
-  .counter-label { font-size: 0.95em; }
-  .counter-value { font-size: 2.2em; }
-  .counter { min-height: 36px; }
+  .arcade-counters { height: 17vh; }
+  .counter-label { font-size: 0.87em; }
+  .counter-value { font-size: 1.35em; }
+  .counter { min-height: 25px; }
 }
