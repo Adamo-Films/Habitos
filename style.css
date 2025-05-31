@@ -1,36 +1,71 @@
 @keyframes rgb-glow-pulse {
   0% {
-    box-shadow: 0 0 12px 3px #cf28ff, 0 0 18px 7px #51ffe7, 0 0 10px 4px #00f0ff, 0 0 30px 11px #ff00ff77, 0 0 0 #fff;
-    filter: brightness(1.2) saturate(2);
+    box-shadow:
+      0 0 22px 8px #cf28ff,
+      0 0 28px 16px #51ffe7,
+      0 0 16px 10px #00f0ff,
+      0 0 18px 12px #ff00ff;
+    filter: brightness(1.1) saturate(2.5);
   }
-  15% {
-    box-shadow: 0 0 24px 7px #cf28ff, 0 0 30px 14px #51ffe7, 0 0 22px 8px #00f0ff, 0 0 38px 16px #ff00ffbb, 0 0 3px #fff5;
-    filter: brightness(1.4) saturate(2.5);
-  }
-  30% {
-    box-shadow: 0 0 18px 7px #51ffe7, 0 0 28px 10px #cf28ff, 0 0 20px 7px #ff00ff, 0 0 35px 14px #51ffe7bb, 0 0 8px #fff6;
-    filter: brightness(1.5) saturate(2.6);
+  25% {
+    box-shadow:
+      0 0 36px 13px #51ffe7,
+      0 0 26px 9px #cf28ff,
+      0 0 23px 10px #00f0ff,
+      0 0 22px 14px #ff00ff;
+    filter: brightness(1.35) saturate(2.9);
   }
   50% {
-    box-shadow: 0 0 44px 19px #51ffe7, 0 0 38px 22px #cf28ff, 0 0 22px 10px #00f0ff, 0 0 50px 18px #ff00ff, 0 0 14px #fff9;
-    filter: brightness(2.1) saturate(3);
+    box-shadow:
+      0 0 33px 15px #ff00ff,
+      0 0 30px 12px #cf28ff,
+      0 0 22px 12px #51ffe7,
+      0 0 27px 18px #00f0ff;
+    filter: brightness(1.18) saturate(3.1);
   }
-  70% {
-    box-shadow: 0 0 20px 8px #cf28ff, 0 0 34px 10px #51ffe7, 0 0 17px 6px #00f0ff, 0 0 32px 10px #ff00ffbb, 0 0 5px #fff5;
-    filter: brightness(1.3) saturate(2.1);
+  75% {
+    box-shadow:
+      0 0 28px 11px #00f0ff,
+      0 0 22px 7px #cf28ff,
+      0 0 23px 10px #ff00ff,
+      0 0 25px 10px #51ffe7;
+    filter: brightness(1.12) saturate(2.6);
   }
   100% {
-    box-shadow: 0 0 12px 3px #cf28ff, 0 0 18px 7px #51ffe7, 0 0 10px 4px #00f0ff, 0 0 30px 11px #ff00ff77, 0 0 0 #fff;
-    filter: brightness(1.2) saturate(2);
+    box-shadow:
+      0 0 22px 8px #cf28ff,
+      0 0 28px 16px #51ffe7,
+      0 0 16px 10px #00f0ff,
+      0 0 18px 12px #ff00ff;
+    filter: brightness(1.1) saturate(2.5);
   }
 }
 
 @keyframes emoji-rgb-pulse {
-  0%,100% { filter: drop-shadow(0 0 8px #cf28ff) drop-shadow(0 0 8px #51ffe7) drop-shadow(0 0 10px #fff); }
-  18% { filter: drop-shadow(0 0 13px #cf28ff) drop-shadow(0 0 13px #51ffe7) drop-shadow(0 0 18px #fff); }
-  35% { filter: drop-shadow(0 0 20px #51ffe7) drop-shadow(0 0 20px #cf28ff) drop-shadow(0 0 24px #fff7); }
-  55% { filter: drop-shadow(0 0 32px #51ffe7) drop-shadow(0 0 32px #cf28ff) drop-shadow(0 0 30px #fff9); }
-  78% { filter: drop-shadow(0 0 12px #cf28ff) drop-shadow(0 0 12px #51ffe7) drop-shadow(0 0 13px #fff5); }
+  0%,100% {
+    filter:
+      drop-shadow(0 0 14px #cf28ff)
+      drop-shadow(0 0 14px #51ffe7)
+      drop-shadow(0 0 10px #00f0ff);
+  }
+  25% {
+    filter:
+      drop-shadow(0 0 22px #51ffe7)
+      drop-shadow(0 0 13px #cf28ff)
+      drop-shadow(0 0 13px #00f0ff);
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 30px #ff00ff)
+      drop-shadow(0 0 14px #cf28ff)
+      drop-shadow(0 0 19px #51ffe7);
+  }
+  75% {
+    filter:
+      drop-shadow(0 0 18px #00f0ff)
+      drop-shadow(0 0 16px #51ffe7)
+      drop-shadow(0 0 9px #cf28ff);
+  }
 }
 
 :root {
@@ -230,7 +265,6 @@ html, body {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
-/* GLOW ILUMINADO REALISTA DENTRO DO CALENDÁRIO */
 #calendario,
 #calendario th,
 #calendario td,
@@ -255,18 +289,17 @@ html, body {
 /* PRÊMIOS - Glow RGB, pulsante, super vibrante no container, texto RGB, emoji pulsante */
 #calendario .reward-card,
 #calendario .reward-bar-bg {
-  animation: rgb-glow-pulse 2.2s infinite linear;
+  animation: rgb-glow-pulse 2.6s infinite linear;
   box-shadow:
-    0 0 22px 6px #cf28ff,
-    0 0 26px 12px #51ffe7,
-    0 0 16px 8px #00f0ff,
-    0 0 39px 15px #ff00ff99,
-    0 0 6px #fff9;
-  filter: brightness(1.5) contrast(1.6) saturate(2.5);
+    0 0 22px 8px #cf28ff,
+    0 0 28px 16px #51ffe7,
+    0 0 16px 10px #00f0ff,
+    0 0 18px 12px #ff00ff;
+  filter: brightness(1.2) contrast(1.2) saturate(2.8);
 }
 
 #calendario .reward-icon {
-  animation: emoji-rgb-pulse 2.2s infinite cubic-bezier(.53,1.6,.38,1.04);
+  animation: emoji-rgb-pulse 2.6s infinite cubic-bezier(.53,1.6,.38,1.04);
   font-size: 2.6em;
   margin-bottom: 5px;
 }
@@ -283,8 +316,8 @@ html, body {
   text-shadow:
     0 0 2px #51ffe7,
     0 0 4px #cf28ffcc,
-    0 0 1px #fff,
-    0 1px 8px #00f0ff88;
+    0 0 1px #00f0ff,
+    0 1px 4px #ff00ff88;
 }
 
 .mes {
