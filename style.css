@@ -1,24 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-@keyframes rgb-glow-pulse {
-  0%,100% {
-    box-shadow:
-      0 0 20px 9px #cf28ff,
-      0 0 22px 13px #51ffe7,
-      0 0 12px 9px #00f0ff,
-      0 0 18px 10px #ff00ff;
-    filter: brightness(1.12) saturate(2.2);
-  }
-  50% {
-    box-shadow:
-      0 0 38px 17px #51ffe7,
-      0 0 32px 14px #cf28ff,
-      0 0 24px 13px #00f0ff,
-      0 0 24px 16px #ff00ff;
-    filter: brightness(1.19) saturate(2.9);
-  }
-}
-
 :root {
   --neon: #51ffe7;
   --gold: #ffe379;
@@ -27,6 +8,7 @@
   --white: #fff;
 }
 
+/* =============== BASE E FUNDO ================ */
 html, body {
   margin: 0;
   padding: 0;
@@ -40,8 +22,6 @@ html, body {
   font-family: 'Press Start 2P', monospace !important;
   letter-spacing: 1px;
 }
-
-/* ================= BANNER ================== */
 .arcade-bg {
   position: fixed;
   z-index: 0;
@@ -50,6 +30,8 @@ html, body {
   background: url('https://github.com/Adamo-Films/Habitos/raw/main/Artboard%201.png') no-repeat center center;
   background-size: cover;
 }
+
+/* =============== BANNER ================ */
 .banner-gamer {
   position: absolute;
   left: 50%;
@@ -79,7 +61,7 @@ html, body {
   pointer-events: none;
 }
 
-/* ================= CONTADORES ================= */
+/* =============== CONTADORES ================ */
 .arcade-counters {
   position: absolute;
   top: 50%;
@@ -117,7 +99,6 @@ html, body {
   width: 100%;
   pointer-events: none;
 }
-
 .counter-label {
   font-size: 1.15em;
   color: #fff;
@@ -130,7 +111,6 @@ html, body {
   transform: none;
   letter-spacing: 2px;
 }
-
 .counter-value {
   font-size: 2.8em;
   background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
@@ -150,7 +130,7 @@ html, body {
   transform: none;
 }
 
-/* ================= TELA PRINCIPAL CRT ================ */
+/* =============== TELA PRINCIPAL CRT ================ */
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
@@ -174,6 +154,7 @@ html, body {
   overflow: hidden;
 }
 
+/* =============== CALENDARIO ================ */
 #calendario {
   position: absolute;
   left: 50%;
@@ -187,7 +168,9 @@ html, body {
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  background: rgba(11,24,61,0.68) !important;
+  align-items: center; /* centraliza tudo horizontalmente */
+  justify-content: flex-start;
+  background: transparent !important;
   color: #ffe379;
   padding: 0 1.5vw 0 1.5vw;
   overflow-y: auto;
@@ -199,12 +182,50 @@ html, body {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
-/* Neon text em todo conteúdo do calendário */
+/* Centraliza e dá espaçamento entre os blocos */
+#calendario > *,
+#calendario .mes,
+#calendario table,
+#calendario .reward-card {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Mais espaçamento entre meses */
+#calendario .mes {
+  font-size: 1.2em;
+  margin: 40px 0 24px 0;
+  color: var(--gold);
+  text-shadow: 0 0 12px #ffe379cc, 0 0 19px #31fcffbb, 0 0 45px #31fcff77;
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: transform 0.3s cubic-bezier(.47,1.64,.41,.88);
+}
+#calendario .mes::after {
+  content: "▼";
+  font-size: 0.8em;
+  margin-left: 13px;
+  color: var(--neon);
+  text-shadow: 0 0 8px #31f2f5;
+  transition: transform 0.3s;
+  transform: rotate(0deg);
+}
+#calendario .mes.open::after { transform: rotate(180deg); }
+
+/* Neon text efeito em todo conteúdo do calendário */
 #calendario,
 #calendario th,
 #calendario td,
 #calendario .progress-text,
-#calendario .mes,
 #calendario .habit-label,
 #calendario .habit-emoji,
 #calendario .habit-item {
@@ -214,232 +235,32 @@ html, body {
     0 0 6px #fff7,
     0 0 1px #fff5;
 }
-
 #calendario .habit-emoji {
   filter:
     drop-shadow(0 0 7px #51ffe7cc)
     drop-shadow(0 0 14px #ffe37966);
 }
 
-/* ============== PRÊMIO MÊS ARCADE - RGB/NEON GLOW =============== */
-#calendario .reward-card {
-  animation: rgb-glow-pulse 6.2s infinite ease-in-out;
-  box-shadow:
-    0 0 38px 15px #cf28ff,
-    0 0 26px 9px #51ffe7,
-    0 0 22px 13px #00f0ff,
-    0 0 20px 12px #ff00ff;
-  filter: brightness(1.14) contrast(1.13) saturate(2.8);
-  position: relative;
-  overflow: visible;
-  font-family: 'Press Start 2P', monospace !important;
-}
-
-#calendario .reward-bar-bg {
-  box-shadow:
-    0 0 10px 2px #51ffe7bb,
-    0 0 13px 3px #cf28ff99;
-  filter: none;
-}
-
-#calendario .reward-icon {
-  font-size: 2.6em;
-  margin-bottom: 5px;
-  filter: none;
-}
-
-#calendario .reward-card .title,
-#calendario .reward-card .desc,
-#calendario .reward-unlocked {
-  color: #fff;
-  font-weight: 900;
-  background: linear-gradient(90deg, #cf28ff 0%, #51ffe7 55%, #ffe379 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow:
-    0 0 2px #51ffe7,
-    0 0 4px #cf28ffcc,
-    0 0 1px #00f0ff,
-    0 1px 4px #ff00ff88;
-  font-family: 'Press Start 2P', monospace !important;
-}
-
-/* Efeito animado do prêmio */
-.reward-effect {
-  position: absolute;
-  left: 0; top: 0; width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 3;
-}
-
-/* Donuts - Sprinkles */
-.sprinkle {
-  position: absolute;
-  top: -15px;
-  border-radius: 99px;
-  transform: rotateZ(20deg);
-  opacity: 0.88;
-  animation: sprinkle-fall 3.2s linear infinite;
-}
-@keyframes sprinkle-fall {
-  0% { top: -14px; opacity:0.8; }
-  10% { opacity: 1; }
-  100% { top: 92%; opacity:0.2;}
-}
-
-/* Valentina - Cinema emojis flutuando */
-.emoji-cinema {
-  position: absolute;
-  top: -25px;
-  animation: cinema-float 4s cubic-bezier(.43,1.4,.4,1.04) infinite;
-  opacity: 0.86;
-  user-select: none;
-}
-@keyframes cinema-float {
-  0% { top: -22px; opacity:0.5; transform: rotate(-8deg);}
-  10% {opacity:1;}
-  50% { opacity:1;}
-  100% { top:92%; opacity:0;}
-}
-
-/* Rascal - Comida/Talheres girando/flutuando */
-.emoji-food {
-  position: absolute;
-  top: -20px;
-  animation: food-float 3.5s ease-in-out infinite;
-  opacity: 0.88;
-  user-select: none;
-}
-@keyframes food-float {
-  0% { top: -20px; transform: rotate(-8deg) scale(1); opacity:0.6;}
-  15% {opacity:1;}
-  50% { transform: rotate(12deg) scale(1.16);}
-  100% { top: 95%; transform: rotate(-8deg) scale(1); opacity:0;}
-}
-
-/* Airbnb - Sol, nuvem, casa, folhas flutuando/balançando */
-.emoji-vacation {
-  position: absolute;
-  top: -24px;
-  animation: vacation-float 4.5s cubic-bezier(.42,1.2,.55,1.09) infinite;
-  opacity: 0.82;
-  user-select: none;
-}
-@keyframes vacation-float {
-  0% { top: -22px; opacity:0.55; transform: translateX(0);}
-  10% {opacity:1;}
-  50% { transform: translateX(14px);}
-  100% { top:92%; opacity:0;}
-}
-
-/* Turing Machine - Bits caindo */
-.emoji-bit {
-  position: absolute;
-  top: -20px;
-  animation: bit-fall 3.5s linear infinite;
-  opacity: 0.86;
-  user-select: none;
-}
-@keyframes bit-fall {
-  0% { top: -20px; opacity: 0.7;}
-  12% {opacity:1;}
-  100% { top:94%; opacity:0;}
-}
-
-/* Compras - Sacolas e moedas pulando */
-.emoji-shop {
-  position: absolute;
-  bottom: 0;
-  animation: shop-bounce 2.9s cubic-bezier(.55,1.3,.53,1.01) infinite;
-  opacity: 0.87;
-  user-select: none;
-}
-@keyframes shop-bounce {
-  0% { bottom: 0; opacity:0.8; transform: scale(1);}
-  22% { bottom: 45%; opacity:1; transform: scale(1.17);}
-  44% { bottom: 0; opacity:1; transform: scale(1);}
-  100% { bottom: 0; opacity:0.7; transform: scale(1);}
-}
-
-/* Tanque Sensorial - Bolhas subindo */
-.emoji-bubble {
-  position: absolute;
-  bottom: -15px;
-  animation: bubble-rise 3.7s cubic-bezier(.54,1.25,.45,1.02) infinite;
-  opacity: 0.79;
-  user-select: none;
-}
-@keyframes bubble-rise {
-  0% { bottom: -15px; opacity:0.5; transform: scale(0.7);}
-  15% {opacity:1;}
-  60% { transform: scale(1.09);}
-  100% { bottom:92%; opacity:0; transform: scale(1.22);}
-}
-
-/* Relógio Ingersoll - Relógios/engrenagens girando/subindo */
-.emoji-clock {
-  position: absolute;
-  bottom: -20px;
-  animation: clock-float 4.1s cubic-bezier(.45,1.4,.5,1.01) infinite;
-  opacity: 0.8;
-  user-select: none;
-}
-@keyframes clock-float {
-  0% { bottom: -14px; opacity:0.5; transform: rotate(0deg);}
-  8% {opacity:1;}
-  55% { transform: rotate(22deg);}
-  100% { bottom: 90%; opacity:0;}
-}
-
-/* ============= MES, TABELA, HABITOS ================== */
-.mes {
-  font-size: 1.2em;
-  margin: 18px 0 11px 0;
-  color: var(--gold);
-  text-shadow: 0 0 12px #ffe379cc, 0 0 19px #31fcffbb, 0 0 45px #31fcff77;
-  background: none !important;
-  border: none !important;
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  transition: transform 0.3s cubic-bezier(.47,1.64,.41,.88);
-  font-family: 'Press Start 2P', monospace !important;
-}
-.mes::after {
-  content: "▼";
-  font-size: 0.8em;
-  margin-left: 13px;
-  color: var(--neon);
-  text-shadow: 0 0 8px #31f2f5;
-  transition: transform 0.3s;
-  transform: rotate(0deg);
-}
-.mes.open::after { transform: rotate(180deg); }
-
-table {
+/* Ajustes tabela centralizada */
+#calendario table {
   border-collapse: collapse;
-  width: 100%;
+  width: 90%;
+  margin: 0 auto 28px auto;
   background: none !important;
   color: #fff;
-  margin-bottom: 18px;
   border: none !important;
   box-shadow: none !important;
+  text-align: center;
 }
-
-th, td {
-  padding: 7px 10px;
-  font-size: 0.85em;
-  text-align: left;
+#calendario th, #calendario td {
+  padding: 12px 10px;
+  font-size: 1em;
+  text-align: center;
   background: transparent !important;
   border: none !important;
 }
 
+/* =============== HABITOS/TABELA ================ */
 tr.main-row {
   cursor: pointer;
   --progress: 0;
@@ -502,8 +323,36 @@ tr.dropdown {
 }
 .habit-emoji { font-size: 1.6em; }
 
-/* PRÊMIO */
-.reward-card {
+/* =============== PRÊMIO (NEON + EFEITOS) ================ */
+@keyframes rgb-glow-pulse {
+  0%,100% {
+    box-shadow:
+      0 0 20px 9px #cf28ff,
+      0 0 22px 13px #51ffe7,
+      0 0 12px 9px #00f0ff,
+      0 0 18px 10px #ff00ff;
+    filter: brightness(1.12) saturate(2.2);
+  }
+  50% {
+    box-shadow:
+      0 0 38px 17px #51ffe7,
+      0 0 32px 14px #cf28ff,
+      0 0 24px 13px #00f0ff,
+      0 0 24px 16px #ff00ff;
+    filter: brightness(1.19) saturate(2.9);
+  }
+}
+
+#calendario .reward-card {
+  animation: rgb-glow-pulse 6.2s infinite ease-in-out;
+  box-shadow:
+    0 0 38px 15px #cf28ff,
+    0 0 26px 9px #51ffe7,
+    0 0 22px 13px #00f0ff,
+    0 0 20px 12px #ff00ff;
+  filter: brightness(1.14) contrast(1.13) saturate(2.8);
+  position: relative;
+  overflow: visible;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -515,10 +364,7 @@ tr.dropdown {
   width: 85%;
   max-width: 650px;
   border: none !important;
-  filter: none;
-  position: relative;
   z-index: 5;
-  font-family: 'Press Start 2P', monospace !important;
 }
 .reward-icon {
   font-size: 2.6em;
@@ -572,16 +418,127 @@ tr.dropdown {
   box-shadow: 0 0 11px #cf28ff66;
   font-size: 1.01em;
   display: inline-block;
-  font-family: 'Press Start 2P', monospace !important;
 }
 
+/* ----- EFEITOS ANIMADOS PERSONALIZADOS DE PRÊMIO ----- */
+.reward-effect {
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+.sprinkle { /* Donuts */
+  position: absolute;
+  top: -15px;
+  border-radius: 99px;
+  transform: rotateZ(20deg);
+  opacity: 0.88;
+  animation: sprinkle-fall 3.2s linear infinite;
+}
+@keyframes sprinkle-fall {
+  0% { top: -14px; opacity:0.8; }
+  10% { opacity: 1; }
+  100% { top: 92%; opacity:0.2;}
+}
+.emoji-cinema { /* Valentina */
+  position: absolute;
+  top: -25px;
+  animation: cinema-float 4s cubic-bezier(.43,1.4,.4,1.04) infinite;
+  opacity: 0.86;
+  user-select: none;
+}
+@keyframes cinema-float {
+  0% { top: -22px; opacity:0.5; transform: rotate(-8deg);}
+  10% {opacity:1;}
+  50% { opacity:1;}
+  100% { top:92%; opacity:0;}
+}
+.emoji-food { /* Rascal */
+  position: absolute;
+  top: -20px;
+  animation: food-float 3.5s ease-in-out infinite;
+  opacity: 0.88;
+  user-select: none;
+}
+@keyframes food-float {
+  0% { top: -20px; transform: rotate(-8deg) scale(1); opacity:0.6;}
+  15% {opacity:1;}
+  50% { transform: rotate(12deg) scale(1.16);}
+  100% { top: 95%; transform: rotate(-8deg) scale(1); opacity:0;}
+}
+.emoji-vacation { /* Airbnb */
+  position: absolute;
+  top: -24px;
+  animation: vacation-float 4.5s cubic-bezier(.42,1.2,.55,1.09) infinite;
+  opacity: 0.82;
+  user-select: none;
+}
+@keyframes vacation-float {
+  0% { top: -22px; opacity:0.55; transform: translateX(0);}
+  10% {opacity:1;}
+  50% { transform: translateX(14px);}
+  100% { top:92%; opacity:0;}
+}
+.emoji-bit { /* Turing Machine */
+  position: absolute;
+  top: -20px;
+  animation: bit-fall 3.5s linear infinite;
+  opacity: 0.86;
+  user-select: none;
+}
+@keyframes bit-fall {
+  0% { top: -20px; opacity: 0.7;}
+  12% {opacity:1;}
+  100% { top:94%; opacity:0;}
+}
+.emoji-shop { /* Compras */
+  position: absolute;
+  bottom: 0;
+  animation: shop-bounce 2.9s cubic-bezier(.55,1.3,.53,1.01) infinite;
+  opacity: 0.87;
+  user-select: none;
+}
+@keyframes shop-bounce {
+  0% { bottom: 0; opacity:0.8; transform: scale(1);}
+  22% { bottom: 45%; opacity:1; transform: scale(1.17);}
+  44% { bottom: 0; opacity:1; transform: scale(1);}
+  100% { bottom: 0; opacity:0.7; transform: scale(1);}
+}
+.emoji-bubble { /* Tanque Sensorial */
+  position: absolute;
+  bottom: -15px;
+  animation: bubble-rise 3.7s cubic-bezier(.54,1.25,.45,1.02) infinite;
+  opacity: 0.79;
+  user-select: none;
+}
+@keyframes bubble-rise {
+  0% { bottom: -15px; opacity:0.5; transform: scale(0.7);}
+  15% {opacity:1;}
+  60% { transform: scale(1.09);}
+  100% { bottom:92%; opacity:0; transform: scale(1.22);}
+}
+.emoji-clock { /* Ingersoll */
+  position: absolute;
+  bottom: -20px;
+  animation: clock-float 4.1s cubic-bezier(.45,1.4,.5,1.01) infinite;
+  opacity: 0.8;
+  user-select: none;
+}
+@keyframes clock-float {
+  0% { bottom: -14px; opacity:0.5; transform: rotate(0deg);}
+  8% {opacity:1;}
+  55% { transform: rotate(22deg);}
+  100% { bottom: 90%; opacity:0;}
+}
+
+/* =============== SCROLLBAR (opcional) ================ */
 #calendario::-webkit-scrollbar { width: 7px; }
 #calendario::-webkit-scrollbar-thumb {
   background-color: transparent;
   border-radius: 11px;
 }
 
-/* =========== RESPONSIVO ============ */
+/* =============== RESPONSIVO ================ */
 @media (max-width: 980px) {
   .banner-gamer {
     width: 95vw;
@@ -607,8 +564,8 @@ tr.dropdown {
     left: 0;
     transform: translateY(-50%);
   }
-  .counter-label { font-size: 1.08em; }
-  .counter-value { font-size: 2.8em; }
+  .counter-label { font-size: 0.95em; }
+  .counter-value { font-size: 1.6em; }
   .counter { min-height: 72px; }
 }
 @media (max-width: 650px) {
@@ -630,7 +587,7 @@ tr.dropdown {
     left: 0;
     transform: translateY(-50%);
   }
-  .counter-label { font-size: 0.87em; }
-  .counter-value { font-size: 1.35em; }
+  .counter-label { font-size: 0.73em; }
+  .counter-value { font-size: 1em; }
   .counter { min-height: 25px; }
 }
