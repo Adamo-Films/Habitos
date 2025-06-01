@@ -4,15 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Danilo no 🎮</title>
-
-  <!-- Fonte Arcade -->
+  
+  <!-- Fonte principal -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- SVG FILTER CONVEX CRT REALISTA -->
+  <!-- SVG FILTER CONVEX CRT -->
   <svg width="0" height="0" style="position:absolute;">
     <filter id="arcade-convex">
       <feImage result="map"
@@ -38,7 +38,7 @@
     <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img" />
   </div>
 
-  <!-- Contadores inclinados laterais -->
+  <!-- Contadores laterais -->
   <div class="arcade-counters transparent">
     <div class="counter left">
       <span class="counter-label">Dias<br>Seguidos</span>
@@ -50,13 +50,11 @@
     </div>
   </div>
 
-  <!-- Tela principal: efeito CRT com container -->
-  <div class="container arcade-screen-curve">
+  <!-- Tela principal CRT -->
+  <div class="arcade-screen-curve">
     <div class="crt-glass-overlay"></div>
-    <!-- CRT NOISE (opcional para efeito visual) -->
     <div class="crt-noise"></div>
-    <!-- Calendário com efeito CRT convex -->
-    <div id="calendario" class="calendario-container"></div>
+    <div id="calendario" class="calendario-container" tabindex="-1"></div>
   </div>
 
   <!-- Confetti e celebração -->
