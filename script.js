@@ -50,7 +50,7 @@ const monthNames = [
   "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-// Confetti
+// Confetti épico (igual seu)
 function launchConfettiEpic() {
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
@@ -190,7 +190,10 @@ async function saveProgress(progress) {
   }
   localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
 }
+
 document.addEventListener("DOMContentLoaded", async function () {
+  // (continua abaixo...)
+  // ==== DADOS E GERACAO CALENDARIO ====
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = {
@@ -239,15 +242,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     grupos[id].push(obj);
   });
 
-  // === Gera o HTML do calendário ===
+  // ======= GERA HTML DO CALENDÁRIO =======
   let html = '';
   Object.entries(grupos).forEach(([id, dias]) => {
     const [mes, ano] = id.split("-");
     const mesNum = Number(mes);
     const anoNum = Number(ano);
     const nomeMes = monthNames[mesNum - 1].toUpperCase();
-
-    html += `<div class='mes'>${nomeMes} ${ano}</div>
+    // seta arcade animada do mês
+    html += `<div class='mes' data-mes='${mesNum}' data-ano='${anoNum}'><span class="arcade-arrow" style="display:none"></span>${nomeMes} ${ano}</div>
       <table>
         <thead>
           <tr>
@@ -274,7 +277,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
       html += `
         <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
-          <td><span class="expand-icon">&#9654;</span></td>
+          <td><span class="expand-icon">&#9654;</span><span class="arcade-arrow-day" style="display:none"></span></td>
           <td class="progress-text gold">${dia.data}</td>
           <td class="progress-text gold">${dia.dia}</td>
           <td class="progress-text gold">${habitosCellText}</td>
@@ -317,18 +320,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   calendario.innerHTML = html;
 
-  // Dropdown meses: só o mês atual começa aberto
+  // ========== Seta arcade mês atual ==========
   const allMesDivs = document.querySelectorAll('#calendario .mes');
   const allTables = document.querySelectorAll('#calendario table');
   const allRewards = document.querySelectorAll('#calendario .reward-card');
   const today = new Date();
   const mesAtual = today.getMonth() + 1;
   const anoAtual = today.getFullYear();
-  allTables.forEach((tbl, idx) => {
-    let mesDiv = allMesDivs[idx];
-    let isAtual = mesDiv && mesDiv.textContent.includes(monthNames[mesAtual - 1]) && mesDiv.textContent.includes(anoAtual);
+  allMesDivs.forEach((mesDiv, idx) => {
+    let isAtual = mesDiv.getAttribute('data-mes') == mesAtual && mesDiv.getAttribute('data-ano') == anoAtual;
+    let arrow = mesDiv.querySelector('.arcade-arrow');
+    if (isAtual) arrow.style.display = 'inline-block';
+    else arrow.style.display = 'none';
+    mesDiv.classList.toggle('current', isAtual);
+    // seta inicial aberta
+    let tbl = allTables[idx];
     tbl.style.display = isAtual ? '' : 'none';
-    // Prêmio logo após mês
     if (allRewards[idx]) allRewards[idx].style.display = isAtual ? '' : 'none';
     mesDiv.classList.toggle('open', isAtual);
 
@@ -352,18 +359,38 @@ document.addEventListener("DOMContentLoaded", async function () {
           effect.innerHTML = '';
           if (effect.__rewardTimeout) clearTimeout(effect.__rewardTimeout);
         }
+        allMesDivs[i].querySelector('.arcade-arrow').style.display = 'none';
       });
       // Abre o clicado
       if (!open) {
         tbl.style.display = '';
         allRewards[idx] && (allRewards[idx].style.display = '');
         mesDiv.classList.add('open');
+        mesDiv.querySelector('.arcade-arrow').style.display = 'inline-block';
         // INICIA animação do prêmio deste mês
         const effect = allRewards[idx]?.querySelector('.reward-effect');
         if (effect) runRewardEffectByType(allRewards[idx], effect);
       }
     };
   });
+
+  // ========== Seta arcade dia atual ==========
+  let diaAtualId = null;
+  dados.forEach(d => {
+    if (
+      d.mes === mesAtual &&
+      d.ano === anoAtual &&
+      d.diaDoMes === today.getDate()
+    ) diaAtualId = d.id;
+  });
+  if (diaAtualId) {
+    const row = document.getElementById(`mainrow-${diaAtualId}`);
+    if (row) {
+      let arrow = row.querySelector('.arcade-arrow-day');
+      arrow.style.display = 'inline-block';
+      row.classList.add('current-day');
+    }
+  }
 
   // Dropdown de dias: inicia fechado, abre ao clicar na linha
   document.querySelectorAll('tr.main-row').forEach(row => {
@@ -374,20 +401,26 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (dropdown.style.display === "table-row") {
         dropdown.style.display = "none";
         this.classList.remove('expanded');
+        this.querySelector('.arcade-arrow-day')?.classList.remove('open');
       } else {
         // fecha todos do mês atual
         let parentTable = this.closest('table');
         parentTable.querySelectorAll('.dropdown').forEach(dd => {
           dd.style.display = "none";
           let tr = parentTable.querySelector(`tr[data-dropdown="${dd.id.replace('dropdown-','')}"]`);
-          if (tr) tr.classList.remove('expanded');
+          if (tr) {
+            tr.classList.remove('expanded');
+            tr.querySelector('.arcade-arrow-day')?.classList.remove('open');
+          }
         });
         dropdown.style.display = "table-row";
         this.classList.add('expanded');
+        this.querySelector('.arcade-arrow-day')?.classList.add('open');
       }
     });
   });
 
+  // (continua: aplica progresso, barra, animação prêmios, etc.)
   // Aplica progresso salvo
   Object.keys(progress).forEach(checkId => {
     const checkbox = document.getElementById(checkId);
@@ -412,8 +445,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (row) {
       row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08), color 0.3s';
       row.style.setProperty('--progress', pct);
-      if (pct === 1) row.classList.add('day-complete');
-      else row.classList.remove('day-complete');
+      if (pct === 1) row.classList.add('day-complete', 'arcade-complete');
+      else row.classList.remove('day-complete', 'arcade-complete');
     }
   }
 
@@ -487,7 +520,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById('doneCount').textContent = done;
   }
 
-  // Checkbox lógica
+  // Checkbox lógica + animação arcade
   document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
     checkbox.addEventListener('change', function () {
       const label = document.getElementById('label-' + this.id);
@@ -499,16 +532,48 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
 
       const hi = document.getElementById('habititem-' + this.id);
-      if (hi) hi.classList.toggle('habit-complete', this.checked);
+      if (hi) {
+        hi.classList.toggle('habit-complete', this.checked);
+        // Efeito arcade clique
+        if (this.checked) {
+          hi.classList.add('arcade-highlight');
+          setTimeout(() => hi.classList.remove('arcade-highlight'), 500);
+        }
+      }
       const parts = this.id.match(/^dia-\d+-\d+-\d+/);
       if (parts) {
         const dayId = parts[0];
         const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
         updateProgressBar(dayId, habitCount);
-        // Atualiza todos prêmios e contadores
         updateAllRewardProgress();
         countStats();
       }
+    });
+  });
+
+  // Animação arcade clique nos meses
+  document.querySelectorAll('.mes').forEach(mes => {
+    mes.addEventListener('mousedown', function () {
+      mes.classList.add('arcade-highlight');
+    });
+    mes.addEventListener('mouseup', function () {
+      setTimeout(() => mes.classList.remove('arcade-highlight'), 200);
+    });
+    mes.addEventListener('mouseleave', function () {
+      mes.classList.remove('arcade-highlight');
+    });
+  });
+
+  // Animação arcade clique nos dias
+  document.querySelectorAll('.main-row').forEach(row => {
+    row.addEventListener('mousedown', function () {
+      row.classList.add('arcade-highlight');
+    });
+    row.addEventListener('mouseup', function () {
+      setTimeout(() => row.classList.remove('arcade-highlight'), 200);
+    });
+    row.addEventListener('mouseleave', function () {
+      row.classList.remove('arcade-highlight');
     });
   });
 
@@ -529,6 +594,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         checkbox.checked = !checkbox.checked;
         checkbox.dispatchEvent(new Event('change'));
       }
+      // Animação arcade clique
+      emoji.classList.add('arcade-highlight');
+      setTimeout(() => emoji.classList.remove('arcade-highlight'), 200);
     });
   });
 
@@ -539,7 +607,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
     if (allDone) {
       const dayRow = document.getElementById(`mainrow-${dia.id}`);
-      if (dayRow) dayRow.classList.add('day-complete');
+      if (dayRow) dayRow.classList.add('day-complete', 'arcade-complete');
     }
   });
   updateAllRewardProgress();
@@ -554,135 +622,3 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 });
-
-// ==== ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ====
-
-// Função para rodar o efeito correto e loop
-function runRewardEffectByType(card, effect) {
-  if (!card || !effect) return;
-  effect.innerHTML = '';
-  let type = card.getAttribute('data-reward') || '';
-  if (type.includes('donuts')) sprinklesEffect(effect);
-  else if (type.includes('valentina')) cinemaEmojisEffect(effect);
-  else if (type.includes('rascal')) foodEffect(effect);
-  else if (type.includes('airbnb')) vacationEffect(effect);
-  else if (type.includes('turing')) turingEffect(effect);
-  else if (type.includes('compras')) shopEffect(effect);
-  else if (type.includes('tanque')) tankEffect(effect);
-  else if (type.includes('relogio')) clockEffect(effect);
-
-  // Loop seamless: refaz o efeito de tempos em tempos
-  if (effect.__rewardTimeout) clearTimeout(effect.__rewardTimeout);
-  effect.__rewardTimeout = setTimeout(() => {
-    if (card.style.display !== 'none' && card.offsetParent !== null) {
-      runRewardEffectByType(card, effect);
-    }
-  }, 4500); // ajuste para a maior duração de animação visual
-}
-
-// Efeitos de animação
-function sprinklesEffect(container) {
-  container.innerHTML = "";
-  let colors = ["#fa47b1","#ffe379","#51ffe7","#cf28ff","#00f0ff","#ff904c","#fff"];
-  for (let i = 0; i < 22; i++) {
-    let sprinkle = document.createElement('div');
-    sprinkle.className = 'sprinkle';
-    sprinkle.style.background = colors[Math.floor(Math.random()*colors.length)];
-    sprinkle.style.left = (Math.random()*90+2) + '%';
-    sprinkle.style.animationDelay = (Math.random()*2)+'s';
-    sprinkle.style.width = (Math.random()*6+3) + 'px';
-    sprinkle.style.height = (Math.random()*2+1.5) + 'px';
-    container.appendChild(sprinkle);
-  }
-}
-function cinemaEmojisEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🎬","🎥","📽️","🍿","🎞️"];
-  for (let i=0;i<10;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-cinema';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*85+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2)+'s';
-    emoji.style.fontSize = (Math.random()*20+24)+'px';
-    container.appendChild(emoji);
-  }
-}
-function foodEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🍝", "🍽️", "🍷", "🍕", "🍰"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-food';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*80+10)+'%';
-    emoji.style.animationDelay = (Math.random()*2.5)+'s';
-    emoji.style.fontSize = (Math.random()*18+23)+'px';
-    container.appendChild(emoji);
-  }
-}
-function vacationEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🌞","🌴","🏡","☁️"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-vacation';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*84+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2.5)+'s';
-    emoji.style.fontSize = (Math.random()*20+22)+'px';
-    container.appendChild(emoji);
-  }
-}
-function turingEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["0️⃣","1️⃣","🟦","💾"];
-  for (let i=0;i<13;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-bit';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*85+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2.2)+'s';
-    emoji.style.fontSize = (Math.random()*18+19)+'px';
-    container.appendChild(emoji);
-  }
-}
-function shopEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🛍️", "💸", "🏷️", "🪙", "👗"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-shop';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*85+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2.2)+'s';
-    emoji.style.fontSize = (Math.random()*18+20)+'px';
-    container.appendChild(emoji);
-  }
-}
-function tankEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🫧","🌊","💧"];
-  for (let i=0;i<12;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-bubble';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*87+5)+'%';
-    emoji.style.animationDelay = (Math.random()*2.3)+'s';
-    emoji.style.fontSize = (Math.random()*13+18)+'px';
-    container.appendChild(emoji);
-  }
-}
-function clockEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["⌚","⏰","⚙️","⏳"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-clock';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*80+10)+'%';
-    emoji.style.animationDelay = (Math.random()*2.5)+'s';
-    emoji.style.fontSize = (Math.random()*17+21)+'px';
-    container.appendChild(emoji);
-  }
-}
