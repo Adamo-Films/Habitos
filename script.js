@@ -17,7 +17,7 @@ const rewards = [
   { month: 6, year: 2025, icon: "🏁", title: "Prêmio Junho", desc: "Um dia pra finalizar Valentina.", label: "Valentina!" },
   { month: 7, year: 2025, icon: "🍝", title: "Prêmio Julho", desc: "Jantar especial no restaurante Rascal.", label: "Rascal!" },
   { month: 8, year: 2025, icon: "🏡", title: "Prêmio Agosto", desc: "Airbnb relaxante para recarregar as energias.", label: "Airbnb relax!" },
-  { month: 9, year: 2025, icon: "🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine.", label: "Turing Machine!" },
+  { month: 9, year: 2025, icon: "🧠🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine.", label: "Turing Machine!" },
   { month: 10, year: 2025, icon: "🛍️", title: "Prêmio Outubro", desc: "Um dia de compras.", label: "Compras!" },
   { month: 11, year: 2025, icon: "🛀", title: "Prêmio Novembro", desc: "Sessão em um tanque de privação sensorial.", label: "Zen!" },
   { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll.", label: "Ingersoll!" }
@@ -30,7 +30,7 @@ function getRewardFor(month, year, day = null) {
 
 // Emojis para hábitos
 const habitEmojis = [
-  "💧", "🥗", "🚫", "💬", "📅", "📚", "⏰", "🧘",
+  "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
   "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪",
 ];
 
@@ -316,6 +316,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
   calendario.innerHTML = html;
+
   // Dropdown meses: só o mês atual começa aberto
   const allMesDivs = document.querySelectorAll('#calendario .mes');
   const allTables = document.querySelectorAll('#calendario table');
@@ -331,6 +332,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (allRewards[idx]) allRewards[idx].style.display = isAtual ? '' : 'none';
     mesDiv.classList.toggle('open', isAtual);
 
+    // INICIA animação do prêmio do mês aberto (e faz loop)
+    if (isAtual && allRewards[idx]) {
+      const effect = allRewards[idx].querySelector('.reward-effect');
+      if (effect) runRewardEffectByType(allRewards[idx], effect);
+    }
+
     // Toggle ao clicar no mês
     mesDiv.onclick = () => {
       let open = tbl.style.display !== 'none';
@@ -339,12 +346,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         t.style.display = 'none';
         allRewards[i] && (allRewards[i].style.display = 'none');
         allMesDivs[i].classList.remove('open');
+        // Limpa animações dos prêmios fechados!
+        const effect = allRewards[i]?.querySelector('.reward-effect');
+        if (effect) {
+          effect.innerHTML = '';
+          if (effect.__rewardTimeout) clearTimeout(effect.__rewardTimeout);
+        }
       });
       // Abre o clicado
       if (!open) {
         tbl.style.display = '';
         allRewards[idx] && (allRewards[idx].style.display = '');
         mesDiv.classList.add('open');
+        // INICIA animação do prêmio deste mês
+        const effect = allRewards[idx]?.querySelector('.reward-effect');
+        if (effect) runRewardEffectByType(allRewards[idx], effect);
       }
     };
   });
@@ -532,16 +548,39 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Redimensiona confetti se precisar
   window.addEventListener('resize', function () {
     const canvas = document.getElementById('confetti-canvas');
-    if (canvas.style.display === 'block') {
+    if (canvas && canvas.style.display === 'block') {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
   });
 });
 
-// === ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ===
-// (Chame sempre que mudar a view do calendário)
+// ==== ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ====
 
+// Função para rodar o efeito correto e loop
+function runRewardEffectByType(card, effect) {
+  if (!card || !effect) return;
+  effect.innerHTML = '';
+  let type = card.getAttribute('data-reward') || '';
+  if (type.includes('donuts')) sprinklesEffect(effect);
+  else if (type.includes('valentina')) cinemaEmojisEffect(effect);
+  else if (type.includes('rascal')) foodEffect(effect);
+  else if (type.includes('airbnb')) vacationEffect(effect);
+  else if (type.includes('turing')) turingEffect(effect);
+  else if (type.includes('compras')) shopEffect(effect);
+  else if (type.includes('tanque')) tankEffect(effect);
+  else if (type.includes('relogio')) clockEffect(effect);
+
+  // Loop seamless: refaz o efeito de tempos em tempos
+  if (effect.__rewardTimeout) clearTimeout(effect.__rewardTimeout);
+  effect.__rewardTimeout = setTimeout(() => {
+    if (card.style.display !== 'none' && card.offsetParent !== null) {
+      runRewardEffectByType(card, effect);
+    }
+  }, 4500); // ajuste para a maior duração de animação visual
+}
+
+// Efeitos de animação
 function sprinklesEffect(container) {
   container.innerHTML = "";
   let colors = ["#fa47b1","#ffe379","#51ffe7","#cf28ff","#00f0ff","#ff904c","#fff"];
@@ -556,7 +595,6 @@ function sprinklesEffect(container) {
     container.appendChild(sprinkle);
   }
 }
-
 function cinemaEmojisEffect(container) {
   container.innerHTML = "";
   let emojis = ["🎬","🎥","📽️","🍿","🎞️"];
@@ -570,7 +608,6 @@ function cinemaEmojisEffect(container) {
     container.appendChild(emoji);
   }
 }
-
 function foodEffect(container) {
   container.innerHTML = "";
   let emojis = ["🍝", "🍽️", "🍷", "🍕", "🍰"];
@@ -584,7 +621,6 @@ function foodEffect(container) {
     container.appendChild(emoji);
   }
 }
-
 function vacationEffect(container) {
   container.innerHTML = "";
   let emojis = ["🌞","🌴","🏡","☁️"];
@@ -598,7 +634,6 @@ function vacationEffect(container) {
     container.appendChild(emoji);
   }
 }
-
 function turingEffect(container) {
   container.innerHTML = "";
   let emojis = ["0️⃣","1️⃣","🟦","💾"];
@@ -612,7 +647,6 @@ function turingEffect(container) {
     container.appendChild(emoji);
   }
 }
-
 function shopEffect(container) {
   container.innerHTML = "";
   let emojis = ["🛍️", "💸", "🏷️", "🪙", "👗"];
@@ -626,7 +660,6 @@ function shopEffect(container) {
     container.appendChild(emoji);
   }
 }
-
 function tankEffect(container) {
   container.innerHTML = "";
   let emojis = ["🫧","🌊","💧"];
@@ -640,7 +673,6 @@ function tankEffect(container) {
     container.appendChild(emoji);
   }
 }
-
 function clockEffect(container) {
   container.innerHTML = "";
   let emojis = ["⌚","⏰","⚙️","⏳"];
@@ -654,28 +686,3 @@ function clockEffect(container) {
     container.appendChild(emoji);
   }
 }
-
-// Inicializa efeitos animados dos prêmios ao carregar ou mudar mês
-function initRewardEffects() {
-  document.querySelectorAll('.reward-card').forEach(card => {
-    let effect = card.querySelector('.reward-effect');
-    if (!effect) return;
-    let type = card.getAttribute('data-reward');
-    if (type?.includes('donuts')) sprinklesEffect(effect);
-    else if (type?.includes('valentina')) cinemaEmojisEffect(effect);
-    else if (type?.includes('rascal')) foodEffect(effect);
-    else if (type?.includes('airbnb')) vacationEffect(effect);
-    else if (type?.includes('turing')) turingEffect(effect);
-    else if (type?.includes('compras')) shopEffect(effect);
-    else if (type?.includes('tanque')) tankEffect(effect);
-    else if (type?.includes('relogio')) clockEffect(effect);
-  });
-}
-
-window.addEventListener('DOMContentLoaded', initRewardEffects);
-window.addEventListener('load', initRewardEffects);
-
-// Reaplica sempre que trocar mês (caso use innerHTML para mudar o calendário)
-const observer = new MutationObserver(() => { setTimeout(initRewardEffects, 150); });
-observer.observe(document.getElementById('calendario'), { childList: true, subtree: true });
-
