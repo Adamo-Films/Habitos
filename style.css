@@ -1,173 +1,108 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
+/* =================== VARS ==================== */
 :root {
   --neon: #51ffe7;
   --gold: #ffe379;
   --crt-blue: #0e55a5;
   --crt-dark: #00253b;
-  --white: #fff;
+  --arcade-pink: #ff2fdf;
+  --arcade-blue: #08f6fd;
+  --arcade-purple: #7921d5;
+  --arcade-yellow: #ffe379;
+  --arcade-cyan: #26fafd;
+  --arcade-scanline: rgba(0,255,255,0.09);
+  --arcade-glow: 0 0 19px #51ffe7, 0 0 36px #cf28ff, 0 0 14px #fff;
+  --arcade-glow-strong: 0 0 38px #51ffe7, 0 0 36px #ff2fdf, 0 0 22px #fff;
 }
 
+/* =============== BASE =============== */
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
+  margin: 0; padding: 0;
+  width: 100vw; height: 100vh;
   background: var(--crt-dark);
   font-family: 'Press Start 2P', monospace !important;
   overflow: hidden;
 }
-* {
-  font-family: 'Press Start 2P', monospace !important;
-  letter-spacing: 1px;
-}
-
-/* =============== BANNER & BG ================ */
 .arcade-bg {
-  position: fixed;
-  z-index: 0;
-  width: 100vw;
-  height: 100vh;
+  position: fixed; z-index: 0;
+  width: 100vw; height: 100vh;
   background: url('https://github.com/Adamo-Films/Habitos/raw/main/Artboard%201.png') no-repeat center center;
   background-size: cover;
 }
+
+/* ================= BANNER ================== */
 .banner-gamer {
-  position: absolute;
-  left: 50%;
-  top: -2px;
-  width: 98vw;
-  max-width: 770px;
-  min-width: 160px;
-  height: auto;
-  transform: translateX(-50%);
-  z-index: 22;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  position: absolute; left: 50%; top: -2px;
+  width: 98vw; max-width: 770px; min-width: 160px;
+  height: auto; transform: translateX(-50%);
+  z-index: 22; display: flex;
+  align-items: center; justify-content: center; pointer-events: none;
 }
 .banner-gamer-img {
-  width: 98%;
-  max-width: 750px;
-  min-width: 120px;
-  height: auto;
-  max-height: 220px;
-  min-height: 75px;
-  display: block;
-  object-fit: contain;
+  width: 98%; max-width: 750px; min-width: 120px; height: auto;
+  max-height: 220px; min-height: 75px; display: block; object-fit: contain;
   filter: drop-shadow(0 0 30px #19e0fcaa) drop-shadow(0 0 60px #ff38fdaa);
   pointer-events: none;
 }
 
-/* =============== CONTADORES ================ */
+/* ================= CONTADORES ================= */
 .arcade-counters {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100vw;
-  height: 0;
-  z-index: 30;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  pointer-events: none;
-  transform: translateY(-50%);
+  position: absolute; top: 50%; left: 0;
+  width: 100vw; height: 0; z-index: 30;
+  display: flex; justify-content: space-between; align-items: center;
+  pointer-events: none; transform: translateY(-50%);
   background: none !important;
 }
 .counter {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 16vw;
-  max-width: 310px;
-  min-width: 80px;
-  min-height: 210px;
-  height: 100%;
-  pointer-events: none;
-  background: none !important;
-  box-sizing: border-box;
-  padding: 0 0.2vw;
-  margin: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  width: 16vw; max-width: 310px; min-width: 80px; min-height: 210px; height: 100%;
+  pointer-events: none; background: none !important;
+  box-sizing: border-box; padding: 0 0.2vw; margin: 0;
 }
 .counter-label, .counter-value {
-  text-align: center;
-  width: 100%;
-  pointer-events: none;
+  text-align: center; width: 100%; pointer-events: none;
 }
 .counter-label {
-  font-size: 1.15em;
-  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.3em; color: #fff;
   text-shadow: 0 2px 14px #19e0fcaa, 0 1px 12px #000d, 0 1px 30px #ffe379bb;
-  font-weight: 900;
-  line-height: 1.12;
-  margin-top: 0;
-  margin-bottom: 16px;
-  text-transform: uppercase;
-  transform: none;
-  letter-spacing: 2px;
+  font-weight: 900; letter-spacing: 0.09em; line-height: 1.12;
+  margin-top: 0; margin-bottom: 16px;
+  text-transform: uppercase; transform: none;
 }
 .counter-value {
-  font-size: 2.8em;
-  background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
-  color: #fdf5c6;
-  font-weight: 900;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 2.7em; background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
+  color: #fff; font-weight: 900; letter-spacing: 0.03em;
   text-shadow: 0 2px 12px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
-  border-radius: 16px;
-  display: inline-block;
-  padding: 0 10px 0 10px;
-  margin-top: 0;
-  margin-bottom: 0;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1;
-  width: 100%;
-  transform: none;
+  border-radius: 16px; display: inline-block; padding: 0 10px 0 10px;
+  margin-top: 0; margin-bottom: 0; background-clip: text;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; width: 100%; transform: none;
 }
 
-/* =============== TELA PRINCIPAL CRT ================ */
+/* ================= TELA PRINCIPAL CRT ================ */
 .arcade-screen-curve {
-  position: absolute;
-  left: 50%;
-  top: 54%;
-  width: 90vw;
-  height: 70vh;
-  max-width: 870px;
-  max-height: 490px;
-  min-width: 240px;
-  min-height: 120px;
+  position: absolute; left: 50%; top: 54%;
+  width: 90vw; height: 70vh;
+  max-width: 870px; max-height: 490px; min-width: 240px; min-height: 120px;
   transform: translate(-50%, -50%);
-  z-index: 10;
-  border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
+  z-index: 10; border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  padding: 0;
-  pointer-events: auto;
-  overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+  padding: 0; pointer-events: auto; overflow: hidden;
 }
-
-/* =============== CALENDARIO ================ */
 #calendario {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 110%;
-  height: 110%;
-  max-width: 99%;
-  max-height: 99%;
-  min-width: 120px;
-  min-height: 70px;
+  position: absolute; left: 50%; top: 50%;
+  width: 110%; height: 110%;
+  max-width: 99%; max-height: 99%; min-width: 120px; min-height: 70px;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background: transparent !important;
+  display: flex; flex-direction: column; align-items: center; /* <-- CENTRALIZA */
+  background: none !important;
   color: #ffe379;
+  font-family: 'Press Start 2P', monospace !important;
   padding: 0 1.5vw 0 1.5vw;
   overflow-y: auto;
   text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
@@ -178,97 +113,105 @@ html, body {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
-/* Centraliza blocos e diminui espaçamento entre meses */
-#calendario > *,
-#calendario .mes,
-#calendario table,
-#calendario .reward-card {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
+/* ====== Seta Arcade ====== */
+.arcade-arrow {
+  position: absolute;
+  left: -70px; /* ajusta para esquerda do calendário */
+  top: 50%; transform: translateY(-50%);
+  z-index: 200;
+  width: 54px; height: 54px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 16px #fff) drop-shadow(0 0 24px #0ff);
+  animation: arcade-arrow-pulse 1.1s infinite alternate;
 }
-#calendario .mes {
-  font-size: 2.35em;
-  margin: 25px 0 14px 0;  /* ESPAÇO REDUZIDO AQUI */
+@keyframes arcade-arrow-pulse {
+  0% { filter: drop-shadow(0 0 12px #0ff) drop-shadow(0 0 8px #ffe379);}
+  100% { filter: drop-shadow(0 0 32px #fff) drop-shadow(0 0 32px #0ff);}
+}
+/* Seta para baixo (dropdown aberto) */
+.arcade-arrow.down {
+  left: 60%;
+  top: 90px;
+  transform: rotate(90deg) scale(1.12);
+  animation: arcade-arrow-bounce 1.15s infinite alternate;
+}
+@keyframes arcade-arrow-bounce {
+  0% { transform: rotate(90deg) scale(1.12) translateY(-12px);}
+  100% { transform: rotate(90deg) scale(1.12) translateY(8px);}
+}
+
+/* =========== MESES ============ */
+.mes {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 2.1em;
+  margin: 29px 0 4px 0;
   color: var(--gold);
-  text-shadow: 0 0 24px #ffe379cc, 0 0 30px #31fcffbb, 0 0 70px #31fcff77;
+  text-shadow:
+    0 0 24px #ffe379cc,
+    0 0 32px #31fcffbb,
+    0 0 55px #31fcff77,
+    0 0 3px #fff8;
   background: none !important;
   border: none !important;
   cursor: pointer;
   user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: sticky;
-  top: 0;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
   z-index: 10;
-  transition: transform 0.12s cubic-bezier(.47,1.64,.41,.88);
-  padding: 16px 28px;
-  border-radius: 28px;
+  transition: transform 0.23s cubic-bezier(.47,1.64,.41,.88), color 0.13s;
+  min-height: 65px;
+  letter-spacing: 2px;
+  padding: 18px 0 13px 0;
+  box-sizing: border-box;
 }
-#calendario .mes::after {
+.mes:active {
+  filter: brightness(1.3) saturate(1.7);
+  transform: scale(1.07) rotate(-1deg);
+}
+.mes:hover {
+  color: #0ff;
+  text-shadow: 0 0 16px #51ffe7, 0 0 22px #ff2fdf, 0 0 4px #fff;
+}
+.mes::after {
   content: "▼";
-  font-size: 0.8em;
-  margin-left: 13px;
-  color: var(--neon);
-  text-shadow: 0 0 8px #31f2f5;
-  transition: transform 0.3s;
+  font-size: 1.0em;
+  margin-left: 18px;
+  color: var(--arcade-cyan);
+  text-shadow: 0 0 12px #31f2f5;
+  transition: transform 0.32s, color 0.18s;
   transform: rotate(0deg);
+  pointer-events: none;
 }
-#calendario .mes.open::after { transform: rotate(180deg); }
-#calendario .mes:active,
-#calendario .mes.click-anim {
-  animation: clickPop 0.18s;
-  filter: brightness(1.6) drop-shadow(0 0 14px #ffe379);
-}
-
-@keyframes clickPop {
-  0% { transform: scale(1);}
-  45% { transform: scale(1.15);}
-  100% { transform: scale(1);}
-}
-
-/* Neon text efeito em todo conteúdo do calendário */
-#calendario,
-#calendario th,
-#calendario td,
-#calendario .progress-text,
-#calendario .habit-label,
-#calendario .habit-emoji,
-#calendario .habit-item {
-  text-shadow:
-    0 0 12px #51ffe7aa,
-    0 0 18px #ffe37933,
-    0 0 6px #fff7,
-    0 0 1px #fff5;
-}
-#calendario .habit-emoji {
-  filter:
-    drop-shadow(0 0 7px #51ffe7cc)
-    drop-shadow(0 0 14px #ffe37966);
+.mes.open::after { transform: rotate(180deg); color: #ff2fdf;}
+/* Mês completo: highlight neon pixel arcade */
+.mes.arcade-complete {
+  background: linear-gradient(90deg, #31fcff22 0%, #ffe37922 100%);
+  color: #fff;
+  border-radius: 22px;
+  box-shadow: 0 0 20px #ffe379, 0 0 45px #0ff, 0 0 16px #fff9;
+  text-shadow: 0 0 24px #ffe379, 0 0 24px #0ff, 0 0 24px #ff2fdf;
+  filter: brightness(1.22) saturate(1.8);
+  border: 2.5px solid #ffe37977;
 }
 
-/* Tabela centralizada */
-#calendario table {
+/* =========== TABELA DIAS ============ */
+table {
   border-collapse: collapse;
-  width: 95%;
-  margin: 0 auto 28px auto;
+  width: 100%;
   background: none !important;
   color: #fff;
+  margin-bottom: 18px;
   border: none !important;
   box-shadow: none !important;
-  text-align: center;
+  font-family: 'Press Start 2P', monospace !important;
 }
-#calendario th, #calendario td {
-  padding: 6px 8px;
-  font-size: 0.82em;
+th, td {
+  padding: 7px 10px;
+  font-size: 0.92em;
   text-align: center;
   background: transparent !important;
   border: none !important;
-  transition: filter 0.2s, font-size 0.16s;
 }
-#calendario th { font-size: 0.76em; }
-
 tr.main-row {
   cursor: pointer;
   --progress: 0;
@@ -277,34 +220,44 @@ tr.main-row {
   border-radius: 17px;
   border-bottom: none !important;
   box-shadow: none;
-  filter: brightness(1.05) contrast(1.12);
-  transition: color 0.25s, box-shadow 0.16s, filter 0.15s, transform 0.12s;
-  font-size: 0.89em;
-  min-height: 64px;
-  height: 54px;
-  padding: 12px 0;
-  user-select: none;
+  filter: brightness(1.09) contrast(1.14);
+  transition: color 0.19s, box-shadow 0.19s;
+  font-size: 0.91em;
 }
-tr.main-row:active,
-tr.main-row.click-anim {
-  animation: clickPop 0.16s;
-  filter: brightness(1.35) drop-shadow(0 0 14px #ffe379aa);
-  box-shadow: 0 0 0 2px #ffe37944;
-}
-
-tr.main-row.expanded {
-  border: 2px solid #ffe37966;
-  box-shadow: 0 0 22px #fff07b66;
+tr.main-row:active {
+  filter: brightness(1.24) saturate(1.16);
+  box-shadow: 0 0 13px #ffe379, 0 0 24px #0ff, 0 0 8px #fff6;
 }
 tr.main-row.day-complete {
-  background: linear-gradient(90deg, #23e2f9 0%, #ffe379 60%, #f7d865 100%) !important;
-  color: #283a1e !important;
+  background: linear-gradient(90deg, #31fcff 15%, #ffe379 60%, #f7d865 100%) !important;
+  color: #181d2c !important;
   font-weight: bold;
-  text-shadow: 0 1px 3px #fff, 0 0 20px #000b;
-  box-shadow: 0 0 36px #0ff6, 0 0 20px #ffe37999;
+  text-shadow: 0 1px 3px #fff, 0 0 20px #000b, 0 0 8px #ffe37999;
+  box-shadow:
+    0 0 36px #0ff9, 0 0 38px #ffe379ee, 0 0 60px #ff2fdfcc,
+    0 2px 32px #ffe37977;
   border-radius: 22px 20px 22px 20px;
   mix-blend-mode: screen;
+  filter: brightness(1.28) saturate(1.11);
+  outline: 2.5px solid #51ffe7;
+  position: relative;
 }
+tr.main-row.day-complete::before {
+  content: '';
+  position: absolute; left: 3px; top: 7px;
+  width: calc(100% - 6px); height: calc(100% - 14px);
+  border-radius: 18px;
+  border: 2.5px dashed #ffe379;
+  box-shadow: 0 0 24px #ffe379, 0 0 18px #0ff, 0 0 7px #fff7;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.77;
+}
+tr.main-row.expanded {
+  border: 2px solid #ffe37966;
+  box-shadow: 0 0 18px #fff07b99;
+}
+
 tr.main-row.day-complete .progress-text,
 tr.main-row.day-complete td {
   color: #171818 !important;
@@ -314,159 +267,104 @@ tr.main-row.day-complete td {
   color: #ffe379;
   text-shadow: 0 0 12px #ffe379cc, 0 0 16px #ffd90099;
 }
-tr.dropdown {
-  background: none !important;
-}
-.habit-list { gap: 7px; margin: 14px 0; }
+
+/* ============= HABITOS ============== */
+.habit-list { gap: 11px; margin: 14px 0; }
 .habit-item {
   display: grid;
-  grid-template-columns: 38px 1fr 30px;
+  grid-template-columns: 42px 1fr 36px;
   align-items: center;
-  background: rgba(41, 133, 188, 0.10);
-  padding: 6px 10px;
-  border-radius: 11px;
+  background: rgba(41, 133, 188, 0.11);
+  padding: 8px 14px;
+  border-radius: 13px;
   box-shadow: 0 1px 6px #0af6;
   color: none;
-  transition: background 0.25s;
+  transition: background 0.18s, filter 0.22s;
   position: relative;
-  font-size: 0.8em;
-  min-height: 32px;
-}
-.habit-item:active,
-.habit-item.click-anim {
-  animation: clickPop 0.17s;
-  filter: brightness(1.36) drop-shadow(0 0 11px #ffe37999);
-  box-shadow: 0 0 0 2px #ffe37922;
-}
-.habit-emoji {
-  font-size: 1.23em;
   cursor: pointer;
-  min-width: 35px;
-  min-height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: none;
-  transition: filter 0.15s, box-shadow 0.13s, transform 0.14s;
+  min-height: 48px;
 }
-.habit-emoji:active,
-.habit-emoji.click-anim {
-  animation: clickPop 0.17s;
-  filter: brightness(1.48) drop-shadow(0 0 9px #ffe379);
-  box-shadow: 0 0 0 2px #ffe37933;
+.habit-item:active {
+  filter: brightness(1.2) saturate(1.3);
+  box-shadow: 0 0 9px #ffe379;
 }
-.habit-label {
-  cursor: pointer;
-  font-size: 0.7em;
-  min-height: 32px;
-  padding: 7px 2px;
-  border-radius: 8px;
-  background: none;
-  user-select: none;
-  display: inline-block;
-  transition: filter 0.13s, transform 0.13s;
+.habit-item:hover {
+  background: rgba(81,255,231,0.19);
 }
-.habit-label:active,
-.habit-label.click-anim {
-  animation: clickPop 0.16s;
-  filter: brightness(1.24) drop-shadow(0 0 6px #ffe379cc);
-}
-.habit-complete {
-  background: rgba(81,255,231,0.18);
+.habit-complete, .habit-item.habit-complete {
+  background: linear-gradient(90deg, #ffe379 0%, #51ffe7 60%, #cf28ff 100%) !important;
   color: #191b22;
   font-weight: bold;
-  box-shadow: 0 0 15px #51ffe7;
+  box-shadow: 0 0 25px #51ffe7, 0 0 17px #ffe379bb;
+  border: 2.5px solid #ffe379a5;
+  text-shadow: 0 0 15px #fff, 0 0 8px #0ff, 0 0 9px #ffe379;
+  filter: brightness(1.18) saturate(1.21);
 }
 
+/* ======= EMOJIS ========= */
+.habit-emoji {
+  font-size: 1.65em;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(.45,2,.44,.87);
+}
+.habit-emoji:active {
+  transform: scale(1.19) rotate(-6deg);
+  filter: brightness(1.5) saturate(1.4);
+}
+.habit-label { font-size: 0.89em; }
+.habit-checkbox { transform: scale(1.6); cursor: pointer; }
+
+/* ========== PRÊMIOS ========== */
 @keyframes rgb-glow-pulse {
   0%,100% {
     box-shadow:
-      0 0 20px 10px #cf28ff,
-      0 0 30px 19px #51ffe7,
+      0 0 20px 9px #cf28ff,
+      0 0 22px 13px #51ffe7,
       0 0 12px 9px #00f0ff,
-      0 0 14px 8px #ff00ff;
-    filter: brightness(1.13) saturate(2.4);
+      0 0 18px 10px #ff00ff;
+    filter: brightness(1.12) saturate(2.2);
   }
   50% {
     box-shadow:
-      0 0 48px 22px #51ffe7,
-      0 0 36px 22px #cf28ff,
-      0 0 28px 16px #00f0ff,
-      0 0 28px 22px #ff00ff;
-    filter: brightness(1.22) saturate(3.1);
+      0 0 38px 17px #51ffe7,
+      0 0 32px 14px #cf28ff,
+      0 0 24px 13px #00f0ff,
+      0 0 24px 16px #ff00ff;
+    filter: brightness(1.19) saturate(2.9);
   }
 }
-
-/* PRÊMIO (NEON + VIBE ARCADE) */
 #calendario .reward-card {
-  animation: rgb-glow-pulse 6.2s infinite cubic-bezier(.71,1.51,.45,.98);
-  position: relative;
-  overflow: visible;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  /* Vibe arcade: fundo neon radial e linhas horizontais simulando scanlines */
-  background:
-    radial-gradient(ellipse at 50% 40%, #160c36 0%, #222f4f 68%, #51ffe720 95%, transparent 100%),
-    repeating-linear-gradient(
-      to bottom,
-      #00fff8 0 2px,
-      #0000 2px 10px
-    );
-  border-radius: 17px;
-  margin: 34px auto 12px auto;
-  padding: 27px 22px 18px 22px;
-  width: 88%;
-  max-width: 670px;
-  border: 2.2px solid #ff00ff;
+  animation: rgb-glow-pulse 6.2s infinite ease-in-out;
   box-shadow:
-    0 0 36px 10px #cf28ff,
-    0 0 48px 26px #51ffe7,
-    0 0 34px 13px #ff38fd,
-    0 0 18px 7px #fff,
-    0 0 0 7px #00fff8 inset;
-  z-index: 5;
+    0 0 38px 15px #cf28ff,
+    0 0 26px 9px #51ffe7,
+    0 0 22px 13px #00f0ff,
+    0 0 20px 12px #ff00ff;
   filter: brightness(1.14) contrast(1.13) saturate(2.8);
+  position: relative; overflow: visible;
+  border-radius: 19px;
+  margin-top: 18px;
 }
-.reward-icon {
-  font-size: 2.6em;
-  margin-bottom: 5px;
-  filter: drop-shadow(0 0 13px #ffe379);
-  animation: clickPop 1.1s cubic-bezier(.24,1.23,.71,.95) 1;
-}
-.reward-card .title {
+#calendario .reward-card .title {
   color: #ffe379;
-  font-size: 1.15em;
-  margin-bottom: 4px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.09em;
+  margin-bottom: 7px;
   text-align: center;
-  letter-spacing: 0.02em;
-  text-shadow: 0 0 6px #cf28ff, 0 0 14px #51ffe7bb, 0 0 2px #ff00ff;
-  background: linear-gradient(90deg, #cf28ff 0%, #51ffe7 60%, #ffe379 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 1px;
+  text-shadow: 0 0 16px #ffe379, 0 0 16px #ff2fdf, 0 0 12px #0ff;
+  filter: brightness(1.24) saturate(1.27);
 }
-.reward-card .desc {
-  color: #fff;
-  font-size: 0.93em;
-  margin-bottom: 8px;
-  text-align: center;
-  text-shadow: 0 0 6px #0ff5, 0 0 14px #ffe379aa;
+#calendario .reward-card .desc {
+  color: #fff; font-size: 1.02em;
+  margin-bottom: 7px; text-align: center;
+  text-shadow: 0 0 8px #ffe379, 0 0 7px #0ff9;
 }
-.reward-bar-bg {
-  width: 89%;
-  height: 15px;
-  background: #0a1f27;
-  border-radius: 7px;
-  overflow: hidden;
-  margin-top: 7px;
-  margin-bottom: 9px;
+#calendario .reward-bar-bg {
+  width: 94%; height: 15px; background: #17305299;
+  border-radius: 7px; overflow: hidden; margin: 12px auto 7px auto;
   box-shadow: 0 0 10px 2px #51ffe7bb, 0 0 13px 3px #cf28ff99;
   filter: none;
-  border: 2px solid #ffe379;
 }
 .reward-bar {
   height: 100%;
@@ -474,57 +372,88 @@ tr.dropdown {
   border-radius: 8px;
   transition: width 0.55s cubic-bezier(.6,1.2,.16,1.08);
   width: 0;
-  box-shadow: 0 0 19px #cf28ff88, 0 0 13px #51ffe799;
+  box-shadow: 0 0 15px #cf28ff88, 0 0 8px #51ffe799;
 }
 .reward-unlocked {
-  margin-top: 14px;
-  color: #fff;
-  background: #12c1fd;
+  margin-top: 10px;
+  color: #222 !important;
+  background: linear-gradient(90deg, #0ff 0%, #51ffe7 60%, #ffe379 100%);
   border-radius: 8px;
-  padding: 8px 22px;
+  padding: 13px 25px 11px 25px;
   font-weight: bold;
-  box-shadow: 0 0 14px #cf28ff88, 0 0 22px #51ffe7bb;
+  box-shadow: 0 0 23px #0ff, 0 0 21px #cf28ff, 0 0 20px #51ffe7cc;
   font-family: 'Press Start 2P', monospace;
-  font-size: 1.17em;
+  font-size: 1.19em;
   display: inline-block;
-  animation: arcadeButtonPop 1.12s cubic-bezier(.23,1.43,.45,.81) 1;
-  border: 2px solid #ffe379;
+  border: 2px solid #0ff;
   letter-spacing: 2.5px;
-  text-shadow: 0 0 10px #ffe379, 0 0 18px #00fff8bb;
+  text-shadow:
+    0 0 12px #fff,
+    0 0 10px #ffe379,
+    0 0 7px #0ff;
+  transition: box-shadow 0.28s, border 0.23s;
 }
 
-@keyframes arcadeButtonPop {
-  0% { transform: scale(0.9);}
-  45% { transform: scale(1.19);}
-  80% { transform: scale(1.02);}
-  100% { transform: scale(1);}
+/* ----- EFEITOS ANIMADOS DE PRÊMIO ----- */
+.reward-effect {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 3;
 }
 
-/* ====== Efeitos animados personalizáveis dos prêmios (como antes) ====== */
-.reward-effect { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
-/* ... seus keyframes customizados aqui ... */
+/* Donuts - Sprinkles */
+.sprinkle {
+  position: absolute; top: -15px;
+  border-radius: 99px; transform: rotateZ(20deg);
+  opacity: 0.88; animation: sprinkle-fall 3.2s linear infinite;
+}
+@keyframes sprinkle-fall {
+  0% { top: -14px; opacity:0.8; }
+  10% { opacity: 1; }
+  100% { top: 92%; opacity:0.2;}
+}
+/* Outras animações já estavam presentes no CSS antigo... */
 
-/* =============== SCROLLBAR ================ */
+/* ===== SCANLINES CRT GLOW OVERLAY ===== */
+.arcade-screen-curve::after {
+  content: "";
+  pointer-events: none;
+  z-index: 199;
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(15, 240, 255, 0.10) 0px,
+    rgba(15, 240, 255, 0.08) 2px,
+    transparent 4px,
+    transparent 11px
+  );
+  opacity: 0.18;
+  mix-blend-mode: screen;
+}
+
+/* ================= SCROLLBAR =============== */
 #calendario::-webkit-scrollbar { width: 7px; }
-#calendario::-webkit-scrollbar-thumb { background-color: transparent; border-radius: 11px; }
+#calendario::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 11px;
+}
 
-/* =============== RESPONSIVO ================ */
+/* ========== RESPONSIVO ========== */
 @media (max-width: 980px) {
   .banner-gamer { width: 95vw; min-width: 80px; max-width: 99vw; top: 8px;}
-  .banner-gamer-img { max-height: 110px; min-height: 44px; }
-  .arcade-screen-curve { width: 99vw; min-width: 80px; max-width: 99vw; left: 50%; top: 54%; }
+  .banner-gamer-img { max-height: 110px; min-height: 44px;}
+  .arcade-screen-curve { width: 99vw; min-width: 80px; max-width: 99vw; left: 50%; top: 54%;}
   .arcade-counters { width: 100vw; height: 0; top: 50%; left: 0; transform: translateY(-50%);}
-  .counter-label { font-size: 0.95em; }
-  .counter-value { font-size: 1.6em; }
+  .counter-label { font-size: 0.87em; }
+  .counter-value { font-size: 1.18em; }
   .counter { min-height: 72px; }
-  #calendario .mes { font-size: 1.45em; padding: 12px 10px;}
+  .mes { font-size: 1.09em; }
 }
 @media (max-width: 650px) {
   .arcade-screen-curve { width: 99vw; min-width: 40px; left: 50%; top: 54%; border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;}
-  #calendario { font-size: 0.77em; padding: 0 1vw 0 1vw;}
+  #calendario { font-size: 0.81em; padding: 0 1vw 0 1vw;}
   .arcade-counters { width: 100vw; height: 0; top: 50%; left: 0; transform: translateY(-50%);}
-  .counter-label { font-size: 0.73em;}
-  .counter-value { font-size: 1em;}
-  .counter { min-height: 25px;}
-  #calendario .mes { font-size: 1em; padding: 8px 5px;}
+  .counter-label { font-size: 0.65em; }
+  .counter-value { font-size: 0.85em; }
+  .counter { min-height: 25px; }
+  .mes { font-size: 0.82em; }
 }
