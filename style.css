@@ -1,741 +1,429 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* ================= ROOT VARS ================= */
+/* ========== VARIÁVEIS ========== */
 :root {
-  --arcade-neon: #51ffe7;
-  --arcade-gold: #ffe379;
-  --arcade-purple: #cf28ff;
-  --arcade-dark: #00253b;
-  --arcade-blue: #04b5f6;
-  --arcade-highlight: #00eaff;
-  --arcade-text-shadow: 0 0 9px #ffe379bb, 0 0 13px #00eaff77, 0 1px 12px #000b;
-  --arcade-shadow: 0 0 40px #00eaff44, 0 0 32px #cf28ff22, 0 0 12px #ffe37955;
+  --neon: #51ffe7;
+  --gold: #ffe379;
+  --crt-blue: #0e55a5;
+  --crt-dark: #00253b;
+  --white: #fff;
+  --text-neon: #67eaff;
+  --highlight: #ffe379;
+  --highlight-bg: #fff5;
+  --mes-arrow: #51ffe7;
+  --mes-arrow-ativo: #ff6be7;
 }
 
-/* ================== BASE ==================== */
+/* ========== BASE ========== */
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  background: var(--arcade-dark);
+  margin: 0; padding: 0; width: 100vw; height: 100vh;
+  background: var(--crt-dark);
+  font-family: 'Press Start 2P', monospace;
   overflow: hidden;
-  cursor: default;
 }
-
-/* Desativa seleção/cursor nos itens não editáveis */
-body, .arcade-bg, .arcade-counters, #calendario, .container {
-  user-select: none;
-  cursor: default !important;
-}
-
-/* ========= ARCADE BACKGROUND ============ */
 .arcade-bg {
-  position: fixed;
-  z-index: 0;
-  width: 100vw;
-  height: 100vh;
+  position: fixed; z-index: 0;
+  width: 100vw; height: 100vh;
   background: url('https://github.com/Adamo-Films/Habitos/raw/main/Artboard%201.png') no-repeat center center;
   background-size: cover;
 }
 
-/* ========== BANNER E CONTADORES ========= */
+/* ========== BANNER ========== */
 .banner-gamer {
-  position: absolute;
-  left: 50%;
-  top: -2px;
-  width: 98vw;
-  max-width: 770px;
-  min-width: 160px;
-  transform: translateX(-50%);
-  z-index: 22;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
+  position: absolute; left: 50%; top: -2px; width: 98vw; max-width: 770px; min-width: 160px;
+  height: auto; transform: translateX(-50%); z-index: 22;
+  display: flex; align-items: center; justify-content: center; pointer-events: none;
 }
 .banner-gamer-img {
-  width: 98%;
-  max-width: 750px;
-  min-width: 120px;
-  height: auto;
-  max-height: 220px;
-  min-height: 75px;
-  object-fit: contain;
+  width: 98%; max-width: 750px; min-width: 120px;
+  height: auto; max-height: 220px; min-height: 75px;
+  display: block; object-fit: contain;
   filter: drop-shadow(0 0 30px #19e0fcaa) drop-shadow(0 0 60px #ff38fdaa);
-}
-
-.arcade-counters {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100vw;
-  height: 0;
-  z-index: 30;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   pointer-events: none;
-  transform: translateY(-50%);
-  background: none !important;
 }
 
+/* ========== CONTADORES ========== */
+.arcade-counters {
+  position: absolute; top: 50%; left: 0; width: 100vw; height: 0; z-index: 30;
+  display: flex; justify-content: space-between; align-items: center; pointer-events: none;
+  transform: translateY(-50%); background: none !important;
+}
 .counter {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 16vw;
-  max-width: 310px;
-  min-width: 80px;
-  min-height: 210px;
-  height: 100%;
-  background: none !important;
-  box-sizing: border-box;
-  padding: 0 0.2vw;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 16vw; max-width: 310px; min-width: 80px; min-height: 210px; height: 100%;
+  pointer-events: none; background: none !important; box-sizing: border-box;
+  padding: 0 0.2vw; margin: 0;
 }
-
+.counter-label, .counter-value {
+  text-align: center; width: 100%; pointer-events: none;
+}
 .counter-label {
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 1.16em;
-  color: #fff;
-  text-shadow: var(--arcade-text-shadow);
-  font-weight: 900;
-  letter-spacing: 0.09em;
-  line-height: 1.12;
-  margin-top: 0;
-  margin-bottom: 16px;
-  text-transform: uppercase;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2em; color: #fff;
+  text-shadow: 0 2px 14px #19e0fcaa, 0 1px 12px #000d, 0 1px 30px #ffe379bb;
+  font-weight: 900; letter-spacing: 0.09em; line-height: 1.12;
+  margin-top: 0; margin-bottom: 16px; text-transform: uppercase;
 }
 .counter-value {
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 2.8em;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 3.2em;
   background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
   color: #fdf5c6;
-  font-weight: 900;
-  letter-spacing: 0.03em;
-  text-shadow: 0 2px 16px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
-  border-radius: 16px;
-  display: inline-block;
-  padding: 0 10px;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1;
-  width: 100%;
+  font-weight: 900; letter-spacing: 0.03em;
+  text-shadow: 0 2px 12px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
+  border-radius: 16px; display: inline-block; padding: 0 10px 0 10px;
+  margin-top: 0; margin-bottom: 0;
+  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; width: 100%; transform: none;
 }
 
-/* ===== TELA PRINCIPAL/CONTAINER (SEM FUNDO!) ===== */
-.container, .arcade-screen-curve {
-  position: absolute;
-  left: 50%;
-  top: 54%;
-  width: 90vw;
-  height: 70vh;
-  max-width: 870px;
-  max-height: 490px;
-  min-width: 240px;
-  min-height: 120px;
-  transform: translate(-50%, -50%);
-  z-index: 10;
+/* ========== TELA PRINCIPAL CRT ========== */
+.arcade-screen-curve {
+  position: absolute; left: 50%; top: 54%;
+  width: 90vw; height: 70vh; max-width: 870px; max-height: 490px; min-width: 240px; min-height: 120px;
+  transform: translate(-50%, -50%); z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  pointer-events: auto;
-  overflow: hidden;
+  background: none !important;
+  display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+  padding: 0; pointer-events: auto; overflow: hidden;
+}
+
+/* ==== Remove fundo container ==== */
+.container, .calendario-container, #calendario, .reward-card {
   background: none !important;
   box-shadow: none !important;
 }
 
+/* ========== CALENDÁRIO E MES ========== */
 #calendario {
-  width: 100%;
-  height: 100%;
-  min-width: 120px;
-  min-height: 70px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: none !important;
-  color: var(--arcade-gold);
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  padding: 0 1vw;
+  position: absolute; left: 50%; top: 50%; width: 110%; height: 110%;
+  max-width: 99%; max-height: 99%; min-width: 120px; min-height: 70px;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column;
+  color: #ffe379;
+  font-family: 'Press Start 2P', monospace;
+  padding: 0 1vw 0 1vw;
   overflow-y: auto;
-  text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
-  filter: url(#arcade-convex);
-  border: none !important;
   box-sizing: border-box;
-}
-
-/* Desabilita cursor de texto na área do calendário */
-#calendario, #calendario * {
-  cursor: default !important;
-  user-select: none !important;
-}
-
-/* =================== MESES ================== */
-.mes {
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 2.15em;
-  color: var(--arcade-gold);
-  text-shadow: 0 0 18px #ffe379, 0 0 27px #31fcff, 0 0 31px #31fcff44;
-  background: none !important;
   border: none !important;
-  cursor: pointer;
+  cursor: default;
   user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  margin: 40px 0 12px 0;
-  transition: color 0.2s, text-shadow 0.2s, transform 0.18s;
+}
+#calendario, #calendario th, #calendario td, #calendario .progress-text,
+#calendario .mes, #calendario .habit-label, #calendario .habit-emoji, #calendario .habit-item {
+  text-shadow: 0 0 10px #31fcff66, 0 0 16px #ffe37933, 0 0 2px #fff4;
+}
+#calendario .habit-emoji {
+  filter: drop-shadow(0 0 6px #51ffe7cc) drop-shadow(0 0 8px #ffe37966);
+}
+
+/* === MES === */
+.mes {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 2.5em;
+  color: var(--highlight);
+  margin: 28px 0 17px 0;
+  background: none !important; border: none !important;
+  cursor: pointer; user-select: none;
+  display: flex; align-items: center; justify-content: center;
+  gap: 24px;
   position: relative;
   z-index: 10;
-  min-height: 2.4em;
-  letter-spacing: 2.5px;
-  outline: none;
+  text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
+  transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
+  padding: 0 0 0 0;
 }
-.mes:hover, .mes.open {
-  color: var(--arcade-blue);
-  text-shadow: 0 0 22px #51ffe7, 0 0 22px #fff, 0 0 36px #31fcff99;
-  transform: scale(1.06);
+.mes .mes-arrow {
+  display: inline-block;
+  margin-left: 13px;
+  font-size: 1.4em;
+  color: var(--mes-arrow);
+  animation: mes-arrow-bounce 1s infinite alternate cubic-bezier(.7,0,.5,1.2);
+  filter: drop-shadow(0 0 8px var(--mes-arrow));
 }
-.mes .arcade-pointer {
-  display: none;
-  left: -62px;
-  top: 56%;
-  transform: translateY(-50%);
-  position: absolute;
-  z-index: 25;
+.mes.open .mes-arrow {
+  color: var(--mes-arrow-ativo);
+  animation: mes-arrow-active 0.33s infinite alternate;
+  filter: drop-shadow(0 0 13px var(--mes-arrow-ativo));
 }
-.mes.current .arcade-pointer {
-  display: block !important;
-  animation: arcade-pointer-bounce 1s infinite cubic-bezier(.4,2.6,.5,.96);
+@keyframes mes-arrow-bounce {
+  0% { transform: translateY(0) scale(1.07);}
+  100% { transform: translateY(-10px) scale(1.14);}
 }
-@keyframes arcade-pointer-bounce {
-  0%, 100% { transform: translateY(-50%) scale(1.08); filter: brightness(1.2);}
-  40% { transform: translateY(-55%) scale(1.19); filter: brightness(1.35);}
-  60% { transform: translateY(-48%) scale(1.06);}
+@keyframes mes-arrow-active {
+  0% { transform: scale(1.17);}
+  100% { transform: scale(1.28);}
 }
+.mes:not(.current) .mes-arrow { opacity: 0.3; filter: none;}
+.mes:not(.current) { opacity: 0.72; }
+.mes:hover { color: #51ffe7; text-shadow: 0 0 12px #51ffe7bb, 0 0 40px #ffe37944; }
+.mes:active { transform: scale(0.97); }
 
-/* Seta lateral neon animada */
-.arcade-pointer {
-  width: 42px; height: 48px;
-  background: none;
-  filter: drop-shadow(0 0 18px #03ffffa1) drop-shadow(0 0 8px #0ffb);
-}
-.arcade-pointer svg {
-  width: 100%;
-  height: 100%;
-}
+.mes .mes-arrow { pointer-events: none; }
+.mes:not(.current) .mes-arrow { display: none !important; }
 
-/* =========== TABELA DE DIAS ============ */
+/* ========== TABELA ========== */
 table {
   border-collapse: collapse;
   width: 100%;
   color: #fff;
-  margin-bottom: 13px;
-  background: none !important;
+  margin-bottom: 18px;
   border: none !important;
+  background: none !important;
   box-shadow: none !important;
-  font-family: 'Press Start 2P', Arial, sans-serif;
 }
 th, td {
-  padding: 7px 8px;
-  font-size: 0.93em;
+  padding: 7px 10px;
+  font-size: 1em;
   text-align: left;
-  background: none !important;
+  background: transparent !important;
   border: none !important;
-  font-family: 'Press Start 2P', Arial, sans-serif;
 }
 
+/* ==== Linhas principais === */
 tr.main-row {
   cursor: pointer;
-  background: none !important;
-  color: var(--arcade-gold);
-  border-radius: 13px;
-  transition: background 0.23s, color 0.23s, box-shadow 0.23s, filter 0.23s;
-  filter: brightness(1.07) contrast(1.06);
+  background: transparent !important;
+  color: #ffe379;
+  border-radius: 17px;
+  transition: color 0.22s, background 0.22s, filter 0.25s;
   position: relative;
-  min-height: 2.2em;
 }
-tr.main-row:hover, tr.main-row.expanded {
-  box-shadow: 0 0 13px #00eaff99, 0 0 7px #ffe37933;
-  filter: brightness(1.13) contrast(1.1);
-  background: rgba(17,255,230,0.08);
+tr.main-row.current-day .day-arrow {
+  display: inline-block !important;
 }
-tr.main-row .arcade-pointer {
-  display: none;
-  left: -44px;
-  top: 53%;
-  position: absolute;
-  z-index: 23;
+tr.main-row:not(.current-day) .day-arrow {
+  display: none !important;
 }
-tr.main-row.current .arcade-pointer {
-  display: block !important;
-  animation: arcade-pointer-bounce 1s infinite cubic-bezier(.42,2.6,.5,.98);
+tr.main-row:hover, .habit-item:hover, .reward-card:hover {
+  filter: brightness(1.13) saturate(1.25) drop-shadow(0 0 8px #31fcff55);
+  background: rgba(81,255,231,0.09) !important;
 }
-tr.main-row.day-complete {
-  background: linear-gradient(90deg, #23e2f9 0%, #ffe379 70%, #f7d865 100%) !important;
-  color: #183a1e !important;
-  font-weight: bold;
-  text-shadow: 0 2px 3px #fff, 0 0 20px #000b;
-  box-shadow: 0 0 23px #0ff8, 0 0 16px #ffe37999;
-  border-radius: 19px;
-}
-tr.main-row.day-complete .progress-text,
-tr.main-row.day-complete td {
-  color: #171818 !important;
-  text-shadow: 0 0 9px #fff5, 0 0 2px #ffe37955;
-}
-tr.main-row .progress-text {
-  color: var(--arcade-gold);
-}
-tr.main-row.expanded {
-  border: 2px solid #ffe37966;
-  box-shadow: 0 0 22px #fff07b66;
-  background: rgba(17,255,230,0.08);
+tr.main-row:active, .habit-item:active, .reward-card:active {
+  filter: brightness(1.21) saturate(1.32) drop-shadow(0 0 14px #cf28ff40);
 }
 
-/* ============ Dropdown de dia (animação) ============ */
+/* ==== Highlight Arcade Clean ==== */
+tr.main-row.day-complete, .habit-item.habit-complete {
+  background: linear-gradient(90deg, #00e4ff50 0%, #ffe37999 50%, #cf28ff55 100%) !important;
+  color: #191d28 !important;
+  font-weight: bold;
+  text-shadow: 0 1px 3px #fff, 0 0 20px #000b, 0 0 20px #ffe37970;
+  border-radius: 22px 20px 22px 20px;
+  filter: brightness(1.16) contrast(1.13);
+  box-shadow: 0 0 38px #00fff055, 0 0 18px #ffe37975;
+  animation: arcade-glow 1.9s infinite alternate;
+}
+@keyframes arcade-glow {
+  0% { filter: brightness(1.10) saturate(1.07);}
+  100% { filter: brightness(1.19) saturate(1.26);}
+}
+
+.progress-text.gold { color: #ffe379; text-shadow: 0 0 8px #ffe379cc, 0 0 16px #ffd90099; }
+
+/* ==== Expand animação dos dropdowns ==== */
 tr.dropdown {
   background: none !important;
-  height: 0;
+  animation: dropdown-open 0.35s cubic-bezier(.7,0,.5,1.2) backwards;
   overflow: hidden;
-  transition: all 0.35s cubic-bezier(.6,2,.24,.88);
-  opacity: 0;
-  transform: scaleY(0.96) translateY(-22px);
-  pointer-events: none;
 }
-tr.dropdown.open {
-  opacity: 1;
-  transform: scaleY(1.04) translateY(0);
-  pointer-events: all;
-  height: auto;
-  transition: all 0.28s cubic-bezier(.47,1.64,.41,.88);
+@keyframes dropdown-open {
+  0% { opacity: 0; transform: scaleY(0.7) translateY(-40px);}
+  100% { opacity: 1; transform: scaleY(1) translateY(0);}
+}
+tr.dropdown[style*="display: none;"] {
+  animation: dropdown-close 0.3s cubic-bezier(.5,0,.7,1.1) backwards;
+}
+@keyframes dropdown-close {
+  0% { opacity: 1; transform: scaleY(1);}
+  100% { opacity: 0; transform: scaleY(0.3) translateY(-32px);}
 }
 
-/* ======= HABITS ======== */
-.habit-list {
-  gap: 10px;
-  margin: 10px 0 10px 0;
-  display: flex;
-  flex-direction: column;
-}
+/* ==== HÁBITOS ==== */
+.habit-list { gap: 13px; margin: 14px 0; display: flex; flex-direction: column;}
 .habit-item {
-  display: grid;
-  grid-template-columns: 42px 1fr 36px;
-  align-items: center;
-  background: linear-gradient(90deg, #0df 2%, #cf28ff29 100%);
-  padding: 10px 12px;
-  border-radius: 13px;
-  margin: 7px 0;
-  box-shadow: 0 1px 9px #0af7;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 0.95em;
-  transition: background 0.2s, box-shadow 0.2s, filter 0.18s;
-  cursor: pointer;
-  position: relative;
-  min-height: 2.3em;
-}
-.habit-item:hover, .habit-item:focus-within {
-  background: linear-gradient(90deg, #00eaff 10%, #ff38fdaa 95%);
-  box-shadow: 0 0 11px #00eaff66, 0 0 17px #cf28ff33;
-  filter: brightness(1.19);
+  display: grid; grid-template-columns: 46px 1fr 38px; align-items: center;
+  background: none !important;
+  padding: 8px 16px; border-radius: 13px;
+  box-shadow: none; color: none; transition: background 0.25s;
+  position: relative; font-size: 1.03em; cursor: pointer;
+  z-index: 2;
 }
 .habit-complete {
-  background: linear-gradient(90deg, #31f2f5cc 10%, #ffe37955 100%);
-  color: #222;
+  background: linear-gradient(90deg, #00e4ff44 0%, #ffe37990 60%, #cf28ff33 100%) !important;
+  color: #1a1d2a !important;
   font-weight: bold;
-  box-shadow: 0 0 21px #51ffe7, 0 0 11px #ffe37988;
+  text-shadow: 0 1px 3px #fff, 0 0 20px #000b;
+  filter: brightness(1.15) contrast(1.07);
+  box-shadow: 0 0 17px #00fff055, 0 0 10px #ffe37960;
+  animation: arcade-glow 1.9s infinite alternate;
 }
-.habit-emoji {
-  font-size: 1.8em;
-  filter: drop-shadow(0 0 7px #51ffe7cc) drop-shadow(0 0 14px #ffe37966);
-  cursor: pointer;
-  outline: none;
-  transition: transform 0.18s;
-}
-.habit-emoji.glow {
-  animation: emoji-glow 0.5s ease;
-}
-@keyframes emoji-glow {
-  0% { filter: drop-shadow(0 0 24px #00eaff) brightness(1.5);}
-  100% { filter: drop-shadow(0 0 7px #51ffe7cc) drop-shadow(0 0 14px #ffe37966);}
-}
-.habit-label {
-  padding-left: 7px;
-  cursor: pointer;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 0.92em;
-  color: #1fe3fa;
-  letter-spacing: 1.4px;
-  text-shadow: 0 0 6px #31f2ff66, 0 0 12px #fff4;
-}
-.habit-done {
-  color: #ffe379 !important;
-  text-shadow: 0 0 9px #ffe37977, 0 0 17px #fff9;
-}
-
-/* ============ Checkbox Arcade ============ */
+.habit-label { cursor: pointer; user-select: none; font-family: inherit;}
 .habit-checkbox {
-  -webkit-appearance: none;
-  appearance: none;
-  outline: none !important;
-  width: 26px; height: 26px;
-  border-radius: 8px;
-  border: 2.2px solid var(--arcade-neon);
-  background: none;
-  box-shadow: 0 0 12px #51ffe799, 0 0 0px #ffe37944;
+  accent-color: var(--neon);
+  width: 28px; height: 28px; border-radius: 7px;
+  margin-left: 8px; background: none;
+  border: 2.5px solid var(--neon); box-shadow: 0 0 5px #51ffe7bb;
+  outline: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 9px;
-  margin-right: 0;
-  transition: border 0.18s, box-shadow 0.18s, background 0.22s;
   position: relative;
-}
-.habit-checkbox:after {
-  content: "";
-  display: block;
-  width: 60%;
-  height: 60%;
-  margin: 20% auto;
-  border-radius: 3px;
-  background: none;
-  box-shadow: none;
-  transition: background 0.21s, box-shadow 0.21s;
-}
-.habit-checkbox:checked:after {
-  background: linear-gradient(90deg, #ffe379 80%, #00eaff 100%);
-  box-shadow: 0 0 12px #ffe379, 0 0 9px #00eaffb1;
+  appearance: none;
+  transition: filter 0.18s, box-shadow 0.18s;
 }
 .habit-checkbox:checked {
-  border: 2.5px solid var(--arcade-gold);
-  box-shadow: 0 0 13px #ffe379cc, 0 0 12px #31fcff88;
+  border: 2.5px solid var(--highlight);
+  background: repeating-linear-gradient(45deg, #19e0fc22 0 6px, transparent 6px 12px) !important;
+}
+.habit-checkbox::before {
+  content: "";
+  display: block;
+  width: 80%; height: 80%; left: 10%; top: 10%;
+  position: absolute;
+  border-radius: 5px;
+  background: transparent;
+  z-index: 2;
+}
+.habit-checkbox:checked::after {
+  content: '';
+  display: block;
+  width: 17px; height: 17px; left: 4px; top: 4px;
+  position: absolute;
+  background: none;
+  border: 2.5px solid var(--highlight);
+  border-radius: 4px;
+  z-index: 2;
+  box-shadow: 0 0 5px #ffe379;
+}
+.habit-checkbox:checked:before {
+  background: transparent;
+}
+.habit-checkbox:checked {
+  background: repeating-linear-gradient(135deg, #ffe37944 0 8px, transparent 8px 16px);
 }
 
-/* =================== PRÊMIO ==================== */
+/* ==== PRÊMIOS ==== */
 .reward-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: none !important;
-  border-radius: 17px;
-  margin: 40px auto 12px auto;
-  padding: 24px 22px 14px 22px;
-  width: 92%;
-  max-width: 650px;
-  border: none !important;
-  position: relative;
-  z-index: 6;
-  box-shadow: 0 0 27px #51ffe7a1, 0 0 13px #ffe37941;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: none !important; border-radius: 17px;
+  margin: 34px auto 12px auto; padding: 19px 22px 13px 22px;
+  width: 89%; max-width: 650px; border: none !important; filter: none;
+  position: relative; z-index: 5; box-shadow: none !important;
 }
-.reward-card .reward-effect {
+.reward-card .reward-bg-emoji {
   position: absolute;
   left: 0; top: 0; width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 3;
-  overflow: hidden;
-  animation: fadein 0.8s;
+  z-index: 1; pointer-events: none;
+  opacity: 0.13;
+  font-size: 7.2em;
+  text-align: center;
 }
-@keyframes fadein { from {opacity:0;} to {opacity:1;} }
-.reward-icon {
-  font-size: 2.9em;
-  margin-bottom: 11px;
-  filter: drop-shadow(0 0 12px #ffe37999);
-  z-index: 6;
+.reward-card .reward-emoji-rain {
+  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 1; overflow: hidden;
 }
+.reward-card .reward-emoji-rain span {
+  position: absolute;
+  animation: emoji-rain 3.2s linear infinite;
+  font-size: 2em;
+  filter: blur(0.7px) brightness(1.18);
+  opacity: 0.8;
+  user-select: none;
+}
+@keyframes emoji-rain {
+  0% { top: -10%; opacity:0.7;}
+  20% { opacity: 1;}
+  100% { top: 93%; opacity:0.15;}
+}
+.reward-icon { font-size: 2.7em; margin-bottom: 6px; z-index: 3; }
 .reward-card .title {
   color: #ffe379;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 1.3em;
-  margin-bottom: 2px;
-  text-align: center;
-  letter-spacing: 0.02em;
-  text-shadow: 0 0 12px #ffe379a9, 0 0 18px #31fcff66;
-  z-index: 6;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.18em; margin-bottom: 5px; text-align: center; letter-spacing: 0.03em;
+  text-shadow: 0 0 18px #ffe37980, 0 0 24px #0ef2fc50;
+  z-index: 3;
 }
 .reward-card .desc {
-  color: #1fe3fa;
-  font-size: 1.09em;
-  margin-bottom: 12px;
-  text-align: center;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  text-shadow: 0 0 7px #31f2ff77;
-  z-index: 6;
+  color: #67eaff; font-size: 1.05em; margin-bottom: 6px; text-align: center; z-index: 3;
+  text-shadow: 0 0 14px #0ff3, 0 0 6px #51ffe7a1;
 }
 .reward-bar-bg {
-  width: 92%;
-  height: 16px;
-  background: rgba(23,48,82,0.08);
-  border-radius: 7px;
-  overflow: hidden;
-  margin-top: 7px;
-  margin-bottom: 7px;
-  box-shadow: 0 0 18px #51ffe7cc, 0 0 17px #cf28ff88;
-  filter: none;
-  z-index: 6;
-}
-.reward-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #cf28ff 8%, #51ffe7 92%);
-  border-radius: 8px;
-  transition: width 0.55s cubic-bezier(.6,1.2,.16,1.08);
-  width: 0;
-  box-shadow: 0 0 19px #cf28ff44, 0 0 12px #51ffe7aa;
-}
-.reward-unlocked {
-  margin-top: 10px;
-  color: #ffe379;
-  background: #19e0fc12;
-  border-radius: 10px;
-  padding: 6px 20px;
-  font-weight: bold;
-  box-shadow: 0 0 18px #cf28ff66;
-  font-family: 'Press Start 2P', Arial, sans-serif;
-  font-size: 1.08em;
-  display: inline-block;
-  z-index: 6;
-  text-shadow: 0 0 13px #ffe37988, 0 0 7px #51ffe799;
-}
-
-/* ==== Chuva de emojis dos prêmios (por trás do texto) ==== */
-.reward-effect .emoji-rain {
-  position: absolute;
+  width: 96%; height: 17px;
+  background: rgba(0, 0, 0, 0.0);
+  border-radius: 7px; overflow: hidden; margin-top: 7px; margin-bottom: 7px;
+  box-shadow: none;
   z-index: 3;
-  pointer-events: none;
-  opacity: 0.87;
-  animation: emoji-rain 2.4s linear infinite;
-}
-@keyframes emoji-rain {
-  0% { top: -28px; opacity: 0.1;}
-  10% {opacity: 0.97;}
-  75% {opacity: 0.97;}
-  100% { top: 96%; opacity: 0;}
-}
-
-/* ========== MEDIA QUERIES (responsivo) =========== */
-@media (max-width: 980px) {
-  .banner-gamer { width: 97vw; min-width: 80px; max-width: 99vw; top: 8px; }
-  .banner-gamer-img { max-height: 110px; min-height: 44px; }
-  .arcade-screen-curve, .container { width: 99vw; min-width: 80px; max-width: 99vw; left: 50%; top: 54%; }
-  .arcade-counters { width: 100vw; top: 50%; left: 0; }
-  .counter-label { font-size: 0.98em; }
-  .counter-value { font-size: 2.1em; }
-  .counter { min-height: 72px; }
-  .mes { font-size: 1.4em; }
-}
-@media (max-width: 650px) {
-  .arcade-screen-curve, .container {
-    width: 99vw;
-    min-width: 40px;
-    left: 50%;
-    top: 54%;
-    border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;
-  }
-  #calendario {
-    font-size: 0.74em;
-    padding: 0 1vw 0 1vw;
-  }
-  .arcade-counters {
-    width: 100vw;
-    height: 0;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-  }
-  .counter-label { font-size: 0.79em; }
-  .counter-value { font-size: 1.12em; }
-  .counter { min-height: 25px; }
-  .mes { font-size: 1.0em; }
-}
-
-/* ==== UTILITÁRIOS ==== */
-/* ===== Arcade Highlight grande azul do mês e dia atual ===== */
-.arcade-pointer {
-  display: none;
-  position: absolute;
-  left: -48px;
-  top: 52%;
-  width: 34px;
-  height: 38px;
-  pointer-events: none;
-  z-index: 30;
-  animation: arcade-pointer-glow 1.1s infinite alternate;
-  filter: drop-shadow(0 0 22px #03ffffd1) drop-shadow(0 0 12px #0ffb);
-}
-@keyframes arcade-pointer-glow {
-  0% { filter: drop-shadow(0 0 18px #03ffffb1) brightness(1.17);}
-  100% { filter: drop-shadow(0 0 34px #00eaffd9) brightness(1.4);}
-}
-
-/* Seta animada SVG – exemplo */
-.arcade-pointer svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  filter: drop-shadow(0 0 12px #00eaff) drop-shadow(0 0 4px #fff7);
-}
-
-/* ===== Hover de tudo que é clicável – arcade clean ===== */
-.mes, .main-row, .habit-item, .habit-emoji, .habit-checkbox {
-  transition: 
-    box-shadow 0.18s cubic-bezier(.62,2,.17,.81),
-    background 0.22s cubic-bezier(.62,2,.17,.81),
-    color 0.18s,
-    filter 0.18s;
-}
-.mes:hover, .mes.open,
-.main-row:hover, .main-row.expanded,
-.habit-item:hover, .habit-item:focus-within,
-.habit-emoji:hover, .habit-checkbox:focus {
-  filter: brightness(1.11) drop-shadow(0 0 6px #00eaff88);
-  background: linear-gradient(90deg, #00eaff12 0%, #ffe37914 100%);
-}
-
-/* ===== Dropdown open/close animações ===== */
-tr.dropdown {
-  opacity: 0;
-  pointer-events: none;
-  height: 0;
-  transform: scaleY(0.95) translateY(-10px);
-  transition: 
-    opacity 0.36s cubic-bezier(.6,2,.24,.88),
-    transform 0.36s cubic-bezier(.6,2,.24,.88),
-    height 0.24s cubic-bezier(.6,2,.24,.88);
-}
-tr.dropdown.open {
-  opacity: 1;
-  transform: scaleY(1.02) translateY(0);
-  height: auto;
-  pointer-events: all;
-}
-
-/* ========== Dias completos =========== */
-tr.main-row.day-complete {
-  background: linear-gradient(90deg, #00eaff 6%, #ffe379 90%) !important;
-  color: #273a1e !important;
-  font-weight: bold;
-  text-shadow: 0 2px 7px #fff, 0 0 18px #ffe37955;
-  box-shadow: 0 0 13px #00eaffcc, 0 0 17px #ffe37999;
-  border-radius: 19px;
-}
-tr.main-row.day-complete .progress-text,
-tr.main-row.day-complete td {
-  color: #183a1e !important;
-  text-shadow: 0 0 8px #ffe37999, 0 0 5px #fff7;
-}
-tr.main-row.day-complete .arcade-pointer {
-  display: block !important;
-}
-
-/* ==== Highlight em hábitos completos ==== */
-.habit-complete {
-  background: linear-gradient(90deg, #00eaff55 10%, #ffe37944 100%);
-  color: #19393e !important;
-  font-weight: bold;
-  box-shadow: 0 0 13px #00eaff99, 0 0 9px #ffe37966;
-}
-
-/* ==== Highlight mês completo (todos dias feitos) ==== */
-.mes.mes-completo {
-  color: #ffe379;
-  text-shadow: 0 0 33px #00eaff99, 0 0 30px #ffe37999, 0 0 12px #fff4;
-  background: none;
-  border: none;
-  filter: brightness(1.14);
-}
-
-/* ============ PRÊMIOS: animação chuva de emojis ============= */
-.reward-effect {
-  pointer-events: none;
-  z-index: 4;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0; top: 0;
-  overflow: hidden;
-}
-.reward-effect .emoji-rain {
-  position: absolute;
-  font-size: 1.7em;
-  left: 5%;
-  top: -30px;
-  pointer-events: none;
-  opacity: 0.85;
-  animation: emoji-rain 2.2s linear infinite;
-}
-@keyframes emoji-rain {
-  0% { top: -18px; opacity: 0.1;}
-  12% {opacity: 0.94;}
-  80% {opacity: 0.97;}
-  100% { top: 97%; opacity: 0;}
-}
-
-/* === Barras de progresso dos prêmios com glow === */
-.reward-bar-bg {
-  width: 92%;
-  height: 15px;
-  background: rgba(0, 234, 255, 0.10);
-  border-radius: 7px;
-  margin-top: 6px;
-  margin-bottom: 9px;
-  box-shadow: 0 0 17px #51ffe7c9, 0 0 13px #cf28ffaa;
-  filter: none;
-  overflow: hidden;
 }
 .reward-bar {
   height: 100%;
   background: linear-gradient(90deg, #cf28ff 10%, #51ffe7 90%);
   border-radius: 8px;
+  transition: width 0.45s cubic-bezier(.6,1.2,.16,1.08);
   width: 0;
-  box-shadow: 0 0 17px #cf28ff88, 0 0 11px #51ffe7b9;
-  transition: width 0.55s cubic-bezier(.6,1.2,.16,1.08);
+  box-shadow: 0 0 13px #cf28ff88, 0 0 7px #51ffe799;
+}
+.reward-unlocked {
+  margin-top: 6px; color: #191d28;
+  background: #51ffe7;
+  border-radius: 8px; padding: 5px 18px;
+  font-weight: bold; box-shadow: 0 0 11px #cf28ff44;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.09em; display: inline-block;
+  z-index: 3;
+  letter-spacing: 1px;
 }
 
-/* ========== Corrige botões, inputs ========== */
-input, textarea, select, button {
-  font-family: 'Press Start 2P', Arial, sans-serif !important;
+/* ========== Seta indicador ========== */
+.mes.current .mes-arrow {
+  display: inline-block !important;
+  color: #ff64b0;
+  filter: drop-shadow(0 0 14px #ff84eb) drop-shadow(0 0 18px #51ffe7cc);
+  animation: mes-arrow-flash 0.67s infinite alternate;
 }
-input:focus, textarea:focus, select:focus, button:focus {
+@keyframes mes-arrow-flash {
+  0% { transform: translateY(0) scale(1.09);}
+  100% { transform: translateY(-11px) scale(1.16);}
+}
+tr.main-row.current-day .day-arrow {
+  display: inline-block !important;
+  color: #00e4ff;
+  font-size: 1.27em;
+  animation: day-arrow-glow 1.1s infinite alternate;
+  margin-right: 7px;
+}
+@keyframes day-arrow-glow {
+  0% { filter: drop-shadow(0 0 9px #00e4ff70);}
+  100% { filter: drop-shadow(0 0 18px #51ffe7cc);}
+}
+.day-arrow { display: none; }
+
+/* ==== Remove cursor editável lateral (bug visual) ==== */
+#calendario:focus,
+#calendario *:focus {
   outline: none !important;
-  box-shadow: 0 0 7px #51ffe7 !important;
-}
-.habit-checkbox:focus {
-  border-color: #00eaff;
-  box-shadow: 0 0 8px #00eaff;
+  caret-color: transparent !important;
 }
 
-/* ========== Corrige cor de texto nas tabelas ========== */
-.progress-text, .gold {
-  color: var(--arcade-gold) !important;
-  text-shadow: 0 0 6px #ffe379aa, 0 0 13px #31fcff44, 0 0 5px #fff6;
-}
+/* ==== SCROLLBAR OCULTA ==== */
+#calendario::-webkit-scrollbar { width: 7px; background: none;}
+#calendario::-webkit-scrollbar-thumb { background: transparent; border-radius: 11px;}
 
-/* ========== Remove highlight em seleção de texto ========== */
-*::selection {
-  background: none;
+/* ========== MEDIA QUERIES ========== */
+@media (max-width: 980px) {
+  .banner-gamer { width: 95vw; min-width: 80px; max-width: 99vw; top: 8px;}
+  .banner-gamer-img { max-height: 110px; min-height: 44px;}
+  .arcade-screen-curve { width: 99vw; min-width: 80px; max-width: 99vw; left: 50%; top: 54%;}
+  .arcade-counters { width: 100vw; height: 0; top: 50%; left: 0; transform: translateY(-50%);}
+  .counter-label { font-size: 0.78em; }
+  .counter-value { font-size: 1.37em; }
+  .counter { min-height: 80px; }
+  .mes { font-size: 1.33em;}
 }
-
-/* ========== Corrige barra lateral que aparecia ========== */
-#calendario {
-  overflow-y: overlay;
-  scrollbar-width: none;
+@media (max-width: 650px) {
+  .arcade-screen-curve { width: 99vw; min-width: 40px; left: 50%; top: 54%; border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;}
+  #calendario { font-size: 0.77em; padding: 0 1vw 0 1vw;}
+  .arcade-counters { width: 100vw; height: 0; top: 50%; left: 0; transform: translateY(-50%);}
+  .counter-label { font-size: 0.57em; }
+  .counter-value { font-size: 1.09em; }
+  .counter { min-height: 25px; }
+  .mes { font-size: 1.1em;}
 }
-
-/* ========== Outras pequenas polidas ========= */
-.habit-list {
-  padding-bottom: 13px;
-}
-.reward-unlocked span {
-  color: #00eaff;
-  text-shadow: 0 0 10px #31fcffbb;
-}
-
-::-webkit-scrollbar { width: 0 !important; background: none !important; }
-::-webkit-scrollbar-thumb { background: none !important; }
