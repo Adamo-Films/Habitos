@@ -190,7 +190,6 @@ async function saveProgress(progress) {
   }
   localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
 }
-
 document.addEventListener("DOMContentLoaded", async function () {
   const progress = await getProgress();
   const dados = [];
@@ -312,11 +311,11 @@ document.addEventListener("DOMContentLoaded", async function () {
           <div class="desc">${reward.desc}</div>
           <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mes}-${ano}"></div></div>
           <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
+          <div class="reward-effect"></div>
         </div>`;
     }
   });
   calendario.innerHTML = html;
-
   // Dropdown meses: só o mês atual começa aberto
   const allMesDivs = document.querySelectorAll('#calendario .mes');
   const allTables = document.querySelectorAll('#calendario table');
@@ -539,3 +538,144 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 });
+
+// === ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ===
+// (Chame sempre que mudar a view do calendário)
+
+function sprinklesEffect(container) {
+  container.innerHTML = "";
+  let colors = ["#fa47b1","#ffe379","#51ffe7","#cf28ff","#00f0ff","#ff904c","#fff"];
+  for (let i = 0; i < 22; i++) {
+    let sprinkle = document.createElement('div');
+    sprinkle.className = 'sprinkle';
+    sprinkle.style.background = colors[Math.floor(Math.random()*colors.length)];
+    sprinkle.style.left = (Math.random()*90+2) + '%';
+    sprinkle.style.animationDelay = (Math.random()*2)+'s';
+    sprinkle.style.width = (Math.random()*6+3) + 'px';
+    sprinkle.style.height = (Math.random()*2+1.5) + 'px';
+    container.appendChild(sprinkle);
+  }
+}
+
+function cinemaEmojisEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🎬","🎥","📽️","🍿","🎞️"];
+  for (let i=0;i<10;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-cinema';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*85+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2)+'s';
+    emoji.style.fontSize = (Math.random()*20+24)+'px';
+    container.appendChild(emoji);
+  }
+}
+
+function foodEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🍝", "🍽️", "🍷", "🍕", "🍰"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-food';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*80+10)+'%';
+    emoji.style.animationDelay = (Math.random()*2.5)+'s';
+    emoji.style.fontSize = (Math.random()*18+23)+'px';
+    container.appendChild(emoji);
+  }
+}
+
+function vacationEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🌞","🌴","🏡","☁️"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-vacation';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*84+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2.5)+'s';
+    emoji.style.fontSize = (Math.random()*20+22)+'px';
+    container.appendChild(emoji);
+  }
+}
+
+function turingEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["0️⃣","1️⃣","🟦","💾"];
+  for (let i=0;i<13;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-bit';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*85+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2.2)+'s';
+    emoji.style.fontSize = (Math.random()*18+19)+'px';
+    container.appendChild(emoji);
+  }
+}
+
+function shopEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🛍️", "💸", "🏷️", "🪙", "👗"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-shop';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*85+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2.2)+'s';
+    emoji.style.fontSize = (Math.random()*18+20)+'px';
+    container.appendChild(emoji);
+  }
+}
+
+function tankEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🫧","🌊","💧"];
+  for (let i=0;i<12;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-bubble';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*87+5)+'%';
+    emoji.style.animationDelay = (Math.random()*2.3)+'s';
+    emoji.style.fontSize = (Math.random()*13+18)+'px';
+    container.appendChild(emoji);
+  }
+}
+
+function clockEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["⌚","⏰","⚙️","⏳"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-clock';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*80+10)+'%';
+    emoji.style.animationDelay = (Math.random()*2.5)+'s';
+    emoji.style.fontSize = (Math.random()*17+21)+'px';
+    container.appendChild(emoji);
+  }
+}
+
+// Inicializa efeitos animados dos prêmios ao carregar ou mudar mês
+function initRewardEffects() {
+  document.querySelectorAll('.reward-card').forEach(card => {
+    let effect = card.querySelector('.reward-effect');
+    if (!effect) return;
+    let type = card.getAttribute('data-reward');
+    if (type?.includes('donuts')) sprinklesEffect(effect);
+    else if (type?.includes('valentina')) cinemaEmojisEffect(effect);
+    else if (type?.includes('rascal')) foodEffect(effect);
+    else if (type?.includes('airbnb')) vacationEffect(effect);
+    else if (type?.includes('turing')) turingEffect(effect);
+    else if (type?.includes('compras')) shopEffect(effect);
+    else if (type?.includes('tanque')) tankEffect(effect);
+    else if (type?.includes('relogio')) clockEffect(effect);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', initRewardEffects);
+window.addEventListener('load', initRewardEffects);
+
+// Reaplica sempre que trocar mês (caso use innerHTML para mudar o calendário)
+const observer = new MutationObserver(() => { setTimeout(initRewardEffects, 150); });
+observer.observe(document.getElementById('calendario'), { childList: true, subtree: true });
+
