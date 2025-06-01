@@ -1,19 +1,19 @@
 @keyframes rgb-glow-pulse {
   0%,100% {
     box-shadow:
-      0 0 16px 7px #cf28ff,
-      0 0 20px 13px #51ffe7,
-      0 0 10px 7px #00f0ff,
-      0 0 12px 8px #ff00ff;
+      0 0 20px 9px #cf28ff,
+      0 0 22px 13px #51ffe7,
+      0 0 12px 9px #00f0ff,
+      0 0 18px 10px #ff00ff;
     filter: brightness(1.12) saturate(2.2);
   }
   50% {
     box-shadow:
-      0 0 36px 14px #51ffe7,
-      0 0 26px 10px #cf28ff,
-      0 0 18px 8px #00f0ff,
-      0 0 22px 14px #ff00ff;
-    filter: brightness(1.18) saturate(2.7);
+      0 0 38px 17px #51ffe7,
+      0 0 32px 14px #cf28ff,
+      0 0 24px 13px #00f0ff,
+      0 0 24px 16px #ff00ff;
+    filter: brightness(1.19) saturate(2.9);
   }
 }
 
@@ -25,6 +25,7 @@
   --white: #fff;
 }
 
+/* ================= BASE =============== */
 html, body {
   margin: 0;
   padding: 0;
@@ -34,7 +35,6 @@ html, body {
   font-family: 'Inter', Arial, sans-serif;
   overflow: hidden;
 }
-
 .arcade-bg {
   position: fixed;
   z-index: 0;
@@ -44,6 +44,7 @@ html, body {
   background-size: cover;
 }
 
+/* ================= BANNER ================== */
 .banner-gamer {
   position: absolute;
   left: 50%;
@@ -73,6 +74,7 @@ html, body {
   pointer-events: none;
 }
 
+/* ================= CONTADORES ================= */
 .arcade-counters {
   position: absolute;
   top: 50%;
@@ -105,11 +107,6 @@ html, body {
   margin: 0;
 }
 
-.counter.left, .counter.right {
-  clip-path: none !important;
-  margin: 0;
-}
-
 .counter-label, .counter-value {
   text-align: center;
   width: 100%;
@@ -128,13 +125,6 @@ html, body {
   margin-bottom: 16px;
   text-transform: uppercase;
   transform: none;
-}
-
-.counter.left .counter-label,
-.counter.right .counter-label {
-  transform: none;
-  margin-left: 0;
-  margin-right: 0;
 }
 
 .counter-value {
@@ -158,13 +148,7 @@ html, body {
   transform: none;
 }
 
-.counter.left .counter-value,
-.counter.right .counter-value {
-  transform: none;
-  margin-left: 0;
-  margin-right: 0;
-}
-
+/* ================= TELA PRINCIPAL CRT ================ */
 .arcade-screen-curve {
   position: absolute;
   left: 50%;
@@ -201,7 +185,7 @@ html, body {
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  background: none !important;
+  background: rgba(11,24,61,0.68) !important;
   color: #ffe379;
   font-family: 'Antonio', 'Bebas Neue', Arial, sans-serif;
   padding: 0 1.5vw 0 1.5vw;
@@ -214,6 +198,7 @@ html, body {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
+/* Neon text em todo conteúdo do calendário */
 #calendario,
 #calendario th,
 #calendario td,
@@ -223,10 +208,10 @@ html, body {
 #calendario .habit-emoji,
 #calendario .habit-item {
   text-shadow:
-    0 0 14px #51ffe7bb,
-    0 0 28px #ffe37944,
-    0 0 8px #fff7,
-    0 0 2px #fff6;
+    0 0 12px #51ffe7aa,
+    0 0 18px #ffe37933,
+    0 0 6px #fff7,
+    0 0 1px #fff5;
 }
 
 #calendario .habit-emoji {
@@ -235,17 +220,17 @@ html, body {
     drop-shadow(0 0 14px #ffe37966);
 }
 
-/* PRÊMIOS - Glow RGB, pulsante só no container, barra estática */
+/* ============== PRÊMIO MÊS ARCADE - RGB/NEON GLOW =============== */
 #calendario .reward-card {
-  animation: rgb-glow-pulse 8s infinite ease-in-out;
+  animation: rgb-glow-pulse 6.2s infinite ease-in-out;
   box-shadow:
-    0 0 22px 8px #cf28ff,
-    0 0 28px 16px #51ffe7,
-    0 0 16px 10px #00f0ff,
-    0 0 18px 12px #ff00ff;
-  filter: brightness(1.12) contrast(1.15) saturate(2.3);
+    0 0 38px 15px #cf28ff,
+    0 0 26px 9px #51ffe7,
+    0 0 22px 13px #00f0ff,
+    0 0 20px 12px #ff00ff;
+  filter: brightness(1.14) contrast(1.13) saturate(2.8);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 #calendario .reward-bar-bg {
@@ -277,7 +262,7 @@ html, body {
     0 1px 4px #ff00ff88;
 }
 
-/* ----- EFEITOS ANIMADOS PERSONALIZADOS DE PRÊMIO ----- */
+/* Efeito animado do prêmio */
 .reward-effect {
   position: absolute;
   left: 0; top: 0; width: 100%; height: 100%;
@@ -404,8 +389,7 @@ html, body {
   100% { bottom: 90%; opacity:0;}
 }
 
-/* ------------------------------------- */
-
+/* ============= MES, TABELA, HABITOS ================== */
 .mes {
   font-family: 'Antonio', sans-serif;
   font-size: 2.18em;
