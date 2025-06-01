@@ -17,7 +17,7 @@ const rewards = [
   { month: 6, year: 2025, icon: "🏁", title: "Prêmio Junho", desc: "Um dia pra finalizar Valentina.", label: "Valentina!" },
   { month: 7, year: 2025, icon: "🍝", title: "Prêmio Julho", desc: "Jantar especial no restaurante Rascal.", label: "Rascal!" },
   { month: 8, year: 2025, icon: "🏡", title: "Prêmio Agosto", desc: "Airbnb relaxante para recarregar as energias.", label: "Airbnb relax!" },
-  { month: 9, year: 2025, icon: "🧠🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine.", label: "Turing Machine!" },
+  { month: 9, year: 2025, icon: "🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine.", label: "Turing Machine!" },
   { month: 10, year: 2025, icon: "🛍️", title: "Prêmio Outubro", desc: "Um dia de compras.", label: "Compras!" },
   { month: 11, year: 2025, icon: "🛀", title: "Prêmio Novembro", desc: "Sessão em um tanque de privação sensorial.", label: "Zen!" },
   { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll.", label: "Ingersoll!" }
@@ -30,7 +30,7 @@ function getRewardFor(month, year, day = null) {
 
 // Emojis para hábitos
 const habitEmojis = [
-  "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
+  "💧", "🥗", "🚫", "💬", "📅", "📚", "⏰", "🧘",
   "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪",
 ];
 
