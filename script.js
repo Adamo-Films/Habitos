@@ -1,4 +1,4 @@
-// Firebase config
+// =================== Firebase config ===================
 const firebaseConfig = {
   apiKey: "AIzaSyAMnk4nDBd6nbvt9ElZeKDlJA7cp2vYfIk",
   authDomain: "habitos-danilo.firebaseapp.com",
@@ -11,7 +11,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Recompensas do mês
+// =================== Recompensas ===================
 const rewards = [
   { month: 5, year: 2025, icon: "🍩", title: "Prêmio Maio", desc: "Uma caixa de donuts Krispy Kreme.", label: "Donuts!" },
   { month: 6, year: 2025, icon: "🏁", title: "Prêmio Junho", desc: "Um dia pra finalizar Valentina.", label: "Valentina!" },
@@ -47,7 +47,7 @@ const monthNames = [
   "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-// === Confetti (igual antes) ===
+// =================== Confetti Functions ===================
 function launchConfettiEpic() {
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
@@ -169,7 +169,7 @@ function launchRewardConfetti() {
   }, 3400);
 }
 
-// --- Salvar e carregar progresso ---
+// =================== Progress Save/Load ===================
 async function getProgress() {
   try {
     const doc = await db.collection("usuarios").doc("danilo").get();
@@ -315,7 +315,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   calendario.innerHTML = html;
 
-  // ... CONTINUAR ...
+  // --- CONTINUAÇÃO ABAIXO ---
   // Dropdown lógica: abrir/fechar MÊS e DIAS
   const allMesDivs = document.querySelectorAll('#calendario .mes');
   const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
@@ -602,10 +602,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       canvas.height = window.innerHeight;
     }
   });
-});
-
-// ==== ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ====
-// ... (Funções runRewardEffectByType, sprinklesEffect, etc. — igual já estavam, não mudam!) ...
+}); // Fecha DOMContentLoaded
 // ==== ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ====
 
 // Função para rodar o efeito correto e loop
@@ -736,193 +733,4 @@ function clockEffect(container) {
     emoji.style.fontSize = (Math.random()*17+21)+'px';
     container.appendChild(emoji);
   }
-}
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyAMnk4nDBd6nbvt9ElZeKDlJA7cp2vYfIk",
-  authDomain: "habitos-danilo.firebaseapp.com",
-  projectId: "habitos-danilo",
-  storageBucket: "habitos-danilo.appspot.com",
-  messagingSenderId: "342699648229",
-  appId: "1:342699648229:web:a22b4706e2dde3c1c1200c",
-  measurementId: "G-5589029JGV"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// Recompensas do mês
-const rewards = [
-  { month: 5, year: 2025, icon: "🍩", title: "Prêmio Maio", desc: "Uma caixa de donuts Krispy Kreme.", label: "Donuts!" },
-  { month: 6, year: 2025, icon: "🏁", title: "Prêmio Junho", desc: "Um dia pra finalizar Valentina.", label: "Valentina!" },
-  { month: 7, year: 2025, icon: "🍝", title: "Prêmio Julho", desc: "Jantar especial no restaurante Rascal.", label: "Rascal!" },
-  { month: 8, year: 2025, icon: "🏡", title: "Prêmio Agosto", desc: "Airbnb relaxante para recarregar as energias.", label: "Airbnb relax!" },
-  { month: 9, year: 2025, icon: "🧠🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine.", label: "Turing Machine!" },
-  { month: 10, year: 2025, icon: "🛍️", title: "Prêmio Outubro", desc: "Um dia de compras.", label: "Compras!" },
-  { month: 11, year: 2025, icon: "🛀", title: "Prêmio Novembro", desc: "Sessão em um tanque de privação sensorial.", label: "Zen!" },
-  { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll.", label: "Ingersoll!" }
-];
-
-function getRewardFor(month, year, day = null) {
-  if (day) return rewards.find(r => r.day === day && r.month === month && r.year === year);
-  return rewards.find(r => r.month === month && r.year === year && !r.day);
-}
-
-const habitEmojis = [
-  "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
-  "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪",
-];
-
-function getCiclicoEmoji(habito) {
-  if (habito.includes("Banho gelado")) return "🚿";
-  if (habito.includes("Agilidade")) return "🧠";
-  if (habito.includes("Diário")) return "🙏";
-  if (habito.includes("Peso")) return "⚖️";
-  return "🎯";
-}
-
-const monthNames = [
-  "Janeiro", "Fevereiro", "Março", "Abril",
-  "Maio", "Junho", "Julho", "Agosto",
-  "Setembro", "Outubro", "Novembro", "Dezembro"
-];
-
-// =================== Confetti ===================
-function launchConfettiEpic() {
-  const canvas = document.getElementById('confetti-canvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  canvas.style.display = 'block';
-  document.body.style.overflow = "hidden";
-  let W = canvas.width, H = canvas.height;
-  let particles = [];
-  let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
-  for (let i = 0; i < 1200; i++) {
-    particles.push({
-      x: Math.random() * W,
-      y: Math.random() * -H,
-      r: 7 + Math.random() * 12,
-      d: Math.random() * 180,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      tilt: Math.random() * 16 - 8,
-      tiltAngle: 0,
-      tiltAngleIncremental: (Math.random() * 0.09) + .05,
-      alpha: 0.84 + Math.random() * 0.16
-    });
-  }
-  let angle = 0;
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    for (let i = 0; i < particles.length; i++) {
-      ctx.beginPath();
-      ctx.lineWidth = particles[i].r / 2;
-      ctx.strokeStyle = particles[i].color;
-      ctx.globalAlpha = particles[i].alpha;
-      ctx.moveTo(particles[i].x + particles[i].tilt + particles[i].r / 4, particles[i].y);
-      ctx.lineTo(particles[i].x + particles[i].tilt, particles[i].y + particles[i].r);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-    update();
-  }
-  function update() {
-    angle += 0.008;
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].y += (Math.cos(angle + particles[i].d) + 2.8 + particles[i].r/6) * 0.93;
-      particles[i].x += Math.sin(angle * 1.18 + i) * 2.7;
-      particles[i].tiltAngle += particles[i].tiltAngleIncremental;
-      particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 3)) * 18;
-      if (particles[i].y > H + 30) {
-        particles[i].y = -14;
-        particles[i].x = Math.random() * W;
-      }
-    }
-  }
-  let interval = setInterval(draw, 13);
-  const celebrateText = document.getElementById('celebrate-text');
-  celebrateText.style.display = 'block';
-  setTimeout(() => {
-    clearInterval(interval);
-    ctx.clearRect(0, 0, W, H);
-    canvas.style.display = 'none';
-    celebrateText.style.display = 'none';
-    document.body.style.overflow = "";
-  }, 4000);
-}
-
-function launchRewardConfetti() {
-  const canvas = document.getElementById('reward-confetti');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  canvas.style.display = 'block';
-  let W = canvas.width, H = canvas.height;
-  let particles = [];
-  let colors = ['#cf28ff', '#ff49e1', '#51ffe7', '#fff', '#9800cc', '#29012e'];
-  for (let i = 0; i < 800; i++) {
-    particles.push({
-      x: Math.random() * W,
-      y: Math.random() * -H,
-      r: 8 + Math.random() * 10,
-      d: Math.random() * 160,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      tilt: Math.random() * 20 - 10,
-      tiltAngle: 0,
-      tiltAngleIncremental: (Math.random() * 0.07) + .06,
-      alpha: 0.82 + Math.random() * 0.18
-    });
-  }
-  let angle = 0;
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    for (let i = 0; i < particles.length; i++) {
-      ctx.beginPath();
-      ctx.lineWidth = particles[i].r / 2;
-      ctx.strokeStyle = particles[i].color;
-      ctx.globalAlpha = particles[i].alpha;
-      ctx.moveTo(particles[i].x + particles[i].tilt + particles[i].r / 4, particles[i].y);
-      ctx.lineTo(particles[i].x + particles[i].tilt, particles[i].y + particles[i].r);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-    update();
-  }
-  function update() {
-    angle += 0.01;
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].y += (Math.cos(angle + particles[i].d) + 2.5 + particles[i].r/6) * 0.84;
-      particles[i].x += Math.sin(angle * 1.07 + i) * 2.3;
-      particles[i].tiltAngle += particles[i].tiltAngleIncremental;
-      particles[i].tilt = Math.sin(particles[i].tiltAngle - (i % 2)) * 19;
-      if (particles[i].y > H + 30) {
-        particles[i].y = -14;
-        particles[i].x = Math.random() * W;
-      }
-    }
-  }
-  let interval = setInterval(draw, 13);
-  setTimeout(() => {
-    clearInterval(interval);
-    ctx.clearRect(0, 0, W, H);
-    canvas.style.display = 'none';
-  }, 3400);
-}
-
-// --- Salvar e carregar progresso ---
-async function getProgress() {
-  try {
-    const doc = await db.collection("usuarios").doc("danilo").get();
-    return doc.exists ? doc.data() : {};
-  } catch (e) {
-    console.error("Erro ao buscar dados do Firebase:", e);
-    return JSON.parse(localStorage.getItem('habits-progress-v1')) || {};
-  }
-}
-async function saveProgress(progress) {
-  try {
-    await db.collection("usuarios").doc("danilo").set(progress);
-  } catch (e) {
-    console.error("Erro ao salvar no Firebase:", e);
-  }
-  localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
 }
