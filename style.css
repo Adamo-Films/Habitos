@@ -1,564 +1,647 @@
+@keyframes rgb-glow-pulse {
+  0%,100% {
+    box-shadow:
+      0 0 16px 7px #cf28ff,
+      0 0 20px 13px #51ffe7,
+      0 0 10px 7px #00f0ff,
+      0 0 12px 8px #ff00ff;
+    filter: brightness(1.12) saturate(2.2);
+  }
+  50% {
+    box-shadow:
+      0 0 36px 14px #51ffe7,
+      0 0 26px 10px #cf28ff,
+      0 0 18px 8px #00f0ff,
+      0 0 22px 14px #ff00ff;
+    filter: brightness(1.18) saturate(2.7);
+  }
+}
+
 :root {
+  --neon: #51ffe7;
   --gold: #ffe379;
-  --gold2: #e4c145;
-  --gold3: #f7e399;
-  --corpo: #191919;
-  --day-inactive: #f2f2f7;
-  --header: #fff;
-  --arcade-purple: #3c005a;
-  --arcade-pink: #fa47b1;
-  --arcade-cyan: #51ffe7;
-  --arcade-blue: #00f0ff;
-  --arcade-shadow: #000b;
-  --arcade-glow: 0 0 36px 10px #51ffe7, 0 0 60px 15px #fa47b1;
-  --arcade-white-glow: 0 0 32px 6px #fff, 0 0 56px 8px #c3f5ff;
+  --crt-blue: #0e55a5;
+  --crt-dark: #00253b;
+  --white: #fff;
 }
 
-body {
-  background: #0b1730;
-  color: #fff;
-  font-family: 'Inter', 'Bebas Neue', Arial, sans-serif;
+html, body {
   margin: 0;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Fundo Arcade BG */
-.arcade-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -9;
-  background: url('https://i.imgur.com/8349c539-35e5-4057-a90d-65b817f2e045.png') center/cover no-repeat, #0b1730;
+  padding: 0;
   width: 100vw;
   height: 100vh;
+  background: var(--crt-dark);
+  font-family: 'Inter', Arial, sans-serif;
+  overflow: hidden;
 }
 
-/* Banner Gamer */
+.arcade-bg {
+  position: fixed;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://github.com/Adamo-Films/Habitos/raw/main/Artboard%201.png') no-repeat center center;
+  background-size: cover;
+}
+
 .banner-gamer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 16px auto 10px auto;
+  position: absolute;
+  left: 50%;
+  top: -2px;
   width: 98vw;
-  max-width: 600px;
+  max-width: 770px;
+  min-width: 160px;
+  height: auto;
+  transform: translateX(-50%);
+  z-index: 22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
 }
 .banner-gamer-img {
-  width: 270px;
-  margin-top: 10px;
-  filter: drop-shadow(0 0 24px #ffe37980) drop-shadow(0 0 18px #3c005a40);
-}
-
-/* CRT tela principal */
-.container.arcade-screen-curve {
-  width: 96vw;
-  max-width: 980px;
-  margin: 0 auto;
-  margin-top: 8px;
-  margin-bottom: 32px;
-  border-radius: 36px;
-  overflow: hidden;
-  position: relative;
-  background: #053072;
-  box-shadow: 0 0 120px 22px #32e3fa55, 0 0 180px 70px #3c005a30;
-  filter: url(#arcade-convex);
-}
-
-/* CRT overlay e noise */
-.crt-glass-overlay {
+  width: 98%;
+  max-width: 750px;
+  min-width: 120px;
+  height: auto;
+  max-height: 220px;
+  min-height: 75px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px #19e0fcaa)
+          drop-shadow(0 0 60px #ff38fdaa);
   pointer-events: none;
-  position: absolute;
-  inset: 0;
-  border-radius: 36px;
-  background:
-    linear-gradient(105deg, #8fd6ff10 40%, #fff2 80%, #fff0 100%),
-    linear-gradient(90deg, #fff1 1%, #fff0 35%, #fff0 85%, #fff2 99%);
-  z-index: 1;
-}
-.crt-noise {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  border-radius: 36px;
-  opacity: 0.09;
-  background: repeating-linear-gradient(
-    to bottom, #fff1 0 1px, #0000 1px 5px
-  );
-  z-index: 2;
-  mix-blend-mode: screen;
-  animation: crtScan 4.6s linear infinite;
-}
-@keyframes crtScan {
-  0% { background-position-y: 0; }
-  100% { background-position-y: 100px; }
 }
 
-/* Calendário - efeito neon por trás do texto */
-.calendario-container {
-  padding: 22px 2vw 34px 2vw;
-  width: 100%;
-  min-height: 420px;
-  box-sizing: border-box;
-  position: relative;
-  z-index: 3;
-}
-
-/* Meses */
-.mes {
-  font-family: 'Bungee', 'Bebas Neue', cursive, sans-serif;
-  color: var(--gold);
-  font-size: 2.0rem;
-  letter-spacing: 2.5px;
-  margin-top: 24px;
-  margin-bottom: 2px;
-  cursor: pointer;
-  text-shadow: 0 0 18px #ffe379, 0 0 26px #fd2a49a0, 0 0 3px #0008;
-  position: relative;
-  transition: color 0.25s;
-}
-.mes.open {
-  color: #fff;
-  text-shadow: 0 0 24px #ffe379, 0 0 30px #fd2a49a0, 0 0 5px #29012e, 0 0 34px #51ffe7a0;
-}
-.mes:hover {
-  color: var(--arcade-cyan);
-}
-
-/* Tabelas */
-.calendario-container table {
-  width: 99%;
-  margin: 0 auto 16px auto;
-  border-collapse: separate;
-  border-spacing: 0 2px;
-  background: transparent;
-  box-shadow: none;
-}
-
-.calendario-container th,
-.calendario-container td {
-  padding: 7px 4px;
-  font-family: 'Inter', Arial, sans-serif;
-  text-align: center;
-  font-size: 1.10rem;
-  border: none;
-  background: transparent;
-}
-
-.calendario-container th {
-  color: var(--gold3);
-  text-shadow: 0 0 8px #ffe379a0, 0 0 4px #fff8;
-  letter-spacing: 1.1px;
-  font-weight: 700;
-  font-size: 1.13rem;
-}
-
-/* Dias principais */
-tr.main-row {
-  cursor: pointer;
-  transition: background 0.28s, color 0.19s;
-}
-tr.main-row .progress-text {
-  text-shadow: 0 0 12px #51ffe7b0, 0 0 20px #cf28ff90, 0 0 3px #0008;
-  color: var(--gold3);
-  font-weight: bold;
-  letter-spacing: 0.7px;
-}
-tr.main-row.day-complete .progress-text {
-  color: #fff;
-  text-shadow: 0 0 14px #ffe379, 0 0 22px #51ffe7a0, 0 0 3px #00f0ff;
-}
-
-/* Barra de progresso do dia (background/efeito neon) */
-tr.main-row {
-  --progress: 0;
-  background: linear-gradient(
-    90deg,
-    #cf28ff 0%,
-    #fa47b1 8%,
-    #ffe379 28%,
-    #51ffe7 48%,
-    #00f0ff 68%,
-    #cf28ff 94%
-  ) 0 100% / calc(var(--progress,0)*100%) 100% no-repeat,
-  transparent;
-  background-blend-mode: screen;
-  background-clip: padding-box;
-  border-radius: 10px;
-}
-
-tr.main-row.expanded {
-  box-shadow: 0 0 24px #ffe37960;
-  background: #181b2ab2;
-}
-
-/* Dropdown rows */
-tr.dropdown {
-  background: #17304f99;
-  box-shadow: 0 0 14px #0bffe749, 0 0 12px #cf28ff22;
-  transition: background 0.2s;
-}
-.habit-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 18px;
-  justify-content: center;
-  align-items: center;
-}
-.habit-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  border-radius: 9px;
-  background: #11224433;
-  padding: 4px 10px 4px 7px;
-  transition: background 0.24s;
-}
-.habit-item.habit-complete {
-  background: #51ffe722;
-}
-.habit-label {
-  color: #fff;
-  font-weight: 500;
-  font-size: 1.01rem;
-  letter-spacing: 0.4px;
-  text-shadow: 0 0 6px #fff7, 0 0 2px #51ffe7bb;
-}
-.habit-done {
-  color: var(--gold);
-  text-shadow: 0 0 7px #ffe379, 0 0 2px #fff;
-}
-.habit-checkbox {
-  accent-color: #51ffe7;
-  width: 19px;
-  height: 19px;
-}
-.habit-emoji {
-  font-size: 1.37rem;
-  filter: drop-shadow(0 0 6px #ffe379cc);
-  cursor: pointer;
-  transition: filter 0.18s, transform 0.14s;
-}
-.habit-emoji.glow {
-  filter: drop-shadow(0 0 13px #cf28ff) drop-shadow(0 0 7px #51ffe7);
-  transform: scale(1.23) rotate(-6deg);
-}
-
-.expand-icon {
-  font-size: 1.2em;
-  color: #ffe379;
-  filter: drop-shadow(0 0 6px #51ffe7);
-  transition: color 0.17s;
-}
-tr.expanded .expand-icon {
-  color: #fff;
-}
-
-/* ---------------- PRÊMIO MÊS ARCADE - SUPER NEON ---------------- */
-.reward-card {
-  min-height: 125px;
-  min-width: 250px;
-  width: 86%;
-  max-width: 700px;
-  margin: 28px auto 24px auto;
-  padding: 18px 14px 24px 14px;
-  background: rgba(10, 48, 97, 0.97);
-  border-radius: 26px;
-  box-shadow:
-    0 0 44px 12px #00eaffc9,
-    0 0 64px 26px #cf28ffa9,
-    0 0 26px 6px #fff7,
-    0 0 44px 4px #ffe37980;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: visible;
-  z-index: 5;
-  animation: rewardPulse 5s ease-in-out infinite alternate;
-}
-@keyframes rewardPulse {
-  0% { box-shadow:
-    0 0 48px 16px #00eaffe5,
-    0 0 64px 26px #cf28ffa9,
-    0 0 26px 6px #fff7,
-    0 0 44px 6px #ffe379e8; }
-  30% { box-shadow:
-    0 0 70px 19px #cf28fff8,
-    0 0 72px 32px #00eaffe6,
-    0 0 28px 8px #51ffe7cc,
-    0 0 54px 9px #ffe379e8; }
-  80% { box-shadow:
-    0 0 70px 28px #51ffe7ed,
-    0 0 100px 42px #cf28ffe8,
-    0 0 32px 7px #fff9,
-    0 0 64px 16px #ffe379e6; }
-  100% { box-shadow:
-    0 0 42px 8px #00eaffc5,
-    0 0 74px 34px #cf28ffd9,
-    0 0 14px 4px #fff5,
-    0 0 24px 7px #ffe379d0; }
-}
-
-.reward-card .reward-icon {
-  font-size: 2.95rem;
-  filter: drop-shadow(0 0 12px #fff) drop-shadow(0 0 14px #51ffe7);
-  margin-bottom: 0.1em;
-  z-index: 4;
-  text-align: center;
-}
-
-.reward-card .title {
-  font-family: 'Bungee', 'Bebas Neue', cursive;
-  color: #fff;
-  font-size: 1.33rem;
-  text-shadow:
-    0 0 12px #ffe379b0,
-    0 0 20px #cf28ff80,
-    0 0 5px #00f0ff99;
-  margin-top: -2px;
-  margin-bottom: 3px;
-  text-align: center;
-}
-.reward-card .desc {
-  font-family: 'Inter', Arial, sans-serif;
-  font-size: 1.13rem;
-  color: #fff;
-  letter-spacing: 0.8px;
-  margin-bottom: 14px;
-  margin-top: 2px;
-  text-align: center;
-  text-shadow:
-    0 0 8px #51ffe7a0,
-    0 0 16px #cf28ff60,
-    0 0 3px #0008;
-}
-
-.reward-unlocked {
-  margin-top: 7px;
-  font-size: 1.08rem;
-  color: #ffe379;
-  font-weight: bold;
-  text-align: center;
-  text-shadow: 0 0 13px #ffe379cc, 0 0 2px #cf28ff, 0 0 1px #fff;
-  letter-spacing: 1.1px;
-}
-
-/* Barra de progresso do prêmio */
-.reward-bar-bg {
-  width: 96%;
-  max-width: 480px;
-  height: 19px;
-  border-radius: 18px;
-  background: rgba(20, 56, 121, 0.56);
-  box-shadow: 0 0 15px #cf28ff, 0 0 16px #51ffe7cc;
-  margin: 0 auto 0 auto;
-  margin-top: 10px;
-  overflow: hidden;
-  position: relative;
-}
-.reward-bar {
-  height: 100%;
-  border-radius: 18px;
-  background: linear-gradient(
-    90deg,
-    #cf28ff 0%,
-    #fa47b1 15%,
-    #ffe379 38%,
-    #51ffe7 62%,
-    #00f0ff 86%,
-    #003fff 100%
-  );
-  box-shadow: 0 0 18px 2px #51ffe7cc, 0 0 20px 5px #cf28ffb5;
-  transition: width 0.54s cubic-bezier(.6,1.2,.16,1.08);
-  width: 0;
-}
-
-/* Efeito animado do prêmio */
-.reward-effect {
-  min-height: 42px;
-  height: 54px;
-  width: 99%;
-  pointer-events: none;
-  position: absolute;
-  left: 0; bottom: 0; right: 0; top: 0;
-  z-index: 7;
-  overflow: visible;
-}
-
-/* ----------- Animações dos prêmios (donuts, cinema, etc) ----------- */
-.sprinkle {
-  position: absolute;
-  top: -10px;
-  border-radius: 7px;
-  opacity: 0.9;
-  animation: sprinkleFall 1.7s cubic-bezier(.29,.82,.69,1.14) forwards;
-}
-@keyframes sprinkleFall {
-  0% { top: -22px; opacity: 0.9; }
-  85% { opacity: 1; }
-  100% { top: 95%; opacity: 0; }
-}
-
-.emoji-cinema, .emoji-food, .emoji-vacation, .emoji-bit, .emoji-shop, .emoji-bubble, .emoji-clock {
-  position: absolute;
-  top: 7%;
-  user-select: none;
-  pointer-events: none;
-  opacity: 0.84;
-  animation-duration: 2.2s;
-  animation-fill-mode: forwards;
-}
-.emoji-cinema {
-  animation-name: cinemaDrop;
-}
-@keyframes cinemaDrop {
-  0% { top: -15px; opacity: 0.84; }
-  85% { opacity: 1; }
-  100% { top: 86%; opacity: 0; }
-}
-.emoji-food {
-  animation-name: foodFly;
-}
-@keyframes foodFly {
-  0% { top: 9%; opacity: 0.84; transform: scale(1.04) rotate(-24deg);}
-  80% { opacity: 1;}
-  100% { top: 92%; opacity: 0; transform: scale(1.28) rotate(14deg);}
-}
-.emoji-vacation {
-  animation-name: vacationRise;
-}
-@keyframes vacationRise {
-  0% { top: 110%; opacity: 0.7; }
-  60% { opacity: 1;}
-  100% { top: 0%; opacity: 0; }
-}
-.emoji-bit {
-  animation-name: bitCode;
-}
-@keyframes bitCode {
-  0% { top: 9%; opacity: 0.7;}
-  45% { opacity: 1;}
-  100% { top: 85%; opacity: 0; }
-}
-.emoji-shop {
-  animation-name: shopFloat;
-}
-@keyframes shopFloat {
-  0% { top: 86%; opacity: 0.84; }
-  70% { opacity: 1;}
-  100% { top: 8%; opacity: 0; }
-}
-.emoji-bubble {
-  animation-name: bubbleFloat;
-}
-@keyframes bubbleFloat {
-  0% { top: 100%; opacity: 0.74;}
-  80% { opacity: 1;}
-  100% { top: 8%; opacity: 0;}
-}
-.emoji-clock {
-  animation-name: clockSwing;
-}
-@keyframes clockSwing {
-  0% { top: 12%; opacity: 0.8; transform: scale(1.05) rotate(-22deg);}
-  75% { opacity: 1;}
-  100% { top: 90%; opacity: 0; transform: scale(1.32) rotate(19deg);}
-}
-
-/* Contadores laterais Arcade */
 .arcade-counters {
   position: absolute;
-  width: 100vw;
+  top: 50%;
   left: 0;
-  top: 106px;
-  z-index: 10;
+  width: 100vw;
+  height: 0;
+  z-index: 30;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   pointer-events: none;
-  user-select: none;
+  transform: translateY(-50%);
+  background: none !important;
 }
+
 .counter {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 190px;
-  font-family: 'Bungee', 'Bebas Neue', cursive, Arial, sans-serif;
-  font-size: 2.44rem;
-  color: #fff;
-  text-shadow:
-    0 0 16px #ffe379,
-    0 0 19px #cf28ff99,
-    0 0 2px #51ffe7cc,
-    0 0 13px #00f0ff;
-  font-weight: 900;
-  filter: drop-shadow(0 0 14px #00eaff80);
+  justify-content: center;
+  width: 16vw;
+  max-width: 310px;
+  min-width: 80px;
+  min-height: 210px;
+  height: 100%;
+  pointer-events: none;
+  background: none !important;
+  box-sizing: border-box;
+  padding: 0 0.2vw;
+  margin: 0;
+}
+
+.counter.left, .counter.right {
+  clip-path: none !important;
+  margin: 0;
+}
+
+.counter-label, .counter-value {
+  text-align: center;
+  width: 100%;
   pointer-events: none;
 }
+
 .counter-label {
-  text-align: center;
-  font-size: 1.25rem;
-  font-family: 'Bungee', 'Bebas Neue', Arial, sans-serif;
-  font-weight: bold;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  line-height: 1.1;
+  font-family: 'Bungee', 'Luckiest Guy', sans-serif;
+  font-size: 2.1em;
   color: #fff;
-  margin-bottom: -10px;
-  text-shadow: 0 0 10px #fff, 0 0 30px #ffe379b0, 0 0 9px #cf28ff60;
-  filter: drop-shadow(0 0 7px #51ffe780);
+  text-shadow: 0 2px 14px #19e0fcaa, 0 1px 12px #000d, 0 1px 30px #ffe379bb;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  line-height: 1.12;
+  margin-top: 0;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  transform: none;
 }
+
+.counter.left .counter-label,
+.counter.right .counter-label {
+  transform: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .counter-value {
-  font-size: 3.23rem;
+  font-family: 'Luckiest Guy', 'Bungee', cursive;
+  font-size: 6.6em;
+  background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
+  color: #fdf5c6;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 12px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
+  border-radius: 16px;
+  display: inline-block;
+  padding: 0 10px 0 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  width: 100%;
+  transform: none;
+}
+
+.counter.left .counter-value,
+.counter.right .counter-value {
+  transform: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.arcade-screen-curve {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  width: 90vw;
+  height: 70vh;
+  max-width: 870px;
+  max-height: 490px;
+  min-width: 240px;
+  min-height: 120px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
+  background: none !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+#calendario {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 110%;
+  height: 110%;
+  max-width: 99%;
+  max-height: 99%;
+  min-width: 120px;
+  min-height: 70px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  background: none !important;
   color: #ffe379;
+  font-family: 'Antonio', 'Bebas Neue', Arial, sans-serif;
+  padding: 0 1.5vw 0 1.5vw;
+  overflow-y: auto;
+  text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
+  filter: url(#arcade-convex);
+  box-sizing: border-box;
+  border: none !important;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
+}
+
+#calendario,
+#calendario th,
+#calendario td,
+#calendario .progress-text,
+#calendario .mes,
+#calendario .habit-label,
+#calendario .habit-emoji,
+#calendario .habit-item {
   text-shadow:
-    0 0 18px #ffe379c8,
-    0 0 14px #cf28ffcc,
-    0 0 6px #51ffe7cc,
-    0 0 14px #00f0ffb5;
-  margin-top: 2px;
+    0 0 14px #51ffe7bb,
+    0 0 28px #ffe37944,
+    0 0 8px #fff7,
+    0 0 2px #fff6;
 }
 
-/* Celular responsivo */
-@media (max-width: 900px) {
-  .container.arcade-screen-curve {
-    max-width: 98vw;
-    margin-top: 2vw;
-    border-radius: 22px;
-  }
-  .calendario-container {
-    padding: 10px 0.5vw 18px 0.5vw;
-    min-height: 350px;
-  }
-  .reward-card {
-    min-height: 95px;
-    padding: 11px 3px 18px 3px;
-    border-radius: 17px;
-  }
-  .reward-card .reward-icon { font-size: 2.1rem; }
-  .arcade-counters .counter { font-size: 1.35rem; width: 120px; }
-  .counter-value { font-size: 2.0rem; }
+#calendario .habit-emoji {
+  filter:
+    drop-shadow(0 0 7px #51ffe7cc)
+    drop-shadow(0 0 14px #ffe37966);
 }
 
-@media (max-width: 650px) {
-  .container.arcade-screen-curve {
-    border-radius: 14px;
-  }
-  .reward-card {
-    min-width: 60vw;
+/* PRÊMIOS - Glow RGB, pulsante só no container, barra estática */
+#calendario .reward-card {
+  animation: rgb-glow-pulse 8s infinite ease-in-out;
+  box-shadow:
+    0 0 22px 8px #cf28ff,
+    0 0 28px 16px #51ffe7,
+    0 0 16px 10px #00f0ff,
+    0 0 18px 12px #ff00ff;
+  filter: brightness(1.12) contrast(1.15) saturate(2.3);
+  position: relative;
+  overflow: hidden;
+}
+
+#calendario .reward-bar-bg {
+  box-shadow:
+    0 0 10px 2px #51ffe7bb,
+    0 0 13px 3px #cf28ff99;
+  filter: none;
+}
+
+#calendario .reward-icon {
+  font-size: 2.6em;
+  margin-bottom: 5px;
+  filter: none;
+}
+
+#calendario .reward-card .title,
+#calendario .reward-card .desc,
+#calendario .reward-unlocked {
+  color: #fff;
+  font-weight: 900;
+  background: linear-gradient(90deg, #cf28ff 0%, #51ffe7 55%, #ffe379 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow:
+    0 0 2px #51ffe7,
+    0 0 4px #cf28ffcc,
+    0 0 1px #00f0ff,
+    0 1px 4px #ff00ff88;
+}
+
+/* ----- EFEITOS ANIMADOS PERSONALIZADOS DE PRÊMIO ----- */
+.reward-effect {
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Donuts - Sprinkles */
+.sprinkle {
+  position: absolute;
+  top: -15px;
+  border-radius: 99px;
+  transform: rotateZ(20deg);
+  opacity: 0.88;
+  animation: sprinkle-fall 3.2s linear infinite;
+}
+@keyframes sprinkle-fall {
+  0% { top: -14px; opacity:0.8; }
+  10% { opacity: 1; }
+  100% { top: 92%; opacity:0.2;}
+}
+
+/* Valentina - Cinema emojis flutuando */
+.emoji-cinema {
+  position: absolute;
+  top: -25px;
+  animation: cinema-float 4s cubic-bezier(.43,1.4,.4,1.04) infinite;
+  opacity: 0.86;
+  user-select: none;
+}
+@keyframes cinema-float {
+  0% { top: -22px; opacity:0.5; transform: rotate(-8deg);}
+  10% {opacity:1;}
+  50% { opacity:1;}
+  100% { top:92%; opacity:0;}
+}
+
+/* Rascal - Comida/Talheres girando/flutuando */
+.emoji-food {
+  position: absolute;
+  top: -20px;
+  animation: food-float 3.5s ease-in-out infinite;
+  opacity: 0.88;
+  user-select: none;
+}
+@keyframes food-float {
+  0% { top: -20px; transform: rotate(-8deg) scale(1); opacity:0.6;}
+  15% {opacity:1;}
+  50% { transform: rotate(12deg) scale(1.16);}
+  100% { top: 95%; transform: rotate(-8deg) scale(1); opacity:0;}
+}
+
+/* Airbnb - Sol, nuvem, casa, folhas flutuando/balançando */
+.emoji-vacation {
+  position: absolute;
+  top: -24px;
+  animation: vacation-float 4.5s cubic-bezier(.42,1.2,.55,1.09) infinite;
+  opacity: 0.82;
+  user-select: none;
+}
+@keyframes vacation-float {
+  0% { top: -22px; opacity:0.55; transform: translateX(0);}
+  10% {opacity:1;}
+  50% { transform: translateX(14px);}
+  100% { top:92%; opacity:0;}
+}
+
+/* Turing Machine - Bits caindo */
+.emoji-bit {
+  position: absolute;
+  top: -20px;
+  animation: bit-fall 3.5s linear infinite;
+  opacity: 0.86;
+  user-select: none;
+}
+@keyframes bit-fall {
+  0% { top: -20px; opacity: 0.7;}
+  12% {opacity:1;}
+  100% { top:94%; opacity:0;}
+}
+
+/* Compras - Sacolas e moedas pulando */
+.emoji-shop {
+  position: absolute;
+  bottom: 0;
+  animation: shop-bounce 2.9s cubic-bezier(.55,1.3,.53,1.01) infinite;
+  opacity: 0.87;
+  user-select: none;
+}
+@keyframes shop-bounce {
+  0% { bottom: 0; opacity:0.8; transform: scale(1);}
+  22% { bottom: 45%; opacity:1; transform: scale(1.17);}
+  44% { bottom: 0; opacity:1; transform: scale(1);}
+  100% { bottom: 0; opacity:0.7; transform: scale(1);}
+}
+
+/* Tanque Sensorial - Bolhas subindo */
+.emoji-bubble {
+  position: absolute;
+  bottom: -15px;
+  animation: bubble-rise 3.7s cubic-bezier(.54,1.25,.45,1.02) infinite;
+  opacity: 0.79;
+  user-select: none;
+}
+@keyframes bubble-rise {
+  0% { bottom: -15px; opacity:0.5; transform: scale(0.7);}
+  15% {opacity:1;}
+  60% { transform: scale(1.09);}
+  100% { bottom:92%; opacity:0; transform: scale(1.22);}
+}
+
+/* Relógio Ingersoll - Relógios/engrenagens girando/subindo */
+.emoji-clock {
+  position: absolute;
+  bottom: -20px;
+  animation: clock-float 4.1s cubic-bezier(.45,1.4,.5,1.01) infinite;
+  opacity: 0.8;
+  user-select: none;
+}
+@keyframes clock-float {
+  0% { bottom: -14px; opacity:0.5; transform: rotate(0deg);}
+  8% {opacity:1;}
+  55% { transform: rotate(22deg);}
+  100% { bottom: 90%; opacity:0;}
+}
+
+/* ------------------------------------- */
+
+.mes {
+  font-family: 'Antonio', sans-serif;
+  font-size: 2.18em;
+  margin: 18px 0 11px 0;
+  color: var(--gold);
+  text-shadow: 0 0 12px #ffe379cc, 0 0 19px #31fcffbb, 0 0 45px #31fcff77;
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: transform 0.3s cubic-bezier(.47,1.64,.41,.88);
+}
+.mes::after {
+  content: "▼";
+  font-size: 0.8em;
+  margin-left: 13px;
+  color: var(--neon);
+  text-shadow: 0 0 8px #31f2f5;
+  transition: transform 0.3s;
+  transform: rotate(0deg);
+}
+.mes.open::after { transform: rotate(180deg); }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: none !important;
+  color: #fff;
+  margin-bottom: 18px;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+th, td {
+  padding: 7px 10px;
+  font-size: 1em;
+  text-align: left;
+  background: transparent !important;
+  border: none !important;
+}
+
+tr.main-row {
+  cursor: pointer;
+  --progress: 0;
+  background: transparent !important;
+  color: #ffe379;
+  border-radius: 17px;
+  border-bottom: none !important;
+  box-shadow: none;
+  filter: brightness(1.05) contrast(1.12);
+  transition: color 0.25s;
+}
+
+tr.main-row.day-complete {
+  background: linear-gradient(90deg, #23e2f9 0%, #ffe379 60%, #f7d865 100%) !important;
+  color: #283a1e !important;
+  font-weight: bold;
+  text-shadow: 0 1px 3px #fff, 0 0 20px #000b;
+  box-shadow: 0 0 36px #0ff6, 0 0 20px #ffe37999;
+  border-radius: 22px 20px 22px 20px;
+  mix-blend-mode: screen;
+}
+
+tr.main-row.expanded {
+  border: 2px solid #ffe37966;
+  box-shadow: 0 0 22px #fff07b66;
+}
+
+tr.main-row.day-complete .progress-text,
+tr.main-row.day-complete td {
+  color: #171818 !important;
+  text-shadow: 0 0 12px #fff5, 0 0 4px #ffe37933;
+}
+
+.progress-text.gold {
+  color: #ffe379;
+  text-shadow: 0 0 12px #ffe379cc, 0 0 16px #ffd90099;
+}
+
+tr.dropdown {
+  background: none !important;
+}
+.habit-list { gap: 11px; margin: 14px 0; }
+.habit-item {
+  display: grid;
+  grid-template-columns: 42px 1fr 36px;
+  align-items: center;
+  background: rgba(41, 133, 188, 0.13);
+  padding: 8px 14px;
+  border-radius: 13px;
+  box-shadow: 0 1px 6px #0af6;
+  color: none;
+  transition: background 0.25s;
+  position: relative;
+}
+.habit-complete {
+  background: rgba(81,255,231,0.18);
+  color: #191b22;
+  font-weight: bold;
+  box-shadow: 0 0 15px #51ffe7;
+}
+.habit-emoji { font-size: 1.6em; }
+
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30,70,150,0.07);
+  border-radius: 17px;
+  margin: 34px auto 12px auto;
+  padding: 19px 22px 13px 22px;
+  width: 85%;
+  max-width: 650px;
+  border: none !important;
+  filter: none;
+  position: relative;
+  z-index: 5;
+}
+.reward-icon {
+  font-size: 2.6em;
+  margin-bottom: 5px;
+  filter: none;
+}
+@keyframes reward-pop {
+  0% { transform: scale(0.85); opacity: 0; }
+  50% { transform: scale(1.17); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.reward-card .title {
+  color: #ffe379;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 1.15em;
+  margin-bottom: 2px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.reward-card .desc {
+  color: #dffbff;
+  font-size: 1.07em;
+  margin-bottom: 7px;
+  text-align: center;
+}
+.reward-bar-bg {
+  width: 89%;
+  height: 15px;
+  background: #17305299;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  box-shadow: 0 0 10px 2px #51ffe7bb, 0 0 13px 3px #cf28ff99;
+  filter: none;
+}
+.reward-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #cf28ff 10%, #51ffe7 90%);
+  border-radius: 8px;
+  transition: width 0.55s cubic-bezier(.6,1.2,.16,1.08);
+  width: 0;
+  box-shadow: 0 0 15px #cf28ff88, 0 0 8px #51ffe799;
+}
+.reward-unlocked {
+  margin-top: 6px;
+  color: #fff;
+  background: #19e0fc;
+  border-radius: 8px;
+  padding: 3px 16px;
+  font-weight: bold;
+  box-shadow: 0 0 11px #cf28ff66;
+  font-family: 'Bungee', cursive;
+  font-size: 1.05em;
+  display: inline-block;
+}
+
+#calendario::-webkit-scrollbar { width: 7px; }
+#calendario::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 11px;
+}
+
+@media (max-width: 980px) {
+  .banner-gamer {
+    width: 95vw;
+    min-width: 80px;
     max-width: 99vw;
-    border-radius: 12px;
+    top: 8px;
   }
-  .calendario-container {
-    padding: 6px 1vw 12px 1vw;
+  .banner-gamer-img {
+    max-height: 110px;
+    min-height: 44px;
   }
-  .counter { width: 80px !important; }
-  .arcade-counters { top: 68px; }
+  .arcade-screen-curve {
+    width: 99vw;
+    min-width: 80px;
+    max-width: 99vw;
+    left: 50%;
+    top: 54%;
+  }
+  .arcade-counters {
+    width: 100vw;
+    height: 0;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+  .counter-label { font-size: 1.08em; }
+  .counter-value { font-size: 2.8em; }
+  .counter { min-height: 72px; }
 }
-
-::-webkit-scrollbar {
-  background: #191b2a;
-  width: 11px;
-}
-::-webkit-scrollbar-thumb {
-  background: #cf28ff90;
-  border-radius: 9px;
+@media (max-width: 650px) {
+  .arcade-screen-curve {
+    width: 99vw;
+    min-width: 40px;
+    left: 50%;
+    top: 54%;
+    border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;
+  }
+  #calendario {
+    font-size: 0.77em;
+    padding: 0 1vw 0 1vw;
+  }
+  .arcade-counters {
+    width: 100vw;
+    height: 0;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+  .counter-label { font-size: 0.87em; }
+  .counter-value { font-size: 1.35em; }
+  .counter { min-height: 25px; }
 }
