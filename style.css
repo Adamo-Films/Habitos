@@ -178,7 +178,7 @@ html, body {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
-/* Centraliza blocos e aumenta espaçamento entre meses */
+/* Centraliza blocos e diminui espaçamento entre meses */
 #calendario > *,
 #calendario .mes,
 #calendario table,
@@ -189,7 +189,7 @@ html, body {
 }
 #calendario .mes {
   font-size: 2.35em;
-  margin: 58px 0 44px 0;
+  margin: 25px 0 14px 0;  /* ESPAÇO REDUZIDO AQUI */
   color: var(--gold);
   text-shadow: 0 0 24px #ffe379cc, 0 0 30px #31fcffbb, 0 0 70px #31fcff77;
   background: none !important;
@@ -203,7 +203,7 @@ html, body {
   top: 0;
   z-index: 10;
   transition: transform 0.12s cubic-bezier(.47,1.64,.41,.88);
-  padding: 20px 38px;
+  padding: 16px 28px;
   border-radius: 28px;
 }
 #calendario .mes::after {
@@ -382,74 +382,91 @@ tr.dropdown {
 @keyframes rgb-glow-pulse {
   0%,100% {
     box-shadow:
-      0 0 20px 9px #cf28ff,
-      0 0 22px 13px #51ffe7,
+      0 0 20px 10px #cf28ff,
+      0 0 30px 19px #51ffe7,
       0 0 12px 9px #00f0ff,
-      0 0 18px 10px #ff00ff;
-    filter: brightness(1.12) saturate(2.2);
+      0 0 14px 8px #ff00ff;
+    filter: brightness(1.13) saturate(2.4);
   }
   50% {
     box-shadow:
-      0 0 38px 17px #51ffe7,
-      0 0 32px 14px #cf28ff,
-      0 0 24px 13px #00f0ff,
-      0 0 24px 16px #ff00ff;
-    filter: brightness(1.19) saturate(2.9);
+      0 0 48px 22px #51ffe7,
+      0 0 36px 22px #cf28ff,
+      0 0 28px 16px #00f0ff,
+      0 0 28px 22px #ff00ff;
+    filter: brightness(1.22) saturate(3.1);
   }
 }
 
-/* PRÊMIO (NEON + EFEITOS) */
+/* PRÊMIO (NEON + VIBE ARCADE) */
 #calendario .reward-card {
-  animation: rgb-glow-pulse 6.2s infinite ease-in-out;
-  box-shadow:
-    0 0 38px 15px #cf28ff,
-    0 0 26px 9px #51ffe7,
-    0 0 22px 13px #00f0ff,
-    0 0 20px 12px #ff00ff;
-  filter: brightness(1.14) contrast(1.13) saturate(2.8);
+  animation: rgb-glow-pulse 6.2s infinite cubic-bezier(.71,1.51,.45,.98);
   position: relative;
   overflow: visible;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(30,70,150,0.07);
+
+  /* Vibe arcade: fundo neon radial e linhas horizontais simulando scanlines */
+  background:
+    radial-gradient(ellipse at 50% 40%, #160c36 0%, #222f4f 68%, #51ffe720 95%, transparent 100%),
+    repeating-linear-gradient(
+      to bottom,
+      #00fff8 0 2px,
+      #0000 2px 10px
+    );
   border-radius: 17px;
   margin: 34px auto 12px auto;
-  padding: 19px 22px 13px 22px;
-  width: 85%;
-  max-width: 650px;
-  border: none !important;
+  padding: 27px 22px 18px 22px;
+  width: 88%;
+  max-width: 670px;
+  border: 2.2px solid #ff00ff;
+  box-shadow:
+    0 0 36px 10px #cf28ff,
+    0 0 48px 26px #51ffe7,
+    0 0 34px 13px #ff38fd,
+    0 0 18px 7px #fff,
+    0 0 0 7px #00fff8 inset;
   z-index: 5;
+  filter: brightness(1.14) contrast(1.13) saturate(2.8);
 }
 .reward-icon {
   font-size: 2.6em;
   margin-bottom: 5px;
-  filter: none;
+  filter: drop-shadow(0 0 13px #ffe379);
+  animation: clickPop 1.1s cubic-bezier(.24,1.23,.71,.95) 1;
 }
 .reward-card .title {
   color: #ffe379;
-  font-size: 1.07em;
-  margin-bottom: 2px;
+  font-size: 1.15em;
+  margin-bottom: 4px;
   text-align: center;
   letter-spacing: 0.02em;
+  text-shadow: 0 0 6px #cf28ff, 0 0 14px #51ffe7bb, 0 0 2px #ff00ff;
+  background: linear-gradient(90deg, #cf28ff 0%, #51ffe7 60%, #ffe379 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 .reward-card .desc {
-  color: #dffbff;
-  font-size: 1.01em;
-  margin-bottom: 7px;
+  color: #fff;
+  font-size: 0.93em;
+  margin-bottom: 8px;
   text-align: center;
+  text-shadow: 0 0 6px #0ff5, 0 0 14px #ffe379aa;
 }
 .reward-bar-bg {
   width: 89%;
   height: 15px;
-  background: #17305299;
+  background: #0a1f27;
   border-radius: 7px;
   overflow: hidden;
   margin-top: 7px;
-  margin-bottom: 7px;
+  margin-bottom: 9px;
   box-shadow: 0 0 10px 2px #51ffe7bb, 0 0 13px 3px #cf28ff99;
   filter: none;
+  border: 2px solid #ffe379;
 }
 .reward-bar {
   height: 100%;
@@ -457,24 +474,35 @@ tr.dropdown {
   border-radius: 8px;
   transition: width 0.55s cubic-bezier(.6,1.2,.16,1.08);
   width: 0;
-  box-shadow: 0 0 15px #cf28ff88, 0 0 8px #51ffe799;
+  box-shadow: 0 0 19px #cf28ff88, 0 0 13px #51ffe799;
 }
 .reward-unlocked {
-  margin-top: 6px;
+  margin-top: 14px;
   color: #fff;
-  background: #19e0fc;
+  background: #12c1fd;
   border-radius: 8px;
-  padding: 3px 16px;
+  padding: 8px 22px;
   font-weight: bold;
-  box-shadow: 0 0 11px #cf28ff66;
-  font-size: 1.01em;
+  box-shadow: 0 0 14px #cf28ff88, 0 0 22px #51ffe7bb;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.17em;
   display: inline-block;
+  animation: arcadeButtonPop 1.12s cubic-bezier(.23,1.43,.45,.81) 1;
+  border: 2px solid #ffe379;
+  letter-spacing: 2.5px;
+  text-shadow: 0 0 10px #ffe379, 0 0 18px #00fff8bb;
 }
 
-/* Efeitos animados personalizáveis dos prêmios */
-.reward-effect { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+@keyframes arcadeButtonPop {
+  0% { transform: scale(0.9);}
+  45% { transform: scale(1.19);}
+  80% { transform: scale(1.02);}
+  100% { transform: scale(1);}
+}
 
-/* ... (todos os keyframes de animação de prêmios igual antes) ... */
+/* ====== Efeitos animados personalizáveis dos prêmios (como antes) ====== */
+.reward-effect { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+/* ... seus keyframes customizados aqui ... */
 
 /* =============== SCROLLBAR ================ */
 #calendario::-webkit-scrollbar { width: 7px; }
@@ -482,16 +510,14 @@ tr.dropdown {
 
 /* =============== RESPONSIVO ================ */
 @media (max-width: 980px) {
-  .banner-gamer {
-    width: 95vw; min-width: 80px; max-width: 99vw; top: 8px;
-  }
+  .banner-gamer { width: 95vw; min-width: 80px; max-width: 99vw; top: 8px;}
   .banner-gamer-img { max-height: 110px; min-height: 44px; }
   .arcade-screen-curve { width: 99vw; min-width: 80px; max-width: 99vw; left: 50%; top: 54%; }
   .arcade-counters { width: 100vw; height: 0; top: 50%; left: 0; transform: translateY(-50%);}
   .counter-label { font-size: 0.95em; }
   .counter-value { font-size: 1.6em; }
   .counter { min-height: 72px; }
-  #calendario .mes { font-size: 1.19em; padding: 12px 10px; }
+  #calendario .mes { font-size: 1.45em; padding: 12px 10px;}
 }
 @media (max-width: 650px) {
   .arcade-screen-curve { width: 99vw; min-width: 40px; left: 50%; top: 54%; border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;}
@@ -500,5 +526,5 @@ tr.dropdown {
   .counter-label { font-size: 0.73em;}
   .counter-value { font-size: 1em;}
   .counter { min-height: 25px;}
-  #calendario .mes { font-size: 0.92em; padding: 7px 5px;}
+  #calendario .mes { font-size: 1em; padding: 8px 5px;}
 }
