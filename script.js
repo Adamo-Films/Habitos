@@ -28,13 +28,11 @@ function getRewardFor(month, year, day = null) {
   return rewards.find(r => r.month === month && r.year === year && !r.day);
 }
 
-// Emojis para hábitos
 const habitEmojis = [
   "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
   "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪",
 ];
 
-// Função para emoji cíclico correto
 function getCiclicoEmoji(habito) {
   if (habito.includes("Banho gelado")) return "🚿";
   if (habito.includes("Agilidade")) return "🧠";
@@ -43,14 +41,13 @@ function getCiclicoEmoji(habito) {
   return "🎯";
 }
 
-// Nomes dos meses
 const monthNames = [
   "Janeiro", "Fevereiro", "Março", "Abril",
   "Maio", "Junho", "Julho", "Agosto",
   "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-// Confetti épico (igual seu)
+// === Confetti (igual antes) ===
 function launchConfettiEpic() {
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
@@ -191,9 +188,8 @@ async function saveProgress(progress) {
   localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
 }
 
+// === INÍCIO DO DOMContentLoaded ===
 document.addEventListener("DOMContentLoaded", async function () {
-  // (continua abaixo...)
-  // ==== DADOS E GERACAO CALENDARIO ====
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = {
@@ -242,16 +238,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     grupos[id].push(obj);
   });
 
-  // ======= GERA HTML DO CALENDÁRIO =======
+  // === Gera o HTML do calendário ===
   let html = '';
   Object.entries(grupos).forEach(([id, dias]) => {
     const [mes, ano] = id.split("-");
     const mesNum = Number(mes);
     const anoNum = Number(ano);
     const nomeMes = monthNames[mesNum - 1].toUpperCase();
-    // seta arcade animada do mês
-    html += `<div class='mes' data-mes='${mesNum}' data-ano='${anoNum}'><span class="arcade-arrow" style="display:none"></span>${nomeMes} ${ano}</div>
-      <table>
+    html += `<div class='mes arcade-clicavel' data-mes="${mesNum}" data-ano="${anoNum}">${nomeMes} ${ano} <span class="arcade-arrow"></span></div>
+      <div class="mes-dropdown" id="dropdown-mes-${mesNum}-${anoNum}"><table>
         <thead>
           <tr>
             <th></th>
@@ -262,7 +257,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           </tr>
         </thead>
         <tbody>`;
-    dias.forEach((dia) => {
+    dias.forEach((dia, i) => {
       const dayNum = parseInt(dia.dia.substring(4));
       let habitosCellText;
       if (dayNum <= 4) {
@@ -276,8 +271,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
       }
       html += `
-        <tr class="main-row" data-dropdown="${dia.id}" id="mainrow-${dia.id}" style="--progress:0">
-          <td><span class="expand-icon">&#9654;</span><span class="arcade-arrow-day" style="display:none"></span></td>
+        <tr class="main-row arcade-clicavel" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
+          <td><span class="expand-icon">&#9654;</span></td>
           <td class="progress-text gold">${dia.data}</td>
           <td class="progress-text gold">${dia.dia}</td>
           <td class="progress-text gold">${habitosCellText}</td>
@@ -287,13 +282,13 @@ document.addEventListener("DOMContentLoaded", async function () {
           <td colspan="5">
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
-                <div class="habit-item" id="habititem-${dia.id}-habit-${idx}">
+                <div class="habit-item arcade-clicavel" id="habititem-${dia.id}-habit-${idx}">
                   <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
                   <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
                 </div>
               `).join('')}
-              <div class="habit-item" id="habititem-${dia.id}-ciclico">
+              <div class="habit-item arcade-clicavel" id="habititem-${dia.id}-ciclico">
                 <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${getCiclicoEmoji(dia.ciclico)}</span>
                 <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
                 <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
@@ -303,8 +298,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         </tr>`;
     });
     html += `</tbody></table>`;
-
-    // Prêmio do mês
+    // Prêmio
     const reward = getRewardFor(mesNum, anoNum);
     if (reward) {
       html += `
@@ -317,111 +311,138 @@ document.addEventListener("DOMContentLoaded", async function () {
           <div class="reward-effect"></div>
         </div>`;
     }
+    html += `</div>`; // fecha o .mes-dropdown
   });
   calendario.innerHTML = html;
 
-  // ========== Seta arcade mês atual ==========
+  // ... CONTINUAR ...
+  // Dropdown lógica: abrir/fechar MÊS e DIAS
   const allMesDivs = document.querySelectorAll('#calendario .mes');
-  const allTables = document.querySelectorAll('#calendario table');
+  const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
   const allRewards = document.querySelectorAll('#calendario .reward-card');
+
   const today = new Date();
   const mesAtual = today.getMonth() + 1;
   const anoAtual = today.getFullYear();
-  allMesDivs.forEach((mesDiv, idx) => {
-    let isAtual = mesDiv.getAttribute('data-mes') == mesAtual && mesDiv.getAttribute('data-ano') == anoAtual;
-    let arrow = mesDiv.querySelector('.arcade-arrow');
-    if (isAtual) arrow.style.display = 'inline-block';
-    else arrow.style.display = 'none';
-    mesDiv.classList.toggle('current', isAtual);
-    // seta inicial aberta
-    let tbl = allTables[idx];
-    tbl.style.display = isAtual ? '' : 'none';
-    if (allRewards[idx]) allRewards[idx].style.display = isAtual ? '' : 'none';
-    mesDiv.classList.toggle('open', isAtual);
+  const diaAtual = today.getDate();
 
-    // INICIA animação do prêmio do mês aberto (e faz loop)
-    if (isAtual && allRewards[idx]) {
-      const effect = allRewards[idx].querySelector('.reward-effect');
-      if (effect) runRewardEffectByType(allRewards[idx], effect);
+  // Inicializa: todos fechados exceto mês/dia atual
+  allMesDivs.forEach((mesDiv, idx) => {
+    const mesNum = parseInt(mesDiv.getAttribute("data-mes"));
+    const anoNum = parseInt(mesDiv.getAttribute("data-ano"));
+    const dropdown = allDropdowns[idx];
+    // Setas animadas
+    mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ? 
+      `<span class="arrow-pulse">&#9654;</span>` : `<span class="arrow-inactive">&#9654;</span>`;
+    // Só abre o mês atual
+    if (mesNum === mesAtual && anoNum === anoAtual) {
+      dropdown.style.display = 'block';
+      mesDiv.classList.add('open');
+      mesDiv.classList.add('mes-atual');
+      if (allRewards[idx]) {
+        allRewards[idx].style.display = '';
+        const effect = allRewards[idx].querySelector('.reward-effect');
+        if (effect) runRewardEffectByType(allRewards[idx], effect);
+      }
+    } else {
+      dropdown.style.display = 'none';
+      mesDiv.classList.remove('open');
+      if (allRewards[idx]) {
+        allRewards[idx].style.display = 'none';
+        const effect = allRewards[idx].querySelector('.reward-effect');
+        if (effect) effect.innerHTML = '';
+      }
     }
 
-    // Toggle ao clicar no mês
-    mesDiv.onclick = () => {
-      let open = tbl.style.display !== 'none';
-      // Fecha todos
-      allTables.forEach((t, i) => {
-        t.style.display = 'none';
-        allRewards[i] && (allRewards[i].style.display = 'none');
-        allMesDivs[i].classList.remove('open');
-        // Limpa animações dos prêmios fechados!
-        const effect = allRewards[i]?.querySelector('.reward-effect');
-        if (effect) {
-          effect.innerHTML = '';
-          if (effect.__rewardTimeout) clearTimeout(effect.__rewardTimeout);
+    // Evento de abrir/fechar mês (com animação)
+    mesDiv.onclick = (e) => {
+      // Desativa todos
+      allDropdowns.forEach((d, i) => {
+        d.style.display = 'none';
+        allMesDivs[i].classList.remove('open', 'mes-atual');
+        allMesDivs[i].querySelector(".arcade-arrow").innerHTML = `<span class="arrow-inactive">&#9654;</span>`;
+        if (allRewards[i]) {
+          allRewards[i].style.display = 'none';
+          const effect = allRewards[i].querySelector('.reward-effect');
+          if (effect) effect.innerHTML = '';
         }
-        allMesDivs[i].querySelector('.arcade-arrow').style.display = 'none';
       });
-      // Abre o clicado
-      if (!open) {
-        tbl.style.display = '';
-        allRewards[idx] && (allRewards[idx].style.display = '');
-        mesDiv.classList.add('open');
-        mesDiv.querySelector('.arcade-arrow').style.display = 'inline-block';
-        // INICIA animação do prêmio deste mês
-        const effect = allRewards[idx]?.querySelector('.reward-effect');
+      // Ativa clicado
+      dropdown.style.display = 'block';
+      setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
+      mesDiv.classList.add('open', 'mes-atual');
+      mesDiv.querySelector(".arcade-arrow").innerHTML = `<span class="arrow-pulse">&#9654;</span>`;
+      if (allRewards[idx]) {
+        allRewards[idx].style.display = '';
+        const effect = allRewards[idx].querySelector('.reward-effect');
         if (effect) runRewardEffectByType(allRewards[idx], effect);
+      }
+      // Fecha todos dropdowns de dias
+      dropdown.querySelectorAll('.dropdown').forEach(dd => {
+        dd.style.display = 'none';
+        dd.classList.remove('arcade-drop-show');
+        let tr = dropdown.querySelector(`tr[data-dropdown="${dd.id.replace('dropdown-','')}"]`);
+        if (tr) tr.classList.remove('expanded');
+      });
+      // Abre dia atual, se for este mês
+      if (mesNum === mesAtual && anoNum === anoAtual) {
+        let idxDia = Array.from(dropdown.querySelectorAll('.main-row')).findIndex(row => {
+          let dateCell = row.querySelectorAll('td')[1];
+          if (!dateCell) return false;
+          let d = parseInt(dateCell.innerText.split("/")[0]);
+          return d === diaAtual;
+        });
+        if (idxDia >= 0) {
+          const mainRow = dropdown.querySelectorAll('.main-row')[idxDia];
+          const dropRow = dropdown.querySelectorAll('.dropdown')[idxDia];
+          mainRow.classList.add('expanded');
+          dropRow.style.display = 'table-row';
+          setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
+        }
       }
     };
   });
 
-  // ========== Seta arcade dia atual ==========
-  let diaAtualId = null;
-  dados.forEach(d => {
-    if (
-      d.mes === mesAtual &&
-      d.ano === anoAtual &&
-      d.diaDoMes === today.getDate()
-    ) diaAtualId = d.id;
-  });
-  if (diaAtualId) {
-    const row = document.getElementById(`mainrow-${diaAtualId}`);
-    if (row) {
-      let arrow = row.querySelector('.arcade-arrow-day');
-      arrow.style.display = 'inline-block';
-      row.classList.add('current-day');
-    }
-  }
-
-  // Dropdown de dias: inicia fechado, abre ao clicar na linha
-  document.querySelectorAll('tr.main-row').forEach(row => {
-    row.addEventListener('click', function (e) {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL' || e.target.classList.contains('habit-emoji')) return;
-      const dropdownId = this.getAttribute('data-dropdown');
-      const dropdown = document.getElementById(`dropdown-${dropdownId}`);
-      if (dropdown.style.display === "table-row") {
-        dropdown.style.display = "none";
-        this.classList.remove('expanded');
-        this.querySelector('.arcade-arrow-day')?.classList.remove('open');
+  // Dropdowns de dias: todos fechados exceto dia atual no mês atual
+  document.querySelectorAll('#calendario .mes-dropdown').forEach((dropdown, dIdx) => {
+    const rows = dropdown.querySelectorAll('tr.main-row');
+    const mesNum = parseInt(allMesDivs[dIdx].getAttribute("data-mes"));
+    const anoNum = parseInt(allMesDivs[dIdx].getAttribute("data-ano"));
+    rows.forEach((row, idx) => {
+      const dropRow = dropdown.querySelectorAll('.dropdown')[idx];
+      // Só abre o dia atual do mês atual
+      let dateCell = row.querySelectorAll('td')[1];
+      let d = parseInt(dateCell ? dateCell.innerText.split("/")[0] : 0);
+      if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
+        dropRow.style.display = 'table-row';
+        setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
+        row.classList.add('expanded');
       } else {
-        // fecha todos do mês atual
-        let parentTable = this.closest('table');
-        parentTable.querySelectorAll('.dropdown').forEach(dd => {
-          dd.style.display = "none";
-          let tr = parentTable.querySelector(`tr[data-dropdown="${dd.id.replace('dropdown-','')}"]`);
-          if (tr) {
-            tr.classList.remove('expanded');
-            tr.querySelector('.arcade-arrow-day')?.classList.remove('open');
-          }
-        });
-        dropdown.style.display = "table-row";
-        this.classList.add('expanded');
-        this.querySelector('.arcade-arrow-day')?.classList.add('open');
+        dropRow.style.display = 'none';
+        dropRow.classList.remove('arcade-drop-show');
+        row.classList.remove('expanded');
       }
+
+      // Evento de abrir/fechar dia
+      row.onclick = (e) => {
+        // Só se clicar fora dos inputs/labels
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL' || e.target.classList.contains('habit-emoji')) return;
+        // Fecha todos do mês
+        rows.forEach((r, i) => {
+          const dr = dropdown.querySelectorAll('.dropdown')[i];
+          dr.style.display = 'none';
+          dr.classList.remove('arcade-drop-show');
+          r.classList.remove('expanded');
+        });
+        // Abre clicado
+        dropRow.style.display = 'table-row';
+        setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
+        row.classList.add('expanded');
+      };
     });
   });
 
-  // (continua: aplica progresso, barra, animação prêmios, etc.)
-  // Aplica progresso salvo
+  // Aplica progresso salvo + highlights arcade
   Object.keys(progress).forEach(checkId => {
     const checkbox = document.getElementById(checkId);
     if (checkbox) {
@@ -433,7 +454,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
-  // Barra de progresso dos dias
+  // Barra de progresso e highlights
   function updateProgressBar(dayId, habitCount) {
     let checked = 0;
     for (let i = 0; i < habitCount; i++) {
@@ -443,14 +464,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     let pct = checked / habitCount;
     const row = document.getElementById(`mainrow-${dayId}`);
     if (row) {
-      row.style.transition = 'background-size 0.7s cubic-bezier(.6,1.2,.16,1.08), color 0.3s';
-      row.style.setProperty('--progress', pct);
-      if (pct === 1) row.classList.add('day-complete', 'arcade-complete');
-      else row.classList.remove('day-complete', 'arcade-complete');
+      if (pct === 1) row.classList.add('day-complete');
+      else row.classList.remove('day-complete');
     }
   }
 
-  // Barra de progresso dos prêmios
+  // Prêmios
   function updateRewardProgress(month, year, totalDias, diasCompletos) {
     const pct = diasCompletos / totalDias;
     const bar = document.getElementById(`reward-bar-${month}-${year}`);
@@ -468,7 +487,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  // Checa se todos hábitos do dia foram feitos
   function checkAllHabitsComplete(dayId, habitCount) {
     let complete = true;
     for (let i = 0; i < habitCount; i++) {
@@ -481,7 +499,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     return complete;
   }
 
-  // Checa todos prêmios
   function updateAllRewardProgress() {
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
@@ -497,7 +514,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
-  // Atualiza contadores 3D
+  // Contadores 3D
   function countStats() {
     const checkboxes = document.querySelectorAll('.habit-checkbox');
     let done = 0;
@@ -520,7 +537,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById('doneCount').textContent = done;
   }
 
-  // Checkbox lógica + animação arcade
+  // Checkbox lógica
   document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
     checkbox.addEventListener('change', function () {
       const label = document.getElementById('label-' + this.id);
@@ -532,14 +549,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
 
       const hi = document.getElementById('habititem-' + this.id);
-      if (hi) {
-        hi.classList.toggle('habit-complete', this.checked);
-        // Efeito arcade clique
-        if (this.checked) {
-          hi.classList.add('arcade-highlight');
-          setTimeout(() => hi.classList.remove('arcade-highlight'), 500);
-        }
-      }
+      if (hi) hi.classList.toggle('habit-complete', this.checked);
       const parts = this.id.match(/^dia-\d+-\d+-\d+/);
       if (parts) {
         const dayId = parts[0];
@@ -548,32 +558,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         updateAllRewardProgress();
         countStats();
       }
-    });
-  });
-
-  // Animação arcade clique nos meses
-  document.querySelectorAll('.mes').forEach(mes => {
-    mes.addEventListener('mousedown', function () {
-      mes.classList.add('arcade-highlight');
-    });
-    mes.addEventListener('mouseup', function () {
-      setTimeout(() => mes.classList.remove('arcade-highlight'), 200);
-    });
-    mes.addEventListener('mouseleave', function () {
-      mes.classList.remove('arcade-highlight');
-    });
-  });
-
-  // Animação arcade clique nos dias
-  document.querySelectorAll('.main-row').forEach(row => {
-    row.addEventListener('mousedown', function () {
-      row.classList.add('arcade-highlight');
-    });
-    row.addEventListener('mouseup', function () {
-      setTimeout(() => row.classList.remove('arcade-highlight'), 200);
-    });
-    row.addEventListener('mouseleave', function () {
-      row.classList.remove('arcade-highlight');
     });
   });
 
@@ -594,26 +578,23 @@ document.addEventListener("DOMContentLoaded", async function () {
         checkbox.checked = !checkbox.checked;
         checkbox.dispatchEvent(new Event('change'));
       }
-      // Animação arcade clique
-      emoji.classList.add('arcade-highlight');
-      setTimeout(() => emoji.classList.remove('arcade-highlight'), 200);
     });
   });
 
-  // Inicializa barras e status ao abrir
+  // Inicializa barras, status e highlights
   dados.forEach((dia) => {
     const habitCount = dia.habitos.length + 1;
     updateProgressBar(dia.id, habitCount);
     const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
     if (allDone) {
       const dayRow = document.getElementById(`mainrow-${dia.id}`);
-      if (dayRow) dayRow.classList.add('day-complete', 'arcade-complete');
+      if (dayRow) dayRow.classList.add('day-complete');
     }
   });
   updateAllRewardProgress();
   countStats();
 
-  // Redimensiona confetti se precisar
+  // Responsividade confetti
   window.addEventListener('resize', function () {
     const canvas = document.getElementById('confetti-canvas');
     if (canvas && canvas.style.display === 'block') {
@@ -622,3 +603,137 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 });
+
+// ==== ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ====
+// ... (Funções runRewardEffectByType, sprinklesEffect, etc. — igual já estavam, não mudam!) ...
+// ==== ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ====
+
+// Função para rodar o efeito correto e loop
+function runRewardEffectByType(card, effect) {
+  if (!card || !effect) return;
+  effect.innerHTML = '';
+  let type = card.getAttribute('data-reward') || '';
+  if (type.includes('5-2025')) sprinklesEffect(effect); // Donuts Maio
+  else if (type.includes('6-2025')) cinemaEmojisEffect(effect); // Valentina Junho
+  else if (type.includes('7-2025')) foodEffect(effect); // Rascal Julho
+  else if (type.includes('8-2025')) vacationEffect(effect); // Airbnb Agosto
+  else if (type.includes('9-2025')) turingEffect(effect); // Turing Machine Setembro
+  else if (type.includes('10-2025')) shopEffect(effect); // Compras Outubro
+  else if (type.includes('11-2025')) tankEffect(effect); // Zen Novembro
+  else if (type.includes('12-2025')) clockEffect(effect); // Ingersoll Dezembro
+
+  // Loop seamless: refaz o efeito de tempos em tempos
+  if (effect.__rewardTimeout) clearTimeout(effect.__rewardTimeout);
+  effect.__rewardTimeout = setTimeout(() => {
+    if (card.style.display !== 'none' && card.offsetParent !== null) {
+      runRewardEffectByType(card, effect);
+    }
+  }, 4500); // ajuste para a maior duração de animação visual
+}
+
+// Efeitos de animação — Arcade Neon
+function sprinklesEffect(container) {
+  container.innerHTML = "";
+  let colors = ["#fa47b1","#ffe379","#51ffe7","#cf28ff","#00f0ff","#ff904c","#fff"];
+  for (let i = 0; i < 22; i++) {
+    let sprinkle = document.createElement('div');
+    sprinkle.className = 'sprinkle';
+    sprinkle.style.background = colors[Math.floor(Math.random()*colors.length)];
+    sprinkle.style.left = (Math.random()*90+2) + '%';
+    sprinkle.style.animationDelay = (Math.random()*2)+'s';
+    sprinkle.style.width = (Math.random()*6+3) + 'px';
+    sprinkle.style.height = (Math.random()*2+1.5) + 'px';
+    container.appendChild(sprinkle);
+  }
+}
+function cinemaEmojisEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🎬","🎥","📽️","🍿","🎞️"];
+  for (let i=0;i<10;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-cinema';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*85+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2)+'s';
+    emoji.style.fontSize = (Math.random()*20+24)+'px';
+    container.appendChild(emoji);
+  }
+}
+function foodEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🍝", "🍽️", "🍷", "🍕", "🍰"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-food';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*80+10)+'%';
+    emoji.style.animationDelay = (Math.random()*2.5)+'s';
+    emoji.style.fontSize = (Math.random()*18+23)+'px';
+    container.appendChild(emoji);
+  }
+}
+function vacationEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🌞","🌴","🏡","☁️"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-vacation';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*84+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2.5)+'s';
+    emoji.style.fontSize = (Math.random()*20+22)+'px';
+    container.appendChild(emoji);
+  }
+}
+function turingEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["0️⃣","1️⃣","🟦","💾"];
+  for (let i=0;i<13;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-bit';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*85+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2.2)+'s';
+    emoji.style.fontSize = (Math.random()*18+19)+'px';
+    container.appendChild(emoji);
+  }
+}
+function shopEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🛍️", "💸", "🏷️", "🪙", "👗"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-shop';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*85+7)+'%';
+    emoji.style.animationDelay = (Math.random()*2.2)+'s';
+    emoji.style.fontSize = (Math.random()*18+20)+'px';
+    container.appendChild(emoji);
+  }
+}
+function tankEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["🫧","🌊","💧"];
+  for (let i=0;i<12;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-bubble';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*87+5)+'%';
+    emoji.style.animationDelay = (Math.random()*2.3)+'s';
+    emoji.style.fontSize = (Math.random()*13+18)+'px';
+    container.appendChild(emoji);
+  }
+}
+function clockEffect(container) {
+  container.innerHTML = "";
+  let emojis = ["⌚","⏰","⚙️","⏳"];
+  for (let i=0;i<9;i++) {
+    let emoji = document.createElement('span');
+    emoji.className = 'emoji-clock';
+    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    emoji.style.left = (Math.random()*80+10)+'%';
+    emoji.style.animationDelay = (Math.random()*2.5)+'s';
+    emoji.style.fontSize = (Math.random()*17+21)+'px';
+    container.appendChild(emoji);
+  }
+}
