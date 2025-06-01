@@ -1,70 +1,19 @@
 @keyframes rgb-glow-pulse {
-  0% {
-    box-shadow:
-      0 0 22px 8px #cf28ff,
-      0 0 28px 16px #51ffe7,
-      0 0 16px 10px #00f0ff,
-      0 0 18px 12px #ff00ff;
-    filter: brightness(1.1) saturate(2.5);
-  }
-  25% {
-    box-shadow:
-      0 0 36px 13px #51ffe7,
-      0 0 26px 9px #cf28ff,
-      0 0 23px 10px #00f0ff,
-      0 0 22px 14px #ff00ff;
-    filter: brightness(1.35) saturate(2.9);
-  }
-  50% {
-    box-shadow:
-      0 0 33px 15px #ff00ff,
-      0 0 30px 12px #cf28ff,
-      0 0 22px 12px #51ffe7,
-      0 0 27px 18px #00f0ff;
-    filter: brightness(1.18) saturate(3.1);
-  }
-  75% {
-    box-shadow:
-      0 0 28px 11px #00f0ff,
-      0 0 22px 7px #cf28ff,
-      0 0 23px 10px #ff00ff,
-      0 0 25px 10px #51ffe7;
-    filter: brightness(1.12) saturate(2.6);
-  }
-  100% {
-    box-shadow:
-      0 0 22px 8px #cf28ff,
-      0 0 28px 16px #51ffe7,
-      0 0 16px 10px #00f0ff,
-      0 0 18px 12px #ff00ff;
-    filter: brightness(1.1) saturate(2.5);
-  }
-}
-
-@keyframes emoji-rgb-pulse {
   0%,100% {
-    filter:
-      drop-shadow(0 0 14px #cf28ff)
-      drop-shadow(0 0 14px #51ffe7)
-      drop-shadow(0 0 10px #00f0ff);
-  }
-  25% {
-    filter:
-      drop-shadow(0 0 22px #51ffe7)
-      drop-shadow(0 0 13px #cf28ff)
-      drop-shadow(0 0 13px #00f0ff);
+    box-shadow:
+      0 0 16px 7px #cf28ff,
+      0 0 20px 13px #51ffe7,
+      0 0 10px 7px #00f0ff,
+      0 0 12px 8px #ff00ff;
+    filter: brightness(1.12) saturate(2.2);
   }
   50% {
-    filter:
-      drop-shadow(0 0 30px #ff00ff)
-      drop-shadow(0 0 14px #cf28ff)
-      drop-shadow(0 0 19px #51ffe7);
-  }
-  75% {
-    filter:
-      drop-shadow(0 0 18px #00f0ff)
-      drop-shadow(0 0 16px #51ffe7)
-      drop-shadow(0 0 9px #cf28ff);
+    box-shadow:
+      0 0 36px 14px #51ffe7,
+      0 0 26px 10px #cf28ff,
+      0 0 18px 8px #00f0ff,
+      0 0 22px 14px #ff00ff;
+    filter: brightness(1.18) saturate(2.7);
   }
 }
 
@@ -265,7 +214,6 @@ html, body {
   mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
 }
 
-/* GLOW ILUMINADO REALISTA DENTRO DO CALENDÁRIO */
 #calendario,
 #calendario th,
 #calendario td,
@@ -287,15 +235,17 @@ html, body {
     drop-shadow(0 0 14px #ffe37966);
 }
 
-/* PRÊMIOS - Glow RGB, pulsante só no container, barra estática, emoji pulsante */
+/* PRÊMIOS - Glow RGB, pulsante só no container, barra estática */
 #calendario .reward-card {
-  animation: rgb-glow-pulse 5.2s infinite linear;
+  animation: rgb-glow-pulse 8s infinite ease-in-out;
   box-shadow:
     0 0 22px 8px #cf28ff,
     0 0 28px 16px #51ffe7,
     0 0 16px 10px #00f0ff,
     0 0 18px 12px #ff00ff;
-  filter: brightness(1.2) contrast(1.2) saturate(2.8);
+  filter: brightness(1.12) contrast(1.15) saturate(2.3);
+  position: relative;
+  overflow: hidden;
 }
 
 #calendario .reward-bar-bg {
@@ -306,9 +256,9 @@ html, body {
 }
 
 #calendario .reward-icon {
-  animation: emoji-rgb-pulse 2.6s infinite cubic-bezier(.53,1.6,.38,1.04);
   font-size: 2.6em;
   margin-bottom: 5px;
+  filter: none;
 }
 
 #calendario .reward-card .title,
@@ -326,6 +276,135 @@ html, body {
     0 0 1px #00f0ff,
     0 1px 4px #ff00ff88;
 }
+
+/* ----- EFEITOS ANIMADOS PERSONALIZADOS DE PRÊMIO ----- */
+.reward-effect {
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Donuts - Sprinkles */
+.sprinkle {
+  position: absolute;
+  top: -15px;
+  border-radius: 99px;
+  transform: rotateZ(20deg);
+  opacity: 0.88;
+  animation: sprinkle-fall 3.2s linear infinite;
+}
+@keyframes sprinkle-fall {
+  0% { top: -14px; opacity:0.8; }
+  10% { opacity: 1; }
+  100% { top: 92%; opacity:0.2;}
+}
+
+/* Valentina - Cinema emojis flutuando */
+.emoji-cinema {
+  position: absolute;
+  top: -25px;
+  animation: cinema-float 4s cubic-bezier(.43,1.4,.4,1.04) infinite;
+  opacity: 0.86;
+  user-select: none;
+}
+@keyframes cinema-float {
+  0% { top: -22px; opacity:0.5; transform: rotate(-8deg);}
+  10% {opacity:1;}
+  50% { opacity:1;}
+  100% { top:92%; opacity:0;}
+}
+
+/* Rascal - Comida/Talheres girando/flutuando */
+.emoji-food {
+  position: absolute;
+  top: -20px;
+  animation: food-float 3.5s ease-in-out infinite;
+  opacity: 0.88;
+  user-select: none;
+}
+@keyframes food-float {
+  0% { top: -20px; transform: rotate(-8deg) scale(1); opacity:0.6;}
+  15% {opacity:1;}
+  50% { transform: rotate(12deg) scale(1.16);}
+  100% { top: 95%; transform: rotate(-8deg) scale(1); opacity:0;}
+}
+
+/* Airbnb - Sol, nuvem, casa, folhas flutuando/balançando */
+.emoji-vacation {
+  position: absolute;
+  top: -24px;
+  animation: vacation-float 4.5s cubic-bezier(.42,1.2,.55,1.09) infinite;
+  opacity: 0.82;
+  user-select: none;
+}
+@keyframes vacation-float {
+  0% { top: -22px; opacity:0.55; transform: translateX(0);}
+  10% {opacity:1;}
+  50% { transform: translateX(14px);}
+  100% { top:92%; opacity:0;}
+}
+
+/* Turing Machine - Bits caindo */
+.emoji-bit {
+  position: absolute;
+  top: -20px;
+  animation: bit-fall 3.5s linear infinite;
+  opacity: 0.86;
+  user-select: none;
+}
+@keyframes bit-fall {
+  0% { top: -20px; opacity: 0.7;}
+  12% {opacity:1;}
+  100% { top:94%; opacity:0;}
+}
+
+/* Compras - Sacolas e moedas pulando */
+.emoji-shop {
+  position: absolute;
+  bottom: 0;
+  animation: shop-bounce 2.9s cubic-bezier(.55,1.3,.53,1.01) infinite;
+  opacity: 0.87;
+  user-select: none;
+}
+@keyframes shop-bounce {
+  0% { bottom: 0; opacity:0.8; transform: scale(1);}
+  22% { bottom: 45%; opacity:1; transform: scale(1.17);}
+  44% { bottom: 0; opacity:1; transform: scale(1);}
+  100% { bottom: 0; opacity:0.7; transform: scale(1);}
+}
+
+/* Tanque Sensorial - Bolhas subindo */
+.emoji-bubble {
+  position: absolute;
+  bottom: -15px;
+  animation: bubble-rise 3.7s cubic-bezier(.54,1.25,.45,1.02) infinite;
+  opacity: 0.79;
+  user-select: none;
+}
+@keyframes bubble-rise {
+  0% { bottom: -15px; opacity:0.5; transform: scale(0.7);}
+  15% {opacity:1;}
+  60% { transform: scale(1.09);}
+  100% { bottom:92%; opacity:0; transform: scale(1.22);}
+}
+
+/* Relógio Ingersoll - Relógios/engrenagens girando/subindo */
+.emoji-clock {
+  position: absolute;
+  bottom: -20px;
+  animation: clock-float 4.1s cubic-bezier(.45,1.4,.5,1.01) infinite;
+  opacity: 0.8;
+  user-select: none;
+}
+@keyframes clock-float {
+  0% { bottom: -14px; opacity:0.5; transform: rotate(0deg);}
+  8% {opacity:1;}
+  55% { transform: rotate(22deg);}
+  100% { bottom: 90%; opacity:0;}
+}
+
+/* ------------------------------------- */
 
 .mes {
   font-family: 'Antonio', sans-serif;
@@ -455,7 +534,7 @@ tr.dropdown {
 .reward-icon {
   font-size: 2.6em;
   margin-bottom: 5px;
-  animation: reward-pop 1.1s cubic-bezier(.44,1.3,.5,1.11);
+  filter: none;
 }
 @keyframes reward-pop {
   0% { transform: scale(0.85); opacity: 0; }
