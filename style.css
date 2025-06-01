@@ -1,320 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* =================== VARS ==================== */
-:root {
-  --neon: #51ffe7;
-  --gold: #ffe379;
-  --crt-blue: #0e55a5;
-  --crt-dark: #00253b;
-  --arcade-pink: #ff2fdf;
-  --arcade-blue: #08f6fd;
-  --arcade-purple: #7921d5;
-  --arcade-yellow: #ffe379;
-  --arcade-cyan: #26fafd;
-  --arcade-scanline: rgba(0,255,255,0.09);
-  --arcade-glow: 0 0 19px #51ffe7, 0 0 36px #cf28ff, 0 0 14px #fff;
-  --arcade-glow-strong: 0 0 38px #51ffe7, 0 0 36px #ff2fdf, 0 0 22px #fff;
-}
-
-/* =============== BASE =============== */
-html, body {
-  margin: 0; padding: 0;
-  width: 100vw; height: 100vh;
-  background: var(--crt-dark);
-  font-family: 'Press Start 2P', monospace !important;
-  overflow: hidden;
-}
-.arcade-bg {
-  position: fixed; z-index: 0;
-  width: 100vw; height: 100vh;
-  background: url('https://github.com/Adamo-Films/Habitos/raw/main/Artboard%201.png') no-repeat center center;
-  background-size: cover;
-}
-
-/* ================= BANNER ================== */
-.banner-gamer {
-  position: absolute; left: 50%; top: -2px;
-  width: 98vw; max-width: 770px; min-width: 160px;
-  height: auto; transform: translateX(-50%);
-  z-index: 22; display: flex;
-  align-items: center; justify-content: center; pointer-events: none;
-}
-.banner-gamer-img {
-  width: 98%; max-width: 750px; min-width: 120px; height: auto;
-  max-height: 220px; min-height: 75px; display: block; object-fit: contain;
-  filter: drop-shadow(0 0 30px #19e0fcaa) drop-shadow(0 0 60px #ff38fdaa);
-  pointer-events: none;
-}
-
-/* ================= CONTADORES ================= */
-.arcade-counters {
-  position: absolute; top: 50%; left: 0;
-  width: 100vw; height: 0; z-index: 30;
-  display: flex; justify-content: space-between; align-items: center;
-  pointer-events: none; transform: translateY(-50%);
-  background: none !important;
-}
-.counter {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  width: 16vw; max-width: 310px; min-width: 80px; min-height: 210px; height: 100%;
-  pointer-events: none; background: none !important;
-  box-sizing: border-box; padding: 0 0.2vw; margin: 0;
-}
-.counter-label, .counter-value {
-  text-align: center; width: 100%; pointer-events: none;
-}
-.counter-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 1.3em; color: #fff;
-  text-shadow: 0 2px 14px #19e0fcaa, 0 1px 12px #000d, 0 1px 30px #ffe379bb;
-  font-weight: 900; letter-spacing: 0.09em; line-height: 1.12;
-  margin-top: 0; margin-bottom: 16px;
-  text-transform: uppercase; transform: none;
-}
-.counter-value {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 2.7em; background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
-  color: #fff; font-weight: 900; letter-spacing: 0.03em;
-  text-shadow: 0 2px 12px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
-  border-radius: 16px; display: inline-block; padding: 0 10px 0 10px;
-  margin-top: 0; margin-bottom: 0; background-clip: text;
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  line-height: 1; width: 100%; transform: none;
-}
-
-/* ================= TELA PRINCIPAL CRT ================ */
-.arcade-screen-curve {
-  position: absolute; left: 50%; top: 54%;
-  width: 90vw; height: 70vh;
-  max-width: 870px; max-height: 490px; min-width: 240px; min-height: 120px;
-  transform: translate(-50%, -50%);
-  z-index: 10; border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
-  background: none !important;
-  display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-  padding: 0; pointer-events: auto; overflow: hidden;
-}
-#calendario {
-  position: absolute; left: 50%; top: 50%;
-  width: 110%; height: 110%;
-  max-width: 99%; max-height: 99%; min-width: 120px; min-height: 70px;
-  transform: translate(-50%, -50%);
-  display: flex; flex-direction: column; align-items: center; /* <-- CENTRALIZA */
-  background: none !important;
-  color: #ffe379;
-  font-family: 'Press Start 2P', monospace !important;
-  padding: 0 1.5vw 0 1.5vw;
-  overflow-y: auto;
-  text-shadow: 0 2px 18px #43f2ffcc, 0 0 20px #fff3;
-  filter: url(#arcade-convex);
-  box-sizing: border-box;
-  border: none !important;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 80%, transparent 100%);
-}
-
-/* ====== Seta Arcade ====== */
-.arcade-arrow {
-  position: absolute;
-  left: -70px; /* ajusta para esquerda do calendário */
-  top: 50%; transform: translateY(-50%);
-  z-index: 200;
-  width: 54px; height: 54px;
-  pointer-events: none;
-  filter: drop-shadow(0 0 16px #fff) drop-shadow(0 0 24px #0ff);
-  animation: arcade-arrow-pulse 1.1s infinite alternate;
-}
-@keyframes arcade-arrow-pulse {
-  0% { filter: drop-shadow(0 0 12px #0ff) drop-shadow(0 0 8px #ffe379);}
-  100% { filter: drop-shadow(0 0 32px #fff) drop-shadow(0 0 32px #0ff);}
-}
-/* Seta para baixo (dropdown aberto) */
-.arcade-arrow.down {
-  left: 60%;
-  top: 90px;
-  transform: rotate(90deg) scale(1.12);
-  animation: arcade-arrow-bounce 1.15s infinite alternate;
-}
-@keyframes arcade-arrow-bounce {
-  0% { transform: rotate(90deg) scale(1.12) translateY(-12px);}
-  100% { transform: rotate(90deg) scale(1.12) translateY(8px);}
-}
-
-/* =========== MESES ============ */
-.mes {
-  font-family: 'Press Start 2P', monospace;
-  font-size: 2.1em;
-  margin: 29px 0 4px 0;
-  color: var(--gold);
-  text-shadow:
-    0 0 24px #ffe379cc,
-    0 0 32px #31fcffbb,
-    0 0 55px #31fcff77,
-    0 0 3px #fff8;
-  background: none !important;
-  border: none !important;
-  cursor: pointer;
-  user-select: none;
-  display: flex; align-items: center; justify-content: center;
-  position: relative;
-  z-index: 10;
-  transition: transform 0.23s cubic-bezier(.47,1.64,.41,.88), color 0.13s;
-  min-height: 65px;
-  letter-spacing: 2px;
-  padding: 18px 0 13px 0;
-  box-sizing: border-box;
-}
-.mes:active {
-  filter: brightness(1.3) saturate(1.7);
-  transform: scale(1.07) rotate(-1deg);
-}
-.mes:hover {
-  color: #0ff;
-  text-shadow: 0 0 16px #51ffe7, 0 0 22px #ff2fdf, 0 0 4px #fff;
-}
-.mes::after {
-  content: "▼";
-  font-size: 1.0em;
-  margin-left: 18px;
-  color: var(--arcade-cyan);
-  text-shadow: 0 0 12px #31f2f5;
-  transition: transform 0.32s, color 0.18s;
-  transform: rotate(0deg);
-  pointer-events: none;
-}
-.mes.open::after { transform: rotate(180deg); color: #ff2fdf;}
-/* Mês completo: highlight neon pixel arcade */
-.mes.arcade-complete {
-  background: linear-gradient(90deg, #31fcff22 0%, #ffe37922 100%);
-  color: #fff;
-  border-radius: 22px;
-  box-shadow: 0 0 20px #ffe379, 0 0 45px #0ff, 0 0 16px #fff9;
-  text-shadow: 0 0 24px #ffe379, 0 0 24px #0ff, 0 0 24px #ff2fdf;
-  filter: brightness(1.22) saturate(1.8);
-  border: 2.5px solid #ffe37977;
-}
-
-/* =========== TABELA DIAS ============ */
-table {
-  border-collapse: collapse;
-  width: 100%;
-  background: none !important;
-  color: #fff;
-  margin-bottom: 18px;
-  border: none !important;
-  box-shadow: none !important;
-  font-family: 'Press Start 2P', monospace !important;
-}
-th, td {
-  padding: 7px 10px;
-  font-size: 0.92em;
-  text-align: center;
-  background: transparent !important;
-  border: none !important;
-}
-tr.main-row {
-  cursor: pointer;
-  --progress: 0;
-  background: transparent !important;
-  color: #ffe379;
-  border-radius: 17px;
-  border-bottom: none !important;
-  box-shadow: none;
-  filter: brightness(1.09) contrast(1.14);
-  transition: color 0.19s, box-shadow 0.19s;
-  font-size: 0.91em;
-}
-tr.main-row:active {
-  filter: brightness(1.24) saturate(1.16);
-  box-shadow: 0 0 13px #ffe379, 0 0 24px #0ff, 0 0 8px #fff6;
-}
-tr.main-row.day-complete {
-  background: linear-gradient(90deg, #31fcff 15%, #ffe379 60%, #f7d865 100%) !important;
-  color: #181d2c !important;
-  font-weight: bold;
-  text-shadow: 0 1px 3px #fff, 0 0 20px #000b, 0 0 8px #ffe37999;
-  box-shadow:
-    0 0 36px #0ff9, 0 0 38px #ffe379ee, 0 0 60px #ff2fdfcc,
-    0 2px 32px #ffe37977;
-  border-radius: 22px 20px 22px 20px;
-  mix-blend-mode: screen;
-  filter: brightness(1.28) saturate(1.11);
-  outline: 2.5px solid #51ffe7;
-  position: relative;
-}
-tr.main-row.day-complete::before {
-  content: '';
-  position: absolute; left: 3px; top: 7px;
-  width: calc(100% - 6px); height: calc(100% - 14px);
-  border-radius: 18px;
-  border: 2.5px dashed #ffe379;
-  box-shadow: 0 0 24px #ffe379, 0 0 18px #0ff, 0 0 7px #fff7;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.77;
-}
-tr.main-row.expanded {
-  border: 2px solid #ffe37966;
-  box-shadow: 0 0 18px #fff07b99;
-}
-
-tr.main-row.day-complete .progress-text,
-tr.main-row.day-complete td {
-  color: #171818 !important;
-  text-shadow: 0 0 12px #fff5, 0 0 4px #ffe37933;
-}
-.progress-text.gold {
-  color: #ffe379;
-  text-shadow: 0 0 12px #ffe379cc, 0 0 16px #ffd90099;
-}
-
-/* ============= HABITOS ============== */
-.habit-list { gap: 11px; margin: 14px 0; }
-.habit-item {
-  display: grid;
-  grid-template-columns: 42px 1fr 36px;
-  align-items: center;
-  background: rgba(41, 133, 188, 0.11);
-  padding: 8px 14px;
-  border-radius: 13px;
-  box-shadow: 0 1px 6px #0af6;
-  color: none;
-  transition: background 0.18s, filter 0.22s;
-  position: relative;
-  cursor: pointer;
-  min-height: 48px;
-}
-.habit-item:active {
-  filter: brightness(1.2) saturate(1.3);
-  box-shadow: 0 0 9px #ffe379;
-}
-.habit-item:hover {
-  background: rgba(81,255,231,0.19);
-}
-.habit-complete, .habit-item.habit-complete {
-  background: linear-gradient(90deg, #ffe379 0%, #51ffe7 60%, #cf28ff 100%) !important;
-  color: #191b22;
-  font-weight: bold;
-  box-shadow: 0 0 25px #51ffe7, 0 0 17px #ffe379bb;
-  border: 2.5px solid #ffe379a5;
-  text-shadow: 0 0 15px #fff, 0 0 8px #0ff, 0 0 9px #ffe379;
-  filter: brightness(1.18) saturate(1.21);
-}
-
-/* ======= EMOJIS ========= */
-.habit-emoji {
-  font-size: 1.65em;
-  cursor: pointer;
-  transition: transform 0.15s cubic-bezier(.45,2,.44,.87);
-}
-.habit-emoji:active {
-  transform: scale(1.19) rotate(-6deg);
-  filter: brightness(1.5) saturate(1.4);
-}
-.habit-label { font-size: 0.89em; }
-.habit-checkbox { transform: scale(1.6); cursor: pointer; }
-
-/* ========== PRÊMIOS ========== */
+/* ======= ARCADE KEYFRAMES & EFFECTS ======= */
 @keyframes rgb-glow-pulse {
   0%,100% {
     box-shadow:
@@ -322,7 +8,7 @@ tr.main-row.day-complete td {
       0 0 22px 13px #51ffe7,
       0 0 12px 9px #00f0ff,
       0 0 18px 10px #ff00ff;
-    filter: brightness(1.12) saturate(2.2);
+    filter: brightness(1.18) saturate(2.4);
   }
   50% {
     box-shadow:
@@ -330,39 +16,495 @@ tr.main-row.day-complete td {
       0 0 32px 14px #cf28ff,
       0 0 24px 13px #00f0ff,
       0 0 24px 16px #ff00ff;
-    filter: brightness(1.19) saturate(2.9);
+    filter: brightness(1.24) saturate(2.9);
   }
 }
-#calendario .reward-card {
-  animation: rgb-glow-pulse 6.2s infinite ease-in-out;
-  box-shadow:
-    0 0 38px 15px #cf28ff,
-    0 0 26px 9px #51ffe7,
-    0 0 22px 13px #00f0ff,
-    0 0 20px 12px #ff00ff;
-  filter: brightness(1.14) contrast(1.13) saturate(2.8);
-  position: relative; overflow: visible;
-  border-radius: 19px;
-  margin-top: 18px;
+@keyframes arcade-glow {
+  0%,100% { filter: drop-shadow(0 0 6px #ffe379) drop-shadow(0 0 14px #51ffe7); }
+  50% { filter: drop-shadow(0 0 16px #51ffe7) drop-shadow(0 0 18px #cf28ff); }
 }
-#calendario .reward-card .title {
-  color: #ffe379;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 1.09em;
-  margin-bottom: 7px;
+@keyframes scale-in {
+  0% { opacity:0; transform: scale(0.9);}
+  100% { opacity:1; transform: scale(1);}
+}
+@keyframes scale-out {
+  0% { opacity:1; transform: scale(1);}
+  100% { opacity:0; transform: scale(0.97);}
+}
+@keyframes hover-bounce {
+  0%,100% { transform: scale(1);}
+  40% { transform: scale(1.1);}
+  80% { transform: scale(0.98);}
+}
+@keyframes arrow-bounce {
+  0%,100% { transform: translateY(0);}
+  40% { transform: translateY(-6px);}
+  80% { transform: translateY(0);}
+}
+
+/* ======= BASE RESET & BACKGROUND ======= */
+:root {
+  --neon: #51ffe7;
+  --gold: #ffe379;
+  --crt-blue: #0e55a5;
+  --crt-dark: #00253b;
+  --white: #fff;
+  --arcade-font: 'Press Start 2P', monospace;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--crt-dark);
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+  overflow: hidden;
+}
+
+.arcade-bg {
+  position: fixed;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  background: url('https://github.com/Adamo-Films/Habitos/raw/main/Artboard%201.png') no-repeat center center;
+  background-size: cover;
+}
+
+.banner-gamer {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  width: 98vw;
+  max-width: 770px;
+  min-width: 160px;
+  height: auto;
+  transform: translateX(-50%);
+  z-index: 22;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.banner-gamer-img {
+  width: 98%;
+  max-width: 750px;
+  min-width: 120px;
+  height: auto;
+  max-height: 220px;
+  min-height: 75px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px #19e0fcaa)
+          drop-shadow(0 0 60px #ff38fdaa);
+  pointer-events: none;
+}
+
+.arcade-counters {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  height: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  transform: translateY(-50%);
+  background: none !important;
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 16vw;
+  max-width: 310px;
+  min-width: 80px;
+  min-height: 210px;
+  height: 100%;
+  pointer-events: none;
+  background: none !important;
+  box-sizing: border-box;
+  padding: 0 0.2vw;
+  margin: 0;
+}
+
+.counter-label, .counter-value {
   text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 0 0 16px #ffe379, 0 0 16px #ff2fdf, 0 0 12px #0ff;
-  filter: brightness(1.24) saturate(1.27);
+  width: 100%;
+  pointer-events: none;
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+  letter-spacing: 0.03em;
 }
-#calendario .reward-card .desc {
-  color: #fff; font-size: 1.02em;
-  margin-bottom: 7px; text-align: center;
-  text-shadow: 0 0 8px #ffe379, 0 0 7px #0ff9;
+
+.counter-label {
+  font-size: 1.1em;
+  color: #fff;
+  text-shadow: 0 2px 14px #19e0fcaa, 0 1px 12px #000d, 0 1px 30px #ffe379bb;
+  font-weight: 900;
+  margin-top: 0;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  transform: none;
 }
-#calendario .reward-bar-bg {
-  width: 94%; height: 15px; background: #17305299;
-  border-radius: 7px; overflow: hidden; margin: 12px auto 7px auto;
+
+.counter-value {
+  font-size: 3.5em;
+  background: linear-gradient(90deg,#ffe379 55%,#51ffe7 80%,#d6e4ff 100%);
+  color: #fdf5c6;
+  font-weight: 900;
+  text-shadow: 0 2px 12px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
+  border-radius: 16px;
+  display: inline-block;
+  padding: 0 10px 0 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+  width: 100%;
+  transform: none;
+}
+
+/* ======= ARCADE SCREEN CURVE ========== */
+.arcade-screen-curve {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  width: 90vw;
+  height: 70vh;
+  max-width: 870px;
+  max-height: 520px;
+  min-width: 240px;
+  min-height: 120px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
+  background: none !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0;
+  pointer-events: auto;
+  overflow: hidden;
+  box-shadow: 0 0 0 3px #151b3688, 0 0 80px #51ffe799;
+}
+
+#calendario {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  min-width: 120px;
+  min-height: 70px;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: none !important;
+  color: #ffe379;
+  font-family: var(--arcade-font), Arial, sans-serif;
+  padding: 0 2vw;
+  overflow-y: auto;
+  text-shadow: 0 2px 16px #43f2ffcc, 0 0 20px #fff3;
+  filter: url(#arcade-convex);
+  box-sizing: border-box;
+  border: none !important;
+}
+
+/* Neon text em todo conteúdo do calendário */
+#calendario,
+#calendario th,
+#calendario td,
+#calendario .progress-text,
+#calendario .mes,
+#calendario .habit-label,
+#calendario .habit-emoji,
+#calendario .habit-item {
+  text-shadow:
+    0 0 13px #51ffe7cc,
+    0 0 18px #ffe37944,
+    0 0 6px #fff7,
+    0 0 2px #fff5;
+}
+
+#calendario .habit-emoji {
+  filter:
+    drop-shadow(0 0 7px #51ffe7cc)
+    drop-shadow(0 0 14px #ffe37966);
+}
+
+/* ========= MESES (títulos e setas animadas) ========== */
+.mes {
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+  font-size: 2.2em;
+  margin: 30px 0 16px 0;
+  color: var(--gold);
+  text-shadow: 0 0 18px #ffe379cc, 0 0 19px #31fcffbb, 0 0 55px #31fcff77;
+  background: none !important;
+  border: none !important;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s cubic-bezier(.47,1.64,.41,.88), filter 0.2s;
+  position: relative;
+  padding: 16px 0 5px 0;
+  outline: none;
+  border-radius: 22px;
+  min-height: 62px;
+  z-index: 12;
+  animation: scale-in 0.4s;
+}
+.mes .arcade-arrow {
+  display: inline-block;
+  margin-left: 16px;
+  font-size: 0.9em;
+  color: #51ffe7;
+  filter: drop-shadow(0 0 10px #51ffe7cc);
+  animation: arrow-bounce 1.1s infinite cubic-bezier(.5,1.5,.5,.8);
+  pointer-events: none;
+}
+.mes:hover, .mes:focus-visible {
+  background: rgba(81,255,231,0.07);
+  filter: brightness(1.12) contrast(1.15) saturate(1.17);
+  box-shadow: 0 0 30px #51ffe799;
+  animation: hover-bounce 0.19s;
+  outline: 2px solid #cf28ff55;
+}
+.mes.open {
+  color: #fff;
+  background: rgba(81,255,231,0.13);
+  box-shadow: 0 0 28px #51ffe799;
+}
+.mes.open .arcade-arrow {
+  color: #cf28ff;
+  animation: arrow-bounce 0.8s infinite cubic-bezier(.45,1.9,.5,.8);
+  transform: rotate(90deg);
+}
+
+.mes.completed {
+  filter: drop-shadow(0 0 18px #ffe379cc) drop-shadow(0 0 38px #51ffe7bb);
+  background: linear-gradient(90deg,#ffe37922,#31fcff11,#ffe37922);
+  color: #fffdde !important;
+}
+
+/* Reduz espaçamento entre meses */
+#calendario .mes + .mes { margin-top: 14px; }
+
+/* ======= TABELA E DIAS ========== */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: none !important;
+  color: #fff;
+  margin-bottom: 10px;
+  border: none !important;
+  box-shadow: none !important;
+  font-size: 1.01em;
+}
+
+th, td {
+  padding: 7px 10px;
+  font-size: 0.93em;
+  text-align: left;
+  background: transparent !important;
+  border: none !important;
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+}
+
+tr.main-row {
+  cursor: pointer;
+  background: transparent !important;
+  color: #ffe379;
+  border-radius: 17px;
+  box-shadow: none;
+  filter: brightness(1.1) contrast(1.08);
+  transition: background 0.19s, color 0.22s, box-shadow 0.23s;
+  outline: none;
+  position: relative;
+  min-height: 38px;
+  animation: scale-in 0.25s;
+}
+tr.main-row .expand-icon {
+  font-size: 1.2em;
+  margin-right: 4px;
+  color: var(--neon);
+  filter: drop-shadow(0 0 6px #51ffe7dd);
+  transition: color 0.2s, filter 0.2s;
+}
+tr.main-row:hover, tr.main-row:focus-visible {
+  background: rgba(81,255,231,0.07);
+  color: #fff;
+  box-shadow: 0 0 16px #51ffe799;
+  animation: hover-bounce 0.16s;
+  outline: 2px solid #cf28ff65;
+}
+tr.main-row.expanded {
+  background: rgba(81,255,231,0.13) !important;
+  box-shadow: 0 0 18px #51ffe7cc;
+}
+tr.main-row.day-complete {
+  background: linear-gradient(90deg, #23e2f9 10%, #ffe379 70%, #f7d865 100%) !important;
+  color: #283a1e !important;
+  font-weight: bold;
+  text-shadow: 0 1px 3px #fff, 0 0 20px #000b;
+  box-shadow: 0 0 40px 8px #51ffe799, 0 0 14px #ffe37988;
+  border-radius: 22px;
+  filter: brightness(1.07) contrast(1.15) saturate(1.16);
+  animation: arcade-glow 2.8s infinite;
+}
+tr.main-row.day-complete .progress-text,
+tr.main-row.day-complete td {
+  color: #181818 !important;
+  text-shadow: 0 0 10px #ffe37988, 0 0 4px #ffe37933;
+}
+tr.dropdown {
+  background: none !important;
+  animation: scale-in 0.23s;
+}
+tr.dropdown[aria-hidden="true"] {
+  animation: scale-out 0.21s;
+}
+
+/* ====== HABITOS DIARIOS ========== */
+.habit-list { gap: 10px; margin: 11px 0; display: flex; flex-direction: column;}
+.habit-item {
+  display: grid;
+  grid-template-columns: 40px 1fr 34px;
+  align-items: center;
+  background: rgba(41, 133, 188, 0.10);
+  padding: 7px 14px;
+  border-radius: 11px;
+  margin-bottom: 7px;
+  box-shadow: 0 1px 6px #0af6;
+  transition: background 0.16s, color 0.18s, box-shadow 0.2s;
+  position: relative;
+  min-height: 28px;
+  font-size: 0.84em;
+}
+.habit-item:hover, .habit-item:focus-within {
+  background: rgba(81,255,231,0.10);
+  filter: brightness(1.11) contrast(1.12);
+  box-shadow: 0 0 8px #cf28ff44;
+  outline: 2px solid #cf28ff50;
+  animation: hover-bounce 0.17s;
+}
+.habit-item .habit-emoji {
+  font-size: 1.3em;
+  cursor: pointer;
+  outline: none;
+  border-radius: 7px;
+  transition: filter 0.2s, transform 0.13s;
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+}
+.habit-item .habit-emoji:hover, .habit-item .habit-emoji:focus-visible {
+  filter: drop-shadow(0 0 8px #51ffe7dd) drop-shadow(0 0 20px #cf28ffbb);
+  background: rgba(81,255,231,0.07);
+  animation: hover-bounce 0.12s;
+  outline: 2px solid #ffe37966;
+}
+
+.habit-label {
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+  font-size: 0.83em;
+  color: #ffe379;
+  text-shadow: 0 0 8px #ffe379aa;
+  padding-left: 9px;
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.2s, filter 0.22s;
+}
+.habit-checkbox {
+  width: 28px;
+  height: 28px;
+  accent-color: #51ffe7;
+  cursor: pointer;
+  margin-left: 0;
+  margin-right: 0;
+  filter: drop-shadow(0 0 2px #51ffe7cc);
+  transition: outline 0.15s;
+  outline: 2px solid #fff3;
+}
+.habit-checkbox:focus-visible {
+  outline: 2px solid #cf28ff99;
+}
+
+.habit-complete,
+.habit-checkbox:checked ~ .habit-label,
+.habit-done {
+  color: #282318 !important;
+  background: linear-gradient(90deg, #23e2f9 10%, #ffe379 70%, #f7d865 100%) !important;
+  filter: brightness(1.07) contrast(1.18);
+  text-shadow: 0 0 14px #ffe37977;
+  border-radius: 8px;
+  box-shadow: 0 0 14px #51ffe7cc;
+  font-weight: bold;
+}
+
+/* ====== ARCADE PRÊMIOS ======= */
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(110deg, #16226fdd 60%, #272a49cc 100%);
+  border-radius: 18px;
+  margin: 26px auto 14px auto;
+  padding: 18px 22px 13px 22px;
+  width: 87%;
+  max-width: 650px;
+  border: 3px solid #ff33efcc;
+  box-shadow: 0 0 40px 8px #51ffe7cc, 0 0 30px #ff33ef66;
+  filter: brightness(1.11) contrast(1.12) saturate(2.1);
+  position: relative;
+  z-index: 5;
+  animation: rgb-glow-pulse 4s infinite;
+  overflow: visible;
+}
+.reward-card .reward-icon {
+  font-size: 2.6em;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 0 11px #ff3ef7cc) drop-shadow(0 0 18px #ffe379bb);
+  animation: arcade-glow 1.5s infinite;
+}
+.reward-card .title {
+  color: #ffe379;
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+  font-size: 1.1em;
+  margin-bottom: 2px;
+  text-align: center;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 8px #ffe379cc, 0 0 20px #cf28ff88;
+}
+.reward-card .desc {
+  color: #23f6f6;
+  font-size: 1.02em;
+  margin-bottom: 8px;
+  text-align: center;
+  text-shadow: 0 0 8px #fff9, 0 0 10px #51ffe7cc;
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+}
+.reward-bar-bg {
+  width: 93%;
+  height: 13px;
+  background: #17305299;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 7px;
+  margin-bottom: 7px;
   box-shadow: 0 0 10px 2px #51ffe7bb, 0 0 13px 3px #cf28ff99;
   filter: none;
 }
@@ -370,90 +512,68 @@ tr.main-row.day-complete td {
   height: 100%;
   background: linear-gradient(90deg, #cf28ff 10%, #51ffe7 90%);
   border-radius: 8px;
-  transition: width 0.55s cubic-bezier(.6,1.2,.16,1.08);
+  transition: width 0.6s cubic-bezier(.6,1.2,.16,1.08);
   width: 0;
   box-shadow: 0 0 15px #cf28ff88, 0 0 8px #51ffe799;
 }
 .reward-unlocked {
-  margin-top: 10px;
-  color: #222 !important;
-  background: linear-gradient(90deg, #0ff 0%, #51ffe7 60%, #ffe379 100%);
-  border-radius: 8px;
-  padding: 13px 25px 11px 25px;
+  margin-top: 8px;
+  color: #181818 !important;
+  background: linear-gradient(90deg,#ffe379 40%,#51ffe7 100%);
+  border-radius: 9px;
+  padding: 5px 16px;
   font-weight: bold;
-  box-shadow: 0 0 23px #0ff, 0 0 21px #cf28ff, 0 0 20px #51ffe7cc;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 1.19em;
+  font-family: var(--arcade-font), Arial, sans-serif !important;
+  font-size: 1.08em;
   display: inline-block;
-  border: 2px solid #0ff;
-  letter-spacing: 2.5px;
-  text-shadow:
-    0 0 12px #fff,
-    0 0 10px #ffe379,
-    0 0 7px #0ff;
-  transition: box-shadow 0.28s, border 0.23s;
+  text-shadow: 0 0 4px #ffe379cc, 0 0 8px #23e2f9cc;
+  border: 2px solid #51ffe7cc;
+  box-shadow: 0 0 16px #ff33efaa;
 }
 
-/* ----- EFEITOS ANIMADOS DE PRÊMIO ----- */
+/* ========== SPRINKLES & EFFECTS ========== */
 .reward-effect {
-  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: 3;
+  position: absolute;
+  left: 0; top: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 3;
 }
 
 /* Donuts - Sprinkles */
 .sprinkle {
-  position: absolute; top: -15px;
-  border-radius: 99px; transform: rotateZ(20deg);
-  opacity: 0.88; animation: sprinkle-fall 3.2s linear infinite;
+  position: absolute;
+  top: -15px;
+  border-radius: 99px;
+  transform: rotateZ(20deg);
+  opacity: 0.88;
+  animation: sprinkle-fall 3.2s linear infinite;
 }
 @keyframes sprinkle-fall {
   0% { top: -14px; opacity:0.8; }
   10% { opacity: 1; }
   100% { top: 92%; opacity:0.2;}
 }
-/* Outras animações já estavam presentes no CSS antigo... */
+/* ... Demais efeitos de emoji seguem seu CSS antigo ... */
 
-/* ===== SCANLINES CRT GLOW OVERLAY ===== */
-.arcade-screen-curve::after {
-  content: "";
-  pointer-events: none;
-  z-index: 199;
-  position: absolute; left: 0; top: 0; width: 100%; height: 100%;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(15, 240, 255, 0.10) 0px,
-    rgba(15, 240, 255, 0.08) 2px,
-    transparent 4px,
-    transparent 11px
-  );
-  opacity: 0.18;
-  mix-blend-mode: screen;
-}
-
-/* ================= SCROLLBAR =============== */
-#calendario::-webkit-scrollbar { width: 7px; }
-#calendario::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  border-radius: 11px;
-}
-
-/* ========== RESPONSIVO ========== */
+/* ==== MOBILE ADAPT ==== */
 @media (max-width: 980px) {
   .banner-gamer { width: 95vw; min-width: 80px; max-width: 99vw; top: 8px;}
   .banner-gamer-img { max-height: 110px; min-height: 44px;}
   .arcade-screen-curve { width: 99vw; min-width: 80px; max-width: 99vw; left: 50%; top: 54%;}
   .arcade-counters { width: 100vw; height: 0; top: 50%; left: 0; transform: translateY(-50%);}
-  .counter-label { font-size: 0.87em; }
-  .counter-value { font-size: 1.18em; }
-  .counter { min-height: 72px; }
-  .mes { font-size: 1.09em; }
+  .counter-label { font-size: 0.98em;}
+  .counter-value { font-size: 2.4em;}
+  .counter { min-height: 72px;}
+  .mes { font-size: 1.3em; min-height: 42px;}
+  th, td { font-size: 0.72em;}
 }
 @media (max-width: 650px) {
   .arcade-screen-curve { width: 99vw; min-width: 40px; left: 50%; top: 54%; border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;}
-  #calendario { font-size: 0.81em; padding: 0 1vw 0 1vw;}
+  #calendario { font-size: 0.67em; padding: 0 1vw;}
   .arcade-counters { width: 100vw; height: 0; top: 50%; left: 0; transform: translateY(-50%);}
-  .counter-label { font-size: 0.65em; }
-  .counter-value { font-size: 0.85em; }
-  .counter { min-height: 25px; }
-  .mes { font-size: 0.82em; }
+  .counter-label { font-size: 0.67em;}
+  .counter-value { font-size: 1.05em;}
+  .counter { min-height: 25px;}
+  .mes { font-size: 1.05em;}
+  th, td { font-size: 0.58em;}
 }
