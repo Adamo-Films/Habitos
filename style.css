@@ -134,16 +134,18 @@ html, body {
 .mes .mes-label { z-index: 2; }
 .arcade-pointer {
   display: none;
-  width: 38px; height: 38px; margin-left: 0;
+  width: 44px; height: 44px; margin-left: 0;
   margin-right: -36px;
-  filter: drop-shadow(0 0 17px #31fcff) drop-shadow(0 0 26px #51ffe7cc);
+  background: url('https://i.imgur.com/qbADhJx.png') center/contain no-repeat;
+  filter: drop-shadow(0 0 22px #31fcff) drop-shadow(0 0 42px #51ffe7cc) drop-shadow(0 0 23px #0090ffbb);
   animation: arcade-pointer-bounce 0.9s infinite alternate;
-  position: absolute; left: -44px; top: 10px; z-index: 3;
+  position: absolute; left: -50px; top: 4px; z-index: 7;
 }
 @keyframes arcade-pointer-bounce {
   0% { transform: scale(1) translateY(0);}
   100% { transform: scale(1.18) translateY(-13px);}
 }
+.arcade-pointer-ativo { display: block !important; }
 .mes.open .arcade-pointer { display: block !important; }
 .mes:hover { color: #51ffe7; text-shadow: 0 0 16px #51ffe788, 0 0 40px #ffe37944; }
 .mes:active { transform: scale(0.97); }
@@ -154,6 +156,8 @@ tr.main-row .arcade-pointer.pointer-dia {
   display: none;
   position: absolute; left: -36px; top: 7px; z-index: 4;
   width: 32px; height: 32px;
+  background: url('https://i.imgur.com/qbADhJx.png') center/contain no-repeat;
+  filter: drop-shadow(0 0 22px #31fcff) drop-shadow(0 0 42px #51ffe7cc) drop-shadow(0 0 23px #0090ffbb);
   animation: arcade-pointer-bounce 1.1s infinite alternate;
 }
 tr.main-row.expanded .arcade-pointer.pointer-dia {
@@ -249,7 +253,7 @@ tr.dropdown[style*="display: none;"] {
   z-index: 2;
 }
 .habit-label { cursor: pointer; user-select: none; font-family: inherit;}
-/* --- Emojis Arcade Grandes --- */
+/* === EMOJI GRANDE 1 por hábito === */
 .habit-emoji.big {
   font-size: 2.4em !important;
   filter: drop-shadow(0 0 18px #00e2ffcc) drop-shadow(0 0 32px #ffe37966);
@@ -263,7 +267,7 @@ tr.dropdown[style*="display: none;"] {
   font-size: 1.13em;
   letter-spacing: 0.02em;
 }
-/* --- Checkbox Pixel Arcade --- */
+/* === CHECKBOX PIXEL ARCADE === */
 .habit-checkbox.pixel {
   appearance: none;
   width: 28px; height: 28px;
@@ -391,18 +395,6 @@ tr.dropdown[style*="display: none;"] {
   .counter { min-height: 25px; }
   .mes { font-size: 1.1em;}
 }
-
-/* --- Indicador arcade pointer mês/dia --- */
-.arcade-pointer, .arcade-pointer.pointer-dia {
-  background: url('https://i.imgur.com/qbADhJx.png') center/contain no-repeat;
-  width: 44px; height: 44px;
-  display: none;
-  position: absolute;
-  left: -50px; top: 4px; z-index: 7;
-  filter: drop-shadow(0 0 22px #31fcff) drop-shadow(0 0 42px #51ffe7cc) drop-shadow(0 0 23px #0090ffbb);
-  animation: arcade-pointer-bounce 1.09s infinite alternate;
-}
-.arcade-pointer-ativo { display: block !important; }
 
 /* --- Remove coluna "Dia" e formata datas --- */
 thead tr th:nth-child(3), tbody tr td:nth-child(3) { display: none !important; }
