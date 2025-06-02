@@ -153,17 +153,46 @@ html, body {
 .mes:not(.open) .arcade-pointer { display: none !important; }
 .mes:not(.open) { opacity: 0.85; }
 
-tr.main-row .arcade-pointer.pointer-dia {
+/* ========== ANIMAÇÕES DE DROPDOWN DE MESES ========== */
+.mes-dropdown {
   display: none;
-  position: absolute; left: -36px; top: 7px; z-index: 4;
-  width: 32px; height: 32px;
-  animation: arcade-pointer-bounce 1.1s infinite alternate;
+  animation: mes-dropdown-close 0.33s cubic-bezier(.7,0,.5,1.2) backwards;
+  transform-origin: top center;
+  will-change: opacity, transform, height;
+  overflow: hidden;
+  pointer-events: none;
 }
-tr.main-row.expanded .arcade-pointer.pointer-dia {
+.mes.open + .mes-dropdown {
   display: block !important;
+  animation: mes-dropdown-open 0.40s cubic-bezier(.57,1.5,.57,.85) both;
+  pointer-events: auto;
 }
-tr.main-row:not(.expanded) .arcade-pointer.pointer-dia {
-  display: none !important;
+@keyframes mes-dropdown-open {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.74) translateY(-44px);
+    filter: blur(5px) brightness(1.2);
+  }
+  80% {
+    filter: blur(1.3px) brightness(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    filter: none;
+  }
+}
+@keyframes mes-dropdown-close {
+  0% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    filter: none;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0.33) translateY(-35px);
+    filter: blur(6px) brightness(1.1);
+  }
 }
 
 /* ========== TABELA ========== */
@@ -223,7 +252,7 @@ tr.main-row.day-complete, .habit-item.habit-complete {
 
 .progress-text.gold { color: #ffe379; text-shadow: 0 0 8px #ffe379cc, 0 0 16px #ffd90099; }
 
-/* ==== Expand animação dos dropdowns ==== */
+/* ==== Expand animação dos dropdowns de dias ==== */
 tr.dropdown {
   background: none !important;
   animation: dropdown-open 0.33s cubic-bezier(.7,0,.5,1.2) backwards;
@@ -233,12 +262,16 @@ tr.dropdown {
   0% { opacity: 0; transform: scaleY(0.6) translateY(-32px);}
   100% { opacity: 1; transform: scaleY(1) translateY(0);}
 }
-tr.dropdown[style*="display: none;"] {
-  animation: dropdown-close 0.25s cubic-bezier(.5,0,.7,1.1) backwards;
+/* NOVO: Animação de fechar dropdown de dia (retrair) */
+tr.dropdown.arcade-drop-hide {
+  animation: dropdown-close 0.28s cubic-bezier(.5,0,.7,1.1) forwards !important;
 }
 @keyframes dropdown-close {
   0% { opacity: 1; transform: scaleY(1);}
   100% { opacity: 0; transform: scaleY(0.2) translateY(-16px);}
+}
+tr.dropdown[style*="display: none;"] {
+  /* Só evita glitch visual (não força close) */
 }
 
 /* ==== HÁBITOS ==== */
