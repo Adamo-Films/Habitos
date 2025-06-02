@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Danilo no 🎮</title>
+  
+  <!-- Fonte principal -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- SVG FILTER CONVEX CRT -->
+  <svg width="0" height="0" style="position:absolute;">
+    <filter id="arcade-convex">
+      <feImage result="map"
+        xlink:href="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='10' height='5'>
+            <defs>
+              <radialGradient id='g' cx='60%' cy='50%' r='60%'>
+                <stop offset='60%' stop-color='white'/>
+                <stop offset='100%' stop-color='black'/>
+              </radialGradient>
+            </defs>
+            <rect width='100%' height='100%' fill='url(%23g)'/>
+          </svg>" />
+      <feDisplacementMap in2="map" in="SourceGraphic" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <!-- Fundo arcade -->
+  <div class="arcade-bg"></div>
+
+  <!-- Banner topo centralizado -->
+  <div class="banner-gamer">
+    <img src="https://i.imgur.com/Krb7yXe.png" alt="Logo" class="banner-gamer-img" />
+  </div>
+
+  <!-- Contadores laterais -->
+  <div class="arcade-counters transparent">
+    <div class="counter left">
+      <span class="counter-label">Dias<br>Seguidos</span>
+      <span class="counter-value" id="seqCount">0</span>
+    </div>
+    <div class="counter right">
+      <span class="counter-label">Hábitos<br>Feitos</span>
+      <span class="counter-value" id="doneCount">0</span>
+    </div>
+  </div>
+
+  <!-- Tela principal CRT -->
+  <div class="arcade-screen-curve">
+    <div class="crt-glass-overlay"></div>
+    <div class="crt-noise"></div>
+    <div id="calendario" class="calendario-container" tabindex="-1"></div>
+  </div>
+
+  <!-- Confetti e celebração -->
+  <canvas id="confetti-canvas"></canvas>
+  <canvas id="reward-confetti"></canvas>
+  <div id="celebrate-text">VAI MLK!!!</div>
+  <audio id="celebrate-audio">
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.mp3" type="audio/mpeg" />
+    <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg" />
+  </audio>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <!-- Script principal -->
+  <script src="script.js"></script>
+</body>
+</html>
