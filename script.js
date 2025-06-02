@@ -11,7 +11,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// =================== RECOMPENSAS (ATUALIZADAS) ===================
+// =================== NOVAS Recompensas ===================
 const rewards = [
   { month: 5, year: 2025, icon: "🍩", title: "Maio", desc: "Caixa de donuts Krispy Kreme", label: "Donuts!" },
   { month: 6, year: 2025, icon: "🍝", title: "Junho", desc: "Restaurante Rascal", label: "Rascal!" },
@@ -43,6 +43,7 @@ const habitUpgrades = {
   49: "Exercício (60 min)",    // Substitui 30 min
   61: "Exercício (90 min)"     // Substitui 60 min
 };
+
 const habitos_incrementais = [
   { dia: 1, nome: "Beber 2L de água" },
   { dia: 5, nome: "Dieta com alimentos integrais" },
@@ -61,7 +62,14 @@ const habitos_incrementais = [
   { dia: 57, nome: "90 min de hiperfoco" },
   { dia: 61, nome: "Exercício (90 min)" }
 ];
+
 const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
+
+const habitEmojis = [
+  "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
+  "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪"
+];
+
 function getCiclicoEmoji(habito) {
   if (habito.includes("Banho gelado")) return "🚿";
   if (habito.includes("Agilidade")) return "🧠";
@@ -69,15 +77,20 @@ function getCiclicoEmoji(habito) {
   if (habito.includes("Peso")) return "⚖️";
   return "🎯";
 }
-const habitEmojis = [
-  "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
-  "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪"
-];
+
 const monthNames = [
   "Janeiro", "Fevereiro", "Março", "Abril",
   "Maio", "Junho", "Julho", "Agosto",
   "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
+
+// =================== Confetti Functions ===================
+function launchConfettiEpic() {
+  // ... MANTÉM SUA FUNÇÃO (igual ao original) ...
+}
+function launchRewardConfetti() {
+  // ... MANTÉM SUA FUNÇÃO (igual ao original) ...
+}
 
 // =================== Progress Save/Load ===================
 async function getProgress() {
@@ -102,12 +115,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   const inicio = new Date(2025, 4, 21), fim = new Date(2026, 7, 31);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
   let habitos_ativos = [];
-  // Previne duplicação em upgrades: remove anteriores
+
+  // GERA DIAS (sem duplicar upgrade!)
   for (let i = 1; i <= dias_total; i++) {
     const data_atual = new Date(inicio);
     data_atual.setDate(inicio.getDate() + i - 1);
-
-    // Checa se tem upgrade
+    // Checa upgrade: substitui (não duplica)
     if (habitUpgrades[i]) {
       habitos_ativos = habitos_ativos.filter(h => {
         if (habitUpgrades[i].startsWith("Acordar")) return !h.startsWith("Acordar");
@@ -119,7 +132,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       let entry = habitos_incrementais.find(h => h.dia === i);
       if (entry) habitos_ativos.push(entry.nome);
     }
-
     let novoHabito = null;
     if (habitos_incrementais.find(h => h.dia === i) || habitUpgrades[i]) {
       novoHabito = habitos_ativos[habitos_ativos.length - 1];
@@ -137,7 +149,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
-  // ===== Gera HTML do calendário =====
+  // === Gera o HTML do calendário (sem coluna Dia, só Data DD/MM) ===
   const calendario = document.getElementById("calendario");
   const grupos = {};
   dados.forEach((obj) => {
@@ -151,7 +163,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const mesNum = Number(mes);
     const anoNum = Number(ano);
     const nomeMes = monthNames[mesNum - 1].toUpperCase();
-    html += `<div class='mes arcade-clicavel' data-mes="${mesNum}" data-ano="${anoNum}">${nomeMes} ${ano} 
+    html += `<div class='mes arcade-clicavel' data-mes="${mesNum}" data-ano="${anoNum}">
+      ${nomeMes} ${ano} 
       <span class="arcade-arrow"></span>
       <span class="arcade-pointer"></span>
     </div>
@@ -167,6 +180,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       <tbody>`;
     dias.forEach((dia, i) => {
       let habitosCellText;
+      // Se dia de novo hábito, mostra só o nome do novo hábito
       if (dia.novoHabito) {
         habitosCellText = `<span class="novo-habito">${dia.novoHabito}</span>`;
       } else {
@@ -219,7 +233,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   calendario.innerHTML = html;
 
-  // ========== Dropdown lógica: abrir/fechar mês e dia ==========
+  // Dropdown lógica: abrir/fechar mês e dia
   const allMesDivs = document.querySelectorAll('#calendario .mes');
   const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
   const allRewards = document.querySelectorAll('#calendario .reward-card');
@@ -234,7 +248,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const dropdown = allDropdowns[idx];
     mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
       `<span class="arrow-pulse">&#9654;</span>` : `<span class="arrow-inactive">&#9654;</span>`;
-    // Adiciona indicador arcade animado ao mês atual
     if (mesNum === mesAtual && anoNum === anoAtual) {
       mesDiv.classList.add('open', 'mes-atual');
       mesDiv.querySelector(".arcade-pointer").classList.add("arcade-pointer-ativo");
@@ -245,7 +258,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       mesDiv.querySelector(".arcade-pointer").classList.remove("arcade-pointer-ativo");
     }
     mesDiv.onclick = (e) => {
-      // Toggle
       const isOpen = mesDiv.classList.contains('open');
       allDropdowns.forEach((d, i) => {
         d.style.display = 'none';
@@ -318,21 +330,126 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   });
 
-  // === Checkbox lógica ===
+  // Aplica progresso salvo + highlights arcade
+  Object.keys(progress).forEach(checkId => {
+    const checkbox = document.getElementById(checkId);
+    if (checkbox) {
+      checkbox.checked = progress[checkId];
+      const label = document.getElementById('label-' + checkId);
+      if (label) label.classList.toggle('habit-done', progress[checkId]);
+      const hi = document.getElementById('habititem-' + checkId);
+      if (hi) hi.classList.toggle('habit-complete', progress[checkId]);
+    }
+  });
+
+  // Barra de progresso e highlights
+  function updateProgressBar(dayId, habitCount) {
+    let checked = 0;
+    for (let i = 0; i < habitCount; i++) {
+      if (document.getElementById(`${dayId}-habit-${i}`)?.checked) checked++;
+    }
+    if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
+    let pct = checked / habitCount;
+    const row = document.getElementById(`mainrow-${dayId}`);
+    if (row) {
+      if (pct === 1) row.classList.add('day-complete');
+      else row.classList.remove('day-complete');
+    }
+  }
+
+  // Prêmios
+  function updateRewardProgress(month, year, totalDias, diasCompletos) {
+    const pct = diasCompletos / totalDias;
+    const bar = document.getElementById(`reward-bar-${month}-${year}`);
+    const unlocked = document.getElementById(`reward-unlocked-${month}-${year}`);
+    if (bar) {
+      bar.style.width = (pct * 100) + "%";
+      if (pct === 1) {
+        if (unlocked.style.display !== "block") {
+          unlocked.style.display = "block";
+          launchRewardConfetti();
+        }
+      } else {
+        unlocked.style.display = "none";
+      }
+    }
+  }
+
+  function checkAllHabitsComplete(dayId, habitCount) {
+    let complete = true;
+    for (let i = 0; i < habitCount; i++) {
+      if (!document.getElementById(`${dayId}-habit-${i}`)?.checked) {
+        complete = false;
+        break;
+      }
+    }
+    if (complete && !document.getElementById(`${dayId}-ciclico`)?.checked) complete = false;
+    return complete;
+  }
+
+  function updateAllRewardProgress() {
+    Object.entries(grupos).forEach(([id, dias]) => {
+      const [mes, ano] = id.split("-");
+      const reward = getRewardFor(Number(mes), Number(ano));
+      if (!reward) return;
+      let diasCompletos = 0;
+      dias.forEach((dia) => {
+        const habitCount = dia.habitos.length + 1;
+        const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
+        if (allDone) diasCompletos++;
+      });
+      updateRewardProgress(mes, ano, dias.length, diasCompletos);
+    });
+  }
+
+  // Contadores 3D
+  function countStats() {
+    const checkboxes = document.querySelectorAll('.habit-checkbox');
+    let done = 0;
+    let maxSeq = 0, currentSeq = 0;
+    let lastDone = false;
+    // Para cada dia, verifica se todos hábitos estão completos para sequência
+    const dias = Array.from(document.querySelectorAll('tr.main-row'));
+    dias.forEach((row) => {
+      if (row.classList.contains('day-complete')) {
+        currentSeq++;
+        if (currentSeq > maxSeq) maxSeq = currentSeq;
+        lastDone = true;
+      } else {
+        currentSeq = 0;
+        lastDone = false;
+      }
+    });
+    checkboxes.forEach(cb => { if (cb.checked) done++; });
+    document.getElementById('seqCount').textContent = maxSeq;
+    document.getElementById('doneCount').textContent = done;
+  }
+
+  // Checkbox lógica
   document.querySelectorAll('.habit-checkbox').forEach(checkbox => {
     checkbox.addEventListener('change', function () {
       const label = document.getElementById('label-' + this.id);
       if (label) label.classList.toggle('habit-done', this.checked);
+
       getProgress().then(progress => {
         progress[this.id] = this.checked;
         saveProgress(progress);
       });
+
       const hi = document.getElementById('habititem-' + this.id);
       if (hi) hi.classList.toggle('habit-complete', this.checked);
+      const parts = this.id.match(/^dia-\d+-\d+-\d+/);
+      if (parts) {
+        const dayId = parts[0];
+        const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
+        updateProgressBar(dayId, habitCount);
+        updateAllRewardProgress();
+        countStats();
+      }
     });
   });
 
-  // === Emojis Arcade interativos ===
+  // Emoji interativo
   document.querySelectorAll('.habit-emoji').forEach(emoji => {
     emoji.addEventListener('mouseenter', function () {
       emoji.classList.add('glow');
@@ -352,4 +469,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   });
 
-});
+  // Inicializa barras, status e highlights
+  dados.forEach((dia) => {
+    const habitCount = dia.habitos.length + 1;
+    updateProgressBar(dia.id, habitCount);
+    const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
+    if (allDone) {
+      const dayRow = document.getElementById(`mainrow-${dia.id}`);
+      if (dayRow) dayRow.classList.add('day-complete');
+    }
+  });
+  updateAllRewardProgress();
+  countStats();
+
+  // Responsividade confetti
+  window.addEventListener('resize', function () {
+    const canvas = document.getElementById('confetti-canvas');
+    if (canvas && canvas.style.display === 'block') {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+  });
+}); // Fecha DOMContentLoaded
