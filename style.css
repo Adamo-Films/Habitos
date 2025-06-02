@@ -87,8 +87,6 @@ html, body {
   padding: 0; pointer-events: auto; overflow: hidden;
   box-shadow: none !important;
 }
-
-/* ==== Remove fundo container ==== */
 .container, .calendario-container, #calendario, .reward-card {
   background: none !important;
   box-shadow: none !important;
@@ -146,7 +144,6 @@ html, body {
   0% { transform: scale(1) translateY(0);}
   100% { transform: scale(1.18) translateY(-13px);}
 }
-
 .mes.open .arcade-pointer { display: block !important; }
 .mes:hover { color: #51ffe7; text-shadow: 0 0 16px #51ffe788, 0 0 40px #ffe37944; }
 .mes:active { transform: scale(0.97); }
@@ -252,43 +249,49 @@ tr.dropdown[style*="display: none;"] {
   z-index: 2;
 }
 .habit-label { cursor: pointer; user-select: none; font-family: inherit;}
-.habit-checkbox {
-  accent-color: var(--neon);
-  width: 28px; height: 28px; border-radius: 7px;
-  margin-left: 8px; background: none;
-  border: 2.5px solid var(--neon); box-shadow: 0 0 5px #51ffe7bb;
+/* --- Emojis Arcade Grandes --- */
+.habit-emoji.big {
+  font-size: 2.4em !important;
+  filter: drop-shadow(0 0 18px #00e2ffcc) drop-shadow(0 0 32px #ffe37966);
+  margin-right: 7px;
+  line-height: 1.05;
+}
+.novo-habito {
+  color: #51ffe7;
+  text-shadow: 0 0 16px #51ffe7cc, 0 0 32px #ffe37999, 0 1px 3px #fff, 0 0 13px #cf28ffbb;
+  font-weight: bold;
+  font-size: 1.13em;
+  letter-spacing: 0.02em;
+}
+/* --- Checkbox Pixel Arcade --- */
+.habit-checkbox.pixel {
+  appearance: none;
+  width: 28px; height: 28px;
+  background: #21222f;
+  border: 3.5px solid #0ff3;
+  border-radius: 5px;
+  box-shadow: 0 0 10px #51ffe7aa, 0 0 3px #ffe37955;
   outline: none;
   cursor: pointer;
+  margin-left: 7px;
   position: relative;
-  appearance: none;
-  transition: filter 0.16s, box-shadow 0.16s;
+  transition: border 0.15s, box-shadow 0.2s;
 }
-.habit-checkbox:checked {
-  border: 2.5px solid var(--highlight);
-  background: transparent !important;
+.habit-checkbox.pixel:checked {
+  border: 3.5px solid #ffe379;
+  background: #23275e;
+  box-shadow: 0 0 19px #ffe379bb, 0 0 8px #51ffe799;
 }
-.habit-checkbox::before {
-  content: "";
-  display: block;
-  width: 80%; height: 80%; left: 10%; top: 10%;
-  position: absolute;
-  border-radius: 5px;
-  background: transparent;
-  z-index: 2;
-}
-.habit-checkbox:checked::after {
+.habit-checkbox.pixel:checked:after {
   content: '';
   display: block;
-  width: 17px; height: 17px; left: 4px; top: 4px;
   position: absolute;
-  background: none;
-  border: 2.5px solid var(--highlight);
-  border-radius: 4px;
-  z-index: 2;
-  box-shadow: 0 0 5px #ffe379;
-}
-.habit-checkbox:checked:before {
-  background: transparent;
+  left: 6px; top: 4px;
+  width: 13px; height: 16px;
+  border-left: 5px solid #51ffe7;
+  border-bottom: 5px solid #ffe379;
+  transform: rotate(-36deg);
+  box-shadow: 0 0 9px #0ff9, 0 0 9px #ffe379aa;
 }
 
 /* ==== PRÊMIOS ==== */
@@ -301,21 +304,23 @@ tr.dropdown[style*="display: none;"] {
   box-shadow: 0 0 26px #51ffe766, 0 0 30px #ffe37920;
 }
 .reward-card .reward-effect, .reward-card .reward-emoji-rain {
-  position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
-  z-index: 1; opacity: 0.36;
+  display: none !important;
 }
-.reward-card .reward-emoji-rain span {
+.reward-glow {
+  content: '';
   position: absolute;
-  animation: emoji-rain 3.2s linear infinite;
-  font-size: 2em;
-  filter: blur(0.7px) brightness(1.18);
-  opacity: 0.7;
-  user-select: none;
+  left: -17px; top: -17px; right: -17px; bottom: -17px;
+  border-radius: 28px;
+  background: conic-gradient(from 0deg, #51ffe7, #cf28ff, #ffe379, #51ffe7);
+  filter: blur(20px) brightness(1.13) opacity(0.53);
+  z-index: 1;
+  animation: rgb-glow-pulse 2.9s infinite linear alternate;
+  pointer-events: none;
 }
-@keyframes emoji-rain {
-  0% { top: -10%; opacity:0.7;}
-  20% { opacity: 1;}
-  100% { top: 93%; opacity:0.13;}
+@keyframes rgb-glow-pulse {
+  0% { filter: blur(24px) brightness(1.11) opacity(0.41);}
+  54% { filter: blur(20px) brightness(1.28) opacity(0.69);}
+  100% { filter: blur(23px) brightness(1.15) opacity(0.47);}
 }
 .reward-icon { font-size: 2.7em; margin-bottom: 6px; z-index: 3; }
 .reward-card .title {
@@ -386,3 +391,18 @@ tr.dropdown[style*="display: none;"] {
   .counter { min-height: 25px; }
   .mes { font-size: 1.1em;}
 }
+
+/* --- Indicador arcade pointer mês/dia --- */
+.arcade-pointer, .arcade-pointer.pointer-dia {
+  background: url('https://i.imgur.com/qbADhJx.png') center/contain no-repeat;
+  width: 44px; height: 44px;
+  display: none;
+  position: absolute;
+  left: -50px; top: 4px; z-index: 7;
+  filter: drop-shadow(0 0 22px #31fcff) drop-shadow(0 0 42px #51ffe7cc) drop-shadow(0 0 23px #0090ffbb);
+  animation: arcade-pointer-bounce 1.09s infinite alternate;
+}
+.arcade-pointer-ativo { display: block !important; }
+
+/* --- Remove coluna "Dia" e formata datas --- */
+thead tr th:nth-child(3), tbody tr td:nth-child(3) { display: none !important; }
