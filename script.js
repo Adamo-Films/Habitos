@@ -607,6 +607,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       setTimeout(() => {
         todayDrop.scrollIntoView({ block: 'center' });
       }, 350);
+    }
+  }
+  centerTodayDropdown();
 
   // Responsividade confetti
   window.addEventListener('resize', function () {
