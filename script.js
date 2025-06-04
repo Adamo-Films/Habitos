@@ -598,16 +598,15 @@ document.addEventListener("DOMContentLoaded", async function () {
   updateAllRewardProgress();
   countStats();
 
-  // Centraliza o conteúdo do dia atual na tela
-  function centerTodayInView() {
+  // Centraliza visualmente o dropdown do dia atual na tela
+  function centerTodayDropdown() {
     const calendario = document.getElementById('calendario');
     const todayDrop = document.getElementById(`dropdown-dia-${anoAtual}-${mesAtual}-${diaAtual}`);
     if (calendario && todayDrop) {
-      const offset = todayDrop.offsetTop - (calendario.clientHeight / 2) + (todayDrop.clientHeight / 2);
-      calendario.scrollTop = offset;
-    }
-  }
-  centerTodayInView();
+      // aguarda a animação de abertura do dropdown antes de centralizar
+      setTimeout(() => {
+        todayDrop.scrollIntoView({ block: 'center' });
+      }, 350);
 
   // Responsividade confetti
   window.addEventListener('resize', function () {
