@@ -219,7 +219,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     61: ["Exercício (90 min)"]
   };
   const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
-  const inicio = new Date(2025, 4, 21), fim = new Date(2025, 11, 31);
+  // Cria calendário de 21/05/2025 até 31/08/2026 para contemplar todas as recompensas
+  const inicio = new Date(2025, 4, 21), fim = new Date(2026, 7, 31);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
   let habitos_ativos = [];
   for (let i = 1; i <= dias_total; i++) {
