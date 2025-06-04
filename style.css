@@ -189,7 +189,7 @@ html, body {
 }
 
 .mes-atual .neon-arrow,
-tr.main-row.current-day::before {
+tr.main-row.current-day td:first-child::before {
   border-left-color: var(--mes-arrow-ativo);
 }
 
@@ -198,10 +198,7 @@ tr.main-row.current-day::before {
   100% { transform: translate(3px, -50%); }
 }
 
-tr.main-row.current-day {
-  position: relative;
-}
-tr.main-row.current-day::before {
+tr.main-row.current-day td:first-child::before {
   content: '';
   position: absolute;
   left: 0;
@@ -244,8 +241,11 @@ tr.main-row {
   border-radius: 17px;
   transition: color 0.22s, background 0.22s, filter 0.25s;
   position: relative;
-  padding-left: 34px;
   min-height: 40px;
+}
+tr.main-row td:first-child {
+  padding-left: 34px;
+  position: relative;
 }
 tr.main-row:hover, .habit-item:hover, .reward-card:hover {
   filter: brightness(1.08) saturate(1.07) drop-shadow(0 0 7px #31fcff35);
