@@ -115,6 +115,7 @@ html, body {
 #calendario::after {
   content: '';
   position: sticky;
+  display: block;
   left: 0;
   right: 0;
   height: 35px;
@@ -160,7 +161,7 @@ html, body {
   z-index: 10;
   text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
-  padding: 0 0 0 0;
+  padding: 0 0 0 38px;
 }
 .arcade-arrow {
   position: absolute;
@@ -174,7 +175,7 @@ html, body {
 
 .neon-arrow {
   position: absolute;
-  left: -50px;
+  left: 0;
   top: 50%;
   width: 0;
   height: 0;
@@ -203,7 +204,7 @@ tr.main-row.current-day {
 tr.main-row.current-day::before {
   content: '';
   position: absolute;
-  left: -50px;
+  left: 0;
   top: 50%;
   width: 0;
   height: 0;
@@ -243,6 +244,8 @@ tr.main-row {
   border-radius: 17px;
   transition: color 0.22s, background 0.22s, filter 0.25s;
   position: relative;
+  padding-left: 34px;
+  min-height: 40px;
 }
 tr.main-row:hover, .habit-item:hover, .reward-card:hover {
   filter: brightness(1.08) saturate(1.07) drop-shadow(0 0 7px #31fcff35);
