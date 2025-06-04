@@ -13,14 +13,22 @@ const db = firebase.firestore();
 
 // =================== Recompensas ===================
 const rewards = [
-  { month: 5, year: 2025, icon: "🍩", title: "Prêmio Maio", desc: "Uma caixa de donuts Krispy Kreme.", label: "Donuts!" },
-  { month: 6, year: 2025, icon: "🏁", title: "Prêmio Junho", desc: "Um dia pra finalizar Valentina.", label: "Valentina!" },
-  { month: 7, year: 2025, icon: "🍝", title: "Prêmio Julho", desc: "Jantar especial no restaurante Rascal.", label: "Rascal!" },
-  { month: 8, year: 2025, icon: "🏡", title: "Prêmio Agosto", desc: "Airbnb relaxante para recarregar as energias.", label: "Airbnb relax!" },
-  { month: 9, year: 2025, icon: "🧠🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine.", label: "Turing Machine!" },
-  { month: 10, year: 2025, icon: "🛍️", title: "Prêmio Outubro", desc: "Um dia de compras.", label: "Compras!" },
-  { month: 11, year: 2025, icon: "🛀", title: "Prêmio Novembro", desc: "Sessão em um tanque de privação sensorial.", label: "Zen!" },
-  { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll.", label: "Ingersoll!" }
+  { month: 5, year: 2025, icon: "🍩", title: "Prêmio Maio", desc: "Caixa de donuts Krispy Kreme", label: "Donuts" },
+  { month: 6, year: 2025, icon: "🍝", title: "Prêmio Junho", desc: "Restaurante Rascal", label: "Rascal" },
+  { month: 7, year: 2025, icon: "🛀", title: "Prêmio Julho", desc: "Tanque de isolamento sensorial", label: "Relax" },
+  { month: 8, year: 2025, icon: "🏡", title: "Prêmio Agosto", desc: "Airbnb relaxante", label: "Airbnb" },
+  { month: 9, year: 2025, icon: "🧠🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine", label: "Turing" },
+  { month: 10, year: 2025, icon: "🛍️", title: "Prêmio Outubro", desc: "Dia de compras", label: "Compras" },
+  { month: 11, year: 2025, icon: "🏠", title: "Prêmio Novembro", desc: "Alugar um apê aconchegante", label: "Apê" },
+  { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll", label: "Ingersoll" },
+  { month: 1, year: 2026, icon: "📺", title: "Prêmio Janeiro", desc: "Comprar uma TV top", label: "TV" },
+  { month: 2, year: 2026, icon: "🚂", title: "Prêmio Fevereiro", desc: "Jogo Ticket to Ride", label: "Ticket" },
+  { month: 3, year: 2026, icon: "🚪", title: "Prêmio Março", desc: "Comprar portão para meus pais", label: "Portão" },
+  { month: 4, year: 2026, icon: "🛍️", title: "Prêmio Abril", desc: "Dia de compras", label: "Compras" },
+  { month: 5, year: 2026, icon: "💉", title: "Prêmio Maio", desc: "Fechar o braço com tattoo", label: "Tattoo" },
+  { month: 6, year: 2026, icon: "👨‍🦳", title: "Prêmio Junho", desc: "Cabelo branco", label: "Cabelo" },
+  { month: 7, year: 2026, icon: "📸", title: "Prêmio Julho", desc: "Look Daphne foto", label: "Daphne" },
+  { month: 8, year: 2026, icon: "✈️", title: "Prêmio Agosto", desc: "Viagem para fora", label: "Viagem" }
 ];
 
 function getRewardFor(month, year, day = null) {
@@ -217,10 +225,19 @@ document.addEventListener("DOMContentLoaded", async function () {
   for (let i = 1; i <= dias_total; i++) {
     const data_atual = new Date(inicio);
     data_atual.setDate(inicio.getDate() + i - 1);
-    if (habitos_incrementais[i]) habitos_ativos = habitos_ativos.concat(habitos_incrementais[i]);
+    if (habitos_incrementais[i]) {
+      habitos_incrementais[i].forEach(novo => {
+        if (novo.startsWith('Acordar')) {
+          habitos_ativos = habitos_ativos.filter(h => !h.startsWith('Acordar'));
+        } else if (novo.startsWith('Exercício')) {
+          habitos_ativos = habitos_ativos.filter(h => !h.startsWith('Exercício'));
+        }
+        habitos_ativos.push(novo);
+      });
+    }
     const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
     dados.push({
-      data: data_atual.toLocaleDateString('pt-BR'),
+      data: data_atual.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       dia: `Dia ${i}`,
       habitos: [...habitos_ativos],
       ciclico: habito_ciclico,
@@ -251,7 +268,6 @@ document.addEventListener("DOMContentLoaded", async function () {
           <tr>
             <th></th>
             <th>Data</th>
-            <th>Dia</th>
             <th>Hábitos Diários</th>
             <th>Hábito Cíclico</th>
           </tr>
@@ -264,8 +280,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         habitosCellText = dia.habitos.join(', ');
       } else if (habitos_incrementais[dayNum]) {
         const newHabs = habitos_incrementais[dayNum];
-        const totalBefore = dia.habitos.length - newHabs.length;
-        habitosCellText = `${totalBefore} ${totalBefore > 1 ? 'hábitos' : 'hábito'} + ${newHabs.join(', ')}`;
+        habitosCellText = `+ ${newHabs.join(', ')}`;
       } else {
         const total = dia.habitos.length;
         habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
@@ -274,12 +289,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         <tr class="main-row arcade-clicavel" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
           <td><span class="expand-icon">&#9654;</span></td>
           <td class="progress-text gold">${dia.data}</td>
-          <td class="progress-text gold">${dia.dia}</td>
           <td class="progress-text gold">${habitosCellText}</td>
           <td class="progress-text gold">${dia.ciclico}</td>
         </tr>
         <tr class="dropdown" id="dropdown-${dia.id}" style="display: none;">
-          <td colspan="5">
+          <td colspan="4">
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
                 <div class="habit-item arcade-clicavel" id="habititem-${dia.id}-habit-${idx}">
@@ -308,7 +322,6 @@ document.addEventListener("DOMContentLoaded", async function () {
           <div class="desc">${reward.desc}</div>
           <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mes}-${ano}"></div></div>
           <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
-          <div class="reward-effect"></div>
         </div>`;
     }
     html += `</div>`; // fecha o .mes-dropdown
@@ -332,8 +345,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const anoNum = parseInt(mesDiv.getAttribute("data-ano"));
     const dropdown = allDropdowns[idx];
     // Setas animadas
-    mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ? 
-      `<span class="arrow-pulse">&#9654;</span>` : `<span class="arrow-inactive">&#9654;</span>`;
+    mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
+      `<span class="current-indicator"></span>` : `<span class="arrow-inactive">&#9654;</span>`;
     // Só abre o mês atual
     if (mesNum === mesAtual && anoNum === anoAtual) {
       dropdown.style.display = 'block';
@@ -341,16 +354,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       mesDiv.classList.add('mes-atual');
       if (allRewards[idx]) {
         allRewards[idx].style.display = '';
-        const effect = allRewards[idx].querySelector('.reward-effect');
-        if (effect) runRewardEffectByType(allRewards[idx], effect);
       }
     } else {
       dropdown.style.display = 'none';
       mesDiv.classList.remove('open');
       if (allRewards[idx]) {
         allRewards[idx].style.display = 'none';
-        const effect = allRewards[idx].querySelector('.reward-effect');
-        if (effect) effect.innerHTML = '';
       }
     }
 
@@ -361,11 +370,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       allDropdowns.forEach((d, i) => {
         d.style.display = 'none';
         allMesDivs[i].classList.remove('open', 'mes-atual');
-        allMesDivs[i].querySelector(".arcade-arrow").innerHTML = `<span class="arrow-inactive">&#9654;</span>`;
+        const mNum = parseInt(allMesDivs[i].getAttribute("data-mes"));
+        const aNum = parseInt(allMesDivs[i].getAttribute("data-ano"));
+        allMesDivs[i].querySelector(".arcade-arrow").innerHTML = (mNum === mesAtual && aNum === anoAtual) ?
+          `<span class="current-indicator"></span>` : `<span class="arrow-inactive">&#9654;</span>`;
         if (allRewards[i]) {
           allRewards[i].style.display = 'none';
-          const effect = allRewards[i].querySelector('.reward-effect');
-          if (effect) effect.innerHTML = '';
         }
       });
       if (wasOpen) return;
@@ -373,11 +383,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       dropdown.style.display = 'block';
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
       mesDiv.classList.add('open', 'mes-atual');
-      mesDiv.querySelector(".arcade-arrow").innerHTML = `<span class="arrow-pulse">&#9654;</span>`;
+      mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
+        `<span class="current-indicator"></span>` : `<span class="arrow-pulse">&#9654;</span>`;
       if (allRewards[idx]) {
         allRewards[idx].style.display = '';
-        const effect = allRewards[idx].querySelector('.reward-effect');
-        if (effect) runRewardEffectByType(allRewards[idx], effect);
       }
       // Fecha todos dropdowns de dias
       dropdown.querySelectorAll('.dropdown').forEach(dd => {
@@ -415,6 +424,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       // Só abre o dia atual do mês atual
       let dateCell = row.querySelectorAll('td')[1];
       let d = parseInt(dateCell ? dateCell.innerText.split("/")[0] : 0);
+      const icon = row.querySelector('.expand-icon');
+      if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
+        if (icon) icon.innerHTML = '<span class="current-indicator"></span>';
+      } else if (icon) {
+        icon.innerHTML = '&#9654;';
+      }
       if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
         dropRow.style.display = 'table-row';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
@@ -436,6 +451,9 @@ document.addEventListener("DOMContentLoaded", async function () {
           dr.style.display = 'none';
           dr.classList.remove('arcade-drop-show');
           r.classList.remove('expanded');
+          const ic = r.querySelector('.expand-icon');
+          const dd = parseInt(r.querySelectorAll('td')[1].innerText.split('/')[0]);
+          if (ic) ic.innerHTML = (mesNum === mesAtual && anoNum === anoAtual && dd === diaAtual) ? '<span class="current-indicator"></span>' : '&#9654;';
         });
         if (wasOpen) return;
         // Abre clicado
@@ -620,134 +638,3 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 }); // Fecha DOMContentLoaded
-// ==== ANIMAÇÕES PERSONALIZADAS DE PRÊMIO ====
-
-// Função para rodar o efeito correto e loop
-function runRewardEffectByType(card, effect) {
-  if (!card || !effect) return;
-  effect.innerHTML = '';
-  let type = card.getAttribute('data-reward') || '';
-  if (type.includes('5-2025')) sprinklesEffect(effect); // Donuts Maio
-  else if (type.includes('6-2025')) cinemaEmojisEffect(effect); // Valentina Junho
-  else if (type.includes('7-2025')) foodEffect(effect); // Rascal Julho
-  else if (type.includes('8-2025')) vacationEffect(effect); // Airbnb Agosto
-  else if (type.includes('9-2025')) turingEffect(effect); // Turing Machine Setembro
-  else if (type.includes('10-2025')) shopEffect(effect); // Compras Outubro
-  else if (type.includes('11-2025')) tankEffect(effect); // Zen Novembro
-  else if (type.includes('12-2025')) clockEffect(effect); // Ingersoll Dezembro
-
-  // Loop seamless: refaz o efeito de tempos em tempos
-  if (effect.__rewardTimeout) clearTimeout(effect.__rewardTimeout);
-  effect.__rewardTimeout = setTimeout(() => {
-    if (card.style.display !== 'none' && card.offsetParent !== null) {
-      runRewardEffectByType(card, effect);
-    }
-  }, 4500); // ajuste para a maior duração de animação visual
-}
-
-// Efeitos de animação — Arcade Neon
-function sprinklesEffect(container) {
-  container.innerHTML = "";
-  let colors = ["#fa47b1","#ffe379","#51ffe7","#cf28ff","#00f0ff","#ff904c","#fff"];
-  for (let i = 0; i < 22; i++) {
-    let sprinkle = document.createElement('div');
-    sprinkle.className = 'sprinkle';
-    sprinkle.style.background = colors[Math.floor(Math.random()*colors.length)];
-    sprinkle.style.left = (Math.random()*90+2) + '%';
-    sprinkle.style.animationDelay = (Math.random()*2)+'s';
-    sprinkle.style.width = (Math.random()*6+3) + 'px';
-    sprinkle.style.height = (Math.random()*2+1.5) + 'px';
-    container.appendChild(sprinkle);
-  }
-}
-function cinemaEmojisEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🎬","🎥","📽️","🍿","🎞️"];
-  for (let i=0;i<10;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-cinema';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*85+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2)+'s';
-    emoji.style.fontSize = (Math.random()*20+24)+'px';
-    container.appendChild(emoji);
-  }
-}
-function foodEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🍝", "🍽️", "🍷", "🍕", "🍰"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-food';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*80+10)+'%';
-    emoji.style.animationDelay = (Math.random()*2.5)+'s';
-    emoji.style.fontSize = (Math.random()*18+23)+'px';
-    container.appendChild(emoji);
-  }
-}
-function vacationEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🌞","🌴","🏡","☁️"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-vacation';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*84+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2.5)+'s';
-    emoji.style.fontSize = (Math.random()*20+22)+'px';
-    container.appendChild(emoji);
-  }
-}
-function turingEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["0️⃣","1️⃣","🟦","💾"];
-  for (let i=0;i<13;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-bit';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*85+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2.2)+'s';
-    emoji.style.fontSize = (Math.random()*18+19)+'px';
-    container.appendChild(emoji);
-  }
-}
-function shopEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🛍️", "💸", "🏷️", "🪙", "👗"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-shop';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*85+7)+'%';
-    emoji.style.animationDelay = (Math.random()*2.2)+'s';
-    emoji.style.fontSize = (Math.random()*18+20)+'px';
-    container.appendChild(emoji);
-  }
-}
-function tankEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["🫧","🌊","💧"];
-  for (let i=0;i<12;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-bubble';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*87+5)+'%';
-    emoji.style.animationDelay = (Math.random()*2.3)+'s';
-    emoji.style.fontSize = (Math.random()*13+18)+'px';
-    container.appendChild(emoji);
-  }
-}
-function clockEffect(container) {
-  container.innerHTML = "";
-  let emojis = ["⌚","⏰","⚙️","⏳"];
-  for (let i=0;i<9;i++) {
-    let emoji = document.createElement('span');
-    emoji.className = 'emoji-clock';
-    emoji.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    emoji.style.left = (Math.random()*80+10)+'%';
-    emoji.style.animationDelay = (Math.random()*2.5)+'s';
-    emoji.style.fontSize = (Math.random()*17+21)+'px';
-    container.appendChild(emoji);
-  }
-}

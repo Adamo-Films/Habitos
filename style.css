@@ -115,6 +115,7 @@ html, body {
 }
 #calendario .habit-emoji {
   filter: drop-shadow(0 0 6px #51ffe7cc) drop-shadow(0 0 8px #ffe37966);
+  font-size: 1.6em;
 }
 
 /* === MES === */
@@ -152,6 +153,21 @@ html, body {
 .mes:active { transform: scale(0.97); }
 .mes:not(.open) .arcade-pointer { display: none !important; }
 .mes:not(.open) { opacity: 0.85; }
+
+.current-indicator {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #51ffe7 40%, transparent 60%);
+  box-shadow: 0 0 8px #51ffe7, 0 0 16px #31fcff;
+  animation: indicator-pulse 1.2s infinite alternate;
+}
+
+@keyframes indicator-pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.25); }
+}
 
 tr.main-row .arcade-pointer.pointer-dia {
   display: none;
@@ -253,42 +269,33 @@ tr.dropdown[style*="display: none;"] {
 }
 .habit-label { cursor: pointer; user-select: none; font-family: inherit;}
 .habit-checkbox {
-  accent-color: var(--neon);
-  width: 28px; height: 28px; border-radius: 7px;
-  margin-left: 8px; background: none;
-  border: 2.5px solid var(--neon); box-shadow: 0 0 5px #51ffe7bb;
+  width: 28px; height: 28px; border-radius: 4px;
+  margin-left: 8px;
+  background: repeating-linear-gradient(45deg,#222 0 2px,#000 2px 4px);
+  border: 2px solid var(--neon);
+  box-shadow: 0 0 5px #51ffe7bb;
   outline: none;
   cursor: pointer;
   position: relative;
   appearance: none;
   transition: filter 0.16s, box-shadow 0.16s;
+  font-family: 'Press Start 2P', monospace;
+  color: var(--highlight);
+  text-align: center;
 }
 .habit-checkbox:checked {
-  border: 2.5px solid var(--highlight);
-  background: transparent !important;
+  border-color: var(--highlight);
 }
-.habit-checkbox::before {
-  content: "";
-  display: block;
-  width: 80%; height: 80%; left: 10%; top: 10%;
+.habit-checkbox::after {
+  content: '';
   position: absolute;
-  border-radius: 5px;
-  background: transparent;
-  z-index: 2;
+  inset: 0;
 }
 .habit-checkbox:checked::after {
-  content: '';
-  display: block;
-  width: 17px; height: 17px; left: 4px; top: 4px;
-  position: absolute;
-  background: none;
-  border: 2.5px solid var(--highlight);
-  border-radius: 4px;
-  z-index: 2;
-  box-shadow: 0 0 5px #ffe379;
-}
-.habit-checkbox:checked:before {
-  background: transparent;
+  content: '✔';
+  font-size: 18px;
+  line-height: 28px;
+  text-shadow: 0 0 5px var(--highlight);
 }
 
 /* ==== PRÊMIOS ==== */
@@ -300,22 +307,14 @@ tr.dropdown[style*="display: none;"] {
   position: relative; z-index: 5; box-shadow: none !important;
   box-shadow: 0 0 26px #51ffe766, 0 0 30px #ffe37920;
 }
-.reward-card .reward-effect, .reward-card .reward-emoji-rain {
-  position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;
-  z-index: 1; opacity: 0.36;
+.reward-card {
+  animation: reward-glow 3s ease-in-out infinite;
 }
-.reward-card .reward-emoji-rain span {
-  position: absolute;
-  animation: emoji-rain 3.2s linear infinite;
-  font-size: 2em;
-  filter: blur(0.7px) brightness(1.18);
-  opacity: 0.7;
-  user-select: none;
-}
-@keyframes emoji-rain {
-  0% { top: -10%; opacity:0.7;}
-  20% { opacity: 1;}
-  100% { top: 93%; opacity:0.13;}
+
+@keyframes reward-glow {
+  0% { box-shadow: 0 0 18px #51ffe7aa, 0 0 26px #cf28ff55; }
+  50% { box-shadow: 0 0 32px #51ffe7dd, 0 0 40px #cf28ff88; }
+  100% { box-shadow: 0 0 18px #51ffe7aa, 0 0 26px #cf28ff55; }
 }
 .reward-icon { font-size: 2.7em; margin-bottom: 6px; z-index: 3; }
 .reward-card .title {
