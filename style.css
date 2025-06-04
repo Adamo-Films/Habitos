@@ -108,28 +108,6 @@ html, body {
   border: none !important;
   cursor: default;
   user-select: none;
-  position: relative;
-}
-
-#calendario::before,
-#calendario::after {
-  content: '';
-  position: sticky;
-  left: 0;
-  right: 0;
-  height: 35px;
-  pointer-events: none;
-  z-index: 20;
-}
-
-#calendario::before {
-  top: 0;
-  background: linear-gradient(to bottom, #00253b, transparent);
-}
-
-#calendario::after {
-  bottom: 0;
-  background: linear-gradient(to top, #00253b, transparent);
 }
 #calendario, #calendario th, #calendario td, #calendario .progress-text,
 #calendario .mes, #calendario .habit-label, #calendario .habit-emoji, #calendario .habit-item {
@@ -138,12 +116,6 @@ html, body {
 #calendario .habit-emoji {
   filter: drop-shadow(0 0 6px #51ffe7cc) drop-shadow(0 0 8px #ffe37966);
   font-size: 1.6em;
-}
-
-.emoji {
-  width: 1em;
-  height: 1em;
-  image-rendering: pixelated;
 }
 
 /* === MES === */
@@ -162,60 +134,53 @@ html, body {
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
   padding: 0 0 0 0;
 }
-.arcade-arrow {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
 .mes .mes-label { z-index: 2; }
+.arcade-pointer {
+  display: none;
+  width: 38px; height: 38px; margin-left: 0;
+  margin-right: -36px;
+  filter: drop-shadow(0 0 17px #31fcff) drop-shadow(0 0 26px #51ffe7cc);
+  animation: arcade-pointer-bounce 0.9s infinite alternate;
+  position: absolute; left: -44px; top: 10px; z-index: 3;
+}
+@keyframes arcade-pointer-bounce {
+  0% { transform: scale(1) translateY(0);}
+  100% { transform: scale(1.18) translateY(-13px);}
+}
+
+.mes.open .arcade-pointer { display: block !important; }
 .mes:hover { color: #51ffe7; text-shadow: 0 0 16px #51ffe788, 0 0 40px #ffe37944; }
 .mes:active { transform: scale(0.97); }
+.mes:not(.open) .arcade-pointer { display: none !important; }
 .mes:not(.open) { opacity: 0.85; }
 
-.neon-arrow {
-  position: absolute;
-  left: -50px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-right: 34px solid var(--mes-arrow);
-  filter: drop-shadow(0 0 6px var(--mes-arrow)) drop-shadow(0 0 12px var(--mes-arrow));
-  animation: arrow-move 0.8s infinite alternate;
-  transform: translateY(-50%);
-  pointer-events: none;
+.current-indicator {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #51ffe7 40%, transparent 60%);
+  box-shadow: 0 0 8px #51ffe7, 0 0 16px #31fcff;
+  animation: indicator-pulse 1.2s infinite alternate;
 }
 
-.mes-atual .neon-arrow,
-tr.main-row.current-day::before {
-  border-right-color: var(--mes-arrow-ativo);
+@keyframes indicator-pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.25); }
 }
 
-@keyframes arrow-move {
-  0% { transform: translate(-3px, -50%); }
-  100% { transform: translate(3px, -50%); }
+tr.main-row .arcade-pointer.pointer-dia {
+  display: none;
+  position: absolute; left: -36px; top: 7px; z-index: 4;
+  width: 32px; height: 32px;
+  animation: arcade-pointer-bounce 1.1s infinite alternate;
 }
-
-tr.main-row.current-day {
-  position: relative;
+tr.main-row.expanded .arcade-pointer.pointer-dia {
+  display: block !important;
 }
-tr.main-row.current-day::before {
-  content: '';
-  position: absolute;
-  left: -50px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 28px solid var(--mes-arrow);
-  filter: drop-shadow(0 0 6px var(--mes-arrow)) drop-shadow(0 0 12px var(--mes-arrow));
-  animation: arrow-move 0.8s infinite alternate;
-  transform: translateY(-50%);
-  pointer-events: none;
+tr.main-row:not(.expanded) .arcade-pointer.pointer-dia {
+  display: none !important;
 }
-
 
 /* ========== TABELA ========== */
 table {
@@ -306,7 +271,7 @@ tr.dropdown[style*="display: none;"] {
 .habit-checkbox {
   width: 28px; height: 28px; border-radius: 4px;
   margin-left: 8px;
-  background: repeating-linear-gradient(45deg,#222 0 4px,#000 4px 8px);
+  background: repeating-linear-gradient(45deg,#222 0 2px,#000 2px 4px);
   border: 2px solid var(--neon);
   box-shadow: 0 0 5px #51ffe7bb;
   outline: none;
@@ -317,7 +282,6 @@ tr.dropdown[style*="display: none;"] {
   font-family: 'Press Start 2P', monospace;
   color: var(--highlight);
   text-align: center;
-  image-rendering: pixelated;
 }
 .habit-checkbox:checked {
   border-color: var(--highlight);
@@ -332,7 +296,6 @@ tr.dropdown[style*="display: none;"] {
   font-size: 18px;
   line-height: 28px;
   text-shadow: 0 0 5px var(--highlight);
-  filter: drop-shadow(0 0 3px var(--highlight));
 }
 
 /* ==== PRÊMIOS ==== */
@@ -343,27 +306,9 @@ tr.dropdown[style*="display: none;"] {
   width: 89%; max-width: 650px; border: none !important; filter: none;
   position: relative; z-index: 5; box-shadow: none !important;
   box-shadow: 0 0 26px #51ffe766, 0 0 30px #ffe37920;
-  overflow: hidden;
 }
 .reward-card {
   animation: reward-glow 3s ease-in-out infinite;
-}
-
-.reward-card::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border-radius: inherit;
-  background: radial-gradient(circle at center, rgba(81,255,231,0.35), rgba(207,40,255,0.35));
-  filter: blur(18px);
-  animation: reward-rgb 4s ease-in-out infinite;
-  z-index: 1;
-}
-
-@keyframes reward-rgb {
-  0% { background: radial-gradient(circle at center, rgba(81,255,231,0.35), rgba(207,40,255,0.35)); }
-  50% { background: radial-gradient(circle at center, rgba(207,40,255,0.35), rgba(81,255,231,0.35)); }
-  100% { background: radial-gradient(circle at center, rgba(81,255,231,0.35), rgba(207,40,255,0.35)); }
 }
 
 @keyframes reward-glow {
