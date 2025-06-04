@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   calendario.innerHTML = html;
   if (window.twemoji) {
-    twemoji.parse(calendario, {folder: 'svg', ext: '.svg'});
+    twemoji.parse(calendario, {folder: '72x72', ext: '.png'});
   }
 
   // --- CONTINUAÇÃO ABAIXO ---
