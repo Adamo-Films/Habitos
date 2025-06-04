@@ -598,12 +598,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   updateAllRewardProgress();
   countStats();
 
-  // Centraliza o dia atual na tela
+  // Centraliza o conteúdo do dia atual na tela
   function centerTodayInView() {
     const calendario = document.getElementById('calendario');
-    const todayRow = document.getElementById(`mainrow-dia-${anoAtual}-${mesAtual}-${diaAtual}`);
-    if (calendario && todayRow) {
-      const offset = todayRow.offsetTop - (calendario.clientHeight / 2) + (todayRow.clientHeight / 2);
+    const todayDrop = document.getElementById(`dropdown-dia-${anoAtual}-${mesAtual}-${diaAtual}`);
+    if (calendario && todayDrop) {
+      const offset = todayDrop.offsetTop - (calendario.clientHeight / 2) + (todayDrop.clientHeight / 2);
       calendario.scrollTop = offset;
     }
   }
