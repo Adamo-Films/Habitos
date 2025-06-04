@@ -266,6 +266,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       <div class="mes-dropdown" id="dropdown-mes-${mesNum}-${anoNum}"><table>
         <thead>
           <tr>
+            <th></th>
             <th>Data</th>
             <th>Hábitos Diários</th>
             <th>Hábito Cíclico</th>
@@ -286,12 +287,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
       html += `
         <tr class="main-row arcade-clicavel" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
+          <td><span class="expand-icon">&#9654;</span></td>
           <td class="progress-text gold">${dia.data}</td>
           <td class="progress-text gold">${habitosCellText}</td>
           <td class="progress-text gold">${dia.ciclico}</td>
         </tr>
         <tr class="dropdown" id="dropdown-${dia.id}" style="display: none;">
-          <td colspan="3">
+          <td colspan="4">
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
                 <div class="habit-item arcade-clicavel" id="habititem-${dia.id}-habit-${idx}">
@@ -325,9 +327,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     html += `</div>`; // fecha o .mes-dropdown
   });
   calendario.innerHTML = html;
-  if (window.twemoji) {
-    twemoji.parse(calendario, {folder: 'svg', ext: '.svg'});
-  }
 
   // --- CONTINUAÇÃO ABAIXO ---
   // Dropdown lógica: abrir/fechar MÊS e DIAS
@@ -345,9 +344,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     const mesNum = parseInt(mesDiv.getAttribute("data-mes"));
     const anoNum = parseInt(mesDiv.getAttribute("data-ano"));
     const dropdown = allDropdowns[idx];
-    // Indicador de mês atual
+    // Setas animadas
     mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
-      `<span class="neon-arrow"></span>` : '';
+      `<span class="current-indicator"></span>` : `<span class="arrow-inactive">&#9654;</span>`;
     // Só abre o mês atual
     if (mesNum === mesAtual && anoNum === anoAtual) {
       dropdown.style.display = 'block';
@@ -374,7 +373,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const mNum = parseInt(allMesDivs[i].getAttribute("data-mes"));
         const aNum = parseInt(allMesDivs[i].getAttribute("data-ano"));
         allMesDivs[i].querySelector(".arcade-arrow").innerHTML = (mNum === mesAtual && aNum === anoAtual) ?
-          `<span class="neon-arrow"></span>` : '';
+          `<span class="current-indicator"></span>` : `<span class="arrow-inactive">&#9654;</span>`;
         if (allRewards[i]) {
           allRewards[i].style.display = 'none';
         }
@@ -385,7 +384,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
       mesDiv.classList.add('open', 'mes-atual');
       mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
-        `<span class="neon-arrow"></span>` : '';
+        `<span class="current-indicator"></span>` : `<span class="arrow-pulse">&#9654;</span>`;
       if (allRewards[idx]) {
         allRewards[idx].style.display = '';
       }
@@ -399,7 +398,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       // Abre dia atual, se for este mês
       if (mesNum === mesAtual && anoNum === anoAtual) {
         let idxDia = Array.from(dropdown.querySelectorAll('.main-row')).findIndex(row => {
-          let dateCell = row.querySelectorAll('td')[0];
+          let dateCell = row.querySelectorAll('td')[1];
           if (!dateCell) return false;
           let d = parseInt(dateCell.innerText.split("/")[0]);
           return d === diaAtual;
@@ -423,10 +422,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     rows.forEach((row, idx) => {
       const dropRow = dropdown.querySelectorAll('.dropdown')[idx];
       // Só abre o dia atual do mês atual
-      let dateCell = row.querySelectorAll('td')[0];
+      let dateCell = row.querySelectorAll('td')[1];
       let d = parseInt(dateCell ? dateCell.innerText.split("/")[0] : 0);
+      const icon = row.querySelector('.expand-icon');
       if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
-        row.classList.add('current-day');
+        if (icon) icon.innerHTML = '<span class="current-indicator"></span>';
+      } else if (icon) {
+        icon.innerHTML = '&#9654;';
       }
       if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
         dropRow.style.display = 'table-row';
@@ -449,6 +451,9 @@ document.addEventListener("DOMContentLoaded", async function () {
           dr.style.display = 'none';
           dr.classList.remove('arcade-drop-show');
           r.classList.remove('expanded');
+          const ic = r.querySelector('.expand-icon');
+          const dd = parseInt(r.querySelectorAll('td')[1].innerText.split('/')[0]);
+          if (ic) ic.innerHTML = (mesNum === mesAtual && anoNum === anoAtual && dd === diaAtual) ? '<span class="current-indicator"></span>' : '&#9654;';
         });
         if (wasOpen) return;
         // Abre clicado
