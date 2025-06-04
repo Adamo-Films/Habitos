@@ -356,6 +356,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Evento de abrir/fechar mês (com animação)
     mesDiv.onclick = (e) => {
+      const wasOpen = mesDiv.classList.contains('open');
       // Desativa todos
       allDropdowns.forEach((d, i) => {
         d.style.display = 'none';
@@ -367,6 +368,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           if (effect) effect.innerHTML = '';
         }
       });
+      if (wasOpen) return;
       // Ativa clicado
       dropdown.style.display = 'block';
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
@@ -427,6 +429,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       row.onclick = (e) => {
         // Só se clicar fora dos inputs/labels
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL' || e.target.classList.contains('habit-emoji')) return;
+        const wasOpen = row.classList.contains('expanded');
         // Fecha todos do mês
         rows.forEach((r, i) => {
           const dr = dropdown.querySelectorAll('.dropdown')[i];
@@ -434,6 +437,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           dr.classList.remove('arcade-drop-show');
           r.classList.remove('expanded');
         });
+        if (wasOpen) return;
         // Abre clicado
         dropRow.style.display = 'table-row';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
