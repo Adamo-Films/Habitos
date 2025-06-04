@@ -598,15 +598,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   updateAllRewardProgress();
   countStats();
 
-  // Centraliza o dropdown do dia atual na tela
+  // Centraliza visualmente o dropdown do dia atual na tela
   function centerTodayDropdown() {
     const calendario = document.getElementById('calendario');
     const todayDrop = document.getElementById(`dropdown-dia-${anoAtual}-${mesAtual}-${diaAtual}`);
     if (calendario && todayDrop) {
       // aguarda a animação de abertura do dropdown antes de centralizar
       setTimeout(() => {
-        const offset = todayDrop.offsetTop - (calendario.clientHeight / 2) + (todayDrop.clientHeight / 2);
-        calendario.scrollTop = offset;
+        todayDrop.scrollIntoView({ block: 'center' });
       }, 350);
     }
   }
