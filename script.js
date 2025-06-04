@@ -598,6 +598,17 @@ document.addEventListener("DOMContentLoaded", async function () {
   updateAllRewardProgress();
   countStats();
 
+  // Centraliza o dia atual na tela
+  function centerTodayInView() {
+    const calendario = document.getElementById('calendario');
+    const todayRow = document.getElementById(`mainrow-dia-${anoAtual}-${mesAtual}-${diaAtual}`);
+    if (calendario && todayRow) {
+      const offset = todayRow.offsetTop - (calendario.clientHeight / 2) + (todayRow.clientHeight / 2);
+      calendario.scrollTop = offset;
+    }
+  }
+  centerTodayInView();
+
   // Responsividade confetti
   window.addEventListener('resize', function () {
     const canvas = document.getElementById('confetti-canvas');
