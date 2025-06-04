@@ -598,8 +598,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   updateAllRewardProgress();
   countStats();
 
-  // Centraliza o conteúdo do dia atual na tela
-  function centerTodayInView() {
+  // Centraliza o dropdown do dia atual na tela
+  function centerTodayDropdown() {
     const calendario = document.getElementById('calendario');
     const todayDrop = document.getElementById(`dropdown-dia-${anoAtual}-${mesAtual}-${diaAtual}`);
     if (calendario && todayDrop) {
@@ -610,7 +610,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }, 350);
     }
   }
-  centerTodayInView();
+  centerTodayDropdown();
 
   // Responsividade confetti
   window.addEventListener('resize', function () {
