@@ -65,7 +65,7 @@ html, body {
   font-size: 1.2em; color: #fff;
   text-shadow: 0 2px 14px #19e0fcaa, 0 1px 12px #000d, 0 1px 30px #ffe379bb;
   font-weight: 900; letter-spacing: 0.09em; line-height: 1.12;
-  margin-top: 0; margin-bottom: 16px; text-transform: uppercase;
+  margin: 0 0 18px 0; padding: 0; text-transform: uppercase;
 }
 .counter-value {
   font-family: 'Press Start 2P', monospace;
@@ -75,8 +75,8 @@ html, body {
   font-weight: 900; letter-spacing: 0.03em;
   text-shadow: 0 2px 12px #ffe379, 0 0 22px #1ffbf4bb, 0 8px 35px #1fc8ffd0;
   border-radius: 16px; display: inline-block; padding: 0 10px 0 10px;
-  margin-top: 0; margin-bottom: 0;
-  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin: 0; background-clip: text;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   line-height: 1; width: 100%; transform: none;
 }
 
