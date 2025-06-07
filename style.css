@@ -48,24 +48,14 @@ html, body {
 /* ========== CONTADORES ========== */
 .arcade-counters {
   position: absolute;
-  top: 3vh;
+  top: 0;
   left: 0;
   width: 100vw;
   height: 0;
   z-index: 30;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   pointer-events: none;
   background: none !important;
   transform: none;
-  padding: 0 2vw;
-}
-.counter {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 16vw; max-width: 310px; min-width: 80px; min-height: 210px; height: 100%;
-  pointer-events: none; background: none !important; box-sizing: border-box;
-  padding: 0 0.2vw; margin: 0;
 }
 .counter-label, .counter-value {
   text-align: center; width: 100%; pointer-events: none;
@@ -88,6 +78,28 @@ html, body {
   margin-top: 0; margin-bottom: 0;
   background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   line-height: 1; width: 100%; transform: none;
+}
+
+/* counter boxes on the top of the page */
+.counter-box {
+  position: absolute;
+  width: 330px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#seguidos-counter {
+  left: 420px;
+  top: 55px;
+}
+
+#feitos-counter {
+  left: 1170px;
+  top: 55px;
 }
 
 /* ========== TELA PRINCIPAL CRT ========== */
@@ -452,7 +464,6 @@ tr.dropdown[style*="display: none;"] {
   }
   .counter-label { font-size: 0.78em; }
   .counter-value { font-size: 1.37em; }
-  .counter { min-height: 80px; }
   .mes { font-size: 1.33em;}
 }
 @media (max-width: 650px) {
@@ -468,6 +479,5 @@ tr.dropdown[style*="display: none;"] {
   }
   .counter-label { font-size: 0.57em; }
   .counter-value { font-size: 1.09em; }
-  .counter { min-height: 25px; }
   .mes { font-size: 1.1em;}
 }
