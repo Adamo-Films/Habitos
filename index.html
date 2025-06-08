@@ -35,9 +35,15 @@
     <source src="Fundo site.mp4" type="video/mp4" />
   </video>
 
-  <div id="start-screen">
-    <div class="start-title">Pronto para tomar o controle da sua vida</div>
-    <div class="press-start">Press Start</div>
+  <!-- Tela principal CRT -->
+  <div class="arcade-screen-curve">
+    <div class="crt-glass-overlay"></div>
+    <div class="crt-noise"></div>
+    <div id="start-screen">
+      <div class="start-title">Pronto para tomar o controle da sua vida?</div>
+      <div class="press-start">Press Start</div>
+    </div>
+    <div id="calendario" class="calendario-container" tabindex="-1" style="display:none;"></div>
   </div>
 
   <!-- Contadores laterais -->
@@ -50,13 +56,6 @@
       <span class="counter-label">Hábitos<br>Feitos</span>
       <span class="counter-value" id="doneCount">0</span>
     </div>
-  </div>
-
-  <!-- Tela principal CRT -->
-  <div class="arcade-screen-curve" style="display:none;">
-    <div class="crt-glass-overlay"></div>
-    <div class="crt-noise"></div>
-    <div id="calendario" class="calendario-container" tabindex="-1"></div>
   </div>
 
   <!-- Confetti e celebração -->

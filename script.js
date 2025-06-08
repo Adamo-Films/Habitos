@@ -218,13 +218,63 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   const startScreen = document.getElementById('start-screen');
-  const mainEls = document.querySelectorAll('.arcade-screen-curve, .arcade-counters');
+  const calendarioEl = document.getElementById('calendario');
+  const countersEl = document.querySelector('.arcade-counters');
+  function openCurrentMonthDay() {
+    const today = new Date();
+    const mesAtual = today.getMonth() + 1;
+    const anoAtual = today.getFullYear();
+    const diaAtual = today.getDate();
+    const allMesDivs = document.querySelectorAll('#calendario .mes');
+    const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
+    const allRewards = document.querySelectorAll('#calendario .reward-card');
+    allMesDivs.forEach((mesDiv, idx) => {
+      const mesNum = parseInt(mesDiv.getAttribute('data-mes'));
+      const anoNum = parseInt(mesDiv.getAttribute('data-ano'));
+      const dropdown = allDropdowns[idx];
+      mesDiv.querySelector('.arcade-arrow').innerHTML = mesNum === mesAtual && anoNum === anoAtual ? `<span class="neon-arrow"></span>` : '';
+      dropdown.style.display = 'none';
+      mesDiv.classList.remove('open', 'mes-atual');
+      if (allRewards[idx]) allRewards[idx].style.display = 'none';
+    });
+    allMesDivs.forEach((mesDiv, idx) => {
+      const mesNum = parseInt(mesDiv.getAttribute('data-mes'));
+      const anoNum = parseInt(mesDiv.getAttribute('data-ano'));
+      const dropdown = allDropdowns[idx];
+      if (mesNum === mesAtual && anoNum === anoAtual) {
+        dropdown.style.display = 'block';
+        setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
+        mesDiv.classList.add('open', 'mes-atual');
+        mesDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
+        if (allRewards[idx]) allRewards[idx].style.display = '';
+        const rows = dropdown.querySelectorAll('tr.main-row');
+        rows.forEach((row, j) => {
+          const dropRow = dropdown.querySelectorAll('.dropdown')[j];
+          const dateCell = row.querySelectorAll('td')[0];
+          const d = parseInt(dateCell.innerText.split('/')[0]);
+          if (d === diaAtual) {
+            row.classList.add('current-day', 'expanded');
+            dropRow.style.display = 'table-row';
+            setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
+          }
+        });
+      }
+    });
+    centerTodayDropdown();
+  }
+
   function startApp() {
     startScreen.classList.add('hidden');
-    mainEls.forEach(el => el.style.display = '');
+    setTimeout(() => {
+      if (calendarioEl) calendarioEl.style.display = '';
+      if (countersEl) countersEl.style.display = '';
+      openCurrentMonthDay();
+    }, 1000);
   }
   startScreen.addEventListener('click', startApp, { once: true });
-  document.addEventListener('keydown', startApp, { once: true });
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Enter' || e.code === 'Space') startApp();
+  }, { once: true });
 
   const progress = await getProgress();
   const dados = [];
@@ -370,7 +420,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const anoAtual = today.getFullYear();
   const diaAtual = today.getDate();
 
-  // Inicializa: todos fechados exceto mês/dia atual
+  // Inicializa: todos fechados
   allMesDivs.forEach((mesDiv, idx) => {
     const mesNum = parseInt(mesDiv.getAttribute("data-mes"));
     const anoNum = parseInt(mesDiv.getAttribute("data-ano"));
@@ -378,22 +428,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Indicador de mês atual
     mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
       `<span class="neon-arrow"></span>` : '';
-    // Só abre o mês atual
-    if (mesNum === mesAtual && anoNum === anoAtual) {
-      dropdown.style.display = 'block';
-      mesDiv.classList.add('open');
-      mesDiv.classList.add('mes-atual');
-      if (allRewards[idx]) {
-        allRewards[idx].style.display = '';
-      }
-    } else {
-      dropdown.style.display = 'none';
-      mesDiv.classList.remove('open');
-      if (allRewards[idx]) {
-        allRewards[idx].style.display = 'none';
-      }
+    dropdown.style.display = 'none';
+    mesDiv.classList.remove('open', 'mes-atual');
+    if (allRewards[idx]) {
+      allRewards[idx].style.display = 'none';
     }
-
+  
     // Evento de abrir/fechar mês (com animação)
     mesDiv.onclick = (e) => {
       const wasOpen = mesDiv.classList.contains('open');
@@ -445,7 +485,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
   });
 
-  // Dropdowns de dias: todos fechados exceto dia atual no mês atual
+  // Dropdowns de dias: todos fechados
   document.querySelectorAll('#calendario .mes-dropdown').forEach((dropdown, dIdx) => {
     const rows = dropdown.querySelectorAll('tr.main-row');
     const mesNum = parseInt(allMesDivs[dIdx].getAttribute("data-mes"));
@@ -458,15 +498,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
         row.classList.add('current-day');
       }
-      if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
-        dropRow.style.display = 'table-row';
-        setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
-        row.classList.add('expanded');
-      } else {
-        dropRow.style.display = 'none';
-        dropRow.classList.remove('arcade-drop-show');
-        row.classList.remove('expanded');
-      }
+      dropRow.style.display = 'none';
+      dropRow.classList.remove('arcade-drop-show');
+      row.classList.remove('expanded');
 
       // Evento de abrir/fechar dia
       row.onclick = (e) => {
@@ -670,7 +704,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }, 350);
     }
   }
-  centerTodayDropdown();
+  // Chamado após abrir mês e dia atuais
 
   // Responsividade confetti
   window.addEventListener('resize', function () {
