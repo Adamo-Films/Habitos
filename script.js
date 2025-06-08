@@ -329,6 +329,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (window.twemoji) {
     twemoji.parse(calendario, {folder: '72x72', ext: '.png'});
   }
+  calendario.classList.add('loaded');
 
   // --- CONTINUAÇÃO ABAIXO ---
   // Dropdown lógica: abrir/fechar MÊS e DIAS
