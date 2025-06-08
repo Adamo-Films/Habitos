@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     centerTodayDropdown();
     adjustVerticalCentering();
-    updateStickyOffsets();
+    handleStickyTitles();
     updateIndicators();
   }
 
@@ -442,6 +442,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     twemoji.parse(calendario, {folder: '72x72', ext: '.png'});
   }
   calendario.classList.add('loaded');
+  calendario.addEventListener('scroll', handleStickyTitles);
+  handleStickyTitles();
   function adjustVerticalCentering() {
     if (calendario.scrollHeight <= calendario.clientHeight + 5) {
       calendario.classList.add('vertical-center');
@@ -449,18 +451,22 @@ document.addEventListener("DOMContentLoaded", async function () {
       calendario.classList.remove('vertical-center');
     }
   }
-  function updateStickyOffsets() {
-    const threshold = 40;
-    const all = document.querySelectorAll('#calendario .ano, #calendario .mes, #calendario tr.main-row');
-    all.forEach(el => {
-      const isOpen = el.classList.contains('open') || el.classList.contains('expanded');
-      if (isOpen) {
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= threshold) {
-          el.classList.add('sticky');
-        } else {
-          el.classList.remove('sticky');
-        }
+  function handleStickyTitles() {
+    const contRect = calendario.getBoundingClientRect();
+    const threshold = contRect.top + 35;
+    const candidates = document.querySelectorAll('#calendario .ano.open, #calendario .mes.open, #calendario tr.expanded');
+    let chosen = null;
+    let maxTop = -Infinity;
+    candidates.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= threshold && rect.top > maxTop) {
+        chosen = el;
+        maxTop = rect.top;
+      }
+    });
+    candidates.forEach(el => {
+      if (el === chosen) {
+        el.classList.add('sticky');
       } else {
         el.classList.remove('sticky');
       }
@@ -522,11 +528,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       allDropdowns.forEach(d => {d.style.display = 'none';});
       allMesDivs.forEach(m => {m.classList.remove('open','mes-atual'); m.querySelector('.arcade-arrow').innerHTML='';});
       allRewards.forEach(r => {r.style.display = 'none';});
-      if (wasOpen) { updateStickyOffsets(); updateIndicators(); return; }
+      if (wasOpen) { handleStickyTitles(); updateIndicators(); return; }
       drop.style.display = 'block';
       anoDiv.classList.add('open','ano-atual');
       adjustVerticalCentering();
-      updateStickyOffsets();
+      handleStickyTitles();
       updateIndicators();
     };
   });
@@ -556,7 +562,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           allRewards[i].style.display = 'none';
         }
       });
-      if (wasOpen) { updateStickyOffsets(); updateIndicators(); return; }
+      if (wasOpen) { handleStickyTitles(); updateIndicators(); return; }
       // Ativa clicado
       dropdown.style.display = 'block';
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
@@ -588,7 +594,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     }
       adjustVerticalCentering();
-      updateStickyOffsets();
+      handleStickyTitles();
       updateIndicators();
     };
   });
@@ -622,14 +628,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           dr.classList.remove('arcade-drop-show');
           r.classList.remove('expanded');
         });
-        updateStickyOffsets();
+        handleStickyTitles();
         if (wasOpen) return;
         // Abre clicado
         dropRow.style.display = 'table-row';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
         row.classList.add('expanded');
         adjustVerticalCentering();
-        updateStickyOffsets();
+        handleStickyTitles();
       };
     });
   });
