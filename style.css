@@ -93,13 +93,13 @@ html, body {
 }
 
 #seguidos-counter {
-  left: 420px;
-  top: 55px;
+  left: calc(420px - 1cm);
+  top: calc(55px - 3cm);
 }
 
 #feitos-counter {
-  left: 1170px;
-  top: 55px;
+  left: calc(1170px + 1cm);
+  top: calc(55px - 3cm);
 }
 
 /* ========== TELA PRINCIPAL CRT ========== */
@@ -147,6 +147,13 @@ html, body {
   height: 35px;
   pointer-events: none;
   z-index: 20;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#calendario.loaded::before,
+#calendario.loaded::after {
+  opacity: 1;
 }
 
 #calendario::before {
