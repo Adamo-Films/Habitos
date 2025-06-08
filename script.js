@@ -225,9 +225,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     const mesAtual = today.getMonth() + 1;
     const anoAtual = today.getFullYear();
     const diaAtual = today.getDate();
+    const allAnoDivs = document.querySelectorAll('#calendario .ano');
+    const allAnoDrops = document.querySelectorAll('#calendario .ano-dropdown');
     const allMesDivs = document.querySelectorAll('#calendario .mes');
     const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
     const allRewards = document.querySelectorAll('#calendario .reward-card');
+
+    allAnoDivs.forEach((anoDiv, idx) => {
+      const aNum = parseInt(anoDiv.getAttribute('data-ano'));
+      const dropA = allAnoDrops[idx];
+      anoDiv.querySelector('.arcade-arrow').innerHTML = aNum === anoAtual ? `<span class="neon-arrow"></span>` : '';
+      dropA.style.display = 'none';
+      anoDiv.classList.remove('open','ano-atual');
+    });
     allMesDivs.forEach((mesDiv, idx) => {
       const mesNum = parseInt(mesDiv.getAttribute('data-mes'));
       const anoNum = parseInt(mesDiv.getAttribute('data-ano'));
@@ -236,6 +246,16 @@ document.addEventListener("DOMContentLoaded", async function () {
       dropdown.style.display = 'none';
       mesDiv.classList.remove('open', 'mes-atual');
       if (allRewards[idx]) allRewards[idx].style.display = 'none';
+    });
+
+    allAnoDivs.forEach((anoDiv, idx) => {
+      const aNum = parseInt(anoDiv.getAttribute('data-ano'));
+      const dropA = allAnoDrops[idx];
+      if (aNum === anoAtual) {
+        dropA.style.display = 'block';
+        anoDiv.classList.add('open','ano-atual');
+        anoDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
+      }
     });
     allMesDivs.forEach((mesDiv, idx) => {
       const mesNum = parseInt(mesDiv.getAttribute('data-mes'));
@@ -333,22 +353,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
   const calendario = document.getElementById("calendario");
+
+  const anos = {};
   const grupos = {};
   dados.forEach((obj) => {
-    const id = `${obj.mes}-${obj.ano}`;
-    if (!grupos[id]) grupos[id] = [];
-    grupos[id].push(obj);
+    if (!anos[obj.ano]) anos[obj.ano] = {};
+    if (!anos[obj.ano][obj.mes]) anos[obj.ano][obj.mes] = [];
+    anos[obj.ano][obj.mes].push(obj);
+
+    const gid = `${obj.mes}-${obj.ano}`;
+    if (!grupos[gid]) grupos[gid] = [];
+    grupos[gid].push(obj);
   });
 
   // === Gera o HTML do calendário ===
   let html = '';
-  Object.entries(grupos).forEach(([id, dias]) => {
-    const [mes, ano] = id.split("-");
-    const mesNum = Number(mes);
-    const anoNum = Number(ano);
-    const nomeMes = monthNames[mesNum - 1].toUpperCase();
-    html += `<div class='mes arcade-clicavel' data-mes="${mesNum}" data-ano="${anoNum}">${nomeMes} ${ano} <span class="arcade-arrow"></span></div>
-      <div class="mes-dropdown" id="dropdown-mes-${mesNum}-${anoNum}"><table>
+  Object.entries(anos).forEach(([ano, meses]) => {
+    html += `<div class='ano arcade-clicavel' data-ano="${ano}">${ano} <span class="arcade-arrow"></span></div>`;
+    html += `<div class="ano-dropdown" id="dropdown-ano-${ano}">`;
+
+    Object.entries(meses).forEach(([mesNum, dias]) => {
+      const nomeMes = monthNames[mesNum - 1].toUpperCase();
+      html += `<div class='mes arcade-clicavel' data-mes="${mesNum}" data-ano="${ano}">${nomeMes} <span class="arcade-arrow"></span></div>
+      <div class="mes-dropdown" id="dropdown-mes-${mesNum}-${ano}"><table>
         <thead>
           <tr>
             <th>Data</th>
@@ -357,12 +384,12 @@ document.addEventListener("DOMContentLoaded", async function () {
           </tr>
         </thead>
         <tbody>`;
-    dias.forEach((dia, i) => {
-      const dayNum = parseInt(dia.dia.substring(4));
-      let habitosCellText;
-      if (dayNum <= 4) {
-        habitosCellText = dia.habitos.join(', ');
-      } else if (habitos_incrementais[dayNum]) {
+      dias.forEach((dia, i) => {
+        const dayNum = parseInt(dia.dia.substring(4));
+        let habitosCellText;
+        if (dayNum <= 4) {
+          habitosCellText = dia.habitos.join(', ');
+        } else if (habitos_incrementais[dayNum]) {
         const newHabs = habitos_incrementais[dayNum];
         habitosCellText = `+ ${newHabs.join(', ')}`;
       } else {
@@ -393,21 +420,24 @@ document.addEventListener("DOMContentLoaded", async function () {
             </div>
           </td>
         </tr>`;
-    });
-    html += `</tbody></table>`;
-    // Prêmio
-    const reward = getRewardFor(mesNum, anoNum);
-    if (reward) {
-      html += `
-        <div class="reward-card" data-reward="${mes}-${ano}">
+      });
+      html += `</tbody></table>`;
+      // Prêmio
+      const reward = getRewardFor(Number(mesNum), Number(ano));
+      if (reward) {
+        html += `
+        <div class="reward-card" data-reward="${mesNum}-${ano}">
           <div class="reward-icon">${reward.icon}</div>
           <div class="title">${reward.title}</div>
           <div class="desc">${reward.desc}</div>
-          <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mes}-${ano}"></div></div>
-          <div class="reward-unlocked" id="reward-unlocked-${mes}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
+          <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mesNum}-${ano}"></div></div>
+          <div class="reward-unlocked" id="reward-unlocked-${mesNum}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
         </div>`;
-    }
-    html += `</div>`; // fecha o .mes-dropdown
+      }
+      html += `</div>`; // fecha o .mes-dropdown
+    });
+
+    html += `</div>`; // fecha o ano-dropdown
   });
   calendario.innerHTML = html;
   if (window.twemoji) {
@@ -416,7 +446,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   calendario.classList.add('loaded');
 
   // --- CONTINUAÇÃO ABAIXO ---
-  // Dropdown lógica: abrir/fechar MÊS e DIAS
+  // Dropdown lógica: abrir/fechar ANO, MÊS e DIAS
+  const allAnoDivs = document.querySelectorAll('#calendario .ano');
+  const allAnoDrops = document.querySelectorAll('#calendario .ano-dropdown');
   const allMesDivs = document.querySelectorAll('#calendario .mes');
   const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
   const allRewards = document.querySelectorAll('#calendario .reward-card');
@@ -427,6 +459,33 @@ document.addEventListener("DOMContentLoaded", async function () {
   const diaAtual = today.getDate();
 
   // Inicializa: todos fechados
+  allAnoDivs.forEach((anoDiv, idx) => {
+    const anoNum = parseInt(anoDiv.getAttribute("data-ano"));
+    const drop = allAnoDrops[idx];
+    anoDiv.querySelector('.arcade-arrow').innerHTML = (anoNum === anoAtual) ? `<span class="neon-arrow"></span>` : '';
+    drop.style.display = 'none';
+    anoDiv.classList.remove('open', 'ano-atual');
+
+    anoDiv.onclick = () => {
+      const wasOpen = anoDiv.classList.contains('open');
+      allAnoDrops.forEach((d,i) => {
+        d.style.display = 'none';
+        allAnoDivs[i].classList.remove('open','ano-atual');
+        const a = parseInt(allAnoDivs[i].getAttribute('data-ano'));
+        allAnoDivs[i].querySelector('.arcade-arrow').innerHTML = (a === anoAtual) ? `<span class="neon-arrow"></span>` : '';
+      });
+      // fecha meses
+      allDropdowns.forEach(d => {d.style.display = 'none';});
+      allMesDivs.forEach(m => m.classList.remove('open','mes-atual'));
+      allRewards.forEach(r => {r.style.display = 'none';});
+      if (wasOpen) return;
+      drop.style.display = 'block';
+      anoDiv.classList.add('open','ano-atual');
+      anoDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
+    };
+  });
+
+  // Inicializa meses: todos fechados
   allMesDivs.forEach((mesDiv, idx) => {
     const mesNum = parseInt(mesDiv.getAttribute("data-mes"));
     const anoNum = parseInt(mesDiv.getAttribute("data-ano"));
@@ -639,7 +698,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     checkboxes.forEach(cb => { if (cb.checked) done++; });
     document.getElementById('seqCount').textContent = maxSeq;
-    document.getElementById('doneCount').textContent = done;
+    const reward = getRewardFor(mesAtual, anoAtual);
+    if (reward) {
+      document.getElementById('rewardText').textContent = reward.label;
+    }
   }
 
   // Checkbox lógica
