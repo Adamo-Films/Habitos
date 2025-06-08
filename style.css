@@ -243,6 +243,10 @@ html, body {
   z-index: 15;
 }
 
+.mes.sticky {
+  background: var(--crt-dark) !important;
+}
+
 .ano.open {
   /* sticky control via JavaScript */
 }
@@ -403,7 +407,12 @@ tr.dropdown[style*="display: none;"] {
 }
 
 /* ==== HÁBITOS ==== */
-.habit-list { gap: 13px; margin: 14px 0; display: flex; flex-direction: column;}
+.habit-list {
+  gap: 13px;
+  margin: 6px 0;
+  display: flex;
+  flex-direction: column;
+}
 .habit-item {
   display: grid; grid-template-columns: 46px 1fr 38px; align-items: center;
   background: none !important;
