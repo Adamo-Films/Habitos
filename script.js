@@ -213,6 +213,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     bgVideo.play().catch(() => {});
   }
 
+  const startScreen = document.getElementById('start-screen');
+  const mainEls = document.querySelectorAll('.arcade-screen-curve, .arcade-counters');
+  function startApp() {
+    startScreen.classList.add('hidden');
+    mainEls.forEach(el => el.style.display = '');
+  }
+  startScreen.addEventListener('click', startApp, { once: true });
+  document.addEventListener('keydown', startApp, { once: true });
+
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = {
