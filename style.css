@@ -148,6 +148,9 @@ html, body {
   max-width: 100%;
   white-space: normal;
 }
+#feitos-counter .counter-value {
+  font-size: 1.18em;
+}
 
 /* ========== TELA PRINCIPAL CRT ========== */
 .arcade-screen-curve {
@@ -189,10 +192,25 @@ html, body {
 }
 
 #calendario {
-  --top-mask-stop: 35px;
+  --top-mask-start: 0px;
+  --top-fade-size: 35px;
   --bottom-mask-stop: 35px;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black var(--top-mask-stop), black calc(100% - var(--bottom-mask-stop)), transparent);
-          mask-image: linear-gradient(to bottom, transparent, black var(--top-mask-stop), black calc(100% - var(--bottom-mask-stop)), transparent);
+  -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 0,
+      black var(--top-mask-start),
+      transparent calc(var(--top-mask-start) + var(--top-fade-size)),
+      black calc(100% - var(--bottom-mask-stop)),
+      transparent
+  );
+          mask-image: linear-gradient(
+      to bottom,
+      black 0,
+      black var(--top-mask-start),
+      transparent calc(var(--top-mask-start) + var(--top-fade-size)),
+      black calc(100% - var(--bottom-mask-stop)),
+      transparent
+  );
   -webkit-mask-size: 100% 100%;
           mask-size: 100% 100%;
 }
