@@ -197,17 +197,17 @@ html, body {
   --bottom-mask-stop: 35px;
   -webkit-mask-image: linear-gradient(
       to bottom,
-      black 0,
-      black var(--top-mask-start),
-      transparent calc(var(--top-mask-start) + var(--top-fade-size)),
+      transparent 0,
+      transparent var(--top-mask-start),
+      black calc(var(--top-mask-start) + var(--top-fade-size)),
       black calc(100% - var(--bottom-mask-stop)),
       transparent
   );
           mask-image: linear-gradient(
       to bottom,
-      black 0,
-      black var(--top-mask-start),
-      transparent calc(var(--top-mask-start) + var(--top-fade-size)),
+      transparent 0,
+      transparent var(--top-mask-start),
+      black calc(var(--top-mask-start) + var(--top-fade-size)),
       black calc(100% - var(--bottom-mask-stop)),
       transparent
   );
