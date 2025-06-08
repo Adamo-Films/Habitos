@@ -214,7 +214,7 @@ html, body {
   font-family: 'Press Start 2P', monospace;
   font-size: 3em;
   color: var(--highlight);
-  margin: 40px 0 20px 0;
+  margin: 40px auto 20px auto;
   background: none !important;
   border: none !important;
   cursor: pointer;
@@ -226,6 +226,7 @@ html, body {
   padding: 0 0 0 30px;
   text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
+  width: fit-content;
 }
 .ano:hover { color: #51ffe7; text-shadow: 0 0 16px #51ffe788, 0 0 40px #ffe37944; }
 .ano:active { transform: scale(0.97); }
@@ -236,13 +237,18 @@ html, body {
   top: 50%;
   transform: translateY(-50%);
 }
+.ano.open {
+  position: sticky;
+  top: 35px;
+  z-index: 15;
+}
 
 /* === MES === */
 .mes {
   font-family: 'Press Start 2P', monospace;
   font-size: 2.5em;
   color: var(--highlight);
-  margin: 28px 0 17px 0;
+  margin: 28px auto 17px auto;
   background: none !important; border: none !important;
   cursor: pointer; user-select: none;
   display: flex; align-items: center; justify-content: center;
@@ -252,6 +258,7 @@ html, body {
   text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
   padding: 0 0 0 30px;
+  width: fit-content;
 }
 .arcade-arrow {
   position: absolute;
@@ -264,6 +271,11 @@ html, body {
 .mes:hover { color: #51ffe7; text-shadow: 0 0 16px #51ffe788, 0 0 40px #ffe37944; }
 .mes:active { transform: scale(0.97); }
 .mes:not(.open) { opacity: 0.85; }
+.mes.open {
+  position: sticky;
+  top: 35px;
+  z-index: 15;
+}
 
 .neon-arrow {
   position: absolute;
