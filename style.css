@@ -93,13 +93,13 @@ html, body {
 }
 
 #seguidos-counter {
-  left: calc(420px - 1cm);
-  top: calc(55px - 3cm);
+  left: calc(420px);
+  top: calc(55px - 2cm);
 }
 
 #feitos-counter {
-  left: calc(1170px + 1cm);
-  top: calc(55px - 3cm);
+  left: calc(1170px);
+  top: calc(55px - 2cm);
 }
 
 /* ========== TELA PRINCIPAL CRT ========== */
@@ -137,33 +137,11 @@ html, body {
   position: relative;
 }
 
-#calendario::before,
-#calendario::after {
-  content: '';
-  position: sticky;
-  display: block;
-  left: 0;
-  right: 0;
-  height: 35px;
-  pointer-events: none;
-  z-index: 20;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-#calendario.loaded::before,
-#calendario.loaded::after {
-  opacity: 1;
-}
-
-#calendario::before {
-  top: 0;
-  background: linear-gradient(to bottom, #00253b, transparent);
-}
-
-#calendario::after {
-  bottom: 0;
-  background: linear-gradient(to top, #00253b, transparent);
+#calendario {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 35px, black calc(100% - 35px), transparent);
+          mask-image: linear-gradient(to bottom, transparent, black 35px, black calc(100% - 35px), transparent);
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
 }
 #calendario, #calendario th, #calendario td, #calendario .progress-text,
 #calendario .mes, #calendario .habit-label, #calendario .habit-emoji, #calendario .habit-item {

@@ -198,6 +198,15 @@ async function saveProgress(progress) {
 
 // === INÍCIO DO DOMContentLoaded ===
 document.addEventListener("DOMContentLoaded", async function () {
+  const bgVideo = document.querySelector('.arcade-bg');
+  if (bgVideo) {
+    bgVideo.addEventListener('ended', function () {
+      this.currentTime = 0;
+      this.play();
+    });
+    bgVideo.play().catch(() => {});
+  }
+
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = {
