@@ -450,7 +450,29 @@ document.addEventListener("DOMContentLoaded", async function () {
       calendario.classList.remove('vertical-center');
     }
   }
-  function handleStickyTitles() {}
+  function handleStickyTitles() {
+    const cal = document.getElementById('calendario');
+    if (!cal) return;
+    document.querySelectorAll('#calendario .ano, #calendario .mes')
+      .forEach(el => el.classList.remove('sticky-title'));
+
+    const openMonth = document.querySelector('#calendario .mes.open');
+    if (openMonth) {
+      const drop = openMonth.nextElementSibling;
+      if (drop && drop.scrollHeight > cal.clientHeight - openMonth.offsetHeight) {
+        openMonth.classList.add('sticky-title');
+        return;
+      }
+    }
+
+    const openYear = document.querySelector('#calendario .ano.open');
+    if (openYear) {
+      const drop = openYear.nextElementSibling;
+      if (drop && drop.scrollHeight > cal.clientHeight - openYear.offsetHeight) {
+        openYear.classList.add('sticky-title');
+      }
+    }
+  }
 
   function updateIndicators() {
     document.querySelectorAll('#calendario .arcade-arrow').forEach(a => a.innerHTML = '');
