@@ -298,6 +298,23 @@ tr.main-row.current-day td:first-child::before {
   border-left-color: var(--mes-arrow-ativo);
 }
 
+.ano-atual .neon-arrow,
+.mes-atual .neon-arrow {
+  border-top-width: 24px;
+  border-bottom-width: 24px;
+  border-left-width: 52px;
+}
+
+.ano-atual,
+.mes-atual {
+  padding-left: 45px;
+}
+
+.ano-atual .arcade-arrow,
+.mes-atual .arcade-arrow {
+  left: -7px;
+}
+
 @keyframes arrow-move {
   0% { transform: translate(-3px, -50%); }
   100% { transform: translate(3px, -50%); }
