@@ -33,14 +33,14 @@ html, body {
 
 /* ========== START SCREEN ========== */
 #start-screen {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: var(--crt-dark);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 40;
+  z-index: 20;
   text-align: center;
 }
 
