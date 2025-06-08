@@ -189,8 +189,10 @@ html, body {
 }
 
 #calendario {
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 35px, black calc(100% - 35px), transparent);
-          mask-image: linear-gradient(to bottom, transparent, black 35px, black calc(100% - 35px), transparent);
+  --top-mask-stop: 35px;
+  --bottom-mask-stop: 35px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black var(--top-mask-stop), black calc(100% - var(--bottom-mask-stop)), transparent);
+          mask-image: linear-gradient(to bottom, transparent, black var(--top-mask-stop), black calc(100% - var(--bottom-mask-stop)), transparent);
   -webkit-mask-size: 100% 100%;
           mask-size: 100% 100%;
 }
