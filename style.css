@@ -223,7 +223,7 @@ html, body {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 0 0 0 30px;
+  padding: 0 0 0 55px;
   text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
   width: fit-content;
@@ -233,7 +233,7 @@ html, body {
 .ano:not(.open) { opacity: 0.85; }
 .ano .arcade-arrow {
   position: absolute;
-  left: 0;
+  left: -7px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -257,12 +257,12 @@ html, body {
   z-index: 10;
   text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
-  padding: 0 0 0 30px;
+  padding: 0 0 0 55px;
   width: fit-content;
 }
 .arcade-arrow {
   position: absolute;
-  left: 0;
+  left: -7px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
@@ -279,13 +279,13 @@ html, body {
 
 .neon-arrow {
   position: absolute;
-  left: 4px;
+  left: 0;
   top: 50%;
   width: 0;
   height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-left: 26px solid var(--mes-arrow);
+  border-top: 24px solid transparent;
+  border-bottom: 24px solid transparent;
+  border-left: 52px solid var(--mes-arrow);
   filter: drop-shadow(0 0 6px var(--mes-arrow)) drop-shadow(0 0 12px var(--mes-arrow));
   animation: arrow-move 0.8s infinite alternate;
   transform: translateY(-50%);
@@ -296,23 +296,6 @@ html, body {
 .mes-atual .neon-arrow,
 tr.main-row.current-day td:first-child::before {
   border-left-color: var(--mes-arrow-ativo);
-}
-
-.ano-atual .neon-arrow,
-.mes-atual .neon-arrow {
-  border-top-width: 24px;
-  border-bottom-width: 24px;
-  border-left-width: 52px;
-}
-
-.ano-atual,
-.mes-atual {
-  padding-left: 45px;
-}
-
-.ano-atual .arcade-arrow,
-.mes-atual .arcade-arrow {
-  left: -7px;
 }
 
 @keyframes arrow-move {
