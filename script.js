@@ -450,30 +450,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
   function updateStickyOffsets() {
-    // Limpa estilos inline para anos, meses e dias
+    // Remove a classe sticky de todos os títulos/linhas
     document.querySelectorAll('#calendario .ano, #calendario .mes, #calendario tr.main-row')
-      .forEach(el => {
-        el.style.position = '';
-        el.style.top = '';
-        el.style.zIndex = '';
-      });
+      .forEach(el => el.classList.remove('sticky'));
 
     const openDay = document.querySelector('#calendario tr.main-row.expanded');
     const openMonth = document.querySelector('#calendario .mes.open');
     const openYear = document.querySelector('#calendario .ano.open');
 
     if (openDay) {
-      openDay.style.position = 'sticky';
-      openDay.style.top = '35px';
-      openDay.style.zIndex = '15';
+      openDay.classList.add('sticky');
     } else if (openMonth) {
-      openMonth.style.position = 'sticky';
-      openMonth.style.top = '35px';
-      openMonth.style.zIndex = '15';
+      openMonth.classList.add('sticky');
     } else if (openYear) {
-      openYear.style.position = 'sticky';
-      openYear.style.top = '35px';
-      openYear.style.zIndex = '15';
+      openYear.classList.add('sticky');
     }
   }
 
