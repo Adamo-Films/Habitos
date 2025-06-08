@@ -558,3 +558,14 @@ tr.dropdown[style*="display: none;"] {
   0%,100% { transform: translate(-50%, -50%) scale(1); }
   50% { transform: translate(-50%, -55%) scale(1.2); }
 }
+
+@keyframes danceShake {
+  0%,100% { transform: translate(0,0) rotate(0deg); }
+  25% { transform: translate(2px, -2px) rotate(1deg); }
+  50% { transform: translate(-2px, 2px) rotate(0deg); }
+  75% { transform: translate(2px, -2px) rotate(-1deg); }
+}
+
+.shake-dance {
+  animation: danceShake 0.4s linear infinite;
+}

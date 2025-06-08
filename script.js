@@ -63,6 +63,7 @@ function launchConfettiEpic() {
   canvas.height = window.innerHeight;
   canvas.style.display = 'block';
   document.body.style.overflow = "hidden";
+  document.body.classList.add('shake-dance');
   let W = canvas.width, H = canvas.height;
   let particles = [];
   let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
@@ -119,6 +120,7 @@ function launchConfettiEpic() {
     celebrateText.style.display = 'none';
     if (lights) lights.style.display = 'none';
     document.body.style.overflow = "";
+    document.body.classList.remove('shake-dance');
   }, 7000);
 }
 
@@ -128,6 +130,7 @@ function launchRewardConfetti() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   canvas.style.display = 'block';
+  document.body.classList.add('shake-dance');
   const lights = document.getElementById('party-lights');
   if (lights) lights.style.display = 'block';
   let W = canvas.width, H = canvas.height;
@@ -180,6 +183,7 @@ function launchRewardConfetti() {
     ctx.clearRect(0, 0, W, H);
     canvas.style.display = 'none';
     if (lights) lights.style.display = 'none';
+    document.body.classList.remove('shake-dance');
   }, 6000);
 }
 
