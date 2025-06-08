@@ -269,7 +269,7 @@ tr.main-row.sticky-title {
   position: sticky;
   top: 40px;
   margin-top: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--crt-dark);
   z-index: 20;
 }
 
