@@ -581,15 +581,16 @@ tr.dropdown[style*="display: none;"] {
   0% {
     opacity: 0;
     filter: drop-shadow(-8px 0 red) drop-shadow(8px 0 cyan);
-    transform: scale(0.95);
+    transform: translate(-50%, -50%) scale(0.95);
   }
   50% {
     filter: drop-shadow(4px 0 red) drop-shadow(-4px 0 cyan);
+    transform: translate(-50%, -50%) scale(0.98);
   }
   100% {
     opacity: 1;
     filter: none;
-    transform: none;
+    transform: translate(-50%, -50%);
   }
 }
 
