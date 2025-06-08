@@ -237,15 +237,6 @@ html, body {
   top: 50%;
   transform: translateY(-50%);
 }
-.sticky {
-  position: sticky;
-  top: 35px;
-  z-index: 15;
-}
-
-.mes.sticky {
-  background: var(--crt-dark) !important;
-}
 
 .ano.open {
   /* sticky control via JavaScript */
