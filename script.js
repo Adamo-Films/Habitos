@@ -232,19 +232,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     const allRewards = document.querySelectorAll('#calendario .reward-card');
 
     allAnoDivs.forEach((anoDiv, idx) => {
-      const aNum = parseInt(anoDiv.getAttribute('data-ano'));
       const dropA = allAnoDrops[idx];
-      anoDiv.querySelector('.arcade-arrow').innerHTML = aNum === anoAtual ? `<span class="neon-arrow"></span>` : '';
       dropA.style.display = 'none';
       anoDiv.classList.remove('open','ano-atual');
+      anoDiv.querySelector('.arcade-arrow').innerHTML = '';
     });
     allMesDivs.forEach((mesDiv, idx) => {
-      const mesNum = parseInt(mesDiv.getAttribute('data-mes'));
-      const anoNum = parseInt(mesDiv.getAttribute('data-ano'));
       const dropdown = allDropdowns[idx];
-      mesDiv.querySelector('.arcade-arrow').innerHTML = mesNum === mesAtual && anoNum === anoAtual ? `<span class="neon-arrow"></span>` : '';
       dropdown.style.display = 'none';
       mesDiv.classList.remove('open', 'mes-atual');
+      mesDiv.querySelector('.arcade-arrow').innerHTML = '';
       if (allRewards[idx]) allRewards[idx].style.display = 'none';
     });
 
@@ -254,7 +251,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (aNum === anoAtual) {
         dropA.style.display = 'block';
         anoDiv.classList.add('open','ano-atual');
-        anoDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
       }
     });
     allMesDivs.forEach((mesDiv, idx) => {
@@ -265,7 +261,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         dropdown.style.display = 'block';
         setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
         mesDiv.classList.add('open', 'mes-atual');
-        mesDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
         if (allRewards[idx]) allRewards[idx].style.display = '';
         const rows = dropdown.querySelectorAll('tr.main-row');
         rows.forEach((row, j) => {
@@ -283,6 +278,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     centerTodayDropdown();
     adjustVerticalCentering();
     updateStickyOffsets();
+    updateIndicators();
   }
 
   function startApp() {
@@ -457,10 +453,33 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.querySelectorAll('#calendario .ano, #calendario .mes').forEach(el => {
       el.style.top = '';
     });
-    const opened = Array.from(document.querySelectorAll('#calendario .ano.open, #calendario .mes.open'));
-    opened.forEach((el, idx) => {
-      el.style.top = `${35 * (idx + 1)}px`;
-    });
+    const openMonth = document.querySelector('#calendario .mes.open');
+    const openYear = document.querySelector('#calendario .ano.open');
+    if (openMonth) {
+      openMonth.style.top = '35px';
+    } else if (openYear) {
+      openYear.style.top = '35px';
+    }
+  }
+
+  function updateIndicators() {
+    document.querySelectorAll('#calendario .arcade-arrow').forEach(a => a.innerHTML = '');
+    const openMonth = document.querySelector('#calendario .mes.open');
+    const openYear = document.querySelector('#calendario .ano.open');
+    if (openMonth) {
+      // apenas indicador do dia
+      return;
+    }
+    if (openYear) {
+      const monthDiv = Array.from(allMesDivs).find(m =>
+        parseInt(m.getAttribute('data-mes')) === mesAtual &&
+        parseInt(m.getAttribute('data-ano')) === anoAtual);
+      if (monthDiv) monthDiv.querySelector('.arcade-arrow').innerHTML = '<span class="neon-arrow"></span>';
+    } else {
+      const yearDiv = Array.from(allAnoDivs).find(a =>
+        parseInt(a.getAttribute('data-ano')) === anoAtual);
+      if (yearDiv) yearDiv.querySelector('.arcade-arrow').innerHTML = '<span class="neon-arrow"></span>';
+    }
   }
   adjustVerticalCentering();
 
@@ -483,28 +502,27 @@ document.addEventListener("DOMContentLoaded", async function () {
   allAnoDivs.forEach((anoDiv, idx) => {
     const anoNum = parseInt(anoDiv.getAttribute("data-ano"));
     const drop = allAnoDrops[idx];
-    anoDiv.querySelector('.arcade-arrow').innerHTML = (anoNum === anoAtual) ? `<span class="neon-arrow"></span>` : '';
     drop.style.display = 'none';
     anoDiv.classList.remove('open', 'ano-atual');
+    anoDiv.querySelector('.arcade-arrow').innerHTML = '';
 
     anoDiv.onclick = () => {
       const wasOpen = anoDiv.classList.contains('open');
       allAnoDrops.forEach((d,i) => {
         d.style.display = 'none';
         allAnoDivs[i].classList.remove('open','ano-atual');
-        const a = parseInt(allAnoDivs[i].getAttribute('data-ano'));
-        allAnoDivs[i].querySelector('.arcade-arrow').innerHTML = (a === anoAtual) ? `<span class="neon-arrow"></span>` : '';
+        allAnoDivs[i].querySelector('.arcade-arrow').innerHTML = '';
       });
       // fecha meses
       allDropdowns.forEach(d => {d.style.display = 'none';});
-      allMesDivs.forEach(m => m.classList.remove('open','mes-atual'));
+      allMesDivs.forEach(m => {m.classList.remove('open','mes-atual'); m.querySelector('.arcade-arrow').innerHTML='';});
       allRewards.forEach(r => {r.style.display = 'none';});
-      if (wasOpen) { updateStickyOffsets(); return; }
+      if (wasOpen) { updateStickyOffsets(); updateIndicators(); return; }
       drop.style.display = 'block';
       anoDiv.classList.add('open','ano-atual');
-      anoDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
       adjustVerticalCentering();
       updateStickyOffsets();
+      updateIndicators();
     };
   });
 
@@ -513,9 +531,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const mesNum = parseInt(mesDiv.getAttribute("data-mes"));
     const anoNum = parseInt(mesDiv.getAttribute("data-ano"));
     const dropdown = allDropdowns[idx];
-    // Indicador de mês atual
-    mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
-      `<span class="neon-arrow"></span>` : '';
+    // limpa indicador
+    mesDiv.querySelector(".arcade-arrow").innerHTML = '';
     dropdown.style.display = 'none';
     mesDiv.classList.remove('open', 'mes-atual');
     if (allRewards[idx]) {
@@ -529,21 +546,16 @@ document.addEventListener("DOMContentLoaded", async function () {
       allDropdowns.forEach((d, i) => {
         d.style.display = 'none';
         allMesDivs[i].classList.remove('open', 'mes-atual');
-        const mNum = parseInt(allMesDivs[i].getAttribute("data-mes"));
-        const aNum = parseInt(allMesDivs[i].getAttribute("data-ano"));
-        allMesDivs[i].querySelector(".arcade-arrow").innerHTML = (mNum === mesAtual && aNum === anoAtual) ?
-          `<span class="neon-arrow"></span>` : '';
+        allMesDivs[i].querySelector('.arcade-arrow').innerHTML = '';
         if (allRewards[i]) {
           allRewards[i].style.display = 'none';
         }
       });
-      if (wasOpen) { updateStickyOffsets(); return; }
+      if (wasOpen) { updateStickyOffsets(); updateIndicators(); return; }
       // Ativa clicado
       dropdown.style.display = 'block';
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
       mesDiv.classList.add('open', 'mes-atual');
-      mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
-        `<span class="neon-arrow"></span>` : '';
       if (allRewards[idx]) {
         allRewards[idx].style.display = '';
       }
@@ -572,6 +584,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
       adjustVerticalCentering();
       updateStickyOffsets();
+      updateIndicators();
     };
   });
 
