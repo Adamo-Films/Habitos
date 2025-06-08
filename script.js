@@ -66,7 +66,7 @@ function launchConfettiEpic() {
   let W = canvas.width, H = canvas.height;
   let particles = [];
   let colors = ['#ffe379','#e4c145','#f7e399','#FF522E','#fafff9','#FFD700','#FF69B4','#00E6F6','#82FF6A','#FF6666','#0ed156','#001130','#fd2a49'];
-  for (let i = 0; i < 1200; i++) {
+  for (let i = 0; i < 2000; i++) {
     particles.push({
       x: Math.random() * W,
       y: Math.random() * -H,
@@ -109,14 +109,17 @@ function launchConfettiEpic() {
   }
   let interval = setInterval(draw, 13);
   const celebrateText = document.getElementById('celebrate-text');
+  const lights = document.getElementById('party-lights');
   celebrateText.style.display = 'block';
+  if (lights) lights.style.display = 'block';
   setTimeout(() => {
     clearInterval(interval);
     ctx.clearRect(0, 0, W, H);
     canvas.style.display = 'none';
     celebrateText.style.display = 'none';
+    if (lights) lights.style.display = 'none';
     document.body.style.overflow = "";
-  }, 4000);
+  }, 7000);
 }
 
 function launchRewardConfetti() {
@@ -125,10 +128,12 @@ function launchRewardConfetti() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   canvas.style.display = 'block';
+  const lights = document.getElementById('party-lights');
+  if (lights) lights.style.display = 'block';
   let W = canvas.width, H = canvas.height;
   let particles = [];
   let colors = ['#cf28ff', '#ff49e1', '#51ffe7', '#fff', '#9800cc', '#29012e'];
-  for (let i = 0; i < 800; i++) {
+  for (let i = 0; i < 1200; i++) {
     particles.push({
       x: Math.random() * W,
       y: Math.random() * -H,
@@ -174,7 +179,8 @@ function launchRewardConfetti() {
     clearInterval(interval);
     ctx.clearRect(0, 0, W, H);
     canvas.style.display = 'none';
-  }, 3400);
+    if (lights) lights.style.display = 'none';
+  }, 6000);
 }
 
 // =================== Progress Save/Load ===================
@@ -518,13 +524,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     const unlocked = document.getElementById(`reward-unlocked-${month}-${year}`);
     if (bar) {
       bar.style.width = (pct * 100) + "%";
+      const celebrateKey = `reward-celebrated-${month}-${year}`;
+      const already = localStorage.getItem(celebrateKey) === 'true';
       if (pct === 1) {
-        if (unlocked.style.display !== "block") {
-          unlocked.style.display = "block";
+        unlocked.style.display = "block";
+        if (!already) {
           launchRewardConfetti();
+          localStorage.setItem(celebrateKey, 'true');
         }
       } else {
         unlocked.style.display = "none";
+        localStorage.removeItem(celebrateKey);
       }
     }
   }

@@ -468,6 +468,25 @@ tr.dropdown[style*="display: none;"] {
 }
 
 /* ====== Confetti Celebration ====== */
+#party-lights {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  display: none;
+  z-index: 1999;
+  background: radial-gradient(circle at 20% 20%, rgba(255,0,255,0.4), transparent 60%),
+              radial-gradient(circle at 80% 30%, rgba(0,255,255,0.4), transparent 60%),
+              radial-gradient(circle at 50% 80%, rgba(255,255,0,0.4), transparent 60%);
+  animation: partyHue 3s linear infinite;
+}
+@keyframes partyHue {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
 #confetti-canvas, #reward-confetti {
   position: fixed;
   left: 0;
@@ -484,6 +503,7 @@ tr.dropdown[style*="display: none;"] {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  animation: textBounce 1.2s ease-in-out infinite;
   font-family: 'Press Start 2P', monospace;
   font-size: 3.5em;
   color: #ffe379;
@@ -491,4 +511,9 @@ tr.dropdown[style*="display: none;"] {
   z-index: 2001;
   display: none;
   pointer-events: none;
+}
+
+@keyframes textBounce {
+  0%,100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -55%) scale(1.2); }
 }
