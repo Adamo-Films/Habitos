@@ -455,6 +455,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!cal) return;
     document.querySelectorAll('#calendario .ano, #calendario .mes, #calendario tr.main-row')
       .forEach(el => el.classList.remove('sticky-title'));
+    cal.style.setProperty('--top-mask-stop', '35px');
 
     const stickyOffset = 40;
 
@@ -463,6 +464,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const drop = openDay.nextElementSibling;
       if (drop && drop.scrollHeight > cal.clientHeight - openDay.offsetHeight - stickyOffset) {
         openDay.classList.add('sticky-title');
+        cal.style.setProperty('--top-mask-stop', stickyOffset + 'px');
         return;
       }
     }
@@ -472,6 +474,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const drop = openMonth.nextElementSibling;
       if (drop && drop.scrollHeight > cal.clientHeight - openMonth.offsetHeight - stickyOffset) {
         openMonth.classList.add('sticky-title');
+        cal.style.setProperty('--top-mask-stop', stickyOffset + 'px');
         return;
       }
     }
@@ -481,6 +484,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const drop = openYear.nextElementSibling;
       if (drop && drop.scrollHeight > cal.clientHeight - openYear.offsetHeight - stickyOffset) {
         openYear.classList.add('sticky-title');
+        cal.style.setProperty('--top-mask-stop', stickyOffset + 'px');
       }
     }
   }
