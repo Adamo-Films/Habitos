@@ -238,9 +238,7 @@ html, body {
   transform: translateY(-50%);
 }
 .ano.open {
-  position: sticky;
-  top: 35px;
-  z-index: 15;
+  /* sticky behavior será controlado via JavaScript */
 }
 
 /* === MES === */
@@ -272,9 +270,7 @@ html, body {
 .mes:active { transform: scale(0.97); }
 .mes:not(.open) { opacity: 0.85; }
 .mes.open {
-  position: sticky;
-  top: 35px;
-  z-index: 15;
+  /* sticky behavior será controlado via JavaScript */
 }
 
 .neon-arrow {
