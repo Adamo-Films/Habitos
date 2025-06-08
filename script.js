@@ -492,8 +492,22 @@ document.addEventListener("DOMContentLoaded", async function () {
     let pct = checked / habitCount;
     const row = document.getElementById(`mainrow-${dayId}`);
     if (row) {
-      if (pct === 1) row.classList.add('day-complete');
-      else row.classList.remove('day-complete');
+      const wasComplete = row.classList.contains('day-complete');
+      if (!row.dataset.initDone) {
+        row.dataset.initDone = 'true';
+      } else if (pct === 1 && !wasComplete) {
+        row.classList.add('day-complete');
+        launchConfettiEpic();
+        const audio = document.getElementById('celebrate-audio');
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
+        }
+      } else if (pct === 1) {
+        row.classList.add('day-complete');
+      } else {
+        row.classList.remove('day-complete');
+      }
     }
   }
 
