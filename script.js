@@ -450,15 +450,30 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
   function updateStickyOffsets() {
-    document.querySelectorAll('#calendario .ano, #calendario .mes').forEach(el => {
-      el.style.top = '';
-    });
+    // Limpa estilos inline para anos, meses e dias
+    document.querySelectorAll('#calendario .ano, #calendario .mes, #calendario tr.main-row')
+      .forEach(el => {
+        el.style.position = '';
+        el.style.top = '';
+        el.style.zIndex = '';
+      });
+
+    const openDay = document.querySelector('#calendario tr.main-row.expanded');
     const openMonth = document.querySelector('#calendario .mes.open');
     const openYear = document.querySelector('#calendario .ano.open');
-    if (openMonth) {
+
+    if (openDay) {
+      openDay.style.position = 'sticky';
+      openDay.style.top = '35px';
+      openDay.style.zIndex = '15';
+    } else if (openMonth) {
+      openMonth.style.position = 'sticky';
       openMonth.style.top = '35px';
+      openMonth.style.zIndex = '15';
     } else if (openYear) {
+      openYear.style.position = 'sticky';
       openYear.style.top = '35px';
+      openYear.style.zIndex = '15';
     }
   }
 
@@ -617,12 +632,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           dr.classList.remove('arcade-drop-show');
           r.classList.remove('expanded');
         });
+        updateStickyOffsets();
         if (wasOpen) return;
         // Abre clicado
         dropRow.style.display = 'table-row';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
         row.classList.add('expanded');
         adjustVerticalCentering();
+        updateStickyOffsets();
       };
     });
   });
