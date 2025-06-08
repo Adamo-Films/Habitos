@@ -453,13 +453,24 @@ document.addEventListener("DOMContentLoaded", async function () {
   function handleStickyTitles() {
     const cal = document.getElementById('calendario');
     if (!cal) return;
-    document.querySelectorAll('#calendario .ano, #calendario .mes')
+    document.querySelectorAll('#calendario .ano, #calendario .mes, #calendario tr.main-row')
       .forEach(el => el.classList.remove('sticky-title'));
+
+    const stickyOffset = 40;
+
+    const openDay = document.querySelector('#calendario tr.main-row.expanded');
+    if (openDay) {
+      const drop = openDay.nextElementSibling;
+      if (drop && drop.scrollHeight > cal.clientHeight - openDay.offsetHeight - stickyOffset) {
+        openDay.classList.add('sticky-title');
+        return;
+      }
+    }
 
     const openMonth = document.querySelector('#calendario .mes.open');
     if (openMonth) {
       const drop = openMonth.nextElementSibling;
-      if (drop && drop.scrollHeight > cal.clientHeight - openMonth.offsetHeight) {
+      if (drop && drop.scrollHeight > cal.clientHeight - openMonth.offsetHeight - stickyOffset) {
         openMonth.classList.add('sticky-title');
         return;
       }
@@ -468,7 +479,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const openYear = document.querySelector('#calendario .ano.open');
     if (openYear) {
       const drop = openYear.nextElementSibling;
-      if (drop && drop.scrollHeight > cal.clientHeight - openYear.offsetHeight) {
+      if (drop && drop.scrollHeight > cal.clientHeight - openYear.offsetHeight - stickyOffset) {
         openYear.classList.add('sticky-title');
       }
     }
