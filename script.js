@@ -450,21 +450,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
   function updateStickyOffsets() {
-    // Remove a classe sticky de todos os títulos/linhas
-    document.querySelectorAll('#calendario .ano, #calendario .mes, #calendario tr.main-row')
-      .forEach(el => el.classList.remove('sticky'));
-
-    const openDay = document.querySelector('#calendario tr.main-row.expanded');
-    const openMonth = document.querySelector('#calendario .mes.open');
-    const openYear = document.querySelector('#calendario .ano.open');
-
-    if (openDay) {
-      openDay.classList.add('sticky');
-    } else if (openMonth) {
-      openMonth.classList.add('sticky');
-    } else if (openYear) {
-      openYear.classList.add('sticky');
-    }
+    const threshold = 40;
+    const all = document.querySelectorAll('#calendario .ano, #calendario .mes, #calendario tr.main-row');
+    all.forEach(el => {
+      const isOpen = el.classList.contains('open') || el.classList.contains('expanded');
+      if (isOpen) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= threshold) {
+          el.classList.add('sticky');
+        } else {
+          el.classList.remove('sticky');
+        }
+      } else {
+        el.classList.remove('sticky');
+      }
+    });
   }
 
   function updateIndicators() {
