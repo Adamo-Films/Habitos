@@ -281,6 +281,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     });
     centerTodayDropdown();
+    adjustVerticalCentering();
   }
 
   function startApp() {
@@ -444,6 +445,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     twemoji.parse(calendario, {folder: '72x72', ext: '.png'});
   }
   calendario.classList.add('loaded');
+  function adjustVerticalCentering() {
+    if (calendario.scrollHeight <= calendario.clientHeight + 5) {
+      calendario.classList.add('vertical-center');
+    } else {
+      calendario.classList.remove('vertical-center');
+    }
+  }
+  adjustVerticalCentering();
 
   // --- CONTINUAÇÃO ABAIXO ---
   // Dropdown lógica: abrir/fechar ANO, MÊS e DIAS
@@ -457,6 +466,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const mesAtual = today.getMonth() + 1;
   const anoAtual = today.getFullYear();
   const diaAtual = today.getDate();
+  const monthLabel = document.getElementById('currentMonth');
+  if (monthLabel) monthLabel.textContent = monthNames[mesAtual - 1];
 
   // Inicializa: todos fechados
   allAnoDivs.forEach((anoDiv, idx) => {
@@ -482,6 +493,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       drop.style.display = 'block';
       anoDiv.classList.add('open','ano-atual');
       anoDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
+      adjustVerticalCentering();
     };
   });
 
@@ -547,6 +559,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
         }
       }
+      adjustVerticalCentering();
     };
   });
 
@@ -584,6 +597,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         dropRow.style.display = 'table-row';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
         row.classList.add('expanded');
+        adjustVerticalCentering();
       };
     });
   });
