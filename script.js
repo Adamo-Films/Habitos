@@ -282,6 +282,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     centerTodayDropdown();
     adjustVerticalCentering();
+    updateStickyOffsets();
   }
 
   function startApp() {
@@ -452,6 +453,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       calendario.classList.remove('vertical-center');
     }
   }
+  function updateStickyOffsets() {
+    document.querySelectorAll('#calendario .ano, #calendario .mes').forEach(el => {
+      el.style.top = '';
+    });
+    const opened = Array.from(document.querySelectorAll('#calendario .ano.open, #calendario .mes.open'));
+    opened.forEach((el, idx) => {
+      el.style.top = `${35 * (idx + 1)}px`;
+    });
+  }
   adjustVerticalCentering();
 
   // --- CONTINUAÇÃO ABAIXO ---
@@ -489,11 +499,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       allDropdowns.forEach(d => {d.style.display = 'none';});
       allMesDivs.forEach(m => m.classList.remove('open','mes-atual'));
       allRewards.forEach(r => {r.style.display = 'none';});
-      if (wasOpen) return;
+      if (wasOpen) { updateStickyOffsets(); return; }
       drop.style.display = 'block';
       anoDiv.classList.add('open','ano-atual');
       anoDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
       adjustVerticalCentering();
+      updateStickyOffsets();
     };
   });
 
@@ -526,7 +537,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           allRewards[i].style.display = 'none';
         }
       });
-      if (wasOpen) return;
+      if (wasOpen) { updateStickyOffsets(); return; }
       // Ativa clicado
       dropdown.style.display = 'block';
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
@@ -551,15 +562,16 @@ document.addEventListener("DOMContentLoaded", async function () {
           let d = parseInt(dateCell.innerText.split("/")[0]);
           return d === diaAtual;
         });
-        if (idxDia >= 0) {
-          const mainRow = dropdown.querySelectorAll('.main-row')[idxDia];
-          const dropRow = dropdown.querySelectorAll('.dropdown')[idxDia];
-          mainRow.classList.add('expanded');
-          dropRow.style.display = 'table-row';
-          setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
-        }
+      if (idxDia >= 0) {
+        const mainRow = dropdown.querySelectorAll('.main-row')[idxDia];
+        const dropRow = dropdown.querySelectorAll('.dropdown')[idxDia];
+        mainRow.classList.add('expanded');
+        dropRow.style.display = 'table-row';
+        setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
       }
+    }
       adjustVerticalCentering();
+      updateStickyOffsets();
     };
   });
 
