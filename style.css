@@ -143,6 +143,11 @@ html, body {
   left: calc(1170px - 0.33cm);
   top: calc(55px - 2cm + 0.33cm);
 }
+#feitos-counter .counter-label {
+  font-size: 1.18em;
+  max-width: 100%;
+  white-space: normal;
+}
 
 /* ========== TELA PRINCIPAL CRT ========== */
 .arcade-screen-curve {
@@ -178,6 +183,9 @@ html, body {
   user-select: none;
   position: relative;
   opacity: 0;
+}
+#calendario.vertical-center {
+  justify-content: center;
 }
 
 #calendario {
@@ -222,7 +230,12 @@ html, body {
 .ano:hover { color: #51ffe7; text-shadow: 0 0 16px #51ffe788, 0 0 40px #ffe37944; }
 .ano:active { transform: scale(0.97); }
 .ano:not(.open) { opacity: 0.85; }
-.ano .arcade-arrow { position: absolute; left: 0; top: 0; }
+.ano .arcade-arrow {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
 /* === MES === */
 .mes {
@@ -243,7 +256,9 @@ html, body {
 .arcade-arrow {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 .mes .mes-label { z-index: 2; }
 .mes:hover { color: #51ffe7; text-shadow: 0 0 16px #51ffe788, 0 0 40px #ffe37944; }
