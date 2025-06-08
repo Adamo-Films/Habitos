@@ -507,7 +507,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       allDropdowns.forEach(d => {d.style.display = 'none';});
       allMesDivs.forEach(m => {m.classList.remove('open','mes-atual'); m.querySelector('.arcade-arrow').innerHTML='';});
       allRewards.forEach(r => {r.style.display = 'none';});
-      if (wasOpen) { handleStickyTitles(); updateIndicators(); return; }
+      if (wasOpen) {
+        adjustVerticalCentering();
+        handleStickyTitles();
+        updateIndicators();
+        return;
+      }
       drop.style.display = 'block';
       anoDiv.classList.add('open','ano-atual');
       adjustVerticalCentering();
@@ -541,7 +546,12 @@ document.addEventListener("DOMContentLoaded", async function () {
           allRewards[i].style.display = 'none';
         }
       });
-      if (wasOpen) { handleStickyTitles(); updateIndicators(); return; }
+      if (wasOpen) {
+        adjustVerticalCentering();
+        handleStickyTitles();
+        updateIndicators();
+        return;
+      }
       // Ativa clicado
       dropdown.style.display = 'block';
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
@@ -608,7 +618,10 @@ document.addEventListener("DOMContentLoaded", async function () {
           r.classList.remove('expanded');
         });
         handleStickyTitles();
-        if (wasOpen) return;
+        if (wasOpen) {
+          adjustVerticalCentering();
+          return;
+        }
         // Abre clicado
         dropRow.style.display = 'table-row';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
