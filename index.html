@@ -36,7 +36,7 @@
   </video>
 
   <!-- Contadores laterais -->
-  <div class="arcade-counters transparent">
+  <div class="arcade-counters transparent" style="display:none;">
     <div class="counter-box" id="seguidos-counter">
       <span class="counter-label">Dias<br>Seguidos</span>
       <span class="counter-value" id="seqCount">0</span>
@@ -51,7 +51,11 @@
   <div class="arcade-screen-curve">
     <div class="crt-glass-overlay"></div>
     <div class="crt-noise"></div>
-    <div id="calendario" class="calendario-container" tabindex="-1"></div>
+    <div id="start-screen" style="display:none;">
+      <div class="start-title">Pronto para tomar o controle da sua vida?</div>
+      <div class="press-start">Press Start</div>
+    </div>
+    <div id="calendario" class="calendario-container" tabindex="-1" style="display:none;"></div>
   </div>
 
   <!-- Confetti e celebração -->

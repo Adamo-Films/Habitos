@@ -31,6 +31,55 @@ html, body {
   pointer-events: none;
 }
 
+/* ========== START SCREEN ========== */
+#start-screen {
+  position: absolute;
+  inset: 0;
+  background: var(--crt-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  text-align: center;
+}
+
+#start-screen .start-title {
+  color: var(--highlight);
+  text-shadow: 0 0 20px var(--neon), 0 0 40px #cf28ff;
+  font-size: 1.1em;
+  margin: 0 20px 40px 20px;
+}
+
+#start-screen .press-start {
+  font-size: 2.4em;
+  color: var(--highlight);
+  text-shadow: 0 0 20px var(--neon), 0 0 40px #cf28ff;
+  animation: press-blink 1s steps(2, start) infinite;
+}
+
+#start-screen.hidden {
+  animation: startFade 0.6s forwards;
+  pointer-events: none;
+}
+
+@keyframes press-blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+@keyframes startFade {
+  to { opacity: 0; visibility: hidden; }
+}
+
+.arcade-reveal {
+  animation: arcade-reveal 0.45s cubic-bezier(.7,0,.5,1.2) backwards;
+}
+@keyframes arcade-reveal {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
 /* ========== BANNER ========== */
 .banner-gamer {
   position: absolute; left: 50%; top: -2px; width: 98vw; max-width: 770px; min-width: 160px;

@@ -205,13 +205,38 @@ async function saveProgress(progress) {
 // === INÍCIO DO DOMContentLoaded ===
 document.addEventListener("DOMContentLoaded", async function () {
   const bgVideo = document.querySelector('.arcade-bg');
+  const startScreen = document.getElementById('start-screen');
+  const calendarioEl = document.getElementById('calendario');
+  const countersEl = document.querySelector('.arcade-counters');
+
   if (bgVideo) {
     bgVideo.addEventListener('ended', function () {
       this.currentTime = 0;
       this.play();
     });
     bgVideo.play().catch(() => {});
+    bgVideo.addEventListener('playing', () => {
+      startScreen.style.display = 'flex';
+    }, { once: true });
+  } else {
+    startScreen.style.display = 'flex';
   }
+
+  function startApp() {
+    if (startScreen.classList.contains('hidden')) return;
+    startScreen.classList.add('hidden');
+    calendarioEl.style.display = '';
+    countersEl.style.display = '';
+    calendarioEl.classList.add('arcade-reveal');
+    setTimeout(() => {
+      openCurrentMonthAndDay();
+      centerTodayDropdown();
+    }, 50);
+  }
+  startScreen.addEventListener('click', startApp, { once: true });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' ') startApp();
+  }, { once: true });
 
   const progress = await getProgress();
   const dados = [];
@@ -357,7 +382,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const anoAtual = today.getFullYear();
   const diaAtual = today.getDate();
 
-  // Inicializa: todos fechados exceto mês/dia atual
+  // Inicializa: todos fechados, apenas marca mês/dia atual
   allMesDivs.forEach((mesDiv, idx) => {
     const mesNum = parseInt(mesDiv.getAttribute("data-mes"));
     const anoNum = parseInt(mesDiv.getAttribute("data-ano"));
@@ -365,20 +390,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Indicador de mês atual
     mesDiv.querySelector(".arcade-arrow").innerHTML = (mesNum === mesAtual && anoNum === anoAtual) ?
       `<span class="neon-arrow"></span>` : '';
-    // Só abre o mês atual
-    if (mesNum === mesAtual && anoNum === anoAtual) {
-      dropdown.style.display = 'block';
-      mesDiv.classList.add('open');
-      mesDiv.classList.add('mes-atual');
-      if (allRewards[idx]) {
-        allRewards[idx].style.display = '';
-      }
-    } else {
-      dropdown.style.display = 'none';
-      mesDiv.classList.remove('open');
-      if (allRewards[idx]) {
-        allRewards[idx].style.display = 'none';
-      }
+    dropdown.style.display = 'none';
+    mesDiv.classList.remove('open');
+    if (allRewards[idx]) {
+      allRewards[idx].style.display = 'none';
     }
 
     // Evento de abrir/fechar mês (com animação)
@@ -432,7 +447,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
   });
 
-  // Dropdowns de dias: todos fechados exceto dia atual no mês atual
+  // Dropdowns de dias: todos fechados, apenas marca dia atual
   document.querySelectorAll('#calendario .mes-dropdown').forEach((dropdown, dIdx) => {
     const rows = dropdown.querySelectorAll('tr.main-row');
     const mesNum = parseInt(allMesDivs[dIdx].getAttribute("data-mes"));
@@ -445,15 +460,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
         row.classList.add('current-day');
       }
-      if (mesNum === mesAtual && anoNum === anoAtual && d === diaAtual) {
-        dropRow.style.display = 'table-row';
-        setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
-        row.classList.add('expanded');
-      } else {
-        dropRow.style.display = 'none';
-        dropRow.classList.remove('arcade-drop-show');
-        row.classList.remove('expanded');
-      }
+      dropRow.style.display = 'none';
+      dropRow.classList.remove('arcade-drop-show');
+      row.classList.remove('expanded');
 
       // Evento de abrir/fechar dia
       row.onclick = (e) => {
@@ -657,7 +666,37 @@ document.addEventListener("DOMContentLoaded", async function () {
       }, 350);
     }
   }
-  centerTodayDropdown();
+
+  function openCurrentMonthAndDay() {
+    const idx = Array.from(allMesDivs).findIndex(div => {
+      const m = parseInt(div.getAttribute('data-mes'));
+      const a = parseInt(div.getAttribute('data-ano'));
+      return m === mesAtual && a === anoAtual;
+    });
+    if (idx >= 0) {
+      const mesDiv = allMesDivs[idx];
+      const dropdown = allDropdowns[idx];
+      dropdown.style.display = 'block';
+      setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
+      mesDiv.classList.add('open', 'mes-atual');
+      mesDiv.querySelector('.arcade-arrow').innerHTML = `<span class="neon-arrow"></span>`;
+      if (allRewards[idx]) allRewards[idx].style.display = '';
+
+      let idxDia = Array.from(dropdown.querySelectorAll('.main-row')).findIndex(row => {
+        const cell = row.querySelector('td');
+        const d = cell ? parseInt(cell.innerText.split('/')[0]) : 0;
+        return d === diaAtual;
+      });
+      if (idxDia >= 0) {
+        const mainRow = dropdown.querySelectorAll('.main-row')[idxDia];
+        const dropRow = dropdown.querySelectorAll('.dropdown')[idxDia];
+        dropRow.style.display = 'table-row';
+        setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
+        mainRow.classList.add('expanded');
+      }
+    }
+  }
+
 
   // Responsividade confetti
   window.addEventListener('resize', function () {
