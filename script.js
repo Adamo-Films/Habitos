@@ -265,9 +265,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function startApp() {
     startScreen.classList.add('hidden');
-    if (calendarioEl) calendarioEl.style.display = '';
-    if (countersEl) countersEl.style.display = '';
-    openCurrentMonthDay();
+    setTimeout(() => {
+      if (calendarioEl) calendarioEl.style.display = '';
+      if (countersEl) countersEl.style.display = '';
+      openCurrentMonthDay();
+    }, 1000);
   }
   startScreen.addEventListener('click', startApp, { once: true });
   document.addEventListener('keydown', function(e) {
