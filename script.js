@@ -266,8 +266,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   function startApp() {
     startScreen.classList.add('hidden');
     setTimeout(() => {
-      if (calendarioEl) calendarioEl.style.display = '';
-      if (countersEl) countersEl.style.display = '';
+      if (calendarioEl) {
+        calendarioEl.style.display = '';
+        calendarioEl.classList.add('show-rgb');
+      }
+      if (countersEl) {
+        countersEl.style.display = '';
+        countersEl.classList.add('show-stroke');
+      }
       openCurrentMonthDay();
     }, 800);
   }
@@ -565,7 +571,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // Prêmios
-  function updateRewardProgress(month, year, totalDias, diasCompletos) {
+  function updateRewardProgress(month, year, totalDias, diasCompletos, skipCelebrate = false) {
     const pct = diasCompletos / totalDias;
     const bar = document.getElementById(`reward-bar-${month}-${year}`);
     const unlocked = document.getElementById(`reward-unlocked-${month}-${year}`);
@@ -575,7 +581,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const already = localStorage.getItem(celebrateKey) === 'true';
       if (pct === 1) {
         unlocked.style.display = "block";
-        if (!already) {
+        if (!already && !skipCelebrate) {
           launchRewardConfetti();
           localStorage.setItem(celebrateKey, 'true');
         }
@@ -598,7 +604,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     return complete;
   }
 
-  function updateAllRewardProgress() {
+  function updateAllRewardProgress(skipCelebrate = false) {
     Object.entries(grupos).forEach(([id, dias]) => {
       const [mes, ano] = id.split("-");
       const reward = getRewardFor(Number(mes), Number(ano));
@@ -609,7 +615,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const allDone = checkAllHabitsComplete(dia.id, habitCount - 1);
         if (allDone) diasCompletos++;
       });
-      updateRewardProgress(mes, ano, dias.length, diasCompletos);
+      updateRewardProgress(mes, ano, dias.length, diasCompletos, skipCelebrate);
     });
   }
 
@@ -654,7 +660,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const dayId = parts[0];
         const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
         updateProgressBar(dayId, habitCount);
-        updateAllRewardProgress();
+        updateAllRewardProgress(false);
         countStats();
       }
     });
@@ -690,7 +696,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (dayRow) dayRow.classList.add('day-complete');
     }
   });
-  updateAllRewardProgress();
+  updateAllRewardProgress(true);
   countStats();
 
   // Centraliza visualmente o dropdown do dia atual na tela

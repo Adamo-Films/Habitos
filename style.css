@@ -97,6 +97,7 @@ html, body {
   pointer-events: none;
   background: none !important;
   transform: none;
+  opacity: 0;
 }
 .counter-label, .counter-value {
   text-align: center; width: 100%; pointer-events: none;
@@ -176,6 +177,7 @@ html, body {
   cursor: default;
   user-select: none;
   position: relative;
+  opacity: 0;
 }
 
 #calendario {
@@ -568,4 +570,43 @@ tr.dropdown[style*="display: none;"] {
 
 .shake-dance {
   animation: danceShake 0.4s linear infinite;
+}
+
+/* === Apresentação com RGB Split === */
+#calendario.show-rgb {
+  animation: rgbSplitIn 0.6s forwards;
+}
+
+@keyframes rgbSplitIn {
+  0% {
+    opacity: 0;
+    filter: drop-shadow(-8px 0 red) drop-shadow(8px 0 cyan);
+    transform: scale(0.95);
+  }
+  50% {
+    filter: drop-shadow(4px 0 red) drop-shadow(-4px 0 cyan);
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+/* === Aparição dos contadores === */
+.arcade-counters.show-stroke {
+  animation: lightStroke 0.7s forwards;
+}
+
+@keyframes lightStroke {
+  0% {
+    opacity: 0;
+    text-shadow: none;
+    filter: drop-shadow(0 0 20px #fff);
+  }
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 20px #51ffe7, 0 0 40px #cf28ff;
+    filter: none;
+  }
 }
