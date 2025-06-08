@@ -93,13 +93,13 @@ html, body {
 }
 
 #seguidos-counter {
-  left: calc(420px);
-  top: calc(55px - 2cm);
+  left: calc(420px - 0.33cm);
+  top: calc(55px - 2cm + 0.33cm);
 }
 
 #feitos-counter {
-  left: calc(1170px);
-  top: calc(55px - 2cm);
+  left: calc(1170px - 0.33cm);
+  top: calc(55px - 2cm + 0.33cm);
 }
 
 /* ========== TELA PRINCIPAL CRT ========== */
