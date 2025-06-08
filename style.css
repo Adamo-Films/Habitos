@@ -223,7 +223,7 @@ html, body {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 0 0 0 55px;
+  padding: 0;
   text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
   width: fit-content;
@@ -233,7 +233,7 @@ html, body {
 .ano:not(.open) { opacity: 0.85; }
 .ano .arcade-arrow {
   position: absolute;
-  left: -7px;
+  left: -62px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -256,12 +256,12 @@ html, body {
   z-index: 10;
   text-shadow: 0 0 24px #ffe379b6, 0 0 36px #31fcff99, 0 0 45px #31fcff77;
   transition: color 0.17s cubic-bezier(.47,1.64,.41,.88);
-  padding: 0 0 0 55px;
+  padding: 0;
   width: fit-content;
 }
 .arcade-arrow {
   position: absolute;
-  left: -7px;
+  left: -62px;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
