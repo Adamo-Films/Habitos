@@ -466,3 +466,29 @@ tr.dropdown[style*="display: none;"] {
   .counter-value { font-size: 1.09em; }
   .mes { font-size: 1.1em;}
 }
+
+/* ====== Confetti Celebration ====== */
+#confetti-canvas, #reward-confetti {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  pointer-events: none;
+  display: none;
+}
+
+#celebrate-text {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 3.5em;
+  color: #ffe379;
+  text-shadow: 0 0 20px #51ffe7, 0 0 40px #cf28ff;
+  z-index: 2001;
+  display: none;
+  pointer-events: none;
+}
