@@ -209,7 +209,11 @@ async function saveProgress(progress) {
 // Aplica Twemoji para converter emojis em imagens pixeladas
 function applyTwemoji(target = document.body) {
   if (window.twemoji) {
-    twemoji.parse(target, { folder: '72x72', ext: '.png', className: 'emoji' });
+    twemoji.parse(target, {
+      folder: '72x72',
+      ext: '.png',
+      className: 'emoji'
+    });
   }
 }
 
