@@ -467,11 +467,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     cal.style.setProperty('--top-fade-size', '35px');
 
     const stickyOffset = 40;
+    const spacing = 22; // distância entre o título e o primeiro item
+    const stickyPoint = cal.scrollTop + stickyOffset;
 
     const openDay = document.querySelector('#calendario tr.main-row.expanded');
     if (openDay) {
       const drop = openDay.nextElementSibling;
-      if (drop && drop.scrollHeight > cal.clientHeight - openDay.offsetHeight - stickyOffset) {
+      const dropBottom = drop.offsetTop + drop.scrollHeight;
+      if (drop && drop.scrollHeight > cal.clientHeight - openDay.offsetHeight - stickyOffset &&
+          stickyPoint >= openDay.offsetTop && stickyPoint < dropBottom) {
         openDay.classList.add('sticky-title');
         const clone = openDay.cloneNode(true);
         clone.removeAttribute('id');
@@ -483,7 +487,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         table.appendChild(tbody);
         overlay.appendChild(table);
         overlay.style.display = 'block';
-        drop.style.marginTop = '16px';
+        drop.style.marginTop = spacing + 'px';
         const start = stickyOffset + openDay.offsetHeight;
         cal.style.setProperty('--top-mask-start', start + 'px');
         cal.style.setProperty('--top-fade-size', '1cm');
@@ -494,14 +498,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     const openMonth = document.querySelector('#calendario .mes.open');
     if (openMonth) {
       const drop = openMonth.nextElementSibling;
-      if (drop && drop.scrollHeight > cal.clientHeight - openMonth.offsetHeight - stickyOffset) {
+      const dropBottom = drop.offsetTop + drop.scrollHeight;
+      if (drop && drop.scrollHeight > cal.clientHeight - openMonth.offsetHeight - stickyOffset &&
+          stickyPoint >= openMonth.offsetTop && stickyPoint < dropBottom) {
         openMonth.classList.add('sticky-title');
         const clone = openMonth.cloneNode(true);
         clone.removeAttribute('id');
         clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
-        drop.style.marginTop = '16px';
+        drop.style.marginTop = spacing + 'px';
         const start = stickyOffset + openMonth.offsetHeight;
         cal.style.setProperty('--top-mask-start', start + 'px');
         cal.style.setProperty('--top-fade-size', '1cm');
@@ -512,14 +518,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     const openYear = document.querySelector('#calendario .ano.open');
     if (openYear) {
       const drop = openYear.nextElementSibling;
-      if (drop && drop.scrollHeight > cal.clientHeight - openYear.offsetHeight - stickyOffset) {
+      const dropBottom = drop.offsetTop + drop.scrollHeight;
+      if (drop && drop.scrollHeight > cal.clientHeight - openYear.offsetHeight - stickyOffset &&
+          stickyPoint >= openYear.offsetTop && stickyPoint < dropBottom) {
         openYear.classList.add('sticky-title');
         const clone = openYear.cloneNode(true);
         clone.removeAttribute('id');
         clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
-        drop.style.marginTop = '16px';
+        drop.style.marginTop = spacing + 'px';
         const start = stickyOffset + openYear.offsetHeight;
         cal.style.setProperty('--top-mask-start', start + 'px');
         cal.style.setProperty('--top-fade-size', '1cm');
@@ -547,6 +555,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
   adjustVerticalCentering();
+
+  if (calendarioEl) {
+    calendarioEl.addEventListener('scroll', handleStickyTitles);
+  }
 
   // --- CONTINUAÇÃO ABAIXO ---
   // Dropdown lógica: abrir/fechar ANO, MÊS e DIAS
