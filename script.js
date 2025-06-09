@@ -463,6 +463,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     overlay.innerHTML = '';
     overlay.style.display = 'none';
+    overlay.style.pointerEvents = 'none';
     cal.style.setProperty('--top-mask-start', '0px');
     cal.style.setProperty('--top-fade-size', '35px');
 
@@ -475,7 +476,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const drop = openDay.nextElementSibling;
       const dropBottom = drop.offsetTop + drop.scrollHeight;
       if (drop && drop.scrollHeight > cal.clientHeight - openDay.offsetHeight - stickyOffset &&
-          stickyPoint >= openDay.offsetTop && stickyPoint < dropBottom) {
+          stickyPoint >= openDay.offsetTop && stickyPoint < dropBottom - spacing) {
         openDay.classList.add('sticky-title');
         const clone = openDay.cloneNode(true);
         clone.removeAttribute('id');
@@ -487,7 +488,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         table.appendChild(tbody);
         overlay.appendChild(table);
         overlay.style.display = 'block';
-        drop.style.marginTop = spacing + 'px';
+        overlay.style.pointerEvents = 'auto';
+        table.addEventListener('click', () => openDay.click());
+        drop.style.marginTop = (openDay.offsetHeight + spacing) + 'px';
         const start = stickyOffset + openDay.offsetHeight;
         cal.style.setProperty('--top-mask-start', start + 'px');
         cal.style.setProperty('--top-fade-size', '1cm');
@@ -500,14 +503,16 @@ document.addEventListener("DOMContentLoaded", async function () {
       const drop = openMonth.nextElementSibling;
       const dropBottom = drop.offsetTop + drop.scrollHeight;
       if (drop && drop.scrollHeight > cal.clientHeight - openMonth.offsetHeight - stickyOffset &&
-          stickyPoint >= openMonth.offsetTop && stickyPoint < dropBottom) {
+          stickyPoint >= openMonth.offsetTop && stickyPoint < dropBottom - spacing) {
         openMonth.classList.add('sticky-title');
         const clone = openMonth.cloneNode(true);
         clone.removeAttribute('id');
         clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
-        drop.style.marginTop = spacing + 'px';
+        overlay.style.pointerEvents = 'auto';
+        clone.addEventListener('click', () => openMonth.click());
+        drop.style.marginTop = (openMonth.offsetHeight + spacing) + 'px';
         const start = stickyOffset + openMonth.offsetHeight;
         cal.style.setProperty('--top-mask-start', start + 'px');
         cal.style.setProperty('--top-fade-size', '1cm');
@@ -520,14 +525,16 @@ document.addEventListener("DOMContentLoaded", async function () {
       const drop = openYear.nextElementSibling;
       const dropBottom = drop.offsetTop + drop.scrollHeight;
       if (drop && drop.scrollHeight > cal.clientHeight - openYear.offsetHeight - stickyOffset &&
-          stickyPoint >= openYear.offsetTop && stickyPoint < dropBottom) {
+          stickyPoint >= openYear.offsetTop && stickyPoint < dropBottom - spacing) {
         openYear.classList.add('sticky-title');
         const clone = openYear.cloneNode(true);
         clone.removeAttribute('id');
         clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
-        drop.style.marginTop = spacing + 'px';
+        overlay.style.pointerEvents = 'auto';
+        clone.addEventListener('click', () => openYear.click());
+        drop.style.marginTop = (openYear.offsetHeight + spacing) + 'px';
         const start = stickyOffset + openYear.offsetHeight;
         cal.style.setProperty('--top-mask-start', start + 'px');
         cal.style.setProperty('--top-fade-size', '1cm');
