@@ -206,6 +206,13 @@ async function saveProgress(progress) {
   localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
 }
 
+// Aplica Twemoji para converter emojis em imagens pixeladas
+function applyTwemoji(target = document.body) {
+  if (window.twemoji) {
+    twemoji.parse(target, { folder: '72x72', ext: '.png' });
+  }
+}
+
 // === INÍCIO DO DOMContentLoaded ===
 document.addEventListener("DOMContentLoaded", async function () {
   const bgVideo = document.querySelector('.arcade-bg');
@@ -438,9 +445,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     html += `</div>`; // fecha o ano-dropdown
   });
   calendario.innerHTML = html;
-  if (window.twemoji) {
-    twemoji.parse(calendario, {folder: '72x72', ext: '.png'});
-  }
+  applyTwemoji(calendario);
   calendario.classList.add('loaded');
   // sticky titles disabled
   function adjustVerticalCentering() {
@@ -833,4 +838,5 @@ document.addEventListener("DOMContentLoaded", async function () {
       canvas.height = window.innerHeight;
     }
   });
+  applyTwemoji();
 }); // Fecha DOMContentLoaded
