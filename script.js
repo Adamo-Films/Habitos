@@ -488,7 +488,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         table.appendChild(tbody);
         overlay.appendChild(table);
         overlay.style.display = 'block';
-        overlay.style.pointerEvents = 'auto';
+        overlay.style.pointerEvents = 'none';
         table.addEventListener('click', () => openDay.click());
         drop.style.marginTop = (openDay.offsetHeight + spacing) + 'px';
         const start = stickyOffset + openDay.offsetHeight;
@@ -510,7 +510,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
-        overlay.style.pointerEvents = 'auto';
+        overlay.style.pointerEvents = 'none';
         clone.addEventListener('click', () => openMonth.click());
         drop.style.marginTop = (openMonth.offsetHeight + spacing) + 'px';
         const start = stickyOffset + openMonth.offsetHeight;
@@ -532,7 +532,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
-        overlay.style.pointerEvents = 'auto';
+        overlay.style.pointerEvents = 'none';
         clone.addEventListener('click', () => openYear.click());
         drop.style.marginTop = (openYear.offsetHeight + spacing) + 'px';
         const start = stickyOffset + openYear.offsetHeight;
