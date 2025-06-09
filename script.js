@@ -475,6 +475,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         openDay.classList.add('sticky-title');
         const clone = openDay.cloneNode(true);
         clone.removeAttribute('id');
+        clone.classList.remove('sticky-title');
         clone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
         const table = document.createElement('table');
         const tbody = document.createElement('tbody');
@@ -497,6 +498,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         openMonth.classList.add('sticky-title');
         const clone = openMonth.cloneNode(true);
         clone.removeAttribute('id');
+        clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
         drop.style.marginTop = '16px';
@@ -514,6 +516,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         openYear.classList.add('sticky-title');
         const clone = openYear.cloneNode(true);
         clone.removeAttribute('id');
+        clone.classList.remove('sticky-title');
         overlay.appendChild(clone);
         overlay.style.display = 'block';
         drop.style.marginTop = '16px';
