@@ -164,7 +164,7 @@ html, body {
 /* ========== TELA PRINCIPAL CRT ========== */
 .arcade-screen-curve {
   position: absolute; left: 50%; top: 54%;
-  width: 90vw; height: 70vh; max-width: 870px; max-height: 490px; min-width: 240px; min-height: 120px;
+  width: 90%; height: 70%; max-width: 870px; max-height: 490px; min-width: 240px; min-height: 120px;
   transform: translate(-50%, -50%); z-index: 10;
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
