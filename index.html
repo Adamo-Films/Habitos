@@ -30,10 +30,24 @@
     </filter>
   </svg>
 
-  <!-- Fundo arcade -->
-  <video class="arcade-bg" autoplay loop muted playsinline>
-    <source src="Fundo site.mp4" type="video/mp4" />
-  </video>
+  <!-- Fundo arcade e contadores em um wrapper -->
+  <div id="video-wrapper">
+    <video class="arcade-bg" autoplay loop muted playsinline>
+      <source src="Fundo site.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Contadores laterais -->
+    <div class="arcade-counters transparent" style="display:none;">
+      <div class="counter-box" id="seguidos-counter">
+        <span class="counter-label">Dias<br>Seguidos</span>
+        <span class="counter-value" id="seqCount">0</span>
+      </div>
+      <div class="counter-box" id="feitos-counter">
+        <span class="counter-label">Prêmio<br><span id="currentMonth"></span></span>
+        <span class="counter-value" id="rewardText"></span>
+      </div>
+    </div>
+  </div>
 
   <!-- Tela principal CRT -->
   <div class="arcade-screen-curve">
@@ -47,17 +61,7 @@
     <div id="calendario" class="calendario-container" tabindex="-1" style="display:none;"></div>
   </div>
 
-  <!-- Contadores laterais -->
-  <div class="arcade-counters transparent" style="display:none;">
-    <div class="counter-box" id="seguidos-counter">
-      <span class="counter-label">Dias<br>Seguidos</span>
-      <span class="counter-value" id="seqCount">0</span>
-    </div>
-    <div class="counter-box" id="feitos-counter">
-      <span class="counter-label">Prêmio<br><span id="currentMonth"></span></span>
-      <span class="counter-value" id="rewardText"></span>
-    </div>
-  </div>
+
 
   <!-- Confetti e celebração -->
   <canvas id="confetti-canvas"></canvas>
