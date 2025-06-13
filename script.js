@@ -249,6 +249,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const startScreen = document.getElementById('start-screen');
   const calendarioEl = document.getElementById('calendario');
   const countersEl = document.querySelector('.arcade-counters');
+  const lifeContainer = document.getElementById('life-container');
   const videoWrapper = document.getElementById('video-wrapper');
 
   function resizeWrapper() {
@@ -335,6 +336,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (countersEl) {
         countersEl.style.display = '';
         countersEl.classList.add('show-stroke');
+      }
+      if (lifeContainer) {
+        lifeContainer.style.display = '';
+        lifeContainer.classList.add('show');
+        updateLivesDisplay();
       }
       openCurrentMonthDay();
     }, 800);
@@ -802,6 +808,30 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (reward) {
       document.getElementById('rewardText').textContent = reward.label;
     }
+    updateLivesDisplay();
+  }
+
+  function updateLivesDisplay() {
+    if (!lifeContainer) return;
+    const hearts = lifeContainer.querySelectorAll('.life-heart');
+    const today = new Date();
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+    let lost = 0;
+    for (const dia of dados) {
+      const rowDate = new Date(dia.ano, dia.mes - 1, dia.diaDoMes);
+      if (rowDate < startOfMonth) continue;
+      if (rowDate > yesterday) break;
+      const row = document.getElementById(`mainrow-${dia.id}`);
+      if (!row || !row.classList.contains('day-complete')) {
+        lost++;
+        if (lost >= 3) break;
+      }
+    }
+    const remaining = Math.max(0, 3 - lost);
+    hearts.forEach((h, idx) => {
+      h.style.visibility = idx < remaining ? 'visible' : 'hidden';
+    });
   }
 
   // Checkbox lógica

@@ -324,6 +324,28 @@ tr.main-row.sticky-title {
   pointer-events: none;
 }
 
+/* === LIFE HEARTS === */
+#life-container {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  font-size: 2em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 26;
+}
+#life-container.show {
+  opacity: 1;
+}
+
+.life-heart {
+  filter: drop-shadow(0 0 8px #ff6be7aa);
+}
+
 /* === MES === */
 .mes {
   font-family: 'Press Start 2P', monospace;
