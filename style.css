@@ -199,7 +199,7 @@ html, body {
   border-radius: 80px 70px 80px 80px/90px 100px 85px 78px;
   background: none !important;
   display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
-  padding: 0; pointer-events: auto; overflow: hidden;
+  padding: 0; pointer-events: auto; overflow: visible;
   box-shadow: none !important;
 }
 
@@ -327,7 +327,7 @@ tr.main-row.sticky-title {
 /* === LIFE HEARTS === */
 #life-container {
   position: absolute;
-  top: 8px;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -344,6 +344,12 @@ tr.main-row.sticky-title {
 
 .life-heart {
   filter: drop-shadow(0 0 8px #ff6be7aa);
+  animation: heart-glow 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes heart-glow {
+  0% { filter: drop-shadow(0 0 6px #ff6be7aa) drop-shadow(0 0 10px #51ffe788); }
+  100% { filter: drop-shadow(0 0 12px #ff6be7) drop-shadow(0 0 20px #51ffe7); }
 }
 
 /* === MES === */
