@@ -167,19 +167,19 @@ html, body {
   max-width: 100%;
   white-space: normal;
 
-  margin-bottom: 6px;
+  margin-bottom: 10px; /* more space for progress bar */
 }
 #feitos-counter .counter-value {
   font-size: 1.18em;
 }
 
 #feitos-counter .counter-progress-bg {
-  width: calc(100% - 1cm);
+  width: calc((100% - 1cm) * 0.67); /* shrink horizontally */
   height: 12px;
   background: rgba(0, 0, 0, 0.05);
   border-radius: 6px;
   overflow: hidden;
-  margin: 4px 0 6px 0;
+  margin: 4px auto 12px; /* centered and more space */
   box-shadow: 0 0 12px #51ffe799, 0 0 5px #cf28ff33;
 }
 #feitos-counter .counter-progress {
