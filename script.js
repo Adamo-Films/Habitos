@@ -36,10 +36,28 @@ function getRewardFor(month, year, day = null) {
   return rewards.find(r => r.month === month && r.year === year && !r.day);
 }
 
-const habitEmojis = [
-  "💧", "🥗", "🎮🚫", "💬", "📅", "📚", "⏰", "🧘",
-  "🔥", "🏃", "🌅", "🚫", "🏋️", "🇮🇹", "🎯", "💪",
-];
+const habitEmojiMap = {
+  "Beber 2L de água": "💧",
+  "Dieta com alimentos integrais": "🥗",
+  "Eliminar jogos": "🎮🚫",
+  "Afirmações": "💬",
+  "Planejar dia": "📅",
+  "Leitura (30 min)": "📚",
+  "Acordar às 6h": "⏰",
+  "Meditação (10 min)": "🧘",
+  "1700 calorias": "🔥",
+  "Exercício (30 min)": "🏃",
+  "Acordar às 5h": "🌅",
+  "Eliminar vícios": "🚫",
+  "Exercício (60 min)": "🏋️",
+  "Praticar italiano": "🇮🇹",
+  "90 min de hiperfoco": "🎯",
+  "Exercício (90 min)": "💪",
+};
+
+function getHabitEmoji(habit) {
+  return habitEmojiMap[habit] || "❓";
+}
 
 function getCiclicoEmoji(habito) {
   if (habito.includes("Banho gelado")) return "🚿";
@@ -245,6 +263,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   window.addEventListener('resize', resizeWrapper);
   resizeWrapper();
+  if (videoWrapper) videoWrapper.classList.add('visible');
   function openCurrentMonthDay() {
     const today = new Date();
     const mesAtual = today.getMonth() + 1;
@@ -430,7 +449,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             <div class="habit-list">
               ${dia.habitos.map((h, idx) => `
                 <div class="habit-item arcade-clicavel" id="habititem-${dia.id}-habit-${idx}">
-                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${habitEmojis[idx % habitEmojis.length]}</span>
+                  <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-habit-${idx}">${getHabitEmoji(h)}</span>
                   <label class="habit-label" for="${dia.id}-habit-${idx}" id="label-${dia.id}-habit-${idx}">${h}</label>
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
                 </div>
