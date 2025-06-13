@@ -237,8 +237,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const baseW = 1920;
     const baseH = 1080;
     const scale = Math.max(window.innerWidth / baseW, window.innerHeight / baseH);
-    const left = (window.innerWidth - baseW * scale) / 2;
-    const top = (window.innerHeight - baseH * scale) / 2;
+    const left = Math.round((window.innerWidth - baseW * scale) / 2);
+    const top = Math.round((window.innerHeight - baseH * scale) / 2);
     if (videoWrapper) {
       videoWrapper.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
     }
@@ -757,21 +757,24 @@ document.addEventListener("DOMContentLoaded", async function () {
     const checkboxes = document.querySelectorAll('.habit-checkbox');
     let done = 0;
     let maxSeq = 0, currentSeq = 0;
-    let lastDone = false;
-    // Para cada dia, verifica se todos hábitos estão completos para sequência
-    const dias = Array.from(document.querySelectorAll('tr.main-row'));
-    dias.forEach((row) => {
-      if (row.classList.contains('day-complete')) {
+    const today = new Date();
+    for (const dia of dados) {
+      const rowDate = new Date(dia.ano, dia.mes - 1, dia.diaDoMes);
+      if (rowDate > today) break;
+      const row = document.getElementById(`mainrow-${dia.id}`);
+      if (row && row.classList.contains('day-complete')) {
         currentSeq++;
         if (currentSeq > maxSeq) maxSeq = currentSeq;
-        lastDone = true;
       } else {
         currentSeq = 0;
-        lastDone = false;
       }
-    });
+    }
+    const currentStreak = currentSeq;
     checkboxes.forEach(cb => { if (cb.checked) done++; });
-    document.getElementById('seqCount').textContent = maxSeq;
+    const seqEl = document.getElementById('seqCount');
+    const recEl = document.getElementById('recordCount');
+    if (seqEl) seqEl.textContent = currentStreak;
+    if (recEl) recEl.textContent = maxSeq;
     const reward = getRewardFor(mesAtual, anoAtual);
     if (reward) {
       document.getElementById('rewardText').textContent = reward.label;
@@ -834,6 +837,23 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   updateAllRewardProgress(true);
   countStats();
+
+  const segCounter = document.getElementById('seguidos-counter');
+  const recordCounter = document.getElementById('record-counter');
+  if (segCounter && recordCounter) {
+    recordCounter.style.display = 'none';
+    let showRecord = false;
+    setInterval(() => {
+      showRecord = !showRecord;
+      if (showRecord) {
+        segCounter.style.display = 'none';
+        recordCounter.style.display = 'flex';
+      } else {
+        segCounter.style.display = 'flex';
+        recordCounter.style.display = 'none';
+      }
+    }, 6000);
+  }
 
   // Centraliza visualmente o dropdown do dia atual na tela
   function centerTodayDropdown() {
