@@ -22,13 +22,11 @@ html, body {
 }
 #video-wrapper {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
   z-index: 0;
-  transform-origin: top left;
 }
 .arcade-bg {
   position: absolute;
