@@ -758,14 +758,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     let done = 0;
     let maxSeq = 0, currentSeq = 0;
     const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     for (const dia of dados) {
       const rowDate = new Date(dia.ano, dia.mes - 1, dia.diaDoMes);
-      if (rowDate > today) break;
+      if (rowDate > startOfToday) break;
       const row = document.getElementById(`mainrow-${dia.id}`);
       if (row && row.classList.contains('day-complete')) {
         currentSeq++;
         if (currentSeq > maxSeq) maxSeq = currentSeq;
       } else {
+        if (rowDate.getTime() === startOfToday.getTime()) break;
         currentSeq = 0;
       }
     }
