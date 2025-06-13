@@ -231,6 +231,20 @@ document.addEventListener("DOMContentLoaded", async function () {
   const startScreen = document.getElementById('start-screen');
   const calendarioEl = document.getElementById('calendario');
   const countersEl = document.querySelector('.arcade-counters');
+  const videoWrapper = document.getElementById('video-wrapper');
+
+  function resizeWrapper() {
+    const baseW = 1920;
+    const baseH = 1080;
+    const scale = Math.max(window.innerWidth / baseW, window.innerHeight / baseH);
+    const left = Math.round((window.innerWidth - baseW * scale) / 2);
+    const top = Math.round((window.innerHeight - baseH * scale) / 2);
+    if (videoWrapper) {
+      videoWrapper.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+    }
+  }
+  window.addEventListener('resize', resizeWrapper);
+  resizeWrapper();
   function openCurrentMonthDay() {
     const today = new Date();
     const mesAtual = today.getMonth() + 1;
