@@ -166,9 +166,29 @@ html, body {
   font-size: 1.18em;
   max-width: 100%;
   white-space: normal;
+
+  margin-bottom: 6px;
 }
 #feitos-counter .counter-value {
   font-size: 1.18em;
+}
+
+#feitos-counter .counter-progress-bg {
+  width: calc(100% - 1cm);
+  height: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 4px 0 6px 0;
+  box-shadow: 0 0 12px #51ffe799, 0 0 5px #cf28ff33;
+}
+#feitos-counter .counter-progress {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #cf28ff 10%, #51ffe7 90%);
+  border-radius: inherit;
+  transition: width 0.45s cubic-bezier(.6,1.2,.16,1.08);
+  box-shadow: 0 0 10px #cf28ff88, 0 0 5px #51ffe799;
 }
 
 /* ========== TELA PRINCIPAL CRT ========== */

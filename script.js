@@ -726,9 +726,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   function updateRewardProgress(month, year, totalDias, diasCompletos, skipCelebrate = false) {
     const pct = diasCompletos / totalDias;
     const bar = document.getElementById(`reward-bar-${month}-${year}`);
+    const counterBar = document.getElementById("current-reward-bar");
     const unlocked = document.getElementById(`reward-unlocked-${month}-${year}`);
     if (bar) {
       bar.style.width = (pct * 100) + "%";
+      if (counterBar && Number(month) === mesAtual && Number(year) === anoAtual) counterBar.style.width = (pct * 100) + "%";
       const celebrateKey = `reward-celebrated-${month}-${year}`;
       const already = localStorage.getItem(celebrateKey) === 'true';
       if (pct === 1) {
