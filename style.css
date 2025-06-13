@@ -148,6 +148,11 @@ html, body {
   top: calc(55px - 2cm + 0.33cm + 1.5cm - 0.33cm);
 }
 
+#record-counter {
+  left: calc(420px - 0.33cm);
+  top: calc(55px - 2cm + 0.33cm + 1.5cm - 0.33cm);
+}
+
 #feitos-counter {
   left: calc(1170px - 0.33cm + 0.5cm - 0.25cm);
   top: calc(55px - 2cm + 0.33cm + 1.5cm - 0.33cm);
