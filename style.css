@@ -328,9 +328,9 @@ tr.main-row.sticky-title {
 /* === LIFE HEARTS === */
 #life-container {
   position: absolute;
-  top: -30px;
-  left: 0;
-  transform: none;
+  top: calc(4% - 30px);
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 8px;
