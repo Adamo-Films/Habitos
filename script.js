@@ -39,7 +39,8 @@ function getRewardFor(month, year, day = null) {
 const habitEmojiMap = {
   "Beber 2L de água": "💧",
   "Dieta com alimentos integrais": "🥗",
-  "Eliminar jogos": "🎮🚫",
+  "Eliminar jogos": "🎮",
+  "Eliminar Youtube": "📺",
   "Afirmações": "💬",
   "Planejar dia": "📅",
   "Leitura (30 min)": "📚",
@@ -252,6 +253,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   const lifeContainer = document.getElementById('life-container');
   const videoWrapper = document.getElementById('video-wrapper');
 
+  function positionLives() {
+    if (!lifeContainer || !calendarioEl) return;
+    const calRect = calendarioEl.getBoundingClientRect();
+    const parentRect = lifeContainer.parentElement.getBoundingClientRect();
+    const left = calRect.left + calRect.width / 2 - parentRect.left;
+    lifeContainer.style.left = `${left}px`;
+  }
+
   function resizeWrapper() {
     const baseW = 1920;
     const baseH = 1080;
@@ -261,6 +270,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (videoWrapper) {
       videoWrapper.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
     }
+    positionLives();
   }
   window.addEventListener('resize', resizeWrapper);
   resizeWrapper();
@@ -341,6 +351,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         lifeContainer.style.display = '';
         lifeContainer.classList.add('show');
         updateLivesDisplay();
+        positionLives();
       }
       openCurrentMonthDay();
     }, 800);
@@ -362,13 +373,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     25: ["Acordar às 6h"],
     29: ["Meditação (10 min)"],
     33: ["1700 calorias"],
-    37: ["Exercício (30 min)"],
-    41: ["Acordar às 5h"],
-    45: ["Eliminar vícios"],
-    49: ["Exercício (60 min)"],
-    53: ["Praticar italiano"],
-    57: ["90 min de hiperfoco"],
-    61: ["Exercício (90 min)"]
+    37: ["Eliminar Youtube"],
+    41: ["Exercício (30 min)"],
+    45: ["Acordar às 5h"],
+    49: ["Eliminar vícios"],
+    53: ["Exercício (60 min)"],
+    57: ["Praticar italiano"],
+    61: ["90 min de hiperfoco"],
+    65: ["Exercício (90 min)"]
   };
   const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
   // Cria calendário de 21/05/2025 até 31/08/2026 para contemplar todas as recompensas
@@ -384,6 +396,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           habitos_ativos = habitos_ativos.filter(h => !h.startsWith('Acordar'));
         } else if (novo.startsWith('Exercício')) {
           habitos_ativos = habitos_ativos.filter(h => !h.startsWith('Exercício'));
+        } else if (novo.startsWith('Eliminar')) {
+          habitos_ativos = habitos_ativos.filter(h => !h.startsWith('Eliminar'));
         }
         habitos_ativos.push(novo);
       });
@@ -929,5 +943,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       canvas.height = window.innerHeight;
     }
   });
+  positionLives();
   applyTwemoji();
 }); // Fecha DOMContentLoaded
