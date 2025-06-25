@@ -257,7 +257,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!lifeContainer || !calendarioEl) return;
     const calRect = calendarioEl.getBoundingClientRect();
     const parentRect = lifeContainer.parentElement.getBoundingClientRect();
-    const left = calRect.left + calRect.width / 2 - parentRect.left;
+    const label = lifeContainer.querySelector('.life-label');
+    const labelW = label ? label.getBoundingClientRect().width : 0;
+    const left = calRect.left + calRect.width / 2 - parentRect.left - labelW / 2;
     lifeContainer.style.left = `${left}px`;
   }
 
