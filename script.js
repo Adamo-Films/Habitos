@@ -252,13 +252,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   const countersEl = document.querySelector('.arcade-counters');
   const lifeContainer = document.getElementById('life-container');
   const videoWrapper = document.getElementById('video-wrapper');
+  let currentScale = 1;
 
-  function positionLives() {
+  function positionLives(scale = currentScale) {
     if (!lifeContainer || !calendarioEl) return;
     const calRect = calendarioEl.getBoundingClientRect();
     const parentRect = lifeContainer.parentElement.getBoundingClientRect();
     const left = calRect.left + calRect.width / 2 - parentRect.left;
-    lifeContainer.style.left = `${left}px`;
+    lifeContainer.style.left = `${left / scale}px`;
   }
 
   function resizeWrapper() {
@@ -270,7 +271,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (videoWrapper) {
       videoWrapper.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
     }
-    positionLives();
+    currentScale = scale;
+    positionLives(scale);
   }
   window.addEventListener('resize', resizeWrapper);
   resizeWrapper();
@@ -351,7 +353,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         lifeContainer.style.display = '';
         lifeContainer.classList.add('show');
         updateLivesDisplay();
-        positionLives();
+        positionLives(currentScale);
       }
       openCurrentMonthDay();
     }, 800);
@@ -943,6 +945,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       canvas.height = window.innerHeight;
     }
   });
-  positionLives();
+  positionLives(currentScale);
   applyTwemoji();
 }); // Fecha DOMContentLoaded
