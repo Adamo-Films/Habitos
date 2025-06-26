@@ -57,6 +57,35 @@ const habitEmojiMap = {
   "Exercício (90 min)": "💪",
 };
 
+const habitPriority = [
+  "Acordar às 6h",
+  "Acordar às 5h",
+  "Meditação (10 min)",
+  "Afirmações",
+  "Leitura (30 min)",
+  "Praticar italiano",
+  "Planejar dia",
+  "90 min de hiperfoco",
+  "Exercício (30 min)",
+  "Exercício (60 min)",
+  "Exercício (90 min)",
+  "90 min de hiperfoco (2x)",
+  "Beber 2L de água",
+  "1700 calorias",
+  "Dieta com alimentos integrais",
+  "Eliminar jogos",
+  "Eliminar Youtube",
+  "Eliminar vícios"
+];
+
+function sortHabits(list) {
+  return list.slice().sort((a, b) => {
+    const ai = habitPriority.indexOf(a);
+    const bi = habitPriority.indexOf(b);
+    return ai - bi;
+  });
+}
+
 function getHabitEmoji(habit) {
   return habitEmojiMap[habit] || "❓";
 }
@@ -414,7 +443,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     dados.push({
       data: data_atual.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       dia: `Dia ${i}`,
-      habitos: [...habitos_ativos],
+      habitos: sortHabits(habitos_ativos),
       ciclico: habito_ciclico,
       mes: data_atual.getMonth() + 1,
       ano: data_atual.getFullYear(),
