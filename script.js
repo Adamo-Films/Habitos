@@ -53,6 +53,7 @@ const habitEmojiMap = {
   "Exercício (60 min)": "🏋️",
   "Praticar italiano": "🇮🇹",
   "90 min de hiperfoco": "🎯",
+  "90 min de hiperfoco (2x)": "🎯",
   "Exercício (90 min)": "💪",
 };
 
@@ -372,22 +373,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     13: ["Afirmações"],
     17: ["Planejar dia"],
     21: ["Leitura (30 min)"],
-    25: ["Acordar às 6h"],
+    25: ["Acordar às 5h"],
     29: ["Meditação (10 min)"],
     33: ["1700 calorias"],
-    37: ["Eliminar Youtube"],
-    41: ["Exercício (30 min)"],
-    45: ["Acordar às 5h"],
+    37: ["Eliminar vícios"],
+    41: ["Exercício (60 min)"],
+    45: ["90 min de hiperfoco"],
     49: ["Eliminar vícios"],
     53: ["Exercício (60 min)"],
-    57: ["Praticar italiano"],
-    61: ["90 min de hiperfoco"],
-    65: ["Exercício (90 min)"]
+    57: ["Acordar às 5h"],
+    61: ["Praticar italiano"],
+    65: ["90 min de hiperfoco (2x)"]
   };
   const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
   // Cria calendário de 21/05/2025 até 31/08/2026 para contemplar todas as recompensas
   const inicio = new Date(2025, 4, 21), fim = new Date(2026, 7, 31);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
+  const caloriasFim = new Date(2025, 11, 23);
   let habitos_ativos = [];
   for (let i = 1; i <= dias_total; i++) {
     const data_atual = new Date(inicio);
@@ -403,6 +405,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         habitos_ativos.push(novo);
       });
+    }
+    if (data_atual > caloriasFim) {
+      habitos_ativos = habitos_ativos.filter(h => h !== '1700 calorias');
     }
     const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
     dados.push({
