@@ -51,7 +51,7 @@ const habitEmojiMap = {
   "Acordar às 5h": "🌅",
   "Eliminar vícios": "🚫",
   "Exercício (60 min)": "🏋️",
-  "Praticar italiano": "🇮🇹",
+  "Praticar italiano": "\uD83C\uDDEE\uD83C\uDDF9",
   "90 min de hiperfoco": "🎯",
   "90 min de hiperfoco (2x)": "🎯",
   "Exercício (90 min)": "💪",
@@ -383,7 +383,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     53: ["Exercício (60 min)"],
     57: ["Acordar às 5h"],
     61: ["Praticar italiano"],
-    65: ["90 min de hiperfoco (2x)"]
+    65: ["90 min de hiperfoco (2x)"],
+    69: ["Exercício (90 min)"]
   };
   const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
   // Cria calendário de 21/05/2025 até 31/08/2026 para contemplar todas as recompensas
