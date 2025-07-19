@@ -13,22 +13,21 @@ const db = firebase.firestore();
 
 // =================== Recompensas ===================
 const rewards = [
-  { month: 5, year: 2025, icon: "🍩", title: "Prêmio Maio", desc: "Caixa de donuts Krispy Kreme", label: "Donuts" },
-  { month: 6, year: 2025, icon: "🍝", title: "Prêmio Junho", desc: "Restaurante Rascal", label: "Rascal" },
-  { month: 7, year: 2025, icon: "🛀", title: "Prêmio Julho", desc: "Tanque de isolamento sensorial", label: "Relax" },
-  { month: 8, year: 2025, icon: "🏡", title: "Prêmio Agosto", desc: "Airbnb relaxante", label: "Airbnb" },
-  { month: 9, year: 2025, icon: "🧠🎲", title: "Prêmio Setembro", desc: "Jogo Turing Machine", label: "Turing" },
-  { month: 10, year: 2025, icon: "🛍️", title: "Prêmio Outubro", desc: "Dia de compras", label: "Compras" },
-  { month: 11, year: 2025, icon: "🏠", title: "Prêmio Novembro", desc: "Alugar um apê aconchegante", label: "Apê" },
-  { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll", label: "Ingersoll" },
-  { month: 1, year: 2026, icon: "📺", title: "Prêmio Janeiro", desc: "Comprar uma TV top", label: "TV" },
-  { month: 2, year: 2026, icon: "🚂", title: "Prêmio Fevereiro", desc: "Jogo Ticket to Ride", label: "Ticket" },
-  { month: 3, year: 2026, icon: "🚪", title: "Prêmio Março", desc: "Comprar portão para meus pais", label: "Portão" },
-  { month: 4, year: 2026, icon: "🛍️", title: "Prêmio Abril", desc: "Dia de compras", label: "Compras" },
-  { month: 5, year: 2026, icon: "💉", title: "Prêmio Maio", desc: "Fechar o braço com tattoo", label: "Tattoo" },
-  { month: 6, year: 2026, icon: "👨‍🦳", title: "Prêmio Junho", desc: "Cabelo branco", label: "Cabelo" },
-  { month: 7, year: 2026, icon: "📸", title: "Prêmio Julho", desc: "Look Daphne foto", label: "Daphne" },
-  { month: 8, year: 2026, icon: "✈️", title: "Prêmio Agosto", desc: "Viagem para fora", label: "Viagem" }
+  { month: 7, year: 2025, icon: "🍝", title: "Prêmio Julho", desc: "Restaurante Rascal", label: "Rascal" },
+  { month: 8, year: 2025, icon: "🛀", title: "Prêmio Agosto", desc: "Tanque de isolamento sensorial", label: "Relax" },
+  { month: 9, year: 2025, icon: "🏡", title: "Prêmio Setembro", desc: "Airbnb relaxante", label: "Airbnb" },
+  { month: 10, year: 2025, icon: "🧠🎲", title: "Prêmio Outubro", desc: "Jogo Turing Machine", label: "Turing" },
+  { month: 11, year: 2025, icon: "🛍️", title: "Prêmio Novembro", desc: "Dia de compras", label: "Compras" },
+  { month: 12, year: 2025, icon: "🏠", title: "Prêmio Dezembro", desc: "Alugar um apê aconchegante", label: "Apê" },
+  { month: 1, year: 2026, icon: "⌚", title: "Prêmio Janeiro", desc: "Relógio Ingersoll", label: "Ingersoll" },
+  { month: 2, year: 2026, icon: "📺", title: "Prêmio Fevereiro", desc: "Comprar uma TV top", label: "TV" },
+  { month: 3, year: 2026, icon: "🚂", title: "Prêmio Março", desc: "Jogo Ticket to Ride", label: "Ticket" },
+  { month: 4, year: 2026, icon: "🚪", title: "Prêmio Abril", desc: "Comprar portão para meus pais", label: "Portão" },
+  { month: 5, year: 2026, icon: "🛍️", title: "Prêmio Maio", desc: "Dia de compras", label: "Compras" },
+  { month: 6, year: 2026, icon: "💉", title: "Prêmio Junho", desc: "Fechar o braço com tattoo", label: "Tattoo" },
+  { month: 7, year: 2026, icon: "👨‍🦳", title: "Prêmio Julho", desc: "Cabelo branco", label: "Cabelo" },
+  { month: 8, year: 2026, icon: "📸", title: "Prêmio Agosto", desc: "Look Daphne foto", label: "Daphne" },
+  { month: 9, year: 2026, icon: "✈️", title: "Prêmio Setembro", desc: "Viagem para fora", label: "Viagem" }
 ];
 
 function getRewardFor(month, year, day = null) {
@@ -397,27 +396,27 @@ document.addEventListener("DOMContentLoaded", async function () {
   const dados = [];
   const habitos_incrementais = {
     1: ["Beber 2L de água"],
-    5: ["Dieta com alimentos integrais"],
-    9: ["Eliminar jogos"],
-    13: ["Afirmações"],
-    17: ["Planejar dia"],
-    21: ["Leitura (30 min)"],
-    25: ["Acordar às 6h"],
-    29: ["Meditação (10 min)"],
-    33: ["1700 calorias"],
-    37: ["Eliminar Youtube"],
-    41: ["Exercício (30 min)"],
-    45: ["90 min de hiperfoco"],
-    49: ["Eliminar vícios"],
-    53: ["Exercício (60 min)"],
-    57: ["Acordar às 5h"],
-    61: ["Praticar italiano"],
-    65: ["90 min de hiperfoco (2x)"],
-    69: ["Exercício (90 min)"]
+    3: ["Dieta com alimentos integrais"],
+    5: ["Eliminar jogos"],
+    7: ["Afirmações"],
+    9: ["Planejar dia"],
+    11: ["Leitura (30 min)"],
+    13: ["Acordar às 6h"],
+    15: ["Meditação (10 min)"],
+    17: ["1700 calorias"],
+    19: ["Eliminar Youtube"],
+    21: ["Exercício (30 min)"],
+    23: ["90 min de hiperfoco"],
+    25: ["Eliminar vícios"],
+    27: ["Exercício (60 min)"],
+    29: ["Acordar às 5h"],
+    31: ["Praticar italiano"],
+    33: ["90 min de hiperfoco (2x)"],
+    35: ["Exercício (90 min)"]
   };
   const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
-  // Cria calendário de 21/05/2025 até 31/08/2026 para contemplar todas as recompensas
-  const inicio = new Date(2025, 4, 21), fim = new Date(2026, 7, 31);
+  // Cria calendário de 21/07/2025 até 30/09/2026 para contemplar todas as recompensas
+  const inicio = new Date(2025, 6, 21), fim = new Date(2026, 8, 30);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
   const caloriasFim = new Date(2025, 11, 23);
   let habitos_ativos = [];
