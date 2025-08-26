@@ -395,28 +395,28 @@ document.addEventListener("DOMContentLoaded", async function () {
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = {
-    1: ["Beber 2L de água"],
-    3: ["Dieta com alimentos integrais"],
-    5: ["Eliminar jogos"],
-    7: ["Afirmações"],
-    9: ["Planejar dia"],
-    11: ["Leitura (30 min)"],
-    13: ["Acordar às 6h"],
-    15: ["Meditação (10 min)"],
-    17: ["1700 calorias"],
-    19: ["Eliminar Youtube"],
-    21: ["Exercício (30 min)"],
-    23: ["90 min de hiperfoco"],
-    25: ["Eliminar vícios"],
-    27: ["Exercício (60 min)"],
-    29: ["Acordar às 5h"],
-    31: ["Praticar italiano"],
-    33: ["90 min de hiperfoco (2x)"],
-    35: ["Exercício (90 min)"]
-  };
-  const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
-  // Cria calendário de 21/07/2025 até 30/09/2026 para contemplar todas as recompensas
-  const inicio = new Date(2025, 6, 21), fim = new Date(2026, 8, 30);
+  1: ["Beber 2L de água"],
+  4: ["Dieta com alimentos integrais"],
+  7: ["Eliminar jogos"],
+ 10: ["Afirmações"],
+ 13: ["Planejar dia"],
+ 16: ["Leitura (30 min)"],
+ 19: ["Acordar às 6h"],
+ 22: ["Meditação (10 min)"],
+ 25: ["1700 calorias"],
+ 28: ["Eliminar Youtube"],
+ 31: ["Exercício (30 min)"],
+ 34: ["90 min de hiperfoco"],
+ 37: ["Eliminar vícios"],
+ 40: ["Exercício (60 min)"],
+ 43: ["Acordar às 5h"],
+ 46: ["Praticar italiano"],
+ 49: ["90 min de hiperfoco (2x)"],
+ 52: ["Exercício (90 min)"]
+};
+const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
+// Cria calendário de 27/08/2025 até 30/09/2026 para contemplar todas as recompensas
+const inicio = new Date(2025, 7, 27), fim = new Date(2026, 8, 30);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
   const caloriasFim = new Date(2025, 11, 23);
   let habitos_ativos = [];
