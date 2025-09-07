@@ -36,45 +36,43 @@ function getRewardFor(month, year, day = null) {
 }
 
 const habitEmojiMap = {
-  "Beber 2L de água": "💧",
-  "Dieta com alimentos integrais": "🥗",
-  "Eliminar jogos": "🎮",
-  "Eliminar Youtube": "📺",
-  "Afirmações": "💬",
-  "Planejar dia": "📅",
-  "Leitura (30 min)": "📚",
   "Acordar às 6h": "⏰",
-  "Meditação (10 min)": "🧘",
-  "1700 calorias": "🔥",
   "Exercício (30 min)": "🏃",
-  "Acordar às 5h": "🌅",
-  "Eliminar vícios": "🚫",
+  "Planejar dia": "📅",
+  "Eliminar Youtube": "📺",
+  "Beber 2L de água": "💧",
+  "45 min de hiperfoco": "🎯",
+  "Afirmações": "💬",
   "Exercício (60 min)": "🏋️",
-  "Praticar italiano": "\uD83C\uDDEE\uD83C\uDDF9",
+  "1700 calorias": "🔥",
+  "Acordar às 5h": "🌅",
+  "Meditação (10 min)": "🧘",
   "90 min de hiperfoco": "🎯",
-  "90 min de hiperfoco (2x)": "🎯",
+  "Leitura (30 min)": "📚",
   "Exercício (90 min)": "💪",
+  "Praticar italiano": "\uD83C\uDDEE\uD83C\uDDF9",
+  "Eliminar vícios": "🚫",
+  "90 min de hiperfoco (2x)": "🎯",
 };
 
 const habitPriority = [
   "Acordar às 6h",
+  "Exercício (30 min)",
+  "Planejar dia",
+  "Eliminar Youtube",
+  "Beber 2L de água",
+  "45 min de hiperfoco",
+  "Afirmações",
+  "Exercício (60 min)",
+  "1700 calorias",
   "Acordar às 5h",
   "Meditação (10 min)",
-  "Afirmações",
-  "Leitura (30 min)",
-  "Praticar italiano",
-  "Planejar dia",
   "90 min de hiperfoco",
-  "Exercício (30 min)",
-  "Exercício (60 min)",
+  "Leitura (30 min)",
   "Exercício (90 min)",
+  "Praticar italiano",
+  "Eliminar vícios",
   "90 min de hiperfoco (2x)",
-  "Beber 2L de água",
-  "1700 calorias",
-  "Dieta com alimentos integrais",
-  "Eliminar jogos",
-  "Eliminar Youtube",
-  "Eliminar vícios"
 ];
 
 function sortHabits(list) {
@@ -236,23 +234,23 @@ function launchRewardConfetti() {
 }
 
 // =================== Progress Save/Load ===================
-async function getProgress() {
-  try {
-    const doc = await db.collection("usuarios").doc("danilo").get();
-    return doc.exists ? doc.data() : {};
-  } catch (e) {
-    console.error("Erro ao buscar dados do Firebase:", e);
-    return JSON.parse(localStorage.getItem('habits-progress-v1')) || {};
+  async function getProgress() {
+    try {
+      const doc = await db.collection("usuarios").doc("danilo2").get();
+      return doc.exists ? doc.data() : {};
+    } catch (e) {
+      console.error("Erro ao buscar dados do Firebase:", e);
+      return JSON.parse(localStorage.getItem('habits-progress-v2')) || {};
+    }
   }
-}
-async function saveProgress(progress) {
-  try {
-    await db.collection("usuarios").doc("danilo").set(progress);
-  } catch (e) {
-    console.error("Erro ao salvar no Firebase:", e);
+  async function saveProgress(progress) {
+    try {
+      await db.collection("usuarios").doc("danilo2").set(progress);
+    } catch (e) {
+      console.error("Erro ao salvar no Firebase:", e);
+    }
+    localStorage.setItem('habits-progress-v2', JSON.stringify(progress));
   }
-  localStorage.setItem('habits-progress-v1', JSON.stringify(progress));
-}
 
 // Aplica Twemoji para converter emojis em imagens pixeladas
 function applyTwemoji(target = document.body) {
@@ -395,30 +393,29 @@ document.addEventListener("DOMContentLoaded", async function () {
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = {
-  1: ["Beber 2L de água"],
-  4: ["Dieta com alimentos integrais"],
-  7: ["Eliminar jogos"],
- 10: ["Afirmações"],
- 13: ["Planejar dia"],
- 16: ["Leitura (30 min)"],
- 19: ["Acordar às 6h"],
- 22: ["Meditação (10 min)"],
- 25: ["1700 calorias"],
- 28: ["Eliminar Youtube"],
- 31: ["Exercício (30 min)"],
- 34: ["90 min de hiperfoco"],
- 37: ["Eliminar vícios"],
- 40: ["Exercício (60 min)"],
- 43: ["Acordar às 5h"],
- 46: ["Praticar italiano"],
- 49: ["90 min de hiperfoco (2x)"],
- 52: ["Exercício (90 min)"]
-};
+    1: ["Acordar às 6h"],
+    5: ["Exercício (30 min)"],
+    9: ["Planejar dia"],
+    13: ["Eliminar Youtube"],
+    17: ["Beber 2L de água"],
+    21: ["45 min de hiperfoco"],
+    25: ["Afirmações"],
+    29: ["Exercício (60 min)"],
+    33: ["1700 calorias"],
+    37: ["Acordar às 5h"],
+    41: ["Meditação (10 min)"],
+    45: ["90 min de hiperfoco"],
+    49: ["Leitura (30 min)"],
+    53: ["Exercício (90 min)"],
+    57: ["Praticar italiano"],
+    61: ["Eliminar vícios"],
+    65: ["90 min de hiperfoco (2x)"],
+  };
 const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
-// Cria calendário de 27/08/2025 até 30/09/2026 para contemplar todas as recompensas
-const inicio = new Date(2025, 7, 27), fim = new Date(2026, 8, 30);
+// Cria calendário de 08/09/2025 até 30/09/2026 para contemplar todas as recompensas
+const inicio = new Date(2025, 8, 8), fim = new Date(2026, 8, 30);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
-  const caloriasFim = new Date(2025, 11, 23);
+  const caloriasFim = new Date(2026, 2, 10);
   let habitos_ativos = [];
   for (let i = 1; i <= dias_total; i++) {
     const data_atual = new Date(inicio);
@@ -431,6 +428,8 @@ const inicio = new Date(2025, 7, 27), fim = new Date(2026, 8, 30);
           habitos_ativos = habitos_ativos.filter(h => !h.startsWith('Exercício'));
         } else if (novo.startsWith('Eliminar')) {
           habitos_ativos = habitos_ativos.filter(h => !h.startsWith('Eliminar'));
+        } else if (novo.includes('hiperfoco')) {
+          habitos_ativos = habitos_ativos.filter(h => !h.includes('hiperfoco'));
         }
         habitos_ativos.push(novo);
       });
