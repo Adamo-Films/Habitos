@@ -55,12 +55,12 @@ const habitEmojiMap = {
 };
 
 const habitPriority = [
-  "Acordar às 6h",
   "Exercício (30 min)",
   "Planejar dia",
   "Eliminar Youtube",
   "Beber 2L de água",
   "45 min de hiperfoco",
+  "Acordar às 6h",
   "Afirmações",
   "Exercício (60 min)",
   "1700 calorias",
@@ -392,12 +392,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   const progress = await getProgress();
   const dados = [];
   const habitos_incrementais = {
-    1: ["Acordar às 6h"],
-    5: ["Exercício (30 min)"],
-    9: ["Planejar dia"],
-    13: ["Eliminar Youtube"],
-    17: ["Beber 2L de água"],
-    21: ["45 min de hiperfoco"],
+    1: ["Exercício (30 min)"],
+    5: ["Planejar dia"],
+    9: ["Eliminar Youtube"],
+    13: ["Beber 2L de água"],
+    17: ["45 min de hiperfoco"],
+    21: ["Acordar às 6h"],
     25: ["Afirmações"],
     29: ["Exercício (60 min)"],
     33: ["1700 calorias"],
