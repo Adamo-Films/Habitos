@@ -37,6 +37,7 @@ function getRewardFor(month, year, day = null) {
 const habitEmojiMap = {
   "Acordar às 6h": "⏰",
   "Exercício (30 min)": "🏃",
+  "Dormir até meia noite": "🌙",
   "Planejar dia": "📅",
   "Eliminar Youtube": "📺",
   "Beber 2L de água": "💧",
@@ -56,6 +57,7 @@ const habitEmojiMap = {
 
 const habitPriority = [
   "Exercício (30 min)",
+  "Dormir até meia noite",
   "Planejar dia",
   "Eliminar Youtube",
   "Beber 2L de água",
@@ -88,9 +90,10 @@ function getHabitEmoji(habit) {
 
 function getCiclicoEmoji(habito) {
   if (habito.includes("Banho gelado")) return "🚿";
-  if (habito.includes("Agilidade")) return "🧠";
+  if (habito.includes("Arrumar o quarto")) return "🧹";
+  if (habito.includes("Se expresse")) return "🗣️";
+  if (habito.includes("Verificar peso")) return "⚖️";
   if (habito.includes("Diário")) return "🙏";
-  if (habito.includes("Peso")) return "⚖️";
   return "🎯";
 }
 
@@ -393,26 +396,33 @@ document.addEventListener("DOMContentLoaded", async function () {
   const dados = [];
   const habitos_incrementais = {
     1: ["Exercício (30 min)"],
-    5: ["Planejar dia"],
-    9: ["Eliminar Youtube"],
-    13: ["Beber 2L de água"],
-    17: ["45 min de hiperfoco"],
-    21: ["Acordar às 6h"],
-    25: ["Afirmações"],
-    29: ["Exercício (60 min)"],
-    33: ["1700 calorias"],
-    37: ["Acordar às 5h"],
-    41: ["Meditação (10 min)"],
-    45: ["90 min de hiperfoco"],
-    49: ["Leitura (30 min)"],
-    53: ["Exercício (90 min)"],
-    57: ["Praticar italiano"],
-    61: ["Eliminar vícios"],
-    65: ["90 min de hiperfoco (2x)"],
+    6: ["Dormir até meia noite"],
+    11: ["Planejar dia"],
+    16: ["Eliminar Youtube"],
+    21: ["Beber 2L de água"],
+    26: ["45 min de hiperfoco"],
+    31: ["Acordar às 6h"],
+    36: ["Afirmações"],
+    41: ["Exercício (60 min)"],
+    46: ["1700 calorias"],
+    51: ["Acordar às 5h"],
+    56: ["Meditação (10 min)"],
+    61: ["90 min de hiperfoco"],
+    66: ["Leitura (30 min)"],
+    71: ["Exercício (90 min)"],
+    76: ["Praticar italiano"],
+    81: ["Eliminar vícios"],
+    86: ["90 min de hiperfoco (2x)"],
   };
-const habitos_ciclicos = ["Banho gelado", "Agilidade mental", "Diário & gratidão", "Peso e Selfie"];
-// Cria calendário de 08/09/2025 até 30/09/2026 para contemplar todas as recompensas
-const inicio = new Date(2025, 8, 8), fim = new Date(2026, 8, 30);
+  const habitos_ciclicos = [
+    "Banho gelado",
+    "Arrumar o quarto",
+    "Se expresse",
+    "Verificar peso",
+    "Diário e gratidão"
+  ];
+  // Cria calendário de 17/09/2025 até 30/09/2026 para contemplar todas as recompensas
+  const inicio = new Date(2025, 8, 17), fim = new Date(2026, 8, 30);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
   const caloriasFim = new Date(2026, 2, 10);
   let habitos_ativos = [];
@@ -436,7 +446,7 @@ const inicio = new Date(2025, 8, 8), fim = new Date(2026, 8, 30);
     if (data_atual > caloriasFim) {
       habitos_ativos = habitos_ativos.filter(h => h !== '1700 calorias');
     }
-    const habito_ciclico = habitos_ciclicos[(i - 1) % 4];
+    const habito_ciclico = habitos_ciclicos[(i - 1) % habitos_ciclicos.length];
     dados.push({
       data: data_atual.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       dia: `Dia ${i}`,
@@ -483,7 +493,7 @@ const inicio = new Date(2025, 8, 8), fim = new Date(2026, 8, 30);
       dias.forEach((dia, i) => {
         const dayNum = parseInt(dia.dia.substring(4));
         let habitosCellText;
-        if (dayNum <= 4) {
+        if (dayNum <= 5) {
           habitosCellText = dia.habitos.join(', ');
         } else if (habitos_incrementais[dayNum]) {
         const newHabs = habitos_incrementais[dayNum];
