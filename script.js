@@ -14,9 +14,9 @@ const db = firebase.firestore();
 // =================== Recompensas ===================
 const rewards = [
   { month: 9, year: 2025, icon: "🛀", title: "Prêmio Setembro", desc: "Tanque sensorial", label: "Tanque" },
-  { month: 10, year: 2025, icon: "🍝", title: "Prêmio Outubro", desc: "Rascal", label: "Rascal" },
+  { month: 10, year: 2025, icon: "⌚", title: "Prêmio Outubro", desc: "Relógio Ingersoll", label: "Ingersoll" },
   { month: 11, year: 2025, icon: "🧠🎲", title: "Prêmio Novembro", desc: "Turing Machine", label: "Turing" },
-  { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll", label: "Ingersoll" },
+  { month: 12, year: 2025, icon: "🍝", title: "Prêmio Dezembro", desc: "Rascal", label: "Rascal" },
   { month: 1, year: 2026, icon: "🛍️", title: "Prêmio Janeiro", desc: "Compras estilosas", label: "Compras" },
   { month: 2, year: 2026, icon: "🛀", title: "Prêmio Fevereiro", desc: "Tanque sensorial", label: "Tanque" },
   { month: 3, year: 2026, icon: "🚗", title: "Prêmio Março", desc: "Comprar um carro", label: "Carro" },
