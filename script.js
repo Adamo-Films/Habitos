@@ -13,20 +13,20 @@ const db = firebase.firestore();
 
 // =================== Recompensas ===================
 const rewards = [
-  { month: 9, year: 2025, icon: "🛀", title: "Prêmio Setembro", desc: "Tanque sensorial", label: "Tanque" },
-  { month: 10, year: 2025, icon: "🍝", title: "Prêmio Outubro", desc: "Rascal", label: "Rascal" },
-  { month: 11, year: 2025, icon: "🧠🎲", title: "Prêmio Novembro", desc: "Turing Machine", label: "Turing" },
-  { month: 12, year: 2025, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll", label: "Ingersoll" },
-  { month: 1, year: 2026, icon: "🛍️", title: "Prêmio Janeiro", desc: "Compras estilosas", label: "Compras" },
-  { month: 2, year: 2026, icon: "🛀", title: "Prêmio Fevereiro", desc: "Tanque sensorial", label: "Tanque" },
-  { month: 3, year: 2026, icon: "🚗", title: "Prêmio Março", desc: "Comprar um carro", label: "Carro" },
-  { month: 4, year: 2026, icon: "🏠", title: "Prêmio Abril", desc: "Ter um apê aconchegante", label: "Apê" },
-  { month: 5, year: 2026, icon: "📺", title: "Prêmio Maio", desc: "Comprar uma TV top", label: "TV" },
-  { month: 6, year: 2026, icon: "🛀", title: "Prêmio Junho", desc: "Tanque sensorial", label: "Tanque" },
-  { month: 7, year: 2026, icon: "📸", title: "Prêmio Julho", desc: "Sessão de foto Daphne no Castelo", label: "Daphne" },
-  { month: 8, year: 2026, icon: "💉", title: "Prêmio Agosto", desc: "Fechar o braço", label: "Tattoo" },
-  { month: 9, year: 2026, icon: "👨‍🦳", title: "Prêmio Setembro", desc: "Cabelo branco", label: "Cabelo" },
-  { month: 10, year: 2026, icon: "✈️", title: "Prêmio Outubro", desc: "Viagem para fora", label: "Viagem" }
+  { month: 9, year: 2024, icon: "🛀", title: "Prêmio Setembro", desc: "Tanque sensorial", label: "Tanque" },
+  { month: 10, year: 2024, icon: "🍝", title: "Prêmio Outubro", desc: "Rascal", label: "Rascal" },
+  { month: 11, year: 2024, icon: "🧠🎲", title: "Prêmio Novembro", desc: "Turing Machine", label: "Turing" },
+  { month: 12, year: 2024, icon: "⌚", title: "Prêmio Dezembro", desc: "Relógio Ingersoll", label: "Ingersoll" },
+  { month: 1, year: 2025, icon: "🛍️", title: "Prêmio Janeiro", desc: "Compras estilosas", label: "Compras" },
+  { month: 2, year: 2025, icon: "🛀", title: "Prêmio Fevereiro", desc: "Tanque sensorial", label: "Tanque" },
+  { month: 3, year: 2025, icon: "🚗", title: "Prêmio Março", desc: "Comprar um carro", label: "Carro" },
+  { month: 4, year: 2025, icon: "🏠", title: "Prêmio Abril", desc: "Ter um apê aconchegante", label: "Apê" },
+  { month: 5, year: 2025, icon: "📺", title: "Prêmio Maio", desc: "Comprar uma TV top", label: "TV" },
+  { month: 6, year: 2025, icon: "🛀", title: "Prêmio Junho", desc: "Tanque sensorial", label: "Tanque" },
+  { month: 7, year: 2025, icon: "📸", title: "Prêmio Julho", desc: "Sessão de foto Daphne no Castelo", label: "Daphne" },
+  { month: 8, year: 2025, icon: "💉", title: "Prêmio Agosto", desc: "Fechar o braço", label: "Tattoo" },
+  { month: 9, year: 2025, icon: "👨‍🦳", title: "Prêmio Setembro", desc: "Cabelo branco", label: "Cabelo" },
+  { month: 10, year: 2025, icon: "✈️", title: "Prêmio Outubro", desc: "Viagem para fora", label: "Viagem" }
 ];
 
 function getRewardFor(month, year, day = null) {
