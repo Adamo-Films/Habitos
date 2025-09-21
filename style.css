@@ -455,26 +455,6 @@ th, td {
   border: none !important;
 }
 
-#calendario table th.col-date,
-#calendario table td.col-date {
-  width: 20%;
-  min-width: 120px;
-}
-
-#calendario table th.col-daily,
-#calendario table td.col-daily {
-  width: 50%;
-}
-
-#calendario table th.col-cyclic,
-#calendario table td.col-cyclic {
-  width: 30%;
-}
-
-#calendario .mes-dropdown tr.dropdown td {
-  padding: 18px 18px 18px 34px;
-}
-
 /* ==== Linhas principais === */
 tr.main-row {
   cursor: pointer;
