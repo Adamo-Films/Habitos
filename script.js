@@ -676,16 +676,28 @@ document.addEventListener("DOMContentLoaded", async function () {
   applyTwemoji(calendario);
   calendario.classList.add('loaded');
 
+  const screenWrapper = calendario.parentElement;
+  if (screenWrapper) {
+    const existingWrapper = screenWrapper.querySelector('#diary-log-button-wrapper');
+    if (existingWrapper) existingWrapper.remove();
+  }
   const diaryButtonWrapper = document.createElement('div');
+  diaryButtonWrapper.id = 'diary-log-button-wrapper';
   diaryButtonWrapper.className = 'diary-log-button-wrapper';
   diaryButtonWrapper.innerHTML = `<button type="button" id="open-diary-log" class="diary-log-button arcade-clicavel">📔 Diário</button>`;
-  calendario.appendChild(diaryButtonWrapper);
+  if (screenWrapper) {
+    screenWrapper.appendChild(diaryButtonWrapper);
+  } else {
+    calendario.appendChild(diaryButtonWrapper);
+  }
   applyTwemoji(diaryButtonWrapper);
 
-  const diaryOverlay = document.createElement('div');
-  diaryOverlay.id = 'diary-log-panel';
-  diaryOverlay.className = 'diary-log-panel';
-  diaryOverlay.innerHTML = `
+  const previousPanel = calendario.querySelector('#diary-log-panel');
+  if (previousPanel) previousPanel.remove();
+  const diaryPanel = document.createElement('div');
+  diaryPanel.id = 'diary-log-panel';
+  diaryPanel.className = 'diary-log-panel';
+  diaryPanel.innerHTML = `
     <div class="diary-log-content">
       <div class="diary-log-header">
         <span class="diary-log-title">Registro do Diário</span>
@@ -694,9 +706,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       <div class="diary-log-list" id="diary-log-list"></div>
     </div>
   `;
-  document.body.appendChild(diaryOverlay);
-  applyTwemoji(diaryOverlay);
-  const diaryLogList = diaryOverlay.querySelector('#diary-log-list');
+  calendario.appendChild(diaryPanel);
+  applyTwemoji(diaryPanel);
+  const diaryLogList = diaryPanel.querySelector('#diary-log-list');
 
   function renderDiaryLog() {
     if (!diaryLogList) return;
@@ -709,15 +721,58 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     const itemsHtml = entriesArr.map(([dayId, entry]) => {
       const safeText = escapeHTML(entry.texto).replace(/\n/g, '<br>');
+      const plain = (entry.texto || '').replace(/\s+/g, ' ').trim();
+      const previewBase = plain.length ? plain : 'Entrada registrada';
+      const preview = previewBase.length > 120 ? previewBase.slice(0, 117) + '…' : previewBase;
+      const safePreview = escapeHTML(preview);
       return `
-        <div class="diary-log-item" data-day="${dayId}">
-          <div class="diary-log-date">${entry.displayDate}</div>
-          <div class="diary-log-text">${safeText}</div>
-        </div>`;
+        <tr class="main-row arcade-clicavel diary-log-row" data-day="${dayId}">
+          <td class="progress-text gold">${entry.displayDate}</td>
+          <td class="progress-text gold"><span class="diary-log-preview">${safePreview}</span></td>
+        </tr>
+        <tr class="dropdown diary-log-dropdown" data-day="${dayId}" style="display: none;">
+          <td colspan="2">
+            <div class="diary-log-item" data-day="${dayId}">
+              <div class="diary-log-date">${entry.displayDate}</div>
+              <div class="diary-log-text">${safeText}</div>
+            </div>
+          </td>
+        </tr>`;
     }).join('');
-    diaryLogList.innerHTML = itemsHtml;
+    diaryLogList.innerHTML = `
+      <table class="diary-log-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Resumo</th>
+          </tr>
+        </thead>
+        <tbody>${itemsHtml}</tbody>
+      </table>
+    `;
     diaryLogList.scrollTop = 0;
     applyTwemoji(diaryLogList);
+    const rows = diaryLogList.querySelectorAll('.diary-log-row');
+    rows.forEach((row) => {
+      row.addEventListener('click', () => {
+        const dayId = row.getAttribute('data-day');
+        if (!dayId) return;
+        const dropdown = diaryLogList.querySelector(`.diary-log-dropdown[data-day="${dayId}"]`);
+        const isOpen = row.classList.contains('expanded');
+        rows.forEach((r) => r.classList.remove('expanded'));
+        diaryLogList.querySelectorAll('.diary-log-dropdown').forEach((dd) => {
+          dd.style.display = 'none';
+          dd.classList.remove('arcade-drop-show');
+        });
+        if (!isOpen) {
+          row.classList.add('expanded');
+          if (dropdown) {
+            dropdown.style.display = 'table-row';
+            setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
+          }
+        }
+      });
+    });
   }
 
   function updateDiaryVisualState(dayId) {
@@ -759,32 +814,58 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   const openDiaryBtn = diaryButtonWrapper.querySelector('#open-diary-log');
-  const closeDiaryBtn = diaryOverlay.querySelector('.diary-log-close');
+  const closeDiaryBtn = diaryPanel.querySelector('.diary-log-close');
 
   if (openDiaryBtn) {
-    openDiaryBtn.addEventListener('click', () => {
+    openDiaryBtn.setAttribute('aria-controls', 'diary-log-panel');
+  }
+
+  const setDiaryButtonState = (isOpen) => {
+    if (!openDiaryBtn) return;
+    openDiaryBtn.classList.toggle('active', isOpen);
+    openDiaryBtn.innerHTML = isOpen ? 'Fechar Diário' : '📔 Diário';
+    openDiaryBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    applyTwemoji(openDiaryBtn);
+  };
+
+  const toggleDiaryPanel = (force) => {
+    const shouldOpen = typeof force === 'boolean' ? force : !calendario.classList.contains('show-diary');
+    calendario.classList.toggle('show-diary', shouldOpen);
+    if (shouldOpen) {
       renderDiaryLog();
-      diaryOverlay.classList.add('open');
+      if (diaryLogList) diaryLogList.scrollTop = 0;
+      calendario.scrollTop = 0;
+    }
+    setDiaryButtonState(shouldOpen);
+  };
+
+  if (openDiaryBtn) {
+    openDiaryBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleDiaryPanel();
     });
   }
 
   if (closeDiaryBtn) {
-    closeDiaryBtn.addEventListener('click', () => {
-      diaryOverlay.classList.remove('open');
+    closeDiaryBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleDiaryPanel(false);
     });
   }
 
-  diaryOverlay.addEventListener('click', (e) => {
-    if (e.target === diaryOverlay) {
-      diaryOverlay.classList.remove('open');
+  if (document.__diaryEscapeHandler) {
+    document.removeEventListener('keydown', document.__diaryEscapeHandler);
+  }
+  const handleDiaryEscape = (e) => {
+    if (e.key === 'Escape' && calendario.classList.contains('show-diary')) {
+      toggleDiaryPanel(false);
     }
-  });
+  };
+  document.__diaryEscapeHandler = handleDiaryEscape;
+  document.addEventListener('keydown', handleDiaryEscape);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && diaryOverlay.classList.contains('open')) {
-      diaryOverlay.classList.remove('open');
-    }
-  });
+  calendario.classList.remove('show-diary');
+  setDiaryButtonState(false);
 
   document.querySelectorAll('.habit-item[data-diary-day]').forEach((item) => {
     const dayId = item.getAttribute('data-diary-day');
@@ -878,7 +959,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   renderDiaryLog();
   // sticky titles disabled
   function adjustVerticalCentering() {
-    if (calendario.scrollHeight <= calendario.clientHeight + 5) {
+    const styles = window.getComputedStyle(calendario);
+    const paddingBottom = parseFloat(styles.paddingBottom) || 0;
+    const effectiveHeight = calendario.scrollHeight - paddingBottom;
+    if (effectiveHeight <= calendario.clientHeight + 5) {
       calendario.classList.add('vertical-center');
     } else {
       calendario.classList.remove('vertical-center');
