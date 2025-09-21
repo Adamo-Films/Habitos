@@ -464,6 +464,32 @@ tr.main-row {
   transition: color 0.22s, background 0.22s, filter 0.25s;
   position: relative;
   min-height: 40px;
+  overflow: hidden;
+  isolation: isolate;
+  --day-progress: 0;
+}
+tr.main-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(11, 255, 115, 0.28) 0%, rgba(0, 255, 212, 0.28) 100%);
+  transform-origin: left center;
+  transform: scaleX(var(--day-progress, 0));
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(.55, .12, .32, 1.32), opacity 0.28s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+tr.main-row.day-has-progress::before {
+  opacity: 1;
+}
+tr.main-row.day-complete::before {
+  background: linear-gradient(90deg, rgba(11, 255, 115, 0.45) 0%, rgba(0, 255, 212, 0.45) 100%);
+}
+tr.main-row > td {
+  position: relative;
+  z-index: 1;
 }
 tr.main-row td:first-child {
   padding-left: 34px;
@@ -482,19 +508,28 @@ tr.main-row.expanded {
 }
 
 /* ==== Highlight Arcade Clean ==== */
-tr.main-row.day-complete, .habit-item.habit-complete {
-  background: linear-gradient(90deg, #0bff73 0%, #2bffb7 55%, #00ffd4 100%) !important;
-  color: #081723 !important;
+tr.main-row.day-complete {
+  color: #081b26 !important;
   font-weight: bold;
-  text-shadow: 0 1px 3px #ebfff6, 0 0 18px #003f2622, 0 0 20px #5effd2aa;
+  text-shadow: 0 1px 3px rgba(235, 255, 246, 0.7), 0 0 18px rgba(0, 63, 38, 0.25);
+  box-shadow: 0 0 22px rgba(29, 255, 141, 0.22), 0 0 12px rgba(0, 255, 212, 0.32);
+  filter: brightness(1.08) contrast(1.04);
+  animation: arcade-glow 1.9s infinite alternate;
+}
+
+.habit-item.habit-complete {
+  background: linear-gradient(90deg, rgba(11, 255, 115, 0.35) 0%, rgba(0, 255, 212, 0.35) 100%) !important;
+  color: #081b26 !important;
+  font-weight: bold;
+  text-shadow: 0 1px 3px rgba(235, 255, 246, 0.6);
   border-radius: 22px 20px 22px 20px;
-  filter: brightness(1.12) contrast(1.08);
-  box-shadow: 0 0 28px #1dff8d4d, 0 0 14px #00ffd466;
+  filter: brightness(1.08) contrast(1.05);
+  box-shadow: 0 0 22px rgba(29, 255, 141, 0.18), 0 0 12px rgba(0, 255, 212, 0.26);
   animation: arcade-glow 1.9s infinite alternate;
 }
 @keyframes arcade-glow {
   0% { filter: brightness(1.06) saturate(1.05);}
-  100% { filter: brightness(1.17) saturate(1.16);}
+  100% { filter: brightness(1.14) saturate(1.12);}
 }
 
 .progress-text.gold { color: #ffe379; text-shadow: 0 0 8px #ffe379cc, 0 0 16px #ffd90099; }
@@ -688,12 +723,21 @@ tr.dropdown[style*="display: none;"] {
 .diary-log-button-wrapper {
   position: absolute;
   left: 50%;
-  bottom: 28px;
-  transform: translateX(-50%);
+  top: calc(96% + 32px);
+  transform: translate(-50%, 12px);
   display: flex;
   justify-content: center;
   pointer-events: none;
   z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.diary-log-button-wrapper.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
 }
 
 .diary-log-button-wrapper .diary-log-button {
@@ -734,13 +778,16 @@ tr.dropdown[style*="display: none;"] {
 .diary-log-panel {
   display: none;
   width: 100%;
+  flex: 1;
   justify-content: center;
-  padding: 28px 0 96px;
+  align-items: stretch;
+  padding: 24px 0 40px;
 }
 
 .diary-log-content {
-  width: min(760px, 94%);
-  max-height: calc(100% - 120px);
+  width: min(820px, 94%);
+  height: 100%;
+  max-height: none;
   background: linear-gradient(135deg, rgba(0, 21, 48, 0.94), rgba(12, 8, 32, 0.96));
   border: 2px solid rgba(81, 255, 231, 0.82);
   border-radius: 28px;
@@ -831,9 +878,9 @@ tr.dropdown[style*="display: none;"] {
 
 #calendario.show-diary {
   align-items: center;
-  justify-content: flex-start;
-  padding-top: 36px;
-  padding-bottom: 36px;
+  justify-content: center;
+  padding-top: 28px;
+  padding-bottom: 28px;
   --top-mask-start: 0px;
   --bottom-mask-stop: 0px;
 }

@@ -389,6 +389,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const lifeContainer = document.getElementById('life-container');
   const videoWrapper = document.getElementById('video-wrapper');
   let currentScale = 1;
+  let diaryButtonWrapper = null;
+  let hasGameStarted = false;
 
   function positionLives(scale = currentScale) {
     if (!lifeContainer || !calendarioEl) return;
@@ -396,6 +398,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     const parentRect = lifeContainer.parentElement.getBoundingClientRect();
     const left = calRect.left + calRect.width / 2 - parentRect.left;
     lifeContainer.style.left = `${left / scale}px`;
+  }
+
+  function positionDiaryButton(scale = currentScale) {
+    if (!diaryButtonWrapper || !calendarioEl) return;
+    const calRect = calendarioEl.getBoundingClientRect();
+    if (!calRect.width || !calRect.height) return;
+    const parentRect = diaryButtonWrapper.parentElement.getBoundingClientRect();
+    const left = calRect.left + calRect.width / 2 - parentRect.left;
+    const bottom = calRect.top + calRect.height - parentRect.top;
+    const offset = 32;
+    diaryButtonWrapper.style.left = `${left / scale}px`;
+    diaryButtonWrapper.style.top = `${(bottom + offset) / scale}px`;
   }
 
   function resizeWrapper() {
@@ -409,6 +423,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     currentScale = scale;
     positionLives(scale);
+    positionDiaryButton(scale);
   }
   window.addEventListener('resize', resizeWrapper);
   resizeWrapper();
@@ -475,6 +490,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function startApp() {
+    if (hasGameStarted) return;
+    hasGameStarted = true;
     startScreen.classList.add('hidden');
     setTimeout(() => {
       if (calendarioEl) {
@@ -490,6 +507,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         lifeContainer.classList.add('show');
         updateLivesDisplay();
         positionLives(currentScale);
+      }
+      if (diaryButtonWrapper) {
+        diaryButtonWrapper.classList.add('show');
+        positionDiaryButton(currentScale);
       }
       openCurrentMonthDay();
     }, 800);
@@ -681,7 +702,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const existingWrapper = screenWrapper.querySelector('#diary-log-button-wrapper');
     if (existingWrapper) existingWrapper.remove();
   }
-  const diaryButtonWrapper = document.createElement('div');
+  diaryButtonWrapper = document.createElement('div');
   diaryButtonWrapper.id = 'diary-log-button-wrapper';
   diaryButtonWrapper.className = 'diary-log-button-wrapper';
   diaryButtonWrapper.innerHTML = `<button type="button" id="open-diary-log" class="diary-log-button arcade-clicavel">📔 Diário</button>`;
@@ -690,6 +711,15 @@ document.addEventListener("DOMContentLoaded", async function () {
   } else {
     calendario.appendChild(diaryButtonWrapper);
   }
+  if (hasGameStarted) {
+    requestAnimationFrame(() => {
+      diaryButtonWrapper.classList.add('show');
+      positionDiaryButton(currentScale);
+    });
+  } else {
+    diaryButtonWrapper.classList.remove('show');
+  }
+  positionDiaryButton(currentScale);
   applyTwemoji(diaryButtonWrapper);
 
   const previousPanel = calendario.querySelector('#diary-log-panel');
@@ -837,6 +867,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       calendario.scrollTop = 0;
     }
     setDiaryButtonState(shouldOpen);
+    positionDiaryButton(currentScale);
   };
 
   if (openDiaryBtn) {
@@ -1176,9 +1207,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (document.getElementById(`${dayId}-habit-${i}`)?.checked) checked++;
     }
     if (document.getElementById(`${dayId}-ciclico`)?.checked) checked++;
-    let pct = checked / habitCount;
+    const total = habitCount || 0;
+    const pct = total > 0 ? Math.min(1, Math.max(0, checked / total)) : 0;
     const row = document.getElementById(`mainrow-${dayId}`);
     if (row) {
+      row.style.setProperty('--day-progress', pct);
+      row.classList.toggle('day-has-progress', pct > 0);
       const wasComplete = row.classList.contains('day-complete');
       if (!row.dataset.initDone) {
         row.dataset.initDone = 'true';
