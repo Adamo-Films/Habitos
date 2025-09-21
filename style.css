@@ -218,7 +218,7 @@ html, body {
   color: #ffe379;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.9em;
-  padding: 0 1vw 0 1vw;
+  padding: 0 1vw 140px 1vw;
   overflow-y: auto;
   box-sizing: border-box;
   border: none !important;
@@ -346,7 +346,7 @@ tr.main-row.sticky-title {
 }
 
 .life-heart {
-  filter: drop-shadow(0 0 8px #ff6be7aa);
+  filter: drop-shadow(0 0 8px #4dffe2cc);
   animation: heart-glow 1.6s ease-in-out infinite alternate;
 }
 
@@ -354,12 +354,12 @@ tr.main-row.sticky-title {
   margin-right: 6px;
   font-size: 0.6em;
   color: var(--highlight);
-  text-shadow: 0 0 8px #ff6be7aa;
+  text-shadow: 0 0 8px #4dffe2cc;
 }
 
 @keyframes heart-glow {
-  0% { filter: drop-shadow(0 0 6px #ff6be7aa) drop-shadow(0 0 10px #51ffe788); }
-  100% { filter: drop-shadow(0 0 12px #ff6be7) drop-shadow(0 0 20px #51ffe7); }
+  0% { filter: drop-shadow(0 0 6px #4dffe2b5) drop-shadow(0 0 10px #3dffcb80); }
+  100% { filter: drop-shadow(0 0 12px #6efff2) drop-shadow(0 0 22px #1fffaf); }
 }
 
 /* === MES === */
@@ -483,13 +483,13 @@ tr.main-row.expanded {
 
 /* ==== Highlight Arcade Clean ==== */
 tr.main-row.day-complete, .habit-item.habit-complete {
-  background: linear-gradient(90deg, #00e4ff33 0%, #ffe37980 50%, #cf28ff33 100%) !important;
-  color: #1a1d2a !important;
+  background: linear-gradient(90deg, #0bff73 0%, #2bffb7 55%, #00ffd4 100%) !important;
+  color: #081723 !important;
   font-weight: bold;
-  text-shadow: 0 1px 3px #fff, 0 0 20px #000b, 0 0 20px #ffe37950;
+  text-shadow: 0 1px 3px #ebfff6, 0 0 18px #003f2622, 0 0 20px #5effd2aa;
   border-radius: 22px 20px 22px 20px;
-  filter: brightness(1.12) contrast(1.10);
-  box-shadow: 0 0 28px #00fff035, 0 0 9px #ffe37945;
+  filter: brightness(1.12) contrast(1.08);
+  box-shadow: 0 0 28px #1dff8d4d, 0 0 14px #00ffd466;
   animation: arcade-glow 1.9s infinite alternate;
 }
 @keyframes arcade-glow {
@@ -614,6 +614,7 @@ tr.dropdown[style*="display: none;"] {
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.45), 0 0 16px rgba(81, 255, 231, 0.12);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   color-scheme: dark;
+  caret-color: var(--neon);
 }
 
 .diary-textarea::placeholder {
@@ -685,9 +686,18 @@ tr.dropdown[style*="display: none;"] {
 }
 
 .diary-log-button-wrapper {
-  margin: 32px 0 20px 0;
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.diary-log-button-wrapper .diary-log-button {
+  pointer-events: auto;
 }
 
 .diary-log-button {
@@ -705,6 +715,13 @@ tr.dropdown[style*="display: none;"] {
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
+.diary-log-button.active {
+  border-color: rgba(81, 255, 231, 0.9);
+  background: rgba(0, 32, 60, 0.85);
+  color: var(--text-neon);
+  box-shadow: 0 0 26px rgba(81, 255, 231, 0.5), 0 0 30px rgba(0, 255, 191, 0.38);
+}
+
 .diary-log-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 26px rgba(81, 255, 231, 0.45), 0 0 32px rgba(207, 40, 255, 0.35);
@@ -715,31 +732,23 @@ tr.dropdown[style*="display: none;"] {
 }
 
 .diary-log-panel {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.72);
   display: none;
-  align-items: center;
+  width: 100%;
   justify-content: center;
-  z-index: 120;
-  padding: 36px 18px;
-  backdrop-filter: blur(6px);
-}
-
-.diary-log-panel.open {
-  display: flex;
+  padding: 28px 0 96px;
 }
 
 .diary-log-content {
-  width: min(720px, 92vw);
-  max-height: 84vh;
-  background: linear-gradient(135deg, rgba(0, 21, 48, 0.92), rgba(18, 10, 40, 0.94));
-  border: 2px solid rgba(81, 255, 231, 0.8);
+  width: min(760px, 94%);
+  max-height: calc(100% - 120px);
+  background: linear-gradient(135deg, rgba(0, 21, 48, 0.94), rgba(12, 8, 32, 0.96));
+  border: 2px solid rgba(81, 255, 231, 0.82);
   border-radius: 28px;
-  box-shadow: 0 0 40px rgba(81, 255, 231, 0.35), 0 0 60px rgba(207, 40, 255, 0.28);
+  box-shadow: 0 0 40px rgba(81, 255, 231, 0.32), 0 0 60px rgba(0, 255, 191, 0.24);
   padding: 28px 32px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .diary-log-header {
@@ -785,9 +794,7 @@ tr.dropdown[style*="display: none;"] {
   flex: 1;
   overflow-y: auto;
   padding-right: 6px;
-  gap: 14px;
-  display: flex;
-  flex-direction: column;
+  margin-top: 12px;
 }
 
 .diary-log-item {
@@ -820,6 +827,67 @@ tr.dropdown[style*="display: none;"] {
   text-align: center;
   color: rgba(103, 234, 255, 0.7);
   margin: 60px 0 30px 0;
+}
+
+#calendario.show-diary {
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 36px;
+  padding-bottom: 36px;
+  --top-mask-start: 0px;
+  --bottom-mask-stop: 0px;
+}
+
+#calendario.show-diary #diary-log-panel {
+  display: flex;
+}
+
+#calendario.show-diary > :not(#diary-log-panel) {
+  display: none !important;
+}
+
+.diary-log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.diary-log-table thead tr {
+  background: transparent;
+}
+
+.diary-log-table th {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.68em;
+  color: var(--text-neon);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 12px;
+}
+
+.diary-log-table td {
+  padding: 10px 12px;
+  background: transparent !important;
+}
+
+.diary-log-row td:first-child {
+  width: 38%;
+}
+
+.diary-log-row .diary-log-preview {
+  display: block;
+  font-size: 0.62em;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.03em;
+  line-height: 1.6;
+}
+
+.diary-log-dropdown td {
+  padding-top: 0;
+  padding-bottom: 18px;
+}
+
+.diary-log-dropdown .diary-log-item {
+  margin-top: 6px;
 }
 
 /* ==== PRÊMIOS ==== */
@@ -900,6 +968,10 @@ tr.dropdown[style*="display: none;"] {
 #calendario:focus,
 #calendario *:focus {
   outline: none !important;
+}
+
+#calendario:focus,
+#calendario *:focus:not(.diary-textarea) {
   caret-color: transparent !important;
 }
 
@@ -926,7 +998,7 @@ tr.dropdown[style*="display: none;"] {
 }
 @media (max-width: 650px) {
   .arcade-screen-curve { width: 99vw; min-width: 40px; left: 50%; top: 54%; border-radius: 28px 22px 28px 28px/32px 38px 31px 27px;}
-  #calendario { font-size: 0.7em; padding: 0 1vw 0 1vw;}
+  #calendario { font-size: 0.7em; padding: 0 1vw 120px 1vw;}
   .arcade-counters {
     width: 1920px;
     height: 1080px;
