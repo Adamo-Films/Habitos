@@ -254,6 +254,113 @@ function launchRewardConfetti() {
     localStorage.setItem('habits-progress-v2', JSON.stringify(progress));
   }
 
+const DIARY_LOCAL_KEY = 'habitos-diary-entries-v1';
+
+function loadDiaryEntriesLocal() {
+  try {
+    const stored = localStorage.getItem(DIARY_LOCAL_KEY);
+    if (!stored) return {};
+    const parsed = JSON.parse(stored);
+    if (!parsed || typeof parsed !== 'object') return {};
+    Object.keys(parsed).forEach((key) => {
+      if (!parsed[key] || !parsed[key].texto) {
+        delete parsed[key];
+      }
+    });
+    return parsed;
+  } catch (err) {
+    console.error('Falha ao ler diário local:', err);
+    return {};
+  }
+}
+
+function saveDiaryEntriesLocal(entries) {
+  try {
+    localStorage.setItem(DIARY_LOCAL_KEY, JSON.stringify(entries));
+  } catch (err) {
+    console.error('Falha ao salvar diário local:', err);
+  }
+}
+
+function formatDiaryDisplayDate(meta) {
+  if (!meta) return '';
+  const dia = String(meta.diaDoMes).padStart(2, '0');
+  const mes = String(meta.mes).padStart(2, '0');
+  return `${dia}/${mes}/${meta.ano}`;
+}
+
+function normalizeDiaryDoc(docId, data) {
+  if (!data) return null;
+  const texto = data.texto || '';
+  const displayDate = data.displayDate || data.data || docId;
+  let order = data.order;
+  if (order == null) {
+    if (data.referenciaDia && typeof data.referenciaDia.toMillis === 'function') {
+      order = data.referenciaDia.toMillis();
+    } else if (data.timestamp && typeof data.timestamp.toMillis === 'function') {
+      order = data.timestamp.toMillis();
+    } else {
+      order = Date.now();
+    }
+  }
+  return { texto, displayDate, order };
+}
+
+async function getDiaryEntries() {
+  try {
+    const snapshot = await db.collection('usuarios').doc('danilo2').collection('diario').get();
+    const entries = {};
+    snapshot.forEach((doc) => {
+      const normalized = normalizeDiaryDoc(doc.id, doc.data());
+      if (normalized && normalized.texto) entries[doc.id] = normalized;
+    });
+    saveDiaryEntriesLocal(entries);
+    return entries;
+  } catch (error) {
+    console.error('Erro ao buscar diário no Firebase:', error);
+    return loadDiaryEntriesLocal();
+  }
+}
+
+async function setDiaryEntryRemote(dayId, text, meta) {
+  const ref = db.collection('usuarios').doc('danilo2').collection('diario').doc(dayId);
+  if (!text) {
+    try {
+      await ref.delete();
+    } catch (err) {
+      console.error('Erro ao remover diário no Firebase:', err);
+      throw err;
+    }
+    return null;
+  }
+  const displayDate = formatDiaryDisplayDate(meta);
+  const referencia = new Date(meta.ano, meta.mes - 1, meta.diaDoMes);
+  const payload = {
+    texto: text,
+    displayDate,
+    order: referencia.getTime(),
+    diaId: dayId,
+    referenciaDia: firebase.firestore.Timestamp.fromDate(referencia),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  };
+  await ref.set(payload);
+  return { texto: text, displayDate, order: payload.order };
+}
+
+function escapeHTML(str) {
+  if (str == null) return '';
+  return str.replace(/[&<>"']/g, (char) => {
+    switch (char) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '"': return '&quot;';
+      case "'": return '&#39;';
+      default: return char;
+    }
+  });
+}
+
 // Aplica Twemoji para converter emojis em imagens pixeladas
 function applyTwemoji(target = document.body) {
   if (window.twemoji) {
@@ -393,6 +500,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   }, { once: true });
 
   const progress = await getProgress();
+  let diaryEntries = await getDiaryEntries();
+  if (!diaryEntries || typeof diaryEntries !== 'object') diaryEntries = {};
   const dados = [];
   const habitos_incrementais = {
     1: ["Exercício (30 min)"],
@@ -460,6 +569,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   const calendario = document.getElementById("calendario");
 
+  const diaLookup = {};
+  dados.forEach((d) => {
+    diaLookup[d.id] = d;
+  });
+
   const anos = {};
   const grupos = {};
   dados.forEach((obj) => {
@@ -502,6 +616,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         const total = dia.habitos.length;
         habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
       }
+      const isDiary = dia.ciclico === "Diário e gratidão";
+      const diaryAttrs = isDiary ? ` data-diary-day="${dia.id}"` : '';
+      const diaryLabelAttrs = isDiary ? ` data-diary-day="${dia.id}" data-diary="true"` : '';
+      const diaryEmojiAttrs = isDiary ? ` data-diary-day="${dia.id}"` : '';
+      const diaryEditorHtml = isDiary ? `
+            <div class="diary-editor" id="diary-editor-${dia.id}" data-day="${dia.id}" style="display:none;">
+              <textarea class="diary-textarea" id="diary-textarea-${dia.id}" placeholder="Escreva seu diário..."></textarea>
+              <div class="diary-actions">
+                <button type="button" class="diary-save" data-day="${dia.id}">Salvar</button>
+                <button type="button" class="diary-cancel" data-day="${dia.id}">Cancelar</button>
+              </div>
+            </div>` : '';
       html += `
         <tr class="main-row arcade-clicavel" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
           <td class="progress-text gold">${dia.data}</td>
@@ -518,12 +644,13 @@ document.addEventListener("DOMContentLoaded", async function () {
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
                 </div>
               `).join('')}
-              <div class="habit-item arcade-clicavel" id="habititem-${dia.id}-ciclico">
-                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico">${getCiclicoEmoji(dia.ciclico)}</span>
-                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico">${dia.ciclico}</label>
-                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico">
+              <div class="habit-item arcade-clicavel${isDiary ? ' diary-habit' : ''}" id="habititem-${dia.id}-ciclico"${diaryAttrs}>
+                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico"${diaryEmojiAttrs}>${getCiclicoEmoji(dia.ciclico)}</span>
+                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico"${diaryLabelAttrs}>${dia.ciclico}</label>
+                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico"${isDiary ? ` data-diary-day="${dia.id}"` : ''}>
               </div>
             </div>
+            ${diaryEditorHtml}
           </td>
         </tr>`;
       });
@@ -548,6 +675,207 @@ document.addEventListener("DOMContentLoaded", async function () {
   calendario.innerHTML = html;
   applyTwemoji(calendario);
   calendario.classList.add('loaded');
+
+  const diaryButtonWrapper = document.createElement('div');
+  diaryButtonWrapper.className = 'diary-log-button-wrapper';
+  diaryButtonWrapper.innerHTML = `<button type="button" id="open-diary-log" class="diary-log-button arcade-clicavel">📔 Diário</button>`;
+  calendario.appendChild(diaryButtonWrapper);
+  applyTwemoji(diaryButtonWrapper);
+
+  const diaryOverlay = document.createElement('div');
+  diaryOverlay.id = 'diary-log-panel';
+  diaryOverlay.className = 'diary-log-panel';
+  diaryOverlay.innerHTML = `
+    <div class="diary-log-content">
+      <div class="diary-log-header">
+        <span class="diary-log-title">Registro do Diário</span>
+        <button type="button" class="diary-log-close">Fechar</button>
+      </div>
+      <div class="diary-log-list" id="diary-log-list"></div>
+    </div>
+  `;
+  document.body.appendChild(diaryOverlay);
+  applyTwemoji(diaryOverlay);
+  const diaryLogList = diaryOverlay.querySelector('#diary-log-list');
+
+  function renderDiaryLog() {
+    if (!diaryLogList) return;
+    const entriesArr = Object.entries(diaryEntries)
+      .filter(([, entry]) => entry && entry.texto)
+      .sort((a, b) => (b[1].order || 0) - (a[1].order || 0));
+    if (!entriesArr.length) {
+      diaryLogList.innerHTML = '<p class="diary-empty">Nenhuma entrada registrada ainda.</p>';
+      return;
+    }
+    const itemsHtml = entriesArr.map(([dayId, entry]) => {
+      const safeText = escapeHTML(entry.texto).replace(/\n/g, '<br>');
+      return `
+        <div class="diary-log-item" data-day="${dayId}">
+          <div class="diary-log-date">${entry.displayDate}</div>
+          <div class="diary-log-text">${safeText}</div>
+        </div>`;
+    }).join('');
+    diaryLogList.innerHTML = itemsHtml;
+    diaryLogList.scrollTop = 0;
+    applyTwemoji(diaryLogList);
+  }
+
+  function updateDiaryVisualState(dayId) {
+    const item = document.getElementById(`habititem-${dayId}-ciclico`);
+    if (!item) return;
+    if (diaryEntries[dayId] && diaryEntries[dayId].texto) {
+      item.classList.add('diary-filled');
+    } else {
+      item.classList.remove('diary-filled');
+    }
+  }
+
+  function resetDiaryEditor(dayId) {
+    const textarea = document.getElementById(`diary-textarea-${dayId}`);
+    if (textarea) {
+      textarea.value = diaryEntries[dayId]?.texto || '';
+    }
+  }
+
+  function showDiaryEditor(dayId) {
+    const editor = document.getElementById(`diary-editor-${dayId}`);
+    if (!editor) return;
+    resetDiaryEditor(dayId);
+    editor.style.display = 'block';
+    editor.classList.add('open');
+    const textarea = document.getElementById(`diary-textarea-${dayId}`);
+    if (textarea) {
+      textarea.focus();
+      const length = textarea.value.length;
+      textarea.setSelectionRange(length, length);
+    }
+  }
+
+  function hideDiaryEditor(dayId) {
+    const editor = document.getElementById(`diary-editor-${dayId}`);
+    if (!editor) return;
+    editor.style.display = 'none';
+    editor.classList.remove('open');
+  }
+
+  const openDiaryBtn = diaryButtonWrapper.querySelector('#open-diary-log');
+  const closeDiaryBtn = diaryOverlay.querySelector('.diary-log-close');
+
+  if (openDiaryBtn) {
+    openDiaryBtn.addEventListener('click', () => {
+      renderDiaryLog();
+      diaryOverlay.classList.add('open');
+    });
+  }
+
+  if (closeDiaryBtn) {
+    closeDiaryBtn.addEventListener('click', () => {
+      diaryOverlay.classList.remove('open');
+    });
+  }
+
+  diaryOverlay.addEventListener('click', (e) => {
+    if (e.target === diaryOverlay) {
+      diaryOverlay.classList.remove('open');
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && diaryOverlay.classList.contains('open')) {
+      diaryOverlay.classList.remove('open');
+    }
+  });
+
+  document.querySelectorAll('.habit-item[data-diary-day]').forEach((item) => {
+    const dayId = item.getAttribute('data-diary-day');
+    updateDiaryVisualState(dayId);
+    resetDiaryEditor(dayId);
+    const label = item.querySelector('.habit-label');
+    const checkbox = item.querySelector('.habit-checkbox');
+
+    item.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.target.classList.contains('habit-emoji')) return;
+      if (e.target.classList.contains('habit-label')) return;
+      if (e.target.closest('.diary-actions')) return;
+      showDiaryEditor(dayId);
+    });
+
+    if (label) {
+      label.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        showDiaryEditor(dayId);
+      });
+    }
+
+    if (checkbox) {
+      checkbox.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+  });
+
+  document.querySelectorAll('.diary-save').forEach((button) => {
+    button.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const dayId = button.getAttribute('data-day');
+      if (!dayId) return;
+      const textarea = document.getElementById(`diary-textarea-${dayId}`);
+      if (!textarea) return;
+      const meta = diaLookup[dayId];
+      if (!meta) return;
+      const text = textarea.value.trim();
+      const original = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Salvando...';
+      try {
+        const normalized = await setDiaryEntryRemote(dayId, text, meta);
+        if (normalized) {
+          diaryEntries[dayId] = normalized;
+        } else {
+          delete diaryEntries[dayId];
+        }
+        saveDiaryEntriesLocal(diaryEntries);
+        resetDiaryEditor(dayId);
+        updateDiaryVisualState(dayId);
+        renderDiaryLog();
+        hideDiaryEditor(dayId);
+        const checkbox = document.getElementById(`${dayId}-ciclico`);
+        if (text) {
+          if (checkbox && !checkbox.checked) {
+            checkbox.checked = true;
+            checkbox.dispatchEvent(new Event('change'));
+          }
+        } else if (checkbox && checkbox.checked) {
+          checkbox.checked = false;
+          checkbox.dispatchEvent(new Event('change'));
+        }
+        button.textContent = 'Salvo!';
+        setTimeout(() => { button.textContent = original; }, 1500);
+      } catch (error) {
+        console.error('Erro ao salvar diário:', error);
+        button.textContent = 'Erro';
+        setTimeout(() => { button.textContent = original; }, 2000);
+        return;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+
+  document.querySelectorAll('.diary-cancel').forEach((button) => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const dayId = button.getAttribute('data-day');
+      if (!dayId) return;
+      resetDiaryEditor(dayId);
+      hideDiaryEditor(dayId);
+    });
+  });
+
+  renderDiaryLog();
   // sticky titles disabled
   function adjustVerticalCentering() {
     if (calendario.scrollHeight <= calendario.clientHeight + 5) {
@@ -927,6 +1255,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     emoji.addEventListener('click', function (e) {
       e.stopPropagation();
+      const diaryDay = emoji.getAttribute('data-diary-day');
+      if (diaryDay) {
+        showDiaryEditor(diaryDay);
+        return;
+      }
       const id = emoji.getAttribute('data-checkbox');
       const checkbox = document.getElementById(id);
       if (checkbox) {
