@@ -619,9 +619,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       <div class="mes-dropdown" id="dropdown-mes-${mesNum}-${ano}"><table>
         <thead>
           <tr>
-            <th>Data</th>
-            <th>Hábitos Diários</th>
-            <th>Hábito Cíclico</th>
+            <th class="col-date">Data</th>
+            <th class="col-daily">Hábitos Diários</th>
+            <th class="col-cyclic">Hábito Cíclico</th>
           </tr>
         </thead>
         <tbody>`;
@@ -651,9 +651,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             </div>` : '';
       html += `
         <tr class="main-row arcade-clicavel" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
-          <td class="progress-text gold">${dia.data}</td>
-          <td class="progress-text gold">${habitosCellText}</td>
-          <td class="progress-text gold">${dia.ciclico}</td>
+          <td class="progress-text gold col-date">${dia.data}</td>
+          <td class="progress-text gold col-daily">${habitosCellText}</td>
+          <td class="progress-text gold col-cyclic">${dia.ciclico}</td>
         </tr>
         <tr class="dropdown" id="dropdown-${dia.id}" style="display: none;">
           <td colspan="3">
