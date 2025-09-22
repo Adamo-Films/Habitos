@@ -455,20 +455,43 @@ th, td {
   border: none !important;
 }
 
+#calendario .mes-dropdown table {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  table-layout: fixed;
+}
+
+#calendario .mes-dropdown table col.col-date {
+  width: 22%;
+}
+
+#calendario .mes-dropdown table col.col-daily {
+  width: 46%;
+}
+
+#calendario .mes-dropdown table col.col-cyclic {
+  width: 32%;
+}
+
 #calendario table th.col-date,
 #calendario table td.col-date {
-  width: 20%;
+  width: 22%;
   min-width: 120px;
 }
 
 #calendario table th.col-daily,
 #calendario table td.col-daily {
-  width: 50%;
+  width: 46%;
 }
 
 #calendario table th.col-cyclic,
 #calendario table td.col-cyclic {
-  width: 30%;
+  width: 32%;
+}
+
+#calendario .mes-dropdown table thead th:first-child {
+  padding-left: 34px;
 }
 
 #calendario .mes-dropdown tr.dropdown td {
