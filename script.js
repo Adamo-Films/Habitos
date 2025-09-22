@@ -616,15 +616,21 @@ document.addEventListener("DOMContentLoaded", async function () {
     Object.entries(meses).forEach(([mesNum, dias]) => {
       const nomeMes = monthNames[mesNum - 1].toUpperCase();
       html += `<div class='mes arcade-clicavel' data-mes="${mesNum}" data-ano="${ano}">${nomeMes} <span class="arcade-arrow"></span></div>
-      <div class="mes-dropdown" id="dropdown-mes-${mesNum}-${ano}"><table>
-        <thead>
-          <tr>
-            <th class="col-date">Data</th>
-            <th class="col-daily">Hábitos Diários</th>
-            <th class="col-cyclic">Hábito Cíclico</th>
-          </tr>
-        </thead>
-        <tbody>`;
+      <div class="mes-dropdown" id="dropdown-mes-${mesNum}-${ano}">
+        <table>
+          <colgroup>
+            <col class="col-date">
+            <col class="col-daily">
+            <col class="col-cyclic">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="col-date">Data</th>
+              <th class="col-daily">Hábitos Diários</th>
+              <th class="col-cyclic">Hábito Cíclico</th>
+            </tr>
+          </thead>
+          <tbody>`;
       dias.forEach((dia, i) => {
         const dayNum = parseInt(dia.dia.substring(4));
         let habitosCellText;
@@ -675,7 +681,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           </td>
         </tr>`;
       });
-      html += `</tbody></table>`;
+      html += `</tbody>
+        </table>`;
       // Prêmio
       const reward = getRewardFor(Number(mesNum), Number(ano));
       if (reward) {
