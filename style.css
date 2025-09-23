@@ -459,35 +459,40 @@ th, td {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  table-layout: fixed;
+  border-collapse: separate;
 }
 
-#calendario .mes-dropdown table col.col-date {
-  width: 22%;
+#calendario .mes-dropdown table colgroup {
+  display: none;
 }
 
-#calendario .mes-dropdown table col.col-daily {
-  width: 46%;
+#calendario .mes-dropdown table thead,
+#calendario .mes-dropdown table tbody {
+  display: block;
+  width: 100%;
 }
 
-#calendario .mes-dropdown table col.col-cyclic {
-  width: 32%;
+#calendario .mes-dropdown table thead tr,
+#calendario .mes-dropdown table tbody tr.main-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.22fr) minmax(200px, 0.46fr) minmax(140px, 0.32fr);
+  align-items: center;
+  width: 100%;
 }
 
-#calendario table th.col-date,
-#calendario table td.col-date {
-  width: 22%;
-  min-width: 120px;
+#calendario .mes-dropdown table thead th,
+#calendario .mes-dropdown table tbody tr.main-row > td {
+  display: block;
+  width: 100%;
 }
 
-#calendario table th.col-daily,
-#calendario table td.col-daily {
-  width: 46%;
+#calendario .mes-dropdown table tbody tr.dropdown {
+  display: block;
 }
 
-#calendario table th.col-cyclic,
-#calendario table td.col-cyclic {
-  width: 32%;
+#calendario .mes-dropdown table tbody tr.dropdown > td {
+  display: block;
+  width: 100%;
 }
 
 #calendario .mes-dropdown table thead th:first-child {

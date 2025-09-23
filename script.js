@@ -477,7 +477,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           const d = parseInt(dateCell.innerText.split('/')[0]);
           if (d === diaAtual) {
             row.classList.add('current-day', 'expanded');
-            dropRow.style.display = 'table-row';
+            dropRow.style.display = 'block';
             setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
           }
         });
@@ -1141,7 +1141,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const mainRow = dropdown.querySelectorAll('.main-row')[idxDia];
         const dropRow = dropdown.querySelectorAll('.dropdown')[idxDia];
         mainRow.classList.add('expanded');
-        dropRow.style.display = 'table-row';
+        dropRow.style.display = 'block';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
       }
     }
@@ -1186,7 +1186,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           return;
         }
         // Abre clicado
-        dropRow.style.display = 'table-row';
+        dropRow.style.display = 'block';
         setTimeout(() => dropRow.classList.add('arcade-drop-show'), 5);
         row.classList.add('expanded');
         adjustVerticalCentering();
