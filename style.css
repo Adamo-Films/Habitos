@@ -527,7 +527,7 @@ tr.main-row::before {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(90deg, rgba(11, 255, 115, 0.28) 0%, rgba(0, 255, 212, 0.28) 100%);
+  background: linear-gradient(90deg, rgba(66, 24, 160, 0.32) 0%, rgba(143, 60, 255, 0.32) 100%);
   transform-origin: left center;
   transform: scaleX(var(--day-progress, 0));
   opacity: 0;
@@ -539,7 +539,7 @@ tr.main-row.day-has-progress::before {
   opacity: 1;
 }
 tr.main-row.day-complete::before {
-  background: linear-gradient(90deg, rgba(11, 255, 115, 0.45) 0%, rgba(0, 255, 212, 0.45) 100%);
+  background: linear-gradient(90deg, rgba(74, 16, 158, 0.55) 0%, rgba(167, 62, 255, 0.55) 100%);
 }
 tr.main-row > td {
   position: relative;
@@ -561,24 +561,66 @@ tr.main-row.expanded {
   filter: brightness(1.04) saturate(1.02);
 }
 
+tr.main-row {
+  --progress-covered-color: #000000;
+}
+
+.progress-text {
+  position: relative;
+  --progress-text-color: currentColor;
+  color: var(--progress-text-color);
+}
+
+.progress-text-content {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.progress-text-base,
+.progress-text-cover {
+  display: block;
+  position: relative;
+  z-index: 1;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-shadow: inherit;
+  white-space: inherit;
+}
+
+.progress-text-base {
+  color: var(--progress-text-color, currentColor);
+}
+
+.progress-text-cover {
+  position: absolute;
+  inset: 0;
+  color: var(--progress-covered-color, #000);
+  clip-path: inset(0 calc((1 - var(--day-progress, 0)) * 100%) 0 0);
+  transition: clip-path 0.4s cubic-bezier(.55, .12, .32, 1.32);
+  pointer-events: none;
+  z-index: 2;
+}
+
 /* ==== Highlight Arcade Clean ==== */
 tr.main-row.day-complete {
-  color: #081b26 !important;
+  color: #050505 !important;
   font-weight: bold;
-  text-shadow: 0 1px 3px rgba(235, 255, 246, 0.7), 0 0 18px rgba(0, 63, 38, 0.25);
-  box-shadow: 0 0 22px rgba(29, 255, 141, 0.22), 0 0 12px rgba(0, 255, 212, 0.32);
+  text-shadow: 0 1px 3px rgba(247, 239, 255, 0.78), 0 0 18px rgba(40, 0, 89, 0.3);
+  box-shadow: 0 0 22px rgba(104, 21, 255, 0.25), 0 0 12px rgba(160, 63, 255, 0.35);
   filter: brightness(1.08) contrast(1.04);
   animation: arcade-glow 1.9s infinite alternate;
 }
 
 .habit-item.habit-complete {
-  background: linear-gradient(90deg, rgba(11, 255, 115, 0.35) 0%, rgba(0, 255, 212, 0.35) 100%) !important;
-  color: #081b26 !important;
+  background: linear-gradient(90deg, rgba(66, 24, 160, 0.38) 0%, rgba(143, 60, 255, 0.38) 100%) !important;
+  color: #050505 !important;
   font-weight: bold;
-  text-shadow: 0 1px 3px rgba(235, 255, 246, 0.6);
+  text-shadow: 0 1px 3px rgba(247, 239, 255, 0.7);
   border-radius: 22px 20px 22px 20px;
   filter: brightness(1.08) contrast(1.05);
-  box-shadow: 0 0 22px rgba(29, 255, 141, 0.18), 0 0 12px rgba(0, 255, 212, 0.26);
+  box-shadow: 0 0 22px rgba(104, 21, 255, 0.22), 0 0 12px rgba(160, 63, 255, 0.32);
   animation: arcade-glow 1.9s infinite alternate;
 }
 @keyframes arcade-glow {
@@ -586,7 +628,11 @@ tr.main-row.day-complete {
   100% { filter: brightness(1.14) saturate(1.12);}
 }
 
-.progress-text.gold { color: #ffe379; text-shadow: 0 0 8px #ffe379cc, 0 0 16px #ffd90099; }
+.progress-text.gold {
+  --progress-text-color: #ffe379;
+  color: #ffe379;
+  text-shadow: 0 0 8px #ffe379cc, 0 0 16px #ffd90099;
+}
 
 /* ==== Expand animação dos dropdowns ==== */
 tr.dropdown {

@@ -361,6 +361,12 @@ function escapeHTML(str) {
   });
 }
 
+function renderProgressText(content, extraClass = '') {
+  const safe = escapeHTML(content ?? '');
+  const extra = extraClass ? ` ${extraClass}` : '';
+  return `<span class="progress-text-content"><span class="progress-text-base${extra}">${safe}</span><span class="progress-text-cover${extra}">${safe}</span></span>`;
+}
+
 // Aplica Twemoji para converter emojis em imagens pixeladas
 function applyTwemoji(target = document.body) {
   if (window.twemoji) {
@@ -657,9 +663,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             </div>` : '';
       html += `
         <tr class="main-row arcade-clicavel" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
-          <td class="progress-text gold col-date">${dia.data}</td>
-          <td class="progress-text gold col-daily">${habitosCellText}</td>
-          <td class="progress-text gold col-cyclic">${dia.ciclico}</td>
+          <td class="progress-text gold col-date">${renderProgressText(dia.data)}</td>
+          <td class="progress-text gold col-daily">${renderProgressText(habitosCellText)}</td>
+          <td class="progress-text gold col-cyclic">${renderProgressText(dia.ciclico)}</td>
         </tr>
         <tr class="dropdown" id="dropdown-${dia.id}" style="display: none;">
           <td colspan="3">
@@ -761,11 +767,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       const plain = (entry.texto || '').replace(/\s+/g, ' ').trim();
       const previewBase = plain.length ? plain : 'Entrada registrada';
       const preview = previewBase.length > 120 ? previewBase.slice(0, 117) + '…' : previewBase;
-      const safePreview = escapeHTML(preview);
       return `
         <tr class="main-row arcade-clicavel diary-log-row" data-day="${dayId}">
-          <td class="progress-text gold">${entry.displayDate}</td>
-          <td class="progress-text gold"><span class="diary-log-preview">${safePreview}</span></td>
+          <td class="progress-text gold">${renderProgressText(entry.displayDate)}</td>
+          <td class="progress-text gold">${renderProgressText(preview, 'diary-log-preview')}</td>
         </tr>
         <tr class="dropdown diary-log-dropdown" data-day="${dayId}" style="display: none;">
           <td colspan="2">
