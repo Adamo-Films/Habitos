@@ -462,6 +462,12 @@ th, td {
   border-collapse: separate;
 }
 
+#calendario .mes-dropdown table,
+#calendario .mes-dropdown table th,
+#calendario .mes-dropdown table td {
+  box-sizing: border-box;
+}
+
 #calendario .mes-dropdown table colgroup {
   display: none;
 }
@@ -500,7 +506,7 @@ th, td {
 }
 
 #calendario .mes-dropdown tr.dropdown td {
-  padding: 18px 18px 18px 34px;
+  padding: 18px 34px;
 }
 
 /* ==== Linhas principais === */
