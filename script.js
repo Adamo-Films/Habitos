@@ -13,7 +13,7 @@ const db = firebase.firestore();
 
 // =================== Recompensas ===================
 const rewards = [
-  { month: 9, year: 2025, icon: "🛀", title: "Prêmio Setembro", desc: "Tanque sensorial", label: "Tanque" },
+  { month: 9, year: 2025, icon: "😒", title: "Prêmio Setembro", desc: "Fez o minimo né", label: "Minimo" },
   { month: 10, year: 2025, icon: "⌚", title: "Prêmio Outubro", desc: "Relógio Ingersoll", label: "Ingersoll" },
   { month: 11, year: 2025, icon: "🧠🎲", title: "Prêmio Novembro", desc: "Turing Machine", label: "Turing" },
   { month: 12, year: 2025, icon: "🍝", title: "Prêmio Dezembro", desc: "Rascal", label: "Rascal" },
@@ -56,8 +56,8 @@ const habitEmojiMap = {
 };
 
 const habitPriority = [
-  "Exercício (30 min)",
   "Dormir até meia noite",
+  "Exercício (30 min)",
   "Planejar dia",
   "Eliminar Youtube",
   "Beber 2L de água",
@@ -531,8 +531,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (!diaryEntries || typeof diaryEntries !== 'object') diaryEntries = {};
   const dados = [];
   const habitos_incrementais = {
-    1: ["Exercício (30 min)"],
-    6: ["Dormir até meia noite"],
+    1: ["Dormir até meia noite"],
+    6: ["Exercício (30 min)"],
     11: ["Planejar dia"],
     16: ["Eliminar Youtube"],
     21: ["Beber 2L de água"],
@@ -557,8 +557,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     "Verificar peso",
     "Diário e gratidão"
   ];
-  // Cria calendário de 17/09/2025 até 30/09/2026 para contemplar todas as recompensas
-  const inicio = new Date(2025, 8, 17), fim = new Date(2026, 8, 30);
+  // Cria calendário de 29/09/2025 até 30/09/2026 para contemplar todas as recompensas
+  const inicio = new Date(2025, 8, 29), fim = new Date(2026, 8, 30);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
   const caloriasFim = new Date(2026, 2, 10);
   let habitos_ativos = [];
