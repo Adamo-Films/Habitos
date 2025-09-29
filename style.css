@@ -597,7 +597,7 @@ tr.main-row {
   position: absolute;
   inset: 0;
   color: var(--progress-covered-color, #000);
-  clip-path: inset(0 calc((1 - var(--day-progress, 0)) * 100%) 0 0);
+  clip-path: inset(0 var(--progress-cover-uncovered, 100%) 0 0);
   transition: clip-path 0.4s cubic-bezier(.55, .12, .32, 1.32);
   pointer-events: none;
   z-index: 2;
