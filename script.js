@@ -29,19 +29,60 @@ const rewards = [
   { month: 10, year: 2026, icon: "✈️", title: "Prêmio Outubro", desc: "Viagem para fora", label: "Viagem" }
 ];
 
+const baseVisualizerTheme = {
+  headline: "Recompensa Arcade",
+  tagline: "Modo vitória ativado",
+  description: "Sua disciplina abriu mais uma porta secreta dentro do fliperama da vida.",
+  icon: "🕹️",
+  primary: "#51ffe7",
+  secondary: "#cf28ff",
+  accent: "#ffe379",
+  background: "radial-gradient(circle at 20% 20%, rgba(81, 255, 231, 0.28) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(207, 40, 255, 0.28) 0%, transparent 55%), linear-gradient(135deg, #010915 0%, #03162a 45%, #01050f 100%)",
+  warpStart: "rgba(81, 255, 231, 0.6)",
+  warpEnd: "rgba(207, 40, 255, 0.45)",
+  gridColor: "rgba(81, 255, 231, 0.18)",
+  haze: "rgba(207, 40, 255, 0.12)",
+  particleColor: "#ffe379",
+  particleGlow: "rgba(81, 255, 231, 0.65)",
+  contentBg: "linear-gradient(135deg, rgba(0, 10, 24, 0.78), rgba(0, 18, 44, 0.82))",
+  contentBorder: "rgba(81, 255, 231, 0.32)",
+  contentShadow: "0 0 45px rgba(0, 0, 0, 0.75), 0 0 85px rgba(0, 0, 0, 0.45), 0 0 40px rgba(81, 255, 231, 0.55)",
+  innerBorder: "rgba(255, 255, 255, 0.08)",
+  contentSheen: "linear-gradient(130deg, rgba(81, 255, 231, 0.12), rgba(207, 40, 255, 0.08), rgba(255, 227, 121, 0.12))",
+  chipBg: "linear-gradient(135deg, rgba(81, 255, 231, 0.12), rgba(207, 40, 255, 0.12))",
+  chipBorder: "rgba(255, 255, 255, 0.18)",
+  chipShadow: "0 0 18px rgba(0, 0, 0, 0.55)",
+  chipColor: "rgba(255, 255, 255, 0.85)",
+  taglineColor: "#ffe379",
+  progressText: "rgba(255, 255, 255, 0.78)",
+  progressAccent: "#ffe379",
+  progressBar: "linear-gradient(90deg, rgba(81, 255, 231, 0.9), rgba(207, 40, 255, 0.85))",
+  cardBackground: "linear-gradient(135deg, rgba(0, 12, 30, 0.85), rgba(0, 28, 60, 0.9))",
+  cardBorder: "rgba(81, 255, 231, 0.45)",
+  cardGlow: "0 0 26px rgba(81, 255, 231, 0.4), 0 0 34px rgba(207, 40, 255, 0.18)",
+  cardSheen: "rgba(255, 255, 255, 0.16)",
+  cardGrid: "rgba(81, 255, 231, 0.18)",
+  barGradient: "linear-gradient(90deg, rgba(81, 255, 231, 0.9), rgba(207, 40, 255, 0.85))",
+  chips: ["Fase desbloqueada", "Combo perfeito", "Continue extra"],
+  floaters: ["🕹️", "⭐", "⚡", "🎉"]
+};
+
 const rewardVisuals = {
   Minimo: {
+    ...baseVisualizerTheme,
     headline: "Primeiro Continue",
     tagline: "Press Start em grande estilo",
     description: "O modo campanha começou. Cada hábito marcado acende os letreiros do seu fliperama pessoal.",
     icon: "🎯",
-    primary: "#51ffe7",
-    secondary: "#cf28ff",
-    accent: "#ffe379",
     chips: ["Setup concluído", "Score inicial", "Ritmo desbloqueado"],
-    floaters: ["🎯", "⭐", "🕹️", "⚡"]
+    floaters: ["🎯", "⭐", "🕹️", "⚡"],
+    background: "radial-gradient(circle at 12% 20%, rgba(81, 255, 231, 0.4) 0%, transparent 45%), radial-gradient(circle at 85% 25%, rgba(207, 40, 255, 0.3) 0%, transparent 60%), linear-gradient(135deg, #010d1d 0%, #041437 55%, #03001a 100%)",
+    cardBackground: "linear-gradient(135deg, rgba(3, 18, 40, 0.94), rgba(2, 6, 22, 0.9))",
+    cardGlow: "0 0 38px rgba(81, 255, 231, 0.45), 0 0 44px rgba(207, 40, 255, 0.28)",
+    cardGrid: "rgba(81, 255, 231, 0.24)"
   },
   Ingersoll: {
+    ...baseVisualizerTheme,
     headline: "Relógio Ingersoll",
     tagline: "Tempo lendário sob seu comando",
     description: "Você sincronizou engrenagens douradas com disciplina diária. Cada alavanca puxada no arcade virou um tique preciso no pulso.",
@@ -50,20 +91,61 @@ const rewardVisuals = {
     secondary: "#ff49e1",
     accent: "#ffe8c5",
     chips: ["Engrenagens expostas", "Luxo clássico", "Pulso de campeão"],
-    floaters: ["⌚", "⚙️", "💎", "⏱️"]
+    floaters: ["⌚", "⚙️", "💎", "⏱️"],
+    background: "radial-gradient(circle at 30% 20%, rgba(246, 181, 100, 0.45) 0%, transparent 38%), radial-gradient(circle at 80% 70%, rgba(255, 73, 225, 0.3) 0%, transparent 55%), linear-gradient(135deg, #1c0901 0%, #3c0f2e 45%, #0e0318 100%)",
+    warpStart: "rgba(246, 181, 100, 0.65)",
+    warpEnd: "rgba(255, 73, 225, 0.5)",
+    gridColor: "rgba(246, 181, 100, 0.22)",
+    haze: "rgba(246, 181, 100, 0.25)",
+    particleColor: "#ffe8c5",
+    particleGlow: "rgba(246, 181, 100, 0.7)",
+    contentBg: "linear-gradient(135deg, rgba(31, 9, 0, 0.88), rgba(60, 8, 40, 0.78))",
+    contentBorder: "rgba(246, 181, 100, 0.45)",
+    contentShadow: "0 0 45px rgba(0, 0, 0, 0.8), 0 0 65px rgba(255, 73, 225, 0.25), 0 0 45px rgba(246, 181, 100, 0.35)",
+    innerBorder: "rgba(246, 181, 100, 0.28)",
+    contentSheen: "linear-gradient(130deg, rgba(246, 181, 100, 0.2), rgba(255, 73, 225, 0.12), rgba(255, 227, 197, 0.2))",
+    taglineColor: "#ffe8c5",
+    progressText: "rgba(255, 230, 210, 0.85)",
+    progressAccent: "#ffe8c5",
+    progressBar: "linear-gradient(90deg, rgba(246, 181, 100, 0.9), rgba(255, 73, 225, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(31, 9, 0, 0.92), rgba(54, 10, 38, 0.88))",
+    cardBorder: "rgba(246, 181, 100, 0.55)",
+    cardGlow: "0 0 38px rgba(246, 181, 100, 0.35), 0 0 46px rgba(255, 73, 225, 0.25)",
+    cardSheen: "rgba(246, 181, 100, 0.18)",
+    cardGrid: "rgba(246, 181, 100, 0.22)",
+    barGradient: "linear-gradient(90deg, rgba(246, 181, 100, 0.9), rgba(255, 73, 225, 0.9))"
   },
   Turing: {
+    ...baseVisualizerTheme,
     headline: "Turing Machine",
     tagline: "Você decifrou o código secreto",
     description: "As cartas perfuradas e os algoritmos lógicos piscam nas luzes neon. Seu cérebro virou a CPU que resolve qualquer enigma.",
     icon: "🧠",
-    primary: "#51ffe7",
     secondary: "#6c5bff",
     accent: "#a6ff8f",
     chips: ["Código quebrado", "Lógica afiada", "Estrategista arcade"],
-    floaters: ["🧠", "🔢", "🧩", "💡"]
+    floaters: ["🧠", "🔢", "🧩", "💡"],
+    background: "radial-gradient(circle at 15% 30%, rgba(81, 255, 231, 0.38) 0%, transparent 45%), radial-gradient(circle at 85% 70%, rgba(108, 91, 255, 0.32) 0%, transparent 55%), linear-gradient(135deg, #020925 0%, #040b2f 45%, #010415 100%)",
+    gridColor: "rgba(166, 255, 143, 0.24)",
+    haze: "rgba(81, 255, 231, 0.25)",
+    particleColor: "#a6ff8f",
+    particleGlow: "rgba(108, 91, 255, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(2, 12, 36, 0.88), rgba(5, 18, 52, 0.8))",
+    contentBorder: "rgba(166, 255, 143, 0.45)",
+    innerBorder: "rgba(166, 255, 143, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(81, 255, 231, 0.2), rgba(108, 91, 255, 0.12), rgba(166, 255, 143, 0.2))",
+    taglineColor: "#a6ff8f",
+    progressAccent: "#a6ff8f",
+    progressBar: "linear-gradient(90deg, rgba(81, 255, 231, 0.9), rgba(108, 91, 255, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(2, 16, 44, 0.92), rgba(4, 10, 28, 0.88))",
+    cardBorder: "rgba(166, 255, 143, 0.5)",
+    cardGlow: "0 0 36px rgba(108, 91, 255, 0.35), 0 0 40px rgba(81, 255, 231, 0.35)",
+    cardSheen: "rgba(166, 255, 143, 0.18)",
+    cardGrid: "rgba(166, 255, 143, 0.22)",
+    barGradient: "linear-gradient(90deg, rgba(81, 255, 231, 0.9), rgba(108, 91, 255, 0.9))"
   },
   Rascal: {
+    ...baseVisualizerTheme,
     headline: "Banquete Rascal",
     tagline: "Arcade mediterrâneo liberado",
     description: "Tabuleiros viraram buffets e cada fase vencida revela novos sabores. É hora de um festival de cores, temperos e high score gastronômico.",
@@ -72,9 +154,30 @@ const rewardVisuals = {
     secondary: "#ffe379",
     accent: "#ffdec8",
     chips: ["Mediterrâneo vibrante", "Mesa lendária", "Celebrar conquistas"],
-    floaters: ["🍅", "🥗", "🔥", "🍇"]
+    floaters: ["🍅", "🥗", "🔥", "🍇"],
+    background: "radial-gradient(circle at 20% 25%, rgba(255, 143, 91, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255, 227, 121, 0.3) 0%, transparent 55%), linear-gradient(135deg, #210700 0%, #44130a 45%, #23050f 100%)",
+    warpStart: "rgba(255, 143, 91, 0.6)",
+    warpEnd: "rgba(255, 227, 121, 0.45)",
+    gridColor: "rgba(255, 200, 140, 0.2)",
+    haze: "rgba(255, 140, 90, 0.25)",
+    particleColor: "#ffdec8",
+    particleGlow: "rgba(255, 143, 91, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(46, 9, 0, 0.85), rgba(82, 22, 8, 0.78))",
+    contentBorder: "rgba(255, 200, 140, 0.45)",
+    innerBorder: "rgba(255, 200, 140, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(255, 143, 91, 0.2), rgba(255, 227, 121, 0.15), rgba(255, 222, 200, 0.2))",
+    taglineColor: "#ffdec8",
+    progressAccent: "#ffdec8",
+    progressBar: "linear-gradient(90deg, rgba(255, 143, 91, 0.9), rgba(255, 227, 121, 0.85))",
+    cardBackground: "linear-gradient(135deg, rgba(46, 9, 0, 0.92), rgba(94, 24, 10, 0.88))",
+    cardBorder: "rgba(255, 200, 140, 0.55)",
+    cardGlow: "0 0 36px rgba(255, 143, 91, 0.4), 0 0 42px rgba(255, 227, 121, 0.28)",
+    cardSheen: "rgba(255, 200, 140, 0.18)",
+    cardGrid: "rgba(255, 200, 140, 0.22)",
+    barGradient: "linear-gradient(90deg, rgba(255, 143, 91, 0.9), rgba(255, 227, 121, 0.85))"
   },
   Compras: {
+    ...baseVisualizerTheme,
     headline: "Compras Estilosas",
     tagline: "Runway em modo turbo",
     description: "Você transformou disciplina em estilo. Luzes de néon refletem em jaquetas impecáveis e sapatos prontos para qualquer boss fight social.",
@@ -83,31 +186,89 @@ const rewardVisuals = {
     secondary: "#51ffe7",
     accent: "#ffe0ff",
     chips: ["Guarda-roupa épico", "Confiança desbloqueada", "Combo de atitude"],
-    floaters: ["🛍️", "✨", "🧥", "👟"]
+    floaters: ["🛍️", "✨", "🧥", "👟"],
+    background: "radial-gradient(circle at 25% 25%, rgba(244, 114, 182, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(81, 255, 231, 0.3) 0%, transparent 55%), linear-gradient(135deg, #1a0336 0%, #02162c 50%, #030019 100%)",
+    warpStart: "rgba(244, 114, 182, 0.6)",
+    warpEnd: "rgba(81, 255, 231, 0.45)",
+    gridColor: "rgba(244, 114, 182, 0.22)",
+    haze: "rgba(244, 114, 182, 0.25)",
+    particleColor: "#ffe0ff",
+    particleGlow: "rgba(244, 114, 182, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(26, 3, 54, 0.88), rgba(0, 21, 44, 0.82))",
+    contentBorder: "rgba(244, 114, 182, 0.45)",
+    innerBorder: "rgba(244, 114, 182, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(244, 114, 182, 0.2), rgba(81, 255, 231, 0.12), rgba(255, 224, 255, 0.2))",
+    taglineColor: "#ffe0ff",
+    progressAccent: "#ffe0ff",
+    progressBar: "linear-gradient(90deg, rgba(244, 114, 182, 0.9), rgba(81, 255, 231, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(26, 3, 54, 0.92), rgba(2, 13, 34, 0.88))",
+    cardBorder: "rgba(244, 114, 182, 0.55)",
+    cardGlow: "0 0 38px rgba(244, 114, 182, 0.45), 0 0 44px rgba(81, 255, 231, 0.25)",
+    cardSheen: "rgba(244, 114, 182, 0.2)",
+    cardGrid: "rgba(244, 114, 182, 0.22)",
+    barGradient: "linear-gradient(90deg, rgba(244, 114, 182, 0.9), rgba(81, 255, 231, 0.9))"
   },
   Tanque: {
+    ...baseVisualizerTheme,
     headline: "Tanque Sensorial",
     tagline: "Silêncio interestelar alcançado",
     description: "O mundo externo some, restam apenas ondas azul neon e respirações em ritmo de synthwave. Você conquistou um portal de tranquilidade.",
     icon: "🌌",
-    primary: "#51ffe7",
     secondary: "#7f5dff",
     accent: "#baffff",
     chips: ["Flutuação total", "Reset mental", "Calma em 8-bits"],
-    floaters: ["🌌", "💫", "🛀", "🌙"]
+    floaters: ["🌌", "💫", "🛀", "🌙"],
+    background: "radial-gradient(circle at 30% 30%, rgba(81, 255, 231, 0.35) 0%, transparent 45%), radial-gradient(circle at 75% 80%, rgba(127, 93, 255, 0.3) 0%, transparent 55%), linear-gradient(135deg, #020a2c 0%, #011c3c 45%, #00081e 100%)",
+    warpStart: "rgba(81, 255, 231, 0.55)",
+    warpEnd: "rgba(127, 93, 255, 0.45)",
+    gridColor: "rgba(186, 255, 255, 0.24)",
+    haze: "rgba(127, 93, 255, 0.25)",
+    particleColor: "#baffff",
+    particleGlow: "rgba(81, 255, 231, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(2, 12, 44, 0.9), rgba(0, 26, 60, 0.85))",
+    contentBorder: "rgba(127, 93, 255, 0.45)",
+    innerBorder: "rgba(127, 93, 255, 0.22)",
+    contentSheen: "linear-gradient(130deg, rgba(81, 255, 231, 0.2), rgba(127, 93, 255, 0.12), rgba(186, 255, 255, 0.2))",
+    taglineColor: "#baffff",
+    progressAccent: "#baffff",
+    progressBar: "linear-gradient(90deg, rgba(81, 255, 231, 0.85), rgba(127, 93, 255, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(2, 18, 48, 0.94), rgba(1, 11, 32, 0.9))",
+    cardBorder: "rgba(127, 93, 255, 0.5)",
+    cardGlow: "0 0 36px rgba(127, 93, 255, 0.4), 0 0 40px rgba(81, 255, 231, 0.3)",
+    cardSheen: "rgba(186, 255, 255, 0.18)",
+    cardGrid: "rgba(186, 255, 255, 0.22)",
+    barGradient: "linear-gradient(90deg, rgba(81, 255, 231, 0.85), rgba(127, 93, 255, 0.9))"
   },
   Carro: {
+    ...baseVisualizerTheme,
     headline: "Upgrade de Carro",
     tagline: "Garage neon desbloqueada",
     description: "Cada hábito foi um pit stop perfeito. Agora o painel digital pisca esperando sua próxima arrancada.",
     icon: "🚗",
-    primary: "#51ffe7",
     secondary: "#ff5252",
-    accent: "#ffe379",
     chips: ["Torque disciplinado", "Volante firme", "Nitro conquistado"],
-    floaters: ["🚗", "⚡", "🛣️", "🏁"]
+    floaters: ["🚗", "⚡", "🛣️", "🏁"],
+    background: "radial-gradient(circle at 25% 30%, rgba(255, 82, 82, 0.35) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(81, 255, 231, 0.3) 0%, transparent 55%), linear-gradient(135deg, #01070f 0%, #210208 50%, #00040d 100%)",
+    warpStart: "rgba(255, 82, 82, 0.55)",
+    warpEnd: "rgba(81, 255, 231, 0.45)",
+    gridColor: "rgba(255, 120, 120, 0.24)",
+    haze: "rgba(255, 82, 82, 0.25)",
+    particleColor: "#ffe379",
+    particleGlow: "rgba(255, 82, 82, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(12, 3, 18, 0.9), rgba(40, 4, 18, 0.82))",
+    contentBorder: "rgba(255, 120, 120, 0.45)",
+    innerBorder: "rgba(255, 120, 120, 0.28)",
+    contentSheen: "linear-gradient(130deg, rgba(255, 82, 82, 0.2), rgba(81, 255, 231, 0.12), rgba(255, 227, 121, 0.2))",
+    progressBar: "linear-gradient(90deg, rgba(255, 82, 82, 0.9), rgba(81, 255, 231, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(20, 2, 12, 0.94), rgba(4, 18, 32, 0.88))",
+    cardBorder: "rgba(255, 120, 120, 0.55)",
+    cardGlow: "0 0 38px rgba(255, 82, 82, 0.42), 0 0 40px rgba(81, 255, 231, 0.28)",
+    cardSheen: "rgba(255, 120, 120, 0.18)",
+    cardGrid: "rgba(255, 120, 120, 0.24)",
+    barGradient: "linear-gradient(90deg, rgba(255, 82, 82, 0.9), rgba(81, 255, 231, 0.9))"
   },
   "Apê": {
+    ...baseVisualizerTheme,
     headline: "Refúgio High Score",
     tagline: "O lar perfeito ganhou vida",
     description: "Plantas neon, sofá confortável e paredes que brilham com suas vitórias. Você merece um HQ aconchegante.",
@@ -116,20 +277,58 @@ const rewardVisuals = {
     secondary: "#51ffe7",
     accent: "#ffe8c5",
     chips: ["Conforto hacker", "Espaço inspirador", "Base de operações"],
-    floaters: ["🏠", "🌿", "🛋️", "🔑"]
+    floaters: ["🏠", "🌿", "🛋️", "🔑"],
+    background: "radial-gradient(circle at 20% 25%, rgba(123, 255, 176, 0.4) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(81, 255, 231, 0.3) 0%, transparent 55%), linear-gradient(135deg, #011d16 0%, #023033 50%, #010d20 100%)",
+    warpStart: "rgba(123, 255, 176, 0.6)",
+    warpEnd: "rgba(81, 255, 231, 0.45)",
+    gridColor: "rgba(123, 255, 176, 0.22)",
+    haze: "rgba(81, 255, 231, 0.25)",
+    particleColor: "#ffe8c5",
+    particleGlow: "rgba(123, 255, 176, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(1, 29, 22, 0.9), rgba(0, 45, 54, 0.82))",
+    contentBorder: "rgba(123, 255, 176, 0.45)",
+    innerBorder: "rgba(123, 255, 176, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(123, 255, 176, 0.2), rgba(81, 255, 231, 0.12), rgba(255, 232, 197, 0.2))",
+    taglineColor: "#ffe8c5",
+    progressAccent: "#ffe8c5",
+    progressBar: "linear-gradient(90deg, rgba(123, 255, 176, 0.9), rgba(81, 255, 231, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(1, 28, 22, 0.94), rgba(0, 44, 52, 0.88))",
+    cardBorder: "rgba(123, 255, 176, 0.55)",
+    cardGlow: "0 0 36px rgba(123, 255, 176, 0.4), 0 0 38px rgba(81, 255, 231, 0.28)",
+    cardSheen: "rgba(123, 255, 176, 0.18)",
+    cardGrid: "rgba(123, 255, 176, 0.22)",
+    barGradient: "linear-gradient(90deg, rgba(123, 255, 176, 0.9), rgba(81, 255, 231, 0.9))"
   },
   TV: {
+    ...baseVisualizerTheme,
     headline: "Cinema Neon",
     tagline: "Tela gigante liberada",
     description: "Luzes RGB refletem na nova tela enquanto você escolhe qual cutscene maratonar. Sessões épicas vêm aí.",
     icon: "📺",
-    primary: "#51ffe7",
     secondary: "#ff3cab",
-    accent: "#ffe379",
     chips: ["Pixels perfeitos", "Som envolvente", "Sessões infinitas"],
-    floaters: ["📺", "🎞️", "🎮", "⭐"]
+    floaters: ["📺", "🎞️", "🎮", "⭐"],
+    background: "radial-gradient(circle at 25% 25%, rgba(81, 255, 231, 0.35) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255, 60, 171, 0.32) 0%, transparent 55%), linear-gradient(135deg, #1b0030 0%, #021238 50%, #030018 100%)",
+    warpStart: "rgba(255, 60, 171, 0.55)",
+    warpEnd: "rgba(81, 255, 231, 0.45)",
+    gridColor: "rgba(255, 60, 171, 0.22)",
+    haze: "rgba(255, 60, 171, 0.2)",
+    particleColor: "#ffe379",
+    particleGlow: "rgba(255, 60, 171, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(27, 0, 48, 0.88), rgba(2, 16, 56, 0.82))",
+    contentBorder: "rgba(255, 60, 171, 0.45)",
+    innerBorder: "rgba(255, 60, 171, 0.28)",
+    contentSheen: "linear-gradient(130deg, rgba(255, 60, 171, 0.2), rgba(81, 255, 231, 0.12), rgba(255, 227, 121, 0.2))",
+    progressBar: "linear-gradient(90deg, rgba(255, 60, 171, 0.9), rgba(81, 255, 231, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(27, 0, 48, 0.94), rgba(3, 16, 52, 0.88))",
+    cardBorder: "rgba(255, 60, 171, 0.55)",
+    cardGlow: "0 0 38px rgba(255, 60, 171, 0.45), 0 0 42px rgba(81, 255, 231, 0.3)",
+    cardSheen: "rgba(255, 60, 171, 0.18)",
+    cardGrid: "rgba(255, 60, 171, 0.24)",
+    barGradient: "linear-gradient(90deg, rgba(255, 60, 171, 0.9), rgba(81, 255, 231, 0.9))"
   },
   Daphne: {
+    ...baseVisualizerTheme,
     headline: "Sessão no Castelo",
     tagline: "Daphne em conto de fadas neon",
     description: "O palco foi preparado para sua heroína de dois aninhos. Cada fase concluída virou um flash de câmera cheio de magia.",
@@ -138,20 +337,58 @@ const rewardVisuals = {
     secondary: "#51ffe7",
     accent: "#ffe8ff",
     chips: ["Memórias eternas", "Brilho infantil", "Castelo encantado"],
-    floaters: ["👑", "✨", "📸", "🦄"]
+    floaters: ["👑", "✨", "📸", "🦄"],
+    background: "radial-gradient(circle at 20% 30%, rgba(255, 157, 225, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(81, 255, 231, 0.28) 0%, transparent 55%), linear-gradient(135deg, #2a0035 0%, #12052f 45%, #1d0030 100%)",
+    warpStart: "rgba(255, 157, 225, 0.55)",
+    warpEnd: "rgba(81, 255, 231, 0.45)",
+    gridColor: "rgba(255, 157, 225, 0.22)",
+    haze: "rgba(255, 157, 225, 0.25)",
+    particleColor: "#ffe8ff",
+    particleGlow: "rgba(255, 157, 225, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(32, 1, 48, 0.9), rgba(12, 8, 52, 0.82))",
+    contentBorder: "rgba(255, 157, 225, 0.45)",
+    innerBorder: "rgba(255, 157, 225, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(255, 157, 225, 0.2), rgba(81, 255, 231, 0.12), rgba(255, 232, 255, 0.2))",
+    taglineColor: "#ffe8ff",
+    progressAccent: "#ffe8ff",
+    progressBar: "linear-gradient(90deg, rgba(255, 157, 225, 0.9), rgba(81, 255, 231, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(32, 1, 48, 0.94), rgba(14, 6, 56, 0.88))",
+    cardBorder: "rgba(255, 157, 225, 0.55)",
+    cardGlow: "0 0 38px rgba(255, 157, 225, 0.45), 0 0 44px rgba(81, 255, 231, 0.28)",
+    cardSheen: "rgba(255, 157, 225, 0.2)",
+    cardGrid: "rgba(255, 157, 225, 0.24)",
+    barGradient: "linear-gradient(90deg, rgba(255, 157, 225, 0.9), rgba(81, 255, 231, 0.9))"
   },
   Tattoo: {
+    ...baseVisualizerTheme,
     headline: "Fechar o Braço",
     tagline: "Ink master liberado",
     description: "Seu corpo vira a tela definitiva. Traços futuristas correm pelo braço como circuitos de um arcade lendário.",
     icon: "🖋️",
-    primary: "#51ffe7",
     secondary: "#ff2e63",
-    accent: "#ffe379",
     chips: ["Coragem na pele", "Arte permanente", "Estilo máximo"],
-    floaters: ["🖋️", "⚡", "🌀", "🎨"]
+    floaters: ["🖋️", "⚡", "🌀", "🎨"],
+    background: "radial-gradient(circle at 25% 25%, rgba(255, 46, 99, 0.35) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(81, 255, 231, 0.3) 0%, transparent 55%), linear-gradient(135deg, #08010a 0%, #280008 45%, #020104 100%)",
+    warpStart: "rgba(255, 46, 99, 0.55)",
+    warpEnd: "rgba(81, 255, 231, 0.45)",
+    gridColor: "rgba(255, 46, 99, 0.24)",
+    haze: "rgba(255, 46, 99, 0.22)",
+    particleColor: "#ffe379",
+    particleGlow: "rgba(255, 46, 99, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(8, 1, 10, 0.92), rgba(34, 0, 12, 0.82))",
+    contentBorder: "rgba(255, 46, 99, 0.45)",
+    innerBorder: "rgba(255, 46, 99, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(255, 46, 99, 0.2), rgba(81, 255, 231, 0.12), rgba(255, 227, 121, 0.2))",
+    progressBar: "linear-gradient(90deg, rgba(255, 46, 99, 0.9), rgba(81, 255, 231, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(8, 1, 10, 0.94), rgba(30, 0, 12, 0.88))",
+    cardBorder: "rgba(255, 46, 99, 0.55)",
+    cardGlow: "0 0 38px rgba(255, 46, 99, 0.45), 0 0 44px rgba(81, 255, 231, 0.28)",
+    cardSheen: "rgba(255, 46, 99, 0.18)",
+    cardGrid: "rgba(255, 46, 99, 0.24)",
+    barGradient: "linear-gradient(90deg, rgba(255, 46, 99, 0.9), rgba(81, 255, 231, 0.9))"
   },
   Cabelo: {
+    ...baseVisualizerTheme,
     headline: "Cabelo Branco",
     tagline: "Transformação lendária",
     description: "Mechas prateadas brilham como lasers de fliperama. Sua evolução é visível já na primeira fase do espelho.",
@@ -160,31 +397,59 @@ const rewardVisuals = {
     secondary: "#cf28ff",
     accent: "#ffffff",
     chips: ["Estilo ousado", "Identidade marcante", "Fase nova"],
-    floaters: ["👨‍🦳", "✨", "💈", "🌟"]
+    floaters: ["👨‍🦳", "✨", "💈", "🌟"],
+    background: "radial-gradient(circle at 20% 25%, rgba(157, 217, 255, 0.38) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(207, 40, 255, 0.3) 0%, transparent 55%), linear-gradient(135deg, #020310 0%, #19012a 45%, #010312 100%)",
+    warpStart: "rgba(157, 217, 255, 0.55)",
+    warpEnd: "rgba(207, 40, 255, 0.45)",
+    gridColor: "rgba(157, 217, 255, 0.22)",
+    haze: "rgba(157, 217, 255, 0.2)",
+    particleColor: "#ffffff",
+    particleGlow: "rgba(157, 217, 255, 0.65)",
+    contentBg: "linear-gradient(135deg, rgba(3, 4, 20, 0.92), rgba(16, 6, 38, 0.82))",
+    contentBorder: "rgba(157, 217, 255, 0.45)",
+    innerBorder: "rgba(157, 217, 255, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(157, 217, 255, 0.2), rgba(207, 40, 255, 0.12), rgba(255, 255, 255, 0.25))",
+    taglineColor: "#ffffff",
+    progressAccent: "#ffffff",
+    progressBar: "linear-gradient(90deg, rgba(157, 217, 255, 0.9), rgba(207, 40, 255, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(3, 4, 20, 0.94), rgba(18, 6, 40, 0.88))",
+    cardBorder: "rgba(157, 217, 255, 0.55)",
+    cardGlow: "0 0 38px rgba(157, 217, 255, 0.45), 0 0 44px rgba(207, 40, 255, 0.3)",
+    cardSheen: "rgba(157, 217, 255, 0.2)",
+    cardGrid: "rgba(157, 217, 255, 0.24)",
+    barGradient: "linear-gradient(90deg, rgba(157, 217, 255, 0.9), rgba(207, 40, 255, 0.9))"
   },
   Viagem: {
+    ...baseVisualizerTheme,
     headline: "Viagem Épica",
     tagline: "Passaporte interestelar",
     description: "Mapa-múndi iluminado aponta para novos mundos. Você desbloqueou créditos para explorar além das fronteiras.",
     icon: "✈️",
-    primary: "#51ffe7",
     secondary: "#ff8f5b",
-    accent: "#ffe379",
     chips: ["Novos horizontes", "Mochila pronta", "Experiências raras"],
-    floaters: ["✈️", "🌍", "🧳", "⭐"]
+    floaters: ["✈️", "🌍", "🧳", "⭐"],
+    background: "radial-gradient(circle at 25% 25%, rgba(81, 255, 231, 0.35) 0%, transparent 45%), radial-gradient(circle at 80% 70%, rgba(255, 143, 91, 0.3) 0%, transparent 55%), linear-gradient(135deg, #001421 0%, #301204 45%, #020a1a 100%)",
+    warpStart: "rgba(81, 255, 231, 0.55)",
+    warpEnd: "rgba(255, 143, 91, 0.45)",
+    gridColor: "rgba(255, 143, 91, 0.22)",
+    haze: "rgba(255, 143, 91, 0.22)",
+    particleColor: "#ffe379",
+    particleGlow: "rgba(255, 143, 91, 0.6)",
+    contentBg: "linear-gradient(135deg, rgba(0, 20, 33, 0.9), rgba(40, 8, 2, 0.82))",
+    contentBorder: "rgba(255, 143, 91, 0.45)",
+    innerBorder: "rgba(255, 143, 91, 0.25)",
+    contentSheen: "linear-gradient(130deg, rgba(81, 255, 231, 0.2), rgba(255, 143, 91, 0.12), rgba(255, 227, 121, 0.2))",
+    progressBar: "linear-gradient(90deg, rgba(81, 255, 231, 0.9), rgba(255, 143, 91, 0.9))",
+    cardBackground: "linear-gradient(135deg, rgba(0, 20, 33, 0.94), rgba(40, 10, 4, 0.88))",
+    cardBorder: "rgba(255, 143, 91, 0.55)",
+    cardGlow: "0 0 38px rgba(81, 255, 231, 0.4), 0 0 44px rgba(255, 143, 91, 0.3)",
+    cardSheen: "rgba(255, 143, 91, 0.18)",
+    cardGrid: "rgba(255, 143, 91, 0.24)",
+    barGradient: "linear-gradient(90deg, rgba(81, 255, 231, 0.9), rgba(255, 143, 91, 0.9))"
   },
-  default: {
-    headline: "Recompensa Arcade",
-    tagline: "Modo vitória ativado",
-    description: "Sua disciplina abriu mais uma porta secreta dentro do fliperama da vida.",
-    icon: "🕹️",
-    primary: "#51ffe7",
-    secondary: "#cf28ff",
-    accent: "#ffe379",
-    chips: ["Fase desbloqueada", "Combo perfeito", "Continue extra"],
-    floaters: ["🕹️", "⭐", "⚡", "🎉"]
-  }
+  default: { ...baseVisualizerTheme }
 };
+
 
 function getRewardFor(month, year, day = null) {
   if (day) return rewards.find(r => r.day === day && r.month === month && r.year === year);
@@ -564,6 +829,73 @@ document.addEventListener("DOMContentLoaded", async function () {
   let diaryButtonWrapper = null;
   let hasGameStarted = false;
   let visualizerOpen = false;
+  let visualizerEnterTimeout = null;
+  let visualizerCloseTimeout = null;
+
+  const visualizerStyleMap = {
+    primary: '--visual-primary',
+    secondary: '--visual-secondary',
+    accent: '--visual-accent',
+    background: '--visual-background',
+    warpStart: '--visual-warp-start',
+    warpEnd: '--visual-warp-end',
+    gridColor: '--visual-grid-color',
+    haze: '--visual-haze',
+    particleColor: '--visual-particle-color',
+    particleGlow: '--visual-particle-glow',
+    contentBg: '--visual-content-bg',
+    contentBorder: '--visual-content-border',
+    contentShadow: '--visual-content-shadow',
+    innerBorder: '--visual-inner-border',
+    contentSheen: '--visual-content-sheen',
+    chipBg: '--visual-chip-bg',
+    chipBorder: '--visual-chip-border',
+    chipShadow: '--visual-chip-shadow',
+    chipColor: '--visual-chip-color',
+    taglineColor: '--visual-tagline-color',
+    progressText: '--visual-progress-text',
+    progressAccent: '--visual-progress-accent',
+    progressBar: '--visual-progress-bar'
+  };
+
+  const rewardCardStyleMap = {
+    cardBackground: '--reward-card-bg',
+    cardBorder: '--reward-card-border',
+    cardGlow: '--reward-card-glow',
+    cardSheen: '--reward-card-sheen',
+    cardGrid: '--reward-card-grid-color',
+    barGradient: '--reward-bar-gradient'
+  };
+
+  function setElementVar(element, variable, value) {
+    if (!element) return;
+    if (value !== undefined && value !== null && value !== '') {
+      element.style.setProperty(variable, value);
+    } else {
+      element.style.removeProperty(variable);
+    }
+  }
+
+  function applyVisualizerThemeStyles(theme) {
+    if (!visualizerEl || !theme) return;
+    Object.entries(visualizerStyleMap).forEach(([key, variable]) => {
+      setElementVar(visualizerEl, variable, theme[key]);
+    });
+  }
+
+  function applyRewardCardTheme(card, theme, reward) {
+    if (!card || !theme) return;
+    Object.entries(rewardCardStyleMap).forEach(([key, variable]) => {
+      setElementVar(card, variable, theme[key]);
+    });
+    setElementVar(card, '--visual-primary', theme.primary);
+    setElementVar(card, '--visual-secondary', theme.secondary);
+    setElementVar(card, '--visual-accent', theme.accent);
+    setElementVar(card, '--visual-progress-text', theme.progressText);
+    setElementVar(card, '--visual-progress-accent', theme.progressAccent);
+    const themeId = (reward?.label || 'default').toLowerCase().replace(/[^a-z0-9]+/gi, '-');
+    if (themeId) card.dataset.theme = themeId;
+  }
 
   if (visualizerCloseEl) {
     visualizerCloseEl.addEventListener('click', () => hideRewardVisualizer());
@@ -606,7 +938,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     const left = Math.round((window.innerWidth - baseW * scale) / 2);
     const top = Math.round((window.innerHeight - baseH * scale) / 2);
     if (videoWrapper) {
-      videoWrapper.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+      videoWrapper.style.setProperty('--wrapper-translate-x', `${left}px`);
+      videoWrapper.style.setProperty('--wrapper-translate-y', `${top}px`);
+      videoWrapper.style.setProperty('--wrapper-scale', scale);
     }
     currentScale = scale;
     positionLives(scale);
@@ -854,21 +1188,42 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function hideRewardVisualizer() {
     if (!visualizerEl || !visualizerOpen) return;
-    visualizerEl.classList.remove('show');
-    visualizerEl.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('visualizer-open');
     visualizerOpen = false;
-    if (visualizerParticlesEl) visualizerParticlesEl.innerHTML = '';
+    document.body.classList.remove('visualizer-portal');
+    visualizerEl.classList.remove('entering');
+    visualizerEl.classList.add('closing');
+    if (visualizerEnterTimeout) {
+      clearTimeout(visualizerEnterTimeout);
+      visualizerEnterTimeout = null;
+    }
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) focusTarget.removeAttribute('tabindex');
+    if (visualizerCloseTimeout) {
+      clearTimeout(visualizerCloseTimeout);
+    }
+    visualizerCloseTimeout = setTimeout(() => {
+      visualizerEl.classList.remove('show', 'closing');
+      visualizerEl.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('visualizer-open');
+      if (visualizerParticlesEl) visualizerParticlesEl.innerHTML = '';
+      if (visualizerEl.dataset.theme) delete visualizerEl.dataset.theme;
+      visualizerCloseTimeout = null;
+    }, 420);
   }
 
   function showRewardVisualizer(reward, context = {}) {
     if (!visualizerEl || !reward) return;
     const theme = getRewardTheme(reward);
-    if (theme.primary) visualizerEl.style.setProperty('--visual-primary', theme.primary);
-    if (theme.secondary) visualizerEl.style.setProperty('--visual-secondary', theme.secondary);
-    if (theme.accent) visualizerEl.style.setProperty('--visual-accent', theme.accent);
+    if (visualizerCloseTimeout) {
+      clearTimeout(visualizerCloseTimeout);
+      visualizerCloseTimeout = null;
+    }
+    if (visualizerEnterTimeout) {
+      clearTimeout(visualizerEnterTimeout);
+      visualizerEnterTimeout = null;
+    }
+    visualizerEl.classList.remove('closing');
+    applyVisualizerThemeStyles(theme);
 
     if (visualizerIconEl) visualizerIconEl.textContent = theme.icon || reward.icon || '⭐';
     if (visualizerTitleEl) visualizerTitleEl.textContent = theme.headline || reward.title || 'Recompensa Arcade';
@@ -930,10 +1285,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     populateVisualizerParticles(theme);
+    const themeId = (reward.label || 'default').toLowerCase().replace(/[^a-z0-9]+/gi, '-');
+    if (themeId) visualizerEl.dataset.theme = themeId;
     visualizerEl.setAttribute('aria-hidden', 'false');
     visualizerEl.classList.add('show');
+    document.body.classList.add('visualizer-portal');
     document.body.classList.add('visualizer-open');
     visualizerOpen = true;
+    requestAnimationFrame(() => {
+      visualizerEl.classList.add('entering');
+    });
+    visualizerEnterTimeout = setTimeout(() => {
+      visualizerEl.classList.remove('entering');
+      visualizerEnterTimeout = null;
+    }, 1200);
 
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) {
@@ -1022,12 +1387,23 @@ document.addEventListener("DOMContentLoaded", async function () {
       const reward = getRewardFor(Number(mesNum), Number(ano));
       if (reward) {
         html += `
-        <div class="reward-card" data-reward="${mesNum}-${ano}">
-          <div class="reward-icon">${reward.icon}</div>
-          <div class="title">${reward.title}</div>
-          <div class="desc">${reward.desc}</div>
-          <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mesNum}-${ano}"></div></div>
-          <div class="reward-unlocked" id="reward-unlocked-${mesNum}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
+        <div class="reward-card arcade-clicavel" data-reward="${mesNum}-${ano}" role="button" tabindex="0">
+          <div class="reward-card-warp"></div>
+          <div class="reward-card-grid"></div>
+          <div class="reward-card-sheen"></div>
+          <div class="reward-card-content">
+            <div class="reward-card-header">
+              <div class="reward-card-icon">${reward.icon}</div>
+              <div class="reward-card-text">
+                <div class="reward-card-title">${reward.title}</div>
+                <div class="reward-card-desc">${reward.desc}</div>
+              </div>
+            </div>
+            <div class="reward-card-progress">
+              <div class="reward-bar-bg"><div class="reward-bar" id="reward-bar-${mesNum}-${ano}"></div></div>
+              <div class="reward-unlocked" id="reward-unlocked-${mesNum}-${ano}" style="display:none">Prêmio desbloqueado: <span>${reward.label}</span></div>
+            </div>
+          </div>
         </div>`;
       }
       html += `</div>`; // fecha o .mes-dropdown
@@ -1379,18 +1755,28 @@ document.addEventListener("DOMContentLoaded", async function () {
   const allRewards = document.querySelectorAll('#calendario .reward-card');
 
   allRewards.forEach((card) => {
+    const key = card.getAttribute('data-reward');
+    if (!key) return;
+    const [monthStr, yearStr] = key.split('-');
+    const month = Number(monthStr);
+    const year = Number(yearStr);
+    const reward = getRewardFor(month, year);
+    if (!reward) return;
+    const theme = getRewardTheme(reward);
+    applyRewardCardTheme(card, theme, reward);
+    const ariaLabel = reward.desc ? `${reward.title} — ${reward.desc}` : reward.title;
+    card.setAttribute('aria-label', ariaLabel);
     card.addEventListener('click', (event) => {
       event.stopPropagation();
-      const key = card.getAttribute('data-reward');
-      if (!key) return;
-      const [monthStr, yearStr] = key.split('-');
-      const month = Number(monthStr);
-      const year = Number(yearStr);
-      const reward = getRewardFor(month, year);
-      if (!reward) return;
       const progress = getRewardProgress(month, year);
       const lives = calculateRemainingLives(month, year);
       showRewardVisualizer(reward, { month, year, lives, progressOverride: progress });
+    });
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        card.click();
+      }
     });
   });
 
