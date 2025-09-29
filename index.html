@@ -84,6 +84,25 @@
     <source src="https://cdn.jsdelivr.net/gh/napthedev/short-audio/success.ogg" type="audio/ogg" />
   </audio>
 
+  <div id="reward-visualizer" aria-hidden="true">
+    <div class="visualizer-backdrop"></div>
+    <div class="visualizer-grid"></div>
+    <div class="visualizer-particles" aria-hidden="true"></div>
+    <div class="visualizer-content" role="dialog" aria-modal="true">
+      <button type="button" class="visualizer-close" aria-label="Fechar visualização">✕</button>
+      <div class="visualizer-headline">
+        <div class="visualizer-icon" aria-hidden="true"></div>
+        <div class="visualizer-text-group">
+          <div class="visualizer-title"></div>
+          <div class="visualizer-tagline"></div>
+        </div>
+      </div>
+      <div class="visualizer-description"></div>
+      <div class="visualizer-details"></div>
+      <div class="visualizer-progress"></div>
+    </div>
+  </div>
+
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
