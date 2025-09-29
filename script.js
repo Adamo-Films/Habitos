@@ -1213,16 +1213,52 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
-  function applyRowProgressClip(row, pct) {
+  function applyRowProgressClip(row, pct, options = {}) {
     if (!row) return;
-    row.dataset.progressValue = pct;
+    const { animate = true } = options;
+    const clampedPct = Math.max(0, Math.min(1, pct));
+    const prevStored = parseFloat(row.dataset.prevProgress);
+    const prevPct = Number.isNaN(prevStored) ? clampedPct : Math.max(0, Math.min(1, prevStored));
+    row.dataset.progressValue = clampedPct;
     const covers = row.querySelectorAll('.progress-text-cover');
-    if (!covers.length) return;
+    if (!covers.length) {
+      row.dataset.prevProgress = clampedPct;
+      return;
+    }
 
     const rowRect = row.getBoundingClientRect();
     const rowWidth = rowRect.width;
-    const clampedPct = Math.max(0, Math.min(1, pct));
     const coveragePx = rowWidth * clampedPct;
+
+    function computeTimingForSegment(prevValue, nextValue, startRatio, endRatio) {
+      const baseDuration = 0.45;
+      if (!animate || !rowWidth) {
+        return { delay: 0, duration: 0 };
+      }
+
+      const deltaLocal = nextValue - prevValue;
+      if (deltaLocal === 0) {
+        return { delay: 0, duration: 0 };
+      }
+
+      if (deltaLocal < 0) {
+        return computeTimingForSegment(1 - prevValue, 1 - nextValue, 1 - endRatio, 1 - startRatio);
+      }
+
+      const segmentStart = Math.max(prevValue, startRatio);
+      const segmentEnd = Math.min(nextValue, endRatio);
+      const changeAmount = Math.max(0, segmentEnd - segmentStart);
+      if (changeAmount <= 0) {
+        return { delay: 0, duration: 0 };
+      }
+
+      const delayFraction = (segmentStart - prevValue) / deltaLocal;
+      const durationFraction = changeAmount / deltaLocal;
+      return {
+        delay: Math.max(0, delayFraction * baseDuration),
+        duration: Math.max(0.05, durationFraction * baseDuration)
+      };
+    }
 
     covers.forEach((cover) => {
       const holder = cover.parentElement;
@@ -1245,7 +1281,21 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       uncoveredPercent = Math.max(0, Math.min(100, uncoveredPercent));
       cover.style.setProperty('--progress-cover-uncovered', `${uncoveredPercent}%`);
+
+      if (!animate || !rowWidth || !width) {
+        cover.style.transitionDuration = '0s';
+        cover.style.transitionDelay = '0s';
+        return;
+      }
+
+      const startRatio = rowWidth ? Math.max(0, Math.min(1, start / rowWidth)) : 0;
+      const endRatio = rowWidth ? Math.max(0, Math.min(1, (start + width) / rowWidth)) : 0;
+      const { delay, duration } = computeTimingForSegment(prevPct, clampedPct, startRatio, endRatio);
+      cover.style.transitionDuration = `${duration}s`;
+      cover.style.transitionDelay = `${delay}s`;
     });
+
+    row.dataset.prevProgress = clampedPct;
   }
 
   function refreshVisibleRowProgress(scope = document) {
@@ -1253,7 +1303,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     rows.forEach((row) => {
       const stored = parseFloat(row.dataset.progressValue);
       if (!Number.isNaN(stored)) {
-        applyRowProgressClip(row, stored);
+        applyRowProgressClip(row, stored, { animate: false });
       }
     });
   }
