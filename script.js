@@ -29,6 +29,163 @@ const rewards = [
   { month: 10, year: 2026, icon: "✈️", title: "Prêmio Outubro", desc: "Viagem para fora", label: "Viagem" }
 ];
 
+const rewardVisuals = {
+  Minimo: {
+    headline: "Primeiro Continue",
+    tagline: "Press Start em grande estilo",
+    description: "O modo campanha começou. Cada hábito marcado acende os letreiros do seu fliperama pessoal.",
+    icon: "🎯",
+    primary: "#51ffe7",
+    secondary: "#cf28ff",
+    accent: "#ffe379",
+    chips: ["Setup concluído", "Score inicial", "Ritmo desbloqueado"],
+    floaters: ["🎯", "⭐", "🕹️", "⚡"]
+  },
+  Ingersoll: {
+    headline: "Relógio Ingersoll",
+    tagline: "Tempo lendário sob seu comando",
+    description: "Você sincronizou engrenagens douradas com disciplina diária. Cada alavanca puxada no arcade virou um tique preciso no pulso.",
+    icon: "⌚",
+    primary: "#f6b564",
+    secondary: "#ff49e1",
+    accent: "#ffe8c5",
+    chips: ["Engrenagens expostas", "Luxo clássico", "Pulso de campeão"],
+    floaters: ["⌚", "⚙️", "💎", "⏱️"]
+  },
+  Turing: {
+    headline: "Turing Machine",
+    tagline: "Você decifrou o código secreto",
+    description: "As cartas perfuradas e os algoritmos lógicos piscam nas luzes neon. Seu cérebro virou a CPU que resolve qualquer enigma.",
+    icon: "🧠",
+    primary: "#51ffe7",
+    secondary: "#6c5bff",
+    accent: "#a6ff8f",
+    chips: ["Código quebrado", "Lógica afiada", "Estrategista arcade"],
+    floaters: ["🧠", "🔢", "🧩", "💡"]
+  },
+  Rascal: {
+    headline: "Banquete Rascal",
+    tagline: "Arcade mediterrâneo liberado",
+    description: "Tabuleiros viraram buffets e cada fase vencida revela novos sabores. É hora de um festival de cores, temperos e high score gastronômico.",
+    icon: "🍽️",
+    primary: "#ff8f5b",
+    secondary: "#ffe379",
+    accent: "#ffdec8",
+    chips: ["Mediterrâneo vibrante", "Mesa lendária", "Celebrar conquistas"],
+    floaters: ["🍅", "🥗", "🔥", "🍇"]
+  },
+  Compras: {
+    headline: "Compras Estilosas",
+    tagline: "Runway em modo turbo",
+    description: "Você transformou disciplina em estilo. Luzes de néon refletem em jaquetas impecáveis e sapatos prontos para qualquer boss fight social.",
+    icon: "🛍️",
+    primary: "#f472b6",
+    secondary: "#51ffe7",
+    accent: "#ffe0ff",
+    chips: ["Guarda-roupa épico", "Confiança desbloqueada", "Combo de atitude"],
+    floaters: ["🛍️", "✨", "🧥", "👟"]
+  },
+  Tanque: {
+    headline: "Tanque Sensorial",
+    tagline: "Silêncio interestelar alcançado",
+    description: "O mundo externo some, restam apenas ondas azul neon e respirações em ritmo de synthwave. Você conquistou um portal de tranquilidade.",
+    icon: "🌌",
+    primary: "#51ffe7",
+    secondary: "#7f5dff",
+    accent: "#baffff",
+    chips: ["Flutuação total", "Reset mental", "Calma em 8-bits"],
+    floaters: ["🌌", "💫", "🛀", "🌙"]
+  },
+  Carro: {
+    headline: "Upgrade de Carro",
+    tagline: "Garage neon desbloqueada",
+    description: "Cada hábito foi um pit stop perfeito. Agora o painel digital pisca esperando sua próxima arrancada.",
+    icon: "🚗",
+    primary: "#51ffe7",
+    secondary: "#ff5252",
+    accent: "#ffe379",
+    chips: ["Torque disciplinado", "Volante firme", "Nitro conquistado"],
+    floaters: ["🚗", "⚡", "🛣️", "🏁"]
+  },
+  "Apê": {
+    headline: "Refúgio High Score",
+    tagline: "O lar perfeito ganhou vida",
+    description: "Plantas neon, sofá confortável e paredes que brilham com suas vitórias. Você merece um HQ aconchegante.",
+    icon: "🏠",
+    primary: "#7bffb0",
+    secondary: "#51ffe7",
+    accent: "#ffe8c5",
+    chips: ["Conforto hacker", "Espaço inspirador", "Base de operações"],
+    floaters: ["🏠", "🌿", "🛋️", "🔑"]
+  },
+  TV: {
+    headline: "Cinema Neon",
+    tagline: "Tela gigante liberada",
+    description: "Luzes RGB refletem na nova tela enquanto você escolhe qual cutscene maratonar. Sessões épicas vêm aí.",
+    icon: "📺",
+    primary: "#51ffe7",
+    secondary: "#ff3cab",
+    accent: "#ffe379",
+    chips: ["Pixels perfeitos", "Som envolvente", "Sessões infinitas"],
+    floaters: ["📺", "🎞️", "🎮", "⭐"]
+  },
+  Daphne: {
+    headline: "Sessão no Castelo",
+    tagline: "Daphne em conto de fadas neon",
+    description: "O palco foi preparado para sua heroína de dois aninhos. Cada fase concluída virou um flash de câmera cheio de magia.",
+    icon: "👑",
+    primary: "#ff9de1",
+    secondary: "#51ffe7",
+    accent: "#ffe8ff",
+    chips: ["Memórias eternas", "Brilho infantil", "Castelo encantado"],
+    floaters: ["👑", "✨", "📸", "🦄"]
+  },
+  Tattoo: {
+    headline: "Fechar o Braço",
+    tagline: "Ink master liberado",
+    description: "Seu corpo vira a tela definitiva. Traços futuristas correm pelo braço como circuitos de um arcade lendário.",
+    icon: "🖋️",
+    primary: "#51ffe7",
+    secondary: "#ff2e63",
+    accent: "#ffe379",
+    chips: ["Coragem na pele", "Arte permanente", "Estilo máximo"],
+    floaters: ["🖋️", "⚡", "🌀", "🎨"]
+  },
+  Cabelo: {
+    headline: "Cabelo Branco",
+    tagline: "Transformação lendária",
+    description: "Mechas prateadas brilham como lasers de fliperama. Sua evolução é visível já na primeira fase do espelho.",
+    icon: "👨‍🦳",
+    primary: "#9dd9ff",
+    secondary: "#cf28ff",
+    accent: "#ffffff",
+    chips: ["Estilo ousado", "Identidade marcante", "Fase nova"],
+    floaters: ["👨‍🦳", "✨", "💈", "🌟"]
+  },
+  Viagem: {
+    headline: "Viagem Épica",
+    tagline: "Passaporte interestelar",
+    description: "Mapa-múndi iluminado aponta para novos mundos. Você desbloqueou créditos para explorar além das fronteiras.",
+    icon: "✈️",
+    primary: "#51ffe7",
+    secondary: "#ff8f5b",
+    accent: "#ffe379",
+    chips: ["Novos horizontes", "Mochila pronta", "Experiências raras"],
+    floaters: ["✈️", "🌍", "🧳", "⭐"]
+  },
+  default: {
+    headline: "Recompensa Arcade",
+    tagline: "Modo vitória ativado",
+    description: "Sua disciplina abriu mais uma porta secreta dentro do fliperama da vida.",
+    icon: "🕹️",
+    primary: "#51ffe7",
+    secondary: "#cf28ff",
+    accent: "#ffe379",
+    chips: ["Fase desbloqueada", "Combo perfeito", "Continue extra"],
+    floaters: ["🕹️", "⭐", "⚡", "🎉"]
+  }
+};
+
 function getRewardFor(month, year, day = null) {
   if (day) return rewards.find(r => r.day === day && r.month === month && r.year === year);
   return rewards.find(r => r.month === month && r.year === year && !r.day);
@@ -394,9 +551,33 @@ document.addEventListener("DOMContentLoaded", async function () {
   const countersEl = document.querySelector('.arcade-counters');
   const lifeContainer = document.getElementById('life-container');
   const videoWrapper = document.getElementById('video-wrapper');
+  const visualizerEl = document.getElementById('reward-visualizer');
+  const visualizerIconEl = visualizerEl ? visualizerEl.querySelector('.visualizer-icon') : null;
+  const visualizerTitleEl = visualizerEl ? visualizerEl.querySelector('.visualizer-title') : null;
+  const visualizerTaglineEl = visualizerEl ? visualizerEl.querySelector('.visualizer-tagline') : null;
+  const visualizerDescriptionEl = visualizerEl ? visualizerEl.querySelector('.visualizer-description') : null;
+  const visualizerDetailsEl = visualizerEl ? visualizerEl.querySelector('.visualizer-details') : null;
+  const visualizerProgressEl = visualizerEl ? visualizerEl.querySelector('.visualizer-progress') : null;
+  const visualizerParticlesEl = visualizerEl ? visualizerEl.querySelector('.visualizer-particles') : null;
+  const visualizerCloseEl = visualizerEl ? visualizerEl.querySelector('.visualizer-close') : null;
   let currentScale = 1;
   let diaryButtonWrapper = null;
   let hasGameStarted = false;
+  let visualizerOpen = false;
+
+  if (visualizerCloseEl) {
+    visualizerCloseEl.addEventListener('click', () => hideRewardVisualizer());
+  }
+  if (visualizerEl) {
+    visualizerEl.addEventListener('click', (event) => {
+      if (event.target === visualizerEl) hideRewardVisualizer();
+    });
+  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && visualizerOpen) {
+      hideRewardVisualizer();
+    }
+  });
 
   function positionLives(scale = currentScale) {
     if (!lifeContainer || !calendarioEl) return;
@@ -612,6 +793,154 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!grupos[gid]) grupos[gid] = [];
     grupos[gid].push(obj);
   });
+
+  function getRewardTheme(reward) {
+    if (!reward) return rewardVisuals.default;
+    return rewardVisuals[reward.label] || rewardVisuals.default;
+  }
+
+  function populateVisualizerParticles(theme) {
+    if (!visualizerParticlesEl) return;
+    visualizerParticlesEl.innerHTML = '';
+    const icons = (theme && Array.isArray(theme.floaters) && theme.floaters.length)
+      ? theme.floaters
+      : rewardVisuals.default.floaters;
+    const total = 18;
+    for (let i = 0; i < total; i++) {
+      const span = document.createElement('span');
+      span.textContent = icons[i % icons.length];
+      span.style.left = `${Math.random() * 100}%`;
+      span.style.bottom = `${-10 + Math.random() * 20}%`;
+      span.style.animationDuration = `${6 + Math.random() * 6}s`;
+      span.style.animationDelay = `${Math.random() * 4}s`;
+      visualizerParticlesEl.appendChild(span);
+    }
+  }
+
+  function getRewardProgress(month, year) {
+    if (!month || !year) return { done: 0, total: 0, percent: 0 };
+    const key = `${month}-${year}`;
+    const dias = grupos[key] || [];
+    let done = 0;
+    dias.forEach((dia) => {
+      const habitCount = dia.habitos.length + 1;
+      if (checkAllHabitsComplete(dia.id, habitCount - 1)) done++;
+    });
+    const total = dias.length;
+    return { done, total, percent: total ? done / total : 0 };
+  }
+
+  function calculateRemainingLives(month, year) {
+    if (!month || !year) return 3;
+    const key = `${month}-${year}`;
+    const dias = grupos[key] || [];
+    if (!dias.length) return 3;
+    let lost = 0;
+    const today = new Date();
+    const monthStart = new Date(year, month - 1, 1);
+    if (monthStart > today) return 3;
+    const isCurrent = today.getFullYear() === year && today.getMonth() + 1 === month;
+    const cutoff = new Date(year, month - 1, today.getDate());
+    dias.forEach((dia) => {
+      const rowDate = new Date(dia.ano, dia.mes - 1, dia.diaDoMes);
+      if (isCurrent && rowDate >= cutoff) return;
+      const habitCount = dia.habitos.length + 1;
+      if (!checkAllHabitsComplete(dia.id, habitCount - 1)) {
+        lost++;
+      }
+    });
+    return Math.max(0, 3 - lost);
+  }
+
+  function hideRewardVisualizer() {
+    if (!visualizerEl || !visualizerOpen) return;
+    visualizerEl.classList.remove('show');
+    visualizerEl.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('visualizer-open');
+    visualizerOpen = false;
+    if (visualizerParticlesEl) visualizerParticlesEl.innerHTML = '';
+    const focusTarget = visualizerEl.querySelector('.visualizer-content');
+    if (focusTarget) focusTarget.removeAttribute('tabindex');
+  }
+
+  function showRewardVisualizer(reward, context = {}) {
+    if (!visualizerEl || !reward) return;
+    const theme = getRewardTheme(reward);
+    if (theme.primary) visualizerEl.style.setProperty('--visual-primary', theme.primary);
+    if (theme.secondary) visualizerEl.style.setProperty('--visual-secondary', theme.secondary);
+    if (theme.accent) visualizerEl.style.setProperty('--visual-accent', theme.accent);
+
+    if (visualizerIconEl) visualizerIconEl.textContent = theme.icon || reward.icon || '⭐';
+    if (visualizerTitleEl) visualizerTitleEl.textContent = theme.headline || reward.title || 'Recompensa Arcade';
+
+    const month = context.month ?? reward.month;
+    const year = context.year ?? reward.year;
+    const monthLabel = month && monthNames[month - 1] ? `${monthNames[month - 1]} ${year}` : '';
+    if (visualizerTaglineEl) {
+      const baseTag = theme.tagline || reward.title || '';
+      visualizerTaglineEl.textContent = monthLabel ? `${baseTag} • ${monthLabel}` : baseTag;
+    }
+
+    if (visualizerDescriptionEl) {
+      visualizerDescriptionEl.textContent = theme.description || reward.desc || '';
+    }
+
+    if (visualizerDetailsEl) {
+      visualizerDetailsEl.innerHTML = '';
+      const chips = (theme.chips && theme.chips.length) ? theme.chips : rewardVisuals.default.chips;
+      chips.forEach((chip) => {
+        const div = document.createElement('div');
+        div.className = 'chip';
+        div.textContent = chip;
+        visualizerDetailsEl.appendChild(div);
+      });
+    }
+
+    const progress = context.progressOverride || getRewardProgress(month, year);
+    const lives = typeof context.lives === 'number' ? context.lives : calculateRemainingLives(month, year);
+    if (visualizerProgressEl) {
+      visualizerProgressEl.innerHTML = '';
+      const pct = progress.total ? Math.round((progress.done / progress.total) * 100) : 0;
+      const bar = document.createElement('div');
+      bar.className = 'visualizer-progress-bar';
+      bar.style.setProperty('--progress', `${pct}%`);
+      const barFill = document.createElement('span');
+      bar.appendChild(barFill);
+      visualizerProgressEl.appendChild(bar);
+
+      const livesText = lives > 0 ? `${lives} ${lives === 1 ? 'vida' : 'vidas'} restantes` : 'Sem vidas restantes';
+      const meta = document.createElement('div');
+      meta.className = 'visualizer-progress-meta';
+      meta.innerHTML = `<span><strong>${progress.done}/${progress.total}</strong> dias perfeitos</span><span>${livesText}</span>`;
+      visualizerProgressEl.appendChild(meta);
+
+      if (pct === 100) {
+        const congrats = document.createElement('div');
+        congrats.className = 'visualizer-progress-meta visualizer-progress-congrats';
+        const suffix = lives > 0 ? ` com ${livesText.toLowerCase()}` : '';
+        congrats.innerHTML = `<strong>Prêmio desbloqueado!</strong><span>Você finalizou o mês${suffix}.</span>`;
+        visualizerProgressEl.appendChild(congrats);
+      } else {
+        const remaining = Math.max(0, progress.total - progress.done);
+        const hint = document.createElement('div');
+        hint.className = 'visualizer-progress-meta';
+        hint.innerHTML = `<span>Faltam <strong>${remaining}</strong> dias perfeitos para liberar.</span>`;
+        visualizerProgressEl.appendChild(hint);
+      }
+    }
+
+    populateVisualizerParticles(theme);
+    visualizerEl.setAttribute('aria-hidden', 'false');
+    visualizerEl.classList.add('show');
+    document.body.classList.add('visualizer-open');
+    visualizerOpen = true;
+
+    const focusTarget = visualizerEl.querySelector('.visualizer-content');
+    if (focusTarget) {
+      focusTarget.setAttribute('tabindex', '-1');
+      focusTarget.focus({ preventScroll: true });
+    }
+  }
 
   // === Gera o HTML do calendário ===
   let html = '';
@@ -1049,6 +1378,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
   const allRewards = document.querySelectorAll('#calendario .reward-card');
 
+  allRewards.forEach((card) => {
+    card.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const key = card.getAttribute('data-reward');
+      if (!key) return;
+      const [monthStr, yearStr] = key.split('-');
+      const month = Number(monthStr);
+      const year = Number(yearStr);
+      const reward = getRewardFor(month, year);
+      if (!reward) return;
+      const progress = getRewardProgress(month, year);
+      const lives = calculateRemainingLives(month, year);
+      showRewardVisualizer(reward, { month, year, lives, progressOverride: progress });
+    });
+  });
+
   const today = new Date();
   const mesAtual = today.getMonth() + 1;
   const anoAtual = today.getFullYear();
@@ -1347,19 +1692,31 @@ document.addEventListener("DOMContentLoaded", async function () {
     const bar = document.getElementById(`reward-bar-${month}-${year}`);
     const counterBar = document.getElementById("current-reward-bar");
     const unlocked = document.getElementById(`reward-unlocked-${month}-${year}`);
+    const rewardObj = getRewardFor(Number(month), Number(year));
     if (bar) {
       bar.style.width = (pct * 100) + "%";
       if (counterBar && Number(month) === mesAtual && Number(year) === anoAtual) counterBar.style.width = (pct * 100) + "%";
       const celebrateKey = `reward-celebrated-${month}-${year}`;
       const already = localStorage.getItem(celebrateKey) === 'true';
       if (pct === 1) {
-        unlocked.style.display = "block";
+        if (unlocked) unlocked.style.display = "block";
         if (!already && !skipCelebrate) {
           launchRewardConfetti();
           localStorage.setItem(celebrateKey, 'true');
+          if (rewardObj) {
+            const remainingLives = calculateRemainingLives(Number(month), Number(year));
+            if (remainingLives > 0) {
+              showRewardVisualizer(rewardObj, {
+                month: Number(month),
+                year: Number(year),
+                lives: remainingLives,
+                progressOverride: { done: diasCompletos, total: totalDias }
+              });
+            }
+          }
         }
       } else {
-        unlocked.style.display = "none";
+        if (unlocked) unlocked.style.display = "none";
         localStorage.removeItem(celebrateKey);
       }
     }
