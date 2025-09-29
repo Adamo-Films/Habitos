@@ -1122,6 +1122,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
       // Ativa clicado
       dropdown.style.display = 'block';
+      requestAnimationFrame(() => refreshVisibleRowProgress(dropdown));
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
       mesDiv.classList.add('open', 'mes-atual');
       if (allRewards[idx]) {
@@ -1212,6 +1213,51 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
+  function applyRowProgressClip(row, pct) {
+    if (!row) return;
+    row.dataset.progressValue = pct;
+    const covers = row.querySelectorAll('.progress-text-cover');
+    if (!covers.length) return;
+
+    const rowRect = row.getBoundingClientRect();
+    const rowWidth = rowRect.width;
+    const clampedPct = Math.max(0, Math.min(1, pct));
+    const coveragePx = rowWidth * clampedPct;
+
+    covers.forEach((cover) => {
+      const holder = cover.parentElement;
+      if (!holder) return;
+      const holderRect = holder.getBoundingClientRect();
+      const start = holderRect.left - rowRect.left;
+      const width = holderRect.width;
+
+      let uncoveredPercent = 100;
+      if (!rowWidth || !width) {
+        uncoveredPercent = clampedPct >= 1 ? 0 : 100;
+      } else if (coveragePx <= start) {
+        uncoveredPercent = 100;
+      } else if (coveragePx >= start + width) {
+        uncoveredPercent = 0;
+      } else {
+        const coveredWidth = coveragePx - start;
+        uncoveredPercent = ((width - coveredWidth) / width) * 100;
+      }
+
+      uncoveredPercent = Math.max(0, Math.min(100, uncoveredPercent));
+      cover.style.setProperty('--progress-cover-uncovered', `${uncoveredPercent}%`);
+    });
+  }
+
+  function refreshVisibleRowProgress(scope = document) {
+    const rows = scope.querySelectorAll ? scope.querySelectorAll('tr.main-row') : [];
+    rows.forEach((row) => {
+      const stored = parseFloat(row.dataset.progressValue);
+      if (!Number.isNaN(stored)) {
+        applyRowProgressClip(row, stored);
+      }
+    });
+  }
+
   // Barra de progresso e highlights
   function updateProgressBar(dayId, habitCount) {
     let checked = 0;
@@ -1224,6 +1270,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const row = document.getElementById(`mainrow-${dayId}`);
     if (row) {
       row.style.setProperty('--day-progress', pct);
+      applyRowProgressClip(row, pct);
       row.classList.toggle('day-has-progress', pct > 0);
       const wasComplete = row.classList.contains('day-complete');
       if (!row.dataset.initDone) {
@@ -1411,6 +1458,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
   updateAllRewardProgress(true);
   countStats();
+
+  let resizeProgressTimeout = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeProgressTimeout);
+    resizeProgressTimeout = setTimeout(() => {
+      refreshVisibleRowProgress(document);
+    }, 120);
+  });
 
   const segCounter = document.getElementById('seguidos-counter');
   const recordCounter = document.getElementById('record-counter');
