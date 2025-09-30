@@ -867,6 +867,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const calendarioEl = document.getElementById('calendario');
   const countersEl = document.querySelector('.arcade-counters');
   const lifeContainer = document.getElementById('life-container');
+  const levelContainer = document.getElementById('level-container');
   const videoWrapper = document.getElementById('video-wrapper');
   const visualizerEl = document.getElementById('reward-visualizer');
   const visualizerIconEl = visualizerEl ? visualizerEl.querySelector('.visualizer-icon') : null;
@@ -877,6 +878,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const visualizerProgressEl = visualizerEl ? visualizerEl.querySelector('.visualizer-progress') : null;
   const visualizerParticlesEl = visualizerEl ? visualizerEl.querySelector('.visualizer-particles') : null;
   const visualizerCloseEl = visualizerEl ? visualizerEl.querySelector('.visualizer-close') : null;
+  const levelValueEl = levelContainer ? levelContainer.querySelector('.level-value') : null;
   let currentScale = 1;
   let diaryButtonWrapper = null;
   let hasGameStarted = false;
@@ -963,12 +965,28 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
+  const statusMargin = 32;
+
   function positionLives(scale = currentScale) {
     if (!lifeContainer || !calendarioEl) return;
+    const parent = lifeContainer.parentElement;
+    if (!parent) return;
     const calRect = calendarioEl.getBoundingClientRect();
-    const parentRect = lifeContainer.parentElement.getBoundingClientRect();
-    const left = calRect.left + calRect.width / 2 - parentRect.left;
+    if (!calRect.width || !calRect.height) return;
+    const parentRect = parent.getBoundingClientRect();
+    const left = calRect.left - parentRect.left + statusMargin;
     lifeContainer.style.left = `${left / scale}px`;
+  }
+
+  function positionLevel(scale = currentScale) {
+    if (!levelContainer || !calendarioEl) return;
+    const parent = levelContainer.parentElement;
+    if (!parent) return;
+    const calRect = calendarioEl.getBoundingClientRect();
+    if (!calRect.width || !calRect.height) return;
+    const parentRect = parent.getBoundingClientRect();
+    const rightInside = calRect.right - parentRect.left - statusMargin;
+    levelContainer.style.left = `${rightInside / scale}px`;
   }
 
   function positionDiaryButton(scale = currentScale) {
@@ -996,6 +1014,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     currentScale = scale;
     positionLives(scale);
+    positionLevel(scale);
     positionDiaryButton(scale);
   }
   window.addEventListener('resize', resizeWrapper);
@@ -1080,6 +1099,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         lifeContainer.classList.add('show');
         updateLivesDisplay();
         positionLives(currentScale);
+      }
+      if (levelContainer) {
+        levelContainer.style.display = '';
+        levelContainer.classList.add('show');
+        updateLevelDisplay();
+        positionLevel(currentScale);
       }
       if (diaryButtonWrapper) {
         diaryButtonWrapper.classList.add('show');
@@ -1243,6 +1268,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     return Math.max(0, 3 - lost);
   }
 
+  function calculatePlayerLevel() {
+    let completed = 0;
+    rewards.forEach((reward) => {
+      if (!reward) return;
+      const progress = getRewardProgress(reward.month, reward.year);
+      if (progress.total && progress.done >= progress.total) {
+        completed++;
+      }
+    });
+    return completed;
+  }
+
+  function updateLevelDisplay() {
+    if (!levelContainer || !levelValueEl) return;
+    const level = calculatePlayerLevel();
+    levelValueEl.textContent = level;
+    levelContainer.setAttribute('data-level', level);
+  }
+
   function hideRewardVisualizer() {
     if (!visualizerEl || !visualizerOpen) return;
     visualizerOpen = false;
@@ -1287,6 +1331,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const month = context.month ?? reward.month;
     const year = context.year ?? reward.year;
+    const level = typeof context.level === 'number' ? context.level : calculatePlayerLevel();
     const monthLabel = month && monthNames[month - 1] ? `${monthNames[month - 1]} ${year}` : '';
     if (visualizerTaglineEl) {
       const baseTag = theme.tagline || reward.title || '';
@@ -1327,10 +1372,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       visualizerProgressEl.appendChild(meta);
 
       if (pct === 100) {
+        const levelMeta = document.createElement('div');
+        levelMeta.className = 'visualizer-progress-meta visualizer-level-up';
+        levelMeta.innerHTML = `<strong>Nível ${level}</strong><span>Novo nível desbloqueado!</span>`;
+        visualizerProgressEl.appendChild(levelMeta);
+
         const congrats = document.createElement('div');
         congrats.className = 'visualizer-progress-meta visualizer-progress-congrats';
         const suffix = lives > 0 ? ` com ${livesText.toLowerCase()}` : '';
-        congrats.innerHTML = `<strong>Prêmio desbloqueado!</strong><span>Você finalizou o mês${suffix}.</span>`;
+        congrats.innerHTML = `<strong>Prêmio desbloqueado!</strong><span>Você finalizou o mês${suffix} e alcançou o nível ${level}.</span>`;
         visualizerProgressEl.appendChild(congrats);
       } else {
         const remaining = Math.max(0, progress.total - progress.done);
@@ -1527,7 +1577,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     <div class="diary-log-content">
       <div class="diary-log-header">
         <span class="diary-log-title">Registro do Diário</span>
-        <button type="button" class="diary-log-close">Fechar</button>
       </div>
       <div class="diary-log-list" id="diary-log-list"></div>
     </div>
@@ -1545,7 +1594,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     <div class="weight-log-content">
       <div class="weight-log-header">
         <span class="weight-log-title">Histórico de Peso</span>
-        <button type="button" class="weight-log-close">Fechar</button>
       </div>
       <div class="weight-stats">
         <div class="weight-stat">
@@ -1862,9 +1910,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   const openDiaryBtn = diaryButtonWrapper.querySelector('#open-diary-log');
-  const closeDiaryBtn = diaryPanel.querySelector('.diary-log-close');
   const openWeightBtn = diaryButtonWrapper.querySelector('#open-weight-log');
-  const closeWeightBtn = weightPanel.querySelector('.weight-log-close');
 
   if (openDiaryBtn) {
     openDiaryBtn.setAttribute('aria-controls', 'diary-log-panel');
@@ -1904,6 +1950,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     setDiaryButtonState(shouldOpen);
     positionDiaryButton(currentScale);
+    positionLives(currentScale);
+    positionLevel(currentScale);
   };
 
   const toggleWeightPanel = (force) => {
@@ -1919,6 +1967,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     setWeightButtonState(shouldOpen);
     positionDiaryButton(currentScale);
+    positionLives(currentScale);
+    positionLevel(currentScale);
   };
 
   if (openDiaryBtn) {
@@ -1928,24 +1978,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
-  if (closeDiaryBtn) {
-    closeDiaryBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleDiaryPanel(false);
-    });
-  }
-
   if (openWeightBtn) {
     openWeightBtn.addEventListener('click', (e) => {
       e.preventDefault();
       toggleWeightPanel();
-    });
-  }
-
-  if (closeWeightBtn) {
-    closeWeightBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleWeightPanel(false);
     });
   }
 
@@ -2557,11 +2593,14 @@ document.addEventListener("DOMContentLoaded", async function () {
           localStorage.setItem(celebrateKey, 'true');
           if (rewardObj) {
             const remainingLives = calculateRemainingLives(Number(month), Number(year));
+            const newLevel = calculatePlayerLevel();
+            updateLevelDisplay();
             if (remainingLives > 0) {
               showRewardVisualizer(rewardObj, {
                 month: Number(month),
                 year: Number(year),
                 lives: remainingLives,
+                level: newLevel,
                 progressOverride: { done: diasCompletos, total: totalDias }
               });
             }
@@ -2599,6 +2638,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
       updateRewardProgress(mes, ano, dias.length, diasCompletos, skipCelebrate);
     });
+    updateLevelDisplay();
   }
 
   // Contadores 3D
