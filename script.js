@@ -511,11 +511,11 @@ function getHabitEmoji(habit) {
 }
 
 function getCiclicoEmoji(habito) {
-  if (habito.includes("Banho gelado")) return "🚿";
-  if (habito.includes("Arrumar o quarto")) return "🧹";
-  if (habito.includes("Se expresse")) return "🗣️";
-  if (habito.includes("Verificar peso")) return "⚖️";
-  if (habito.includes("Diário")) return "🙏";
+  if (!habito) return "🎯";
+  const normalized = habito.toLowerCase();
+  if (normalized.includes("verificar peso")) return "⚖️";
+  if (normalized.includes("diário")) return "🙏";
+  if (normalized.includes("arrumar")) return "🧹";
   return "🎯";
 }
 
@@ -677,6 +677,14 @@ function launchRewardConfetti() {
   }
 
 const DIARY_LOCAL_KEY = 'habitos-diary-entries-v1';
+const WEIGHT_LOCAL_KEY = 'habitos-weight-entries-v1';
+const WEIGHT_GOAL = 69;
+const WEIGHT_START = 88;
+
+const weightFormatter = new Intl.NumberFormat('pt-BR', {
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 1
+});
 
 function loadDiaryEntriesLocal() {
   try {
@@ -702,6 +710,50 @@ function saveDiaryEntriesLocal(entries) {
   } catch (err) {
     console.error('Falha ao salvar diário local:', err);
   }
+}
+
+function loadWeightEntriesLocal() {
+  try {
+    const stored = localStorage.getItem(WEIGHT_LOCAL_KEY);
+    if (!stored) return {};
+    const parsed = JSON.parse(stored);
+    if (!parsed || typeof parsed !== 'object') return {};
+    Object.keys(parsed).forEach((key) => {
+      const value = parsed[key]?.value;
+      if (value == null || Number.isNaN(Number(value))) {
+        delete parsed[key];
+      } else {
+        parsed[key] = {
+          value: Number(value),
+          savedAt: parsed[key]?.savedAt || Date.now()
+        };
+      }
+    });
+    return parsed;
+  } catch (err) {
+    console.error('Falha ao ler pesos locais:', err);
+    return {};
+  }
+}
+
+function saveWeightEntriesLocal(entries) {
+  try {
+    localStorage.setItem(WEIGHT_LOCAL_KEY, JSON.stringify(entries));
+  } catch (err) {
+    console.error('Falha ao salvar pesos locais:', err);
+  }
+}
+
+function formatWeightDisplay(value) {
+  if (value == null || Number.isNaN(value)) return '--';
+  return `${weightFormatter.format(value)} kg`;
+}
+
+function formatWeightDelta(delta) {
+  if (delta == null || Number.isNaN(delta)) return '--';
+  if (Math.abs(delta) < 0.05) return '0 kg';
+  const formatted = weightFormatter.format(Math.abs(delta));
+  return `${delta > 0 ? '+' : '-'}${formatted} kg`;
 }
 
 function formatDiaryDisplayDate(meta) {
@@ -1044,33 +1096,38 @@ document.addEventListener("DOMContentLoaded", async function () {
   const progress = await getProgress();
   let diaryEntries = await getDiaryEntries();
   if (!diaryEntries || typeof diaryEntries !== 'object') diaryEntries = {};
+  let weightEntries = loadWeightEntriesLocal();
+  if (!weightEntries || typeof weightEntries !== 'object') weightEntries = {};
   const dados = [];
-  const habitos_incrementais = {
-    1: ["Dormir até meia noite"],
-    6: ["Exercício (30 min)"],
-    11: ["Planejar dia"],
-    16: ["Eliminar Youtube"],
-    21: ["Beber 2L de água"],
-    26: ["45 min de hiperfoco"],
-    31: ["Acordar às 6h"],
-    36: ["Afirmações"],
-    41: ["Exercício (60 min)"],
-    46: ["1700 calorias"],
-    51: ["Acordar às 5h"],
-    56: ["Meditação (10 min)"],
-    61: ["90 min de hiperfoco"],
-    66: ["Leitura (30 min)"],
-    71: ["Exercício (90 min)"],
-    76: ["Praticar italiano"],
-    81: ["Eliminar vícios"],
-    86: ["90 min de hiperfoco (2x)"],
-  };
+  const habitosIncrementaisLista = [
+    "Dormir até meia noite",
+    "Exercício (30 min)",
+    "Planejar dia",
+    "Eliminar Youtube",
+    "Beber 2L de água",
+    "45 min de hiperfoco",
+    "Acordar às 6h",
+    "Afirmações",
+    "Exercício (60 min)",
+    "1700 calorias",
+    "Acordar às 5h",
+    "Meditação (10 min)",
+    "90 min de hiperfoco",
+    "Leitura (30 min)",
+    "Exercício (90 min)",
+    "Praticar italiano",
+    "Eliminar vícios",
+    "90 min de hiperfoco (2x)"
+  ];
+  const habitos_incrementais = {};
+  habitosIncrementaisLista.forEach((habito, index) => {
+    const diaIntroducao = 1 + index * 3;
+    habitos_incrementais[diaIntroducao] = [habito];
+  });
   const habitos_ciclicos = [
-    "Banho gelado",
-    "Arrumar o quarto",
-    "Se expresse",
     "Verificar peso",
-    "Diário e gratidão"
+    "Diário e gratidão",
+    "Arrumar quarto"
   ];
   // Cria calendário de 29/09/2025 até 30/09/2026 para contemplar todas as recompensas
   const inicio = new Date(2025, 8, 29), fim = new Date(2026, 8, 30);
@@ -1337,17 +1394,21 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (dayNum <= 5) {
           habitosCellText = dia.habitos.join(', ');
         } else if (habitos_incrementais[dayNum]) {
-        const newHabs = habitos_incrementais[dayNum];
-        habitosCellText = `+ ${newHabs.join(', ')}`;
-      } else {
-        const total = dia.habitos.length;
-        habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
-      }
-      const isDiary = dia.ciclico === "Diário e gratidão";
-      const diaryAttrs = isDiary ? ` data-diary-day="${dia.id}"` : '';
-      const diaryLabelAttrs = isDiary ? ` data-diary-day="${dia.id}" data-diary="true"` : '';
-      const diaryEmojiAttrs = isDiary ? ` data-diary-day="${dia.id}"` : '';
-      const diaryEditorHtml = isDiary ? `
+          const newHabs = habitos_incrementais[dayNum];
+          habitosCellText = `+ ${newHabs.join(', ')}`;
+        } else {
+          const total = dia.habitos.length;
+          habitosCellText = `${total} ${total > 1 ? 'hábitos' : 'hábito'}`;
+        }
+        const isDiary = dia.ciclico === "Diário e gratidão";
+        const isWeight = dia.ciclico === "Verificar peso";
+        const diaryAttrs = isDiary ? ` data-diary-day="${dia.id}"` : '';
+        const diaryLabelAttrs = isDiary ? ` data-diary-day="${dia.id}" data-diary="true"` : '';
+        const diaryEmojiAttrs = isDiary ? ` data-diary-day="${dia.id}"` : '';
+        const weightAttrs = isWeight ? ` data-weight-day="${dia.id}"` : '';
+        const weightLabelAttrs = isWeight ? ` data-weight-day="${dia.id}" data-weight="true"` : '';
+        const weightEmojiAttrs = isWeight ? ` data-weight-day="${dia.id}"` : '';
+        const diaryEditorHtml = isDiary ? `
             <div class="diary-editor" id="diary-editor-${dia.id}" data-day="${dia.id}" style="display:none;">
               <textarea class="diary-textarea" id="diary-textarea-${dia.id}" placeholder="Escreva seu diário..."></textarea>
               <div class="diary-actions">
@@ -1355,7 +1416,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <button type="button" class="diary-cancel" data-day="${dia.id}">Cancelar</button>
               </div>
             </div>` : '';
-      html += `
+        const weightEditorHtml = isWeight ? `
+            <div class="weight-editor" id="weight-editor-${dia.id}" data-day="${dia.id}" style="display:none;">
+              <div class="weight-input-group">
+                <input type="number" min="0" step="0.1" class="weight-input" id="weight-input-${dia.id}" placeholder="Peso atual" inputmode="decimal">
+                <span class="weight-unit">kg</span>
+              </div>
+              <div class="weight-actions">
+                <button type="button" class="weight-save" data-day="${dia.id}">Salvar</button>
+                <button type="button" class="weight-cancel" data-day="${dia.id}">Cancelar</button>
+              </div>
+            </div>` : '';
+        const weightBadgeHtml = isWeight ? `
+                <div class="weight-latest" id="weight-latest-${dia.id}"></div>` : '';
+        html += `
         <tr class="main-row arcade-clicavel" data-dropdown="${dia.id}" id="mainrow-${dia.id}">
           <td class="progress-text gold col-date">${renderProgressText(dia.data)}</td>
           <td class="progress-text gold col-daily">${renderProgressText(habitosCellText)}</td>
@@ -1371,13 +1445,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                   <input type="checkbox" class="habit-checkbox" id="${dia.id}-habit-${idx}">
                 </div>
               `).join('')}
-              <div class="habit-item arcade-clicavel${isDiary ? ' diary-habit' : ''}" id="habititem-${dia.id}-ciclico"${diaryAttrs}>
-                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico"${diaryEmojiAttrs}>${getCiclicoEmoji(dia.ciclico)}</span>
-                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico"${diaryLabelAttrs}>${dia.ciclico}</label>
-                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico"${isDiary ? ` data-diary-day="${dia.id}"` : ''}>
+              <div class="habit-item arcade-clicavel${isDiary ? ' diary-habit' : ''}${isWeight ? ' weight-habit' : ''}" id="habititem-${dia.id}-ciclico"${diaryAttrs}${weightAttrs}>
+                <span class="habit-emoji" tabindex="0" data-checkbox="${dia.id}-ciclico"${diaryEmojiAttrs}${weightEmojiAttrs}>${getCiclicoEmoji(dia.ciclico)}</span>
+                <label class="habit-label" for="${dia.id}-ciclico" id="label-${dia.id}-ciclico"${diaryLabelAttrs}${weightLabelAttrs}>${dia.ciclico}</label>${weightBadgeHtml}
+                <input type="checkbox" class="habit-checkbox" id="${dia.id}-ciclico"${isDiary ? ` data-diary-day="${dia.id}"` : ''}${isWeight ? ` data-weight-day="${dia.id}"` : ''}>
               </div>
             </div>
             ${diaryEditorHtml}
+            ${weightEditorHtml}
           </td>
         </tr>`;
       });
@@ -1423,7 +1498,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   diaryButtonWrapper = document.createElement('div');
   diaryButtonWrapper.id = 'diary-log-button-wrapper';
   diaryButtonWrapper.className = 'diary-log-button-wrapper';
-  diaryButtonWrapper.innerHTML = `<button type="button" id="open-diary-log" class="diary-log-button arcade-clicavel">📔 Diário</button>`;
+  diaryButtonWrapper.innerHTML = `
+    <button type="button" id="open-diary-log" class="diary-log-button arcade-clicavel">📔 Diário</button>
+    <button type="button" id="open-weight-log" class="diary-log-button weight-log-button arcade-clicavel">⚖️ Peso</button>
+  `;
   if (screenWrapper) {
     screenWrapper.appendChild(diaryButtonWrapper);
   } else {
@@ -1457,6 +1535,46 @@ document.addEventListener("DOMContentLoaded", async function () {
   calendario.appendChild(diaryPanel);
   applyTwemoji(diaryPanel);
   const diaryLogList = diaryPanel.querySelector('#diary-log-list');
+
+  const previousWeightPanel = calendario.querySelector('#weight-log-panel');
+  if (previousWeightPanel) previousWeightPanel.remove();
+  const weightPanel = document.createElement('div');
+  weightPanel.id = 'weight-log-panel';
+  weightPanel.className = 'weight-log-panel';
+  weightPanel.innerHTML = `
+    <div class="weight-log-content">
+      <div class="weight-log-header">
+        <span class="weight-log-title">Histórico de Peso</span>
+        <button type="button" class="weight-log-close">Fechar</button>
+      </div>
+      <div class="weight-stats">
+        <div class="weight-stat">
+          <span class="weight-stat-label">Meta</span>
+          <span class="weight-stat-value">${formatWeightDisplay(WEIGHT_GOAL)}</span>
+        </div>
+        <div class="weight-stat">
+          <span class="weight-stat-label">Inicial</span>
+          <span class="weight-stat-value">${formatWeightDisplay(WEIGHT_START)}</span>
+        </div>
+        <div class="weight-stat">
+          <span class="weight-stat-label">Atual</span>
+          <span class="weight-stat-value" id="weight-current">--</span>
+        </div>
+        <div class="weight-stat">
+          <span class="weight-stat-label">Falta</span>
+          <span class="weight-stat-value" id="weight-remaining">--</span>
+        </div>
+      </div>
+      <div class="weight-chart-wrapper" id="weight-chart"></div>
+      <div class="weight-log-list" id="weight-log-list"></div>
+    </div>
+  `;
+  calendario.appendChild(weightPanel);
+  applyTwemoji(weightPanel);
+  const weightChartContainer = weightPanel.querySelector('#weight-chart');
+  const weightLogList = weightPanel.querySelector('#weight-log-list');
+  const weightCurrentEl = weightPanel.querySelector('#weight-current');
+  const weightRemainingEl = weightPanel.querySelector('#weight-remaining');
 
   function renderDiaryLog() {
     if (!diaryLogList) return;
@@ -1522,6 +1640,142 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
+  function buildWeightEntries() {
+    return Object.entries(weightEntries)
+      .map(([dayId, entry]) => {
+        if (!entry || entry.value == null) return null;
+        const meta = diaLookup[dayId];
+        if (!meta) return null;
+        const date = new Date(meta.ano, meta.mes - 1, meta.diaDoMes);
+        return {
+          dayId,
+          weight: Number(entry.value),
+          date,
+          label: formatDiaryDisplayDate(meta),
+          order: date.getTime()
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.order - b.order);
+  }
+
+  function renderWeightLog() {
+    if (!weightChartContainer || !weightLogList) return;
+    const entries = buildWeightEntries();
+    const startDate = new Date(inicio);
+    const points = [{
+      dayId: 'start',
+      weight: WEIGHT_START,
+      date: startDate,
+      label: 'Início',
+      order: startDate.getTime()
+    }, ...entries];
+
+    const latest = entries.length ? entries[entries.length - 1] : points[0];
+    if (weightCurrentEl) weightCurrentEl.textContent = formatWeightDisplay(latest.weight);
+    if (weightRemainingEl) {
+      const remaining = Math.max(0, latest.weight - WEIGHT_GOAL);
+      weightRemainingEl.textContent = `${weightFormatter.format(remaining)} kg`;
+    }
+
+    if (!entries.length) {
+      weightLogList.innerHTML = '<p class="weight-empty">Nenhum peso registrado ainda.</p>';
+    } else {
+      const rows = entries.map((entry) => {
+        const diff = formatWeightDelta(entry.weight - WEIGHT_GOAL);
+        return `
+          <tr>
+            <td>${entry.label}</td>
+            <td>${formatWeightDisplay(entry.weight)}</td>
+            <td>${diff}</td>
+          </tr>`;
+      }).join('');
+      weightLogList.innerHTML = `
+        <table class="weight-log-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Peso</th>
+              <th>Diferença p/ meta</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    if (points.length <= 1) {
+      weightChartContainer.innerHTML = '<p class="weight-empty">Registre um peso para visualizar o gráfico.</p>';
+      return;
+    }
+
+    const allValues = points.map((p) => p.weight).concat([WEIGHT_GOAL]);
+    let minVal = Math.min(...allValues);
+    let maxVal = Math.max(...allValues);
+    if (maxVal - minVal < 1) {
+      const mid = (maxVal + minVal) / 2;
+      maxVal = mid + 0.5;
+      minVal = mid - 0.5;
+    }
+    const padding = Math.max((maxVal - minVal) * 0.1, 1);
+    const minY = Math.max(0, minVal - padding);
+    const maxY = maxVal + padding;
+    const width = 820;
+    const height = 360;
+    const paddingLeft = 70;
+    const paddingRight = 30;
+    const paddingTop = 30;
+    const paddingBottom = 60;
+    const innerWidth = width - paddingLeft - paddingRight;
+    const innerHeight = height - paddingTop - paddingBottom;
+    const step = points.length > 1 ? innerWidth / (points.length - 1) : 0;
+    const range = Math.max(1, maxY - minY);
+
+    const coords = points.map((point, index) => {
+      const x = paddingLeft + (points.length > 1 ? step * index : innerWidth / 2);
+      const y = paddingTop + ((maxY - point.weight) / range) * innerHeight;
+      return {
+        ...point,
+        x,
+        y
+      };
+    });
+
+    const pathData = coords.map((coord, index) => {
+      const cmd = index === 0 ? 'M' : 'L';
+      return `${cmd}${coord.x.toFixed(2)},${coord.y.toFixed(2)}`;
+    }).join(' ');
+
+    const goalY = paddingTop + ((maxY - WEIGHT_GOAL) / range) * innerHeight;
+    const pointDots = coords.map((coord) => `<circle class="weight-chart-point" cx="${coord.x.toFixed(2)}" cy="${coord.y.toFixed(2)}" r="6"></circle>`).join('');
+    const xLabels = coords.map((coord) => `<text x="${coord.x.toFixed(2)}" y="${height - paddingBottom / 2}" class="weight-chart-label">${coord.label}</text>`).join('');
+    const yTicksValues = [maxVal, (maxVal + minVal) / 2, Math.max(minVal, 0)];
+    const yTicks = yTicksValues.map((value) => {
+      const y = paddingTop + ((maxY - value) / range) * innerHeight;
+      return `<text x="${paddingLeft - 16}" y="${y.toFixed(2)}" class="weight-axis-label">${weightFormatter.format(value)}</text>`;
+    }).join('');
+
+    weightChartContainer.innerHTML = `
+      <svg class="weight-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" role="img" aria-label="Gráfico de evolução do peso">
+        <rect class="weight-chart-bg" x="0" y="0" width="${width}" height="${height}"></rect>
+        <g class="weight-chart-axis">
+          <line x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
+          <line x1="${paddingLeft}" y1="${height - paddingBottom}" x2="${width - paddingRight}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
+        </g>
+        <g class="weight-chart-goal-group">
+          <line x1="${paddingLeft}" y1="${goalY.toFixed(2)}" x2="${width - paddingRight}" y2="${goalY.toFixed(2)}" class="weight-chart-goal"></line>
+          <text x="${width - paddingRight}" y="${goalY - 8}" class="weight-goal-label" text-anchor="end">Meta ${formatWeightDisplay(WEIGHT_GOAL)}</text>
+        </g>
+        <path class="weight-chart-line" d="${pathData}"></path>
+        ${pointDots}
+        <g class="weight-chart-labels">
+          ${xLabels}
+          ${yTicks}
+        </g>
+      </svg>
+    `;
+  }
+
   function updateDiaryVisualState(dayId) {
     const item = document.getElementById(`habititem-${dayId}-ciclico`);
     if (!item) return;
@@ -1530,6 +1784,53 @@ document.addEventListener("DOMContentLoaded", async function () {
     } else {
       item.classList.remove('diary-filled');
     }
+  }
+
+  function updateWeightVisualState(dayId) {
+    const item = document.getElementById(`habititem-${dayId}-ciclico`);
+    if (!item) return;
+    const entry = weightEntries[dayId];
+    const hasValue = entry && entry.value != null && !Number.isNaN(Number(entry.value));
+    item.classList.toggle('weight-filled', Boolean(hasValue));
+    const badge = document.getElementById(`weight-latest-${dayId}`);
+    if (badge) {
+      if (hasValue) {
+        badge.textContent = `Peso: ${formatWeightDisplay(entry.value)}`;
+        badge.style.display = '';
+      } else {
+        badge.textContent = '';
+        badge.style.display = 'none';
+      }
+    }
+  }
+
+  function resetWeightEditor(dayId) {
+    const input = document.getElementById(`weight-input-${dayId}`);
+    if (input) {
+      const entry = weightEntries[dayId];
+      input.value = entry && entry.value != null ? Number(entry.value).toString() : '';
+      input.classList.remove('weight-input-error');
+    }
+  }
+
+  function showWeightEditor(dayId) {
+    const editor = document.getElementById(`weight-editor-${dayId}`);
+    if (!editor) return;
+    resetWeightEditor(dayId);
+    editor.style.display = 'block';
+    editor.classList.add('open');
+    const input = document.getElementById(`weight-input-${dayId}`);
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }
+
+  function hideWeightEditor(dayId) {
+    const editor = document.getElementById(`weight-editor-${dayId}`);
+    if (!editor) return;
+    editor.style.display = 'none';
+    editor.classList.remove('open');
   }
 
   function resetDiaryEditor(dayId) {
@@ -1562,9 +1863,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const openDiaryBtn = diaryButtonWrapper.querySelector('#open-diary-log');
   const closeDiaryBtn = diaryPanel.querySelector('.diary-log-close');
+  const openWeightBtn = diaryButtonWrapper.querySelector('#open-weight-log');
+  const closeWeightBtn = weightPanel.querySelector('.weight-log-close');
 
   if (openDiaryBtn) {
     openDiaryBtn.setAttribute('aria-controls', 'diary-log-panel');
+  }
+
+  if (openWeightBtn) {
+    openWeightBtn.setAttribute('aria-controls', 'weight-log-panel');
   }
 
   const setDiaryButtonState = (isOpen) => {
@@ -1575,8 +1882,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     applyTwemoji(openDiaryBtn);
   };
 
+  const setWeightButtonState = (isOpen) => {
+    if (!openWeightBtn) return;
+    openWeightBtn.classList.toggle('active', isOpen);
+    openWeightBtn.innerHTML = isOpen ? 'Fechar Peso' : '⚖️ Peso';
+    openWeightBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    applyTwemoji(openWeightBtn);
+  };
+
   const toggleDiaryPanel = (force) => {
     const shouldOpen = typeof force === 'boolean' ? force : !calendario.classList.contains('show-diary');
+    if (shouldOpen) {
+      calendario.classList.remove('show-weight');
+      setWeightButtonState(false);
+    }
     calendario.classList.toggle('show-diary', shouldOpen);
     if (shouldOpen) {
       renderDiaryLog();
@@ -1584,6 +1903,21 @@ document.addEventListener("DOMContentLoaded", async function () {
       calendario.scrollTop = 0;
     }
     setDiaryButtonState(shouldOpen);
+    positionDiaryButton(currentScale);
+  };
+
+  const toggleWeightPanel = (force) => {
+    const shouldOpen = typeof force === 'boolean' ? force : !calendario.classList.contains('show-weight');
+    if (shouldOpen) {
+      calendario.classList.remove('show-diary');
+      setDiaryButtonState(false);
+    }
+    calendario.classList.toggle('show-weight', shouldOpen);
+    if (shouldOpen) {
+      renderWeightLog();
+      calendario.scrollTop = 0;
+    }
+    setWeightButtonState(shouldOpen);
     positionDiaryButton(currentScale);
   };
 
@@ -1601,6 +1935,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
+  if (openWeightBtn) {
+    openWeightBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleWeightPanel();
+    });
+  }
+
+  if (closeWeightBtn) {
+    closeWeightBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleWeightPanel(false);
+    });
+  }
+
   if (document.__diaryEscapeHandler) {
     document.removeEventListener('keydown', document.__diaryEscapeHandler);
   }
@@ -1612,15 +1960,28 @@ document.addEventListener("DOMContentLoaded", async function () {
   document.__diaryEscapeHandler = handleDiaryEscape;
   document.addEventListener('keydown', handleDiaryEscape);
 
+  if (document.__weightEscapeHandler) {
+    document.removeEventListener('keydown', document.__weightEscapeHandler);
+  }
+  const handleWeightEscape = (e) => {
+    if (e.key === 'Escape' && calendario.classList.contains('show-weight')) {
+      toggleWeightPanel(false);
+    }
+  };
+  document.__weightEscapeHandler = handleWeightEscape;
+  document.addEventListener('keydown', handleWeightEscape);
+
   calendario.classList.remove('show-diary');
   setDiaryButtonState(false);
+  calendario.classList.remove('show-weight');
+  setWeightButtonState(false);
 
-  document.querySelectorAll('.habit-item[data-diary-day]').forEach((item) => {
-    const dayId = item.getAttribute('data-diary-day');
-    updateDiaryVisualState(dayId);
-    resetDiaryEditor(dayId);
-    const label = item.querySelector('.habit-label');
-    const checkbox = item.querySelector('.habit-checkbox');
+    document.querySelectorAll('.habit-item[data-diary-day]').forEach((item) => {
+      const dayId = item.getAttribute('data-diary-day');
+      updateDiaryVisualState(dayId);
+      resetDiaryEditor(dayId);
+      const label = item.querySelector('.habit-label');
+      const checkbox = item.querySelector('.habit-checkbox');
 
     item.addEventListener('click', (e) => {
       if (e.target.tagName === 'INPUT') return;
@@ -1642,14 +2003,118 @@ document.addEventListener("DOMContentLoaded", async function () {
       checkbox.addEventListener('click', (e) => {
         e.stopPropagation();
       });
-    }
-  });
+      }
+    });
 
-  document.querySelectorAll('.diary-save').forEach((button) => {
-    button.addEventListener('click', async (e) => {
-      e.stopPropagation();
-      const dayId = button.getAttribute('data-day');
-      if (!dayId) return;
+    document.querySelectorAll('.habit-item[data-weight-day]').forEach((item) => {
+      const dayId = item.getAttribute('data-weight-day');
+      updateWeightVisualState(dayId);
+      resetWeightEditor(dayId);
+      const label = item.querySelector('.habit-label');
+      const checkbox = item.querySelector('.habit-checkbox');
+
+      item.addEventListener('click', (e) => {
+        if (e.target.tagName === 'INPUT') return;
+        if (e.target.classList.contains('habit-emoji')) return;
+        if (e.target.classList.contains('habit-label')) return;
+        if (e.target.closest('.weight-actions')) return;
+        showWeightEditor(dayId);
+      });
+
+      if (label) {
+        label.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          showWeightEditor(dayId);
+        });
+      }
+
+      if (checkbox) {
+        checkbox.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      }
+    });
+
+    document.querySelectorAll('.weight-input').forEach((input) => {
+      input.addEventListener('input', () => {
+        input.classList.remove('weight-input-error');
+      });
+    });
+
+    document.querySelectorAll('.weight-save').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const dayId = button.getAttribute('data-day');
+        if (!dayId) return;
+        const input = document.getElementById(`weight-input-${dayId}`);
+        if (!input) return;
+        const original = button.textContent;
+        button.disabled = true;
+        button.textContent = 'Salvando...';
+        const rawValue = (input.value || '').toString().replace(',', '.').trim();
+        const checkbox = document.getElementById(`${dayId}-ciclico`);
+
+        if (!rawValue) {
+          delete weightEntries[dayId];
+          saveWeightEntriesLocal(weightEntries);
+          hideWeightEditor(dayId);
+          updateWeightVisualState(dayId);
+          renderWeightLog();
+          if (checkbox && checkbox.checked) {
+            checkbox.checked = false;
+            checkbox.dispatchEvent(new Event('change'));
+          }
+          button.textContent = 'Removido';
+          setTimeout(() => { button.textContent = original; }, 1500);
+          button.disabled = false;
+          return;
+        }
+
+        const parsed = parseFloat(rawValue);
+        if (Number.isNaN(parsed) || parsed <= 0) {
+          input.classList.add('weight-input-error');
+          button.textContent = original;
+          button.disabled = false;
+          input.focus();
+          return;
+        }
+
+        weightEntries[dayId] = {
+          value: parsed,
+          savedAt: Date.now()
+        };
+        saveWeightEntriesLocal(weightEntries);
+        hideWeightEditor(dayId);
+        updateWeightVisualState(dayId);
+        renderWeightLog();
+        if (checkbox && !checkbox.checked) {
+          checkbox.checked = true;
+          checkbox.dispatchEvent(new Event('change'));
+        }
+        button.textContent = 'Salvo!';
+        setTimeout(() => { button.textContent = original; }, 1500);
+        button.disabled = false;
+      });
+    });
+
+    document.querySelectorAll('.weight-cancel').forEach((button) => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const dayId = button.getAttribute('data-day');
+        if (!dayId) return;
+        resetWeightEditor(dayId);
+        hideWeightEditor(dayId);
+      });
+    });
+
+    document.querySelectorAll('.diary-save').forEach((button) => {
+      button.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const dayId = button.getAttribute('data-day');
+        if (!dayId) return;
       const textarea = document.getElementById(`diary-textarea-${dayId}`);
       if (!textarea) return;
       const meta = diaLookup[dayId];
@@ -1668,7 +2133,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         saveDiaryEntriesLocal(diaryEntries);
         resetDiaryEditor(dayId);
         updateDiaryVisualState(dayId);
-        renderDiaryLog();
+    renderDiaryLog();
+    renderWeightLog();
         hideDiaryEditor(dayId);
         const checkbox = document.getElementById(`${dayId}-ciclico`);
         if (text) {
@@ -2228,6 +2694,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       const diaryDay = emoji.getAttribute('data-diary-day');
       if (diaryDay) {
         showDiaryEditor(diaryDay);
+        return;
+      }
+      const weightDay = emoji.getAttribute('data-weight-day');
+      if (weightDay) {
+        showWeightEditor(weightDay);
         return;
       }
       const id = emoji.getAttribute('data-checkbox');
