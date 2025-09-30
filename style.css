@@ -1462,6 +1462,7 @@ body.visualizer-open {
   background-size: 140% 140%;
   filter: saturate(120%);
   animation: backdropDrift 18s ease-in-out infinite;
+  z-index: 1;
 }
 
 #reward-visualizer::before {
@@ -1480,6 +1481,7 @@ body.visualizer-open {
   place-items: center;
   overflow: hidden;
   pointer-events: none;
+  z-index: 2;
 }
 
 #reward-visualizer .visualizer-warp::before {
@@ -1524,25 +1526,17 @@ body.visualizer-open {
 }
 
 #reward-visualizer .visualizer-grid {
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(90deg, var(--visual-grid-color) 0px, var(--visual-grid-color) 2px, transparent 2px, transparent 80px),
-              repeating-linear-gradient(0deg, var(--visual-grid-color) 0px, var(--visual-grid-color) 2px, transparent 2px, transparent 80px);
-  transform: perspective(900px) rotateX(68deg) scale(1.8);
-  transform-origin: center;
-  opacity: 0.45;
-  filter: drop-shadow(0 0 45px rgba(0,0,0,0.85));
-  animation: gridPulse 6s ease-in-out infinite;
+  display: none;
 }
 
 #reward-visualizer.entering .visualizer-grid {
-  animation: gridPulse 6s ease-in-out infinite, gridLift 1.15s ease-out forwards;
+  display: none;
 }
 
 @keyframes gridPulse {
-  0%, 100% { opacity: 0.38; }
-  40% { opacity: 0.6; }
-  70% { opacity: 0.45; }
+  0%, 100% { opacity: 0; }
+  40% { opacity: 0; }
+  70% { opacity: 0; }
 }
 
 #reward-visualizer .visualizer-particles {
@@ -1550,16 +1544,18 @@ body.visualizer-open {
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  z-index: 5;
 }
 
 #reward-visualizer .visualizer-haze {
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at center, var(--visual-haze), transparent 70%);
-  opacity: 0.25;
+  opacity: 0.18;
   mix-blend-mode: screen;
   pointer-events: none;
   animation: portalHaze 8s ease-in-out infinite;
+  z-index: 4;
 }
 
 #reward-visualizer .visualizer-particles span {
@@ -1664,6 +1660,7 @@ body.visualizer-open {
   transform: translate3d(0, 0, 0) scale(1);
   opacity: 0;
   transition: opacity 0.45s ease, transform 0.6s cubic-bezier(.16, .84, .44, 1);
+  z-index: 10;
 }
 
 #reward-visualizer.show .visualizer-content {
