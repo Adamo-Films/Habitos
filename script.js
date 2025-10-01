@@ -1645,15 +1645,17 @@ document.addEventListener("DOMContentLoaded", async function () {
       const plain = (entry.texto || '').replace(/\s+/g, ' ').trim();
       const previewBase = plain.length ? plain : 'Entrada registrada';
       const preview = previewBase.length > 120 ? previewBase.slice(0, 117) + '…' : previewBase;
+      const previewSafe = escapeHTML(preview);
+      const displayDateSafe = escapeHTML(entry.displayDate || '');
       return `
         <tr class="main-row arcade-clicavel diary-log-row" data-day="${dayId}">
-          <td class="progress-text gold">${renderProgressText(entry.displayDate)}</td>
-          <td class="progress-text gold">${renderProgressText(preview, 'diary-log-preview')}</td>
+          <td class="diary-log-date-cell">${displayDateSafe}</td>
+          <td class="diary-log-summary-cell"><span class="diary-log-preview">${previewSafe}</span></td>
         </tr>
         <tr class="dropdown diary-log-dropdown" data-day="${dayId}" style="display: none;">
           <td colspan="2">
             <div class="diary-log-item" data-day="${dayId}">
-              <div class="diary-log-date">${entry.displayDate}</div>
+              <div class="diary-log-date">${displayDateSafe}</div>
               <div class="diary-log-text">${safeText}</div>
             </div>
           </td>
@@ -1663,8 +1665,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       <table class="diary-log-table">
         <thead>
           <tr>
-            <th>Data</th>
-            <th>Resumo</th>
+            <th class="diary-log-date-header">Data</th>
+            <th class="diary-log-summary-header">Resumo</th>
           </tr>
         </thead>
         <tbody>${itemsHtml}</tbody>
