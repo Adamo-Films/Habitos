@@ -965,7 +965,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
-  const statusMargin = 32;
+  const statusMargin = 72;
 
   function positionLives(scale = currentScale) {
     if (!lifeContainer || !calendarioEl) return;
@@ -975,7 +975,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!calRect.width || !calRect.height) return;
     const parentRect = parent.getBoundingClientRect();
     const left = calRect.left - parentRect.left + statusMargin;
-    lifeContainer.style.left = `${left / scale}px`;
+    lifeContainer.style.left = `${Math.max(left, statusMargin) / scale}px`;
   }
 
   function positionLevel(scale = currentScale) {
@@ -986,7 +986,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!calRect.width || !calRect.height) return;
     const parentRect = parent.getBoundingClientRect();
     const rightInside = calRect.right - parentRect.left - statusMargin;
-    levelContainer.style.left = `${rightInside / scale}px`;
+    const containerWidth = (levelContainer.offsetWidth || 0) * scale;
+    const left = Math.max(statusMargin, rightInside - containerWidth);
+    levelContainer.style.left = `${left / scale}px`;
   }
 
   function positionDiaryButton(scale = currentScale) {
@@ -1291,11 +1293,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!visualizerEl || !visualizerOpen) return;
     visualizerOpen = false;
     document.body.classList.remove('visualizer-portal');
+    document.body.classList.remove('visualizer-entering');
     visualizerEl.classList.remove('entering');
     visualizerEl.classList.add('closing');
     if (visualizerEnterTimeout) {
       clearTimeout(visualizerEnterTimeout);
       visualizerEnterTimeout = null;
+      document.body.classList.remove('visualizer-entering');
     }
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) focusTarget.removeAttribute('tabindex');
@@ -1322,6 +1326,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (visualizerEnterTimeout) {
       clearTimeout(visualizerEnterTimeout);
       visualizerEnterTimeout = null;
+      document.body.classList.remove('visualizer-entering');
     }
     visualizerEl.classList.remove('closing');
     applyVisualizerThemeStyles(theme);
@@ -1398,14 +1403,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     visualizerEl.classList.add('show');
     document.body.classList.add('visualizer-portal');
     document.body.classList.add('visualizer-open');
+    document.body.classList.add('visualizer-entering');
     visualizerOpen = true;
     requestAnimationFrame(() => {
       visualizerEl.classList.add('entering');
     });
     visualizerEnterTimeout = setTimeout(() => {
       visualizerEl.classList.remove('entering');
+      document.body.classList.remove('visualizer-entering');
       visualizerEnterTimeout = null;
-    }, 1200);
+    }, 1300);
 
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) {
