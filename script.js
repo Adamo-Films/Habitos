@@ -965,7 +965,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
-  const statusMargin = 72;
+  const statusMargin = 72 + 38; // base offset plus ~1cm for symmetric spacing
 
   function positionLives(scale = currentScale) {
     if (!lifeContainer || !calendarioEl) return;
