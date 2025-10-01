@@ -390,10 +390,29 @@ tr.main-row.sticky-title {
 }
 
 /* === STATUS INDICATORS === */
-#life-container,
-#level-container {
+#status-indicators {
   position: absolute;
   top: calc(clamp(-60px, -6%, 24px) + 0.5cm - 3mm);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6cm;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease;
+  z-index: 26;
+}
+
+#status-indicators.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#life-container,
+#level-container {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -402,15 +421,9 @@ tr.main-row.sticky-title {
   opacity: 0;
   overflow: visible;
   transition: opacity 0.3s ease, transform 0.3s ease;
-  z-index: 26;
-}
-
-#life-container {
-  left: var(--status-indicator-gutter);
 }
 
 #level-container {
-  right: var(--status-indicator-gutter);
   text-align: right;
   justify-content: flex-end;
 }

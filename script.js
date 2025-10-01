@@ -868,6 +868,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const countersEl = document.querySelector('.arcade-counters');
   const lifeContainer = document.getElementById('life-container');
   const levelContainer = document.getElementById('level-container');
+  const statusIndicators = document.getElementById('status-indicators');
   const videoWrapper = document.getElementById('video-wrapper');
   const visualizerEl = document.getElementById('reward-visualizer');
   const visualizerIconEl = visualizerEl ? visualizerEl.querySelector('.visualizer-icon') : null;
@@ -965,30 +966,22 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
 
-  const statusMargin = 72 + 38; // base offset plus ~1cm for symmetric spacing
-
   function positionLives(scale = currentScale) {
-    if (!lifeContainer || !calendarioEl) return;
-    const parent = lifeContainer.parentElement;
-    if (!parent) return;
-    const calRect = calendarioEl.getBoundingClientRect();
-    if (!calRect.width || !calRect.height) return;
-    const parentRect = parent.getBoundingClientRect();
-    const left = calRect.left - parentRect.left + statusMargin;
-    lifeContainer.style.left = `${Math.max(left, statusMargin) / scale}px`;
+    if (!lifeContainer) return;
+    lifeContainer.style.removeProperty('left');
+    lifeContainer.style.removeProperty('right');
+    if (statusIndicators) {
+      statusIndicators.style.transform = 'translateX(-50%)';
+    }
   }
 
   function positionLevel(scale = currentScale) {
-    if (!levelContainer || !calendarioEl) return;
-    const parent = levelContainer.parentElement;
-    if (!parent) return;
-    const calRect = calendarioEl.getBoundingClientRect();
-    if (!calRect.width || !calRect.height) return;
-    const parentRect = parent.getBoundingClientRect();
-    const rightInside = calRect.right - parentRect.left - statusMargin;
-    const containerWidth = (levelContainer.offsetWidth || 0) * scale;
-    const left = Math.max(statusMargin, rightInside - containerWidth);
-    levelContainer.style.left = `${left / scale}px`;
+    if (!levelContainer) return;
+    levelContainer.style.removeProperty('left');
+    levelContainer.style.removeProperty('right');
+    if (statusIndicators) {
+      statusIndicators.style.transform = 'translateX(-50%)';
+    }
   }
 
   function positionDiaryButton(scale = currentScale) {
@@ -1091,6 +1084,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (calendarioEl) {
         calendarioEl.style.display = '';
         calendarioEl.classList.add('show-rgb');
+      }
+      if (statusIndicators) {
+        statusIndicators.classList.add('active');
       }
       if (countersEl) {
         countersEl.style.display = '';
