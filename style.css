@@ -40,6 +40,7 @@
   --reward-card-sheen: rgba(255, 255, 255, 0.16);
   --reward-card-grid-color: rgba(81, 255, 231, 0.18);
   --reward-bar-gradient: linear-gradient(90deg, #cf28ff 10%, #51ffe7 90%);
+  --status-indicator-gutter: clamp(18px, 3vw, 60px);
 }
 
 /* ========== BASE ========== */
@@ -392,7 +393,7 @@ tr.main-row.sticky-title {
 #life-container,
 #level-container {
   position: absolute;
-  top: calc(clamp(-60px, -6%, 24px) + 0.5cm);
+  top: calc(clamp(-60px, -6%, 24px) + 0.5cm - 3mm);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -405,11 +406,11 @@ tr.main-row.sticky-title {
 }
 
 #life-container {
-  left: 0;
+  left: var(--status-indicator-gutter);
 }
 
 #level-container {
-  right: 0;
+  right: var(--status-indicator-gutter);
   text-align: right;
   justify-content: flex-end;
 }
