@@ -885,6 +885,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   let visualizerOpen = false;
   let visualizerEnterTimeout = null;
   let visualizerCloseTimeout = null;
+  const PORTAL_INTRO_DURATION = 1200;
 
   const visualizerStyleMap = {
     primary: '--visual-primary',
@@ -1290,8 +1291,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   function hideRewardVisualizer() {
     if (!visualizerEl || !visualizerOpen) return;
     visualizerOpen = false;
-    document.body.classList.remove('visualizer-portal');
-    visualizerEl.classList.remove('entering');
+    document.body.classList.remove('visualizer-portal', 'visualizer-tunnel');
+    visualizerEl.classList.remove('tunnel-active');
     visualizerEl.classList.add('closing');
     if (visualizerEnterTimeout) {
       clearTimeout(visualizerEnterTimeout);
@@ -1303,7 +1304,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       clearTimeout(visualizerCloseTimeout);
     }
     visualizerCloseTimeout = setTimeout(() => {
-      visualizerEl.classList.remove('show', 'closing');
+      visualizerEl.classList.remove('show', 'closing', 'portal-arrived', 'tunnel-active');
       visualizerEl.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('visualizer-open');
       if (visualizerParticlesEl) visualizerParticlesEl.innerHTML = '';
@@ -1323,7 +1324,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       clearTimeout(visualizerEnterTimeout);
       visualizerEnterTimeout = null;
     }
-    visualizerEl.classList.remove('closing');
+    visualizerEl.classList.remove('closing', 'portal-arrived', 'tunnel-active');
+    document.body.classList.remove('visualizer-tunnel');
     applyVisualizerThemeStyles(theme);
 
     if (visualizerIconEl) visualizerIconEl.textContent = theme.icon || reward.icon || '⭐';
@@ -1398,20 +1400,25 @@ document.addEventListener("DOMContentLoaded", async function () {
     visualizerEl.classList.add('show');
     document.body.classList.add('visualizer-portal');
     document.body.classList.add('visualizer-open');
+    document.body.classList.add('visualizer-tunnel');
     visualizerOpen = true;
-    requestAnimationFrame(() => {
-      visualizerEl.classList.add('entering');
-    });
-    visualizerEnterTimeout = setTimeout(() => {
-      visualizerEl.classList.remove('entering');
-      visualizerEnterTimeout = null;
-    }, 1200);
-
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) {
       focusTarget.setAttribute('tabindex', '-1');
-      focusTarget.focus({ preventScroll: true });
     }
+
+    requestAnimationFrame(() => {
+      visualizerEl.classList.add('tunnel-active');
+    });
+    visualizerEnterTimeout = setTimeout(() => {
+      visualizerEl.classList.remove('tunnel-active');
+      visualizerEl.classList.add('portal-arrived');
+      document.body.classList.remove('visualizer-tunnel');
+      if (focusTarget) {
+        focusTarget.focus({ preventScroll: true });
+      }
+      visualizerEnterTimeout = null;
+    }, PORTAL_INTRO_DURATION);
   }
 
   // === Gera o HTML do calendário ===
