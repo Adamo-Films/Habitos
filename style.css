@@ -410,7 +410,7 @@ tr.main-row.sticky-title {
 }
 
 #level-container {
-  right: calc(1vw + 16px);
+  right: var(--status-indicator-gutter);
   text-align: right;
   justify-content: flex-end;
 }
