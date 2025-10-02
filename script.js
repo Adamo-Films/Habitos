@@ -1644,50 +1644,44 @@ document.addEventListener("DOMContentLoaded", async function () {
       const previewSafe = escapeHTML(preview);
       const displayDateSafe = escapeHTML(entry.displayDate || '');
       return `
-        <tr class="main-row arcade-clicavel diary-log-row" data-day="${dayId}">
-          <td class="diary-log-date-cell">${displayDateSafe}</td>
-          <td class="diary-log-summary-cell"><span class="diary-log-preview">${previewSafe}</span></td>
-        </tr>
-        <tr class="dropdown diary-log-dropdown" data-day="${dayId}" style="display: none;">
-          <td colspan="2">
-            <div class="diary-log-item" data-day="${dayId}">
-              <div class="diary-log-date">${displayDateSafe}</div>
-              <div class="diary-log-text">${safeText}</div>
-            </div>
-          </td>
-        </tr>`;
+        <article class="diary-entry" data-day="${dayId}">
+          <button type="button" class="diary-entry-toggle" aria-expanded="false">
+            <span class="diary-entry-date">${displayDateSafe}</span>
+            <span class="diary-entry-preview">${previewSafe}</span>
+            <span class="diary-entry-icon" aria-hidden="true">▼</span>
+          </button>
+          <div class="diary-entry-body" hidden>
+            <div class="diary-entry-text">${safeText}</div>
+          </div>
+        </article>`;
     }).join('');
-    diaryLogList.innerHTML = `
-      <table class="diary-log-table">
-        <thead>
-          <tr>
-            <th class="diary-log-date-header">Data</th>
-            <th class="diary-log-summary-header">Resumo</th>
-          </tr>
-        </thead>
-        <tbody>${itemsHtml}</tbody>
-      </table>
-    `;
+    diaryLogList.innerHTML = `<div class="diary-entry-list">${itemsHtml}</div>`;
     diaryLogList.scrollTop = 0;
     applyTwemoji(diaryLogList);
-    const rows = diaryLogList.querySelectorAll('.diary-log-row');
-    rows.forEach((row) => {
-      row.addEventListener('click', () => {
-        const dayId = row.getAttribute('data-day');
-        if (!dayId) return;
-        const dropdown = diaryLogList.querySelector(`.diary-log-dropdown[data-day="${dayId}"]`);
-        const isOpen = row.classList.contains('expanded');
-        rows.forEach((r) => r.classList.remove('expanded'));
-        diaryLogList.querySelectorAll('.diary-log-dropdown').forEach((dd) => {
-          dd.style.display = 'none';
-          dd.classList.remove('arcade-drop-show');
+    const entries = Array.from(diaryLogList.querySelectorAll('.diary-entry'));
+    entries.forEach((entryEl) => {
+      const toggle = entryEl.querySelector('.diary-entry-toggle');
+      const body = entryEl.querySelector('.diary-entry-body');
+      if (!toggle || !body) return;
+      toggle.addEventListener('click', () => {
+        const isOpen = entryEl.classList.contains('open');
+        entries.forEach((other) => {
+          if (other === entryEl) return;
+          other.classList.remove('open');
+          const otherToggle = other.querySelector('.diary-entry-toggle');
+          const otherBody = other.querySelector('.diary-entry-body');
+          if (otherToggle) otherToggle.setAttribute('aria-expanded', 'false');
+          if (otherBody) otherBody.hidden = true;
         });
-        if (!isOpen) {
-          row.classList.add('expanded');
-          if (dropdown) {
-            dropdown.style.display = 'table-row';
-            setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
-          }
+        if (isOpen) {
+          entryEl.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+          body.hidden = true;
+        } else {
+          entryEl.classList.add('open');
+          toggle.setAttribute('aria-expanded', 'true');
+          body.hidden = false;
+          entryEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }
       });
     });
