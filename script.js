@@ -1539,6 +1539,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         html += `
         <div class="reward-card arcade-clicavel" data-reward="${mesNum}-${ano}" role="button" tabindex="0">
           <div class="reward-card-warp"></div>
+          <div class="reward-card-dreamy"></div>
           <div class="reward-card-grid"></div>
           <div class="reward-card-sheen"></div>
           <div class="reward-card-content">
@@ -2434,6 +2435,14 @@ document.addEventListener("DOMContentLoaded", async function () {
   const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
   const allRewards = document.querySelectorAll('#calendario .reward-card');
 
+  const triggerDreamyTransition = (card) => {
+    if (!card) return;
+    card.classList.remove('dreamy-transition');
+    void card.offsetWidth; // restart animation
+    card.classList.add('dreamy-transition');
+    setTimeout(() => card.classList.remove('dreamy-transition'), 1400);
+  };
+
   allRewards.forEach((card) => {
     const key = card.getAttribute('data-reward');
     if (!key) return;
@@ -2448,6 +2457,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     card.setAttribute('aria-label', ariaLabel);
     card.addEventListener('click', (event) => {
       event.stopPropagation();
+      triggerDreamyTransition(card);
       const progress = getRewardProgress(month, year);
       const lives = calculateRemainingLives(month, year);
       showRewardVisualizer(reward, { month, year, lives, progressOverride: progress });
