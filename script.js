@@ -920,6 +920,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const visualizerProgressEl = visualizerEl ? visualizerEl.querySelector('.visualizer-progress') : null;
   const visualizerParticlesEl = visualizerEl ? visualizerEl.querySelector('.visualizer-particles') : null;
   const visualizerCloseEl = visualizerEl ? visualizerEl.querySelector('.visualizer-close') : null;
+  const glowTransitionEl = document.getElementById('prize-glow-transition');
   const levelValueEl = levelContainer ? levelContainer.querySelector('.level-value') : null;
   let currentScale = 1;
   let diaryButtonWrapper = null;
@@ -990,6 +991,31 @@ document.addEventListener("DOMContentLoaded", async function () {
     setElementVar(card, '--visual-progress-accent', theme.progressAccent);
     const themeId = (reward?.label || 'default').toLowerCase().replace(/[^a-z0-9]+/gi, '-');
     if (themeId) card.dataset.theme = themeId;
+  }
+
+  function triggerRewardGlow(theme = {}, card = null) {
+    const colors = {
+      primary: theme.primary || '#51ffe7',
+      secondary: theme.secondary || '#cf28ff',
+      accent: theme.accent || '#ffe379'
+    };
+
+    if (glowTransitionEl) {
+      setElementVar(glowTransitionEl, '--glow-primary', colors.primary);
+      setElementVar(glowTransitionEl, '--glow-secondary', colors.secondary);
+      setElementVar(glowTransitionEl, '--glow-accent', colors.accent);
+      glowTransitionEl.classList.remove('active');
+      void glowTransitionEl.offsetWidth;
+      glowTransitionEl.classList.add('active');
+      setTimeout(() => glowTransitionEl.classList.remove('active'), 1300);
+    }
+
+    if (card) {
+      card.classList.remove('glow-triggered');
+      void card.offsetWidth;
+      card.classList.add('glow-triggered');
+      setTimeout(() => card.classList.remove('glow-triggered'), 950);
+    }
   }
 
   if (visualizerCloseEl) {
@@ -2450,6 +2476,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       event.stopPropagation();
       const progress = getRewardProgress(month, year);
       const lives = calculateRemainingLives(month, year);
+      triggerRewardGlow(theme, card);
       showRewardVisualizer(reward, { month, year, lives, progressOverride: progress });
     });
     card.addEventListener('keydown', (event) => {
