@@ -1040,10 +1040,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   function resizeWrapper() {
     const baseW = 1920;
     const baseH = 1080;
-    const scale = Math.min(window.innerWidth / baseW, window.innerHeight / baseH);
+    const scale = Math.max(window.innerWidth / baseW, window.innerHeight / baseH);
+    const left = Math.round((window.innerWidth - baseW * scale) / 2);
+    const top = Math.round((window.innerHeight - baseH * scale) / 2);
     if (videoWrapper) {
-      videoWrapper.style.setProperty('--wrapper-translate-x', `0px`);
-      videoWrapper.style.setProperty('--wrapper-translate-y', `0px`);
+      videoWrapper.style.setProperty('--wrapper-translate-x', `${left}px`);
+      videoWrapper.style.setProperty('--wrapper-translate-y', `${top}px`);
       videoWrapper.style.setProperty('--wrapper-scale', scale);
     }
     currentScale = scale;
