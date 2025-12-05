@@ -677,6 +677,8 @@ function launchRewardConfetti() {
   }
 
 const DIARY_LOCAL_KEY = 'habitos-diary-entries-v1';
+const DIARY_UNLOCK_KEY = 'habitos-diary-unlock-v1';
+const DIARY_UNLOCK_CODE = '1684';
 const WEIGHT_LOCAL_KEY = 'habitos-weight-entries-v1';
 const WEIGHT_GOAL = 69;
 const WEIGHT_START = 88;
@@ -709,6 +711,31 @@ function saveDiaryEntriesLocal(entries) {
     localStorage.setItem(DIARY_LOCAL_KEY, JSON.stringify(entries));
   } catch (err) {
     console.error('Falha ao salvar diário local:', err);
+  }
+}
+
+function clearDiaryEntriesLocal() {
+  try {
+    localStorage.removeItem(DIARY_LOCAL_KEY);
+  } catch (err) {
+    console.error('Falha ao limpar diário local:', err);
+  }
+}
+
+function loadDiaryUnlockState() {
+  try {
+    return localStorage.getItem(DIARY_UNLOCK_KEY) === 'true';
+  } catch (err) {
+    console.error('Falha ao ler status de bloqueio do diário:', err);
+    return false;
+  }
+}
+
+function saveDiaryUnlockState(isUnlocked) {
+  try {
+    localStorage.setItem(DIARY_UNLOCK_KEY, isUnlocked ? 'true' : 'false');
+  } catch (err) {
+    console.error('Falha ao salvar status de bloqueio do diário:', err);
   }
 }
 
@@ -819,6 +846,20 @@ async function setDiaryEntryRemote(dayId, text, meta) {
   };
   await ref.set(payload);
   return { texto: text, displayDate, order: payload.order };
+}
+
+async function resetDiaryEntriesRemote() {
+  try {
+    const collectionRef = db.collection('usuarios').doc('danilo2').collection('diario');
+    const snapshot = await collectionRef.get();
+    if (snapshot.empty) return;
+    const batch = db.batch();
+    snapshot.forEach((doc) => batch.delete(doc.ref));
+    await batch.commit();
+  } catch (error) {
+    console.error('Erro ao resetar diário no Firebase:', error);
+    throw error;
+  }
 }
 
 function escapeHTML(str) {
@@ -1119,6 +1160,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const progress = await getProgress();
   let diaryEntries = await getDiaryEntries();
   if (!diaryEntries || typeof diaryEntries !== 'object') diaryEntries = {};
+  let diaryUnlocked = loadDiaryUnlockState();
   let weightEntries = loadWeightEntriesLocal();
   if (!weightEntries || typeof weightEntries !== 'object') weightEntries = {};
   const dados = [];
@@ -1584,6 +1626,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     <div class="diary-log-content">
       <div class="diary-log-header">
         <span class="diary-log-title">Registro do Diário</span>
+        <button type="button" id="reset-diary-log" class="diary-log-close diary-log-reset">Resetar Diário</button>
+      </div>
+      <div class="diary-locker" id="diary-locker">
+        <div class="diary-locker-glow"></div>
+        <div class="diary-locker-inner">
+          <div class="diary-locker-icon" aria-hidden="true">🔒</div>
+          <p class="diary-locker-text">Conteúdo protegido. Digite o código secreto para liberar o diário.</p>
+          <div class="diary-locker-form">
+            <input type="password" id="diary-unlock-code" class="diary-unlock-input" placeholder="Código" maxlength="12" inputmode="numeric" autocomplete="off" aria-label="Código do diário">
+            <button type="button" id="diary-unlock-button" class="diary-unlock-button">Desbloquear</button>
+          </div>
+          <div class="diary-locker-feedback" id="diary-unlock-feedback" aria-live="polite"></div>
+        </div>
       </div>
       <div class="diary-log-list" id="diary-log-list"></div>
     </div>
@@ -1591,6 +1646,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   calendario.appendChild(diaryPanel);
   applyTwemoji(diaryPanel);
   const diaryLogList = diaryPanel.querySelector('#diary-log-list');
+  const diaryLocker = diaryPanel.querySelector('#diary-locker');
+  const diaryUnlockInput = diaryPanel.querySelector('#diary-unlock-code');
+  const diaryUnlockButton = diaryPanel.querySelector('#diary-unlock-button');
+  const diaryUnlockFeedback = diaryPanel.querySelector('#diary-unlock-feedback');
 
   const previousWeightPanel = calendario.querySelector('#weight-log-panel');
   if (previousWeightPanel) previousWeightPanel.remove();
@@ -1631,8 +1690,61 @@ document.addEventListener("DOMContentLoaded", async function () {
   const weightCurrentEl = weightPanel.querySelector('#weight-current');
   const weightRemainingEl = weightPanel.querySelector('#weight-remaining');
 
+  function flashDiaryLocker(errorMessage) {
+    if (!diaryLocker) return;
+    diaryLocker.classList.remove('diary-locker-shake');
+    // force reflow for restart animation
+    // eslint-disable-next-line no-unused-expressions
+    diaryLocker.offsetHeight;
+    diaryLocker.classList.add('diary-locker-shake');
+    if (errorMessage && diaryUnlockFeedback) {
+      diaryUnlockFeedback.textContent = errorMessage;
+      diaryUnlockFeedback.classList.add('show-error');
+    }
+    if (diaryUnlockInput) {
+      diaryUnlockInput.focus();
+      diaryUnlockInput.select();
+    }
+  }
+
+  function updateDiaryLockVisuals({ shouldRenderList = true, success = false } = {}) {
+    if (diaryPanel) {
+      diaryPanel.classList.toggle('diary-locked', !diaryUnlocked);
+    }
+    if (diaryLocker) {
+      diaryLocker.classList.toggle('hidden', diaryUnlocked);
+      if (success) {
+        diaryLocker.classList.add('diary-locker-success');
+        setTimeout(() => diaryLocker && diaryLocker.classList.remove('diary-locker-success'), 1200);
+      }
+    }
+    if (diaryUnlockFeedback) {
+      diaryUnlockFeedback.textContent = diaryUnlocked ? 'Diário desbloqueado. Entradas liberadas!' : '';
+      diaryUnlockFeedback.classList.toggle('show-error', false);
+    }
+    if (shouldRenderList) renderDiaryLog();
+  }
+
   function renderDiaryLog() {
     if (!diaryLogList) return;
+    if (!diaryUnlocked) {
+      diaryLogList.innerHTML = `
+        <div class="diary-locked-banner">
+          <div class="diary-locked-icon">🔐</div>
+          <div class="diary-locked-text">
+            <p>Aqui ficam as páginas secretas. Desbloqueie para visualizar.</p>
+            <button type="button" class="diary-locked-cta" id="diary-locked-focus">Inserir código</button>
+          </div>
+        </div>`;
+      const focusBtn = diaryLogList.querySelector('#diary-locked-focus');
+      if (focusBtn) {
+        focusBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          flashDiaryLocker();
+        });
+      }
+      return;
+    }
     const entriesArr = Object.entries(diaryEntries)
       .filter(([, entry]) => entry && entry.texto)
       .sort((a, b) => (b[1].order || 0) - (a[1].order || 0));
@@ -1690,6 +1802,40 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     });
   }
+
+  function attemptDiaryUnlock() {
+    if (!diaryUnlockInput) return;
+    const code = (diaryUnlockInput.value || '').trim();
+    if (!code) {
+      flashDiaryLocker('Digite o código para desbloquear.');
+      return;
+    }
+    if (code === DIARY_UNLOCK_CODE) {
+      diaryUnlocked = true;
+      saveDiaryUnlockState(true);
+      updateDiaryLockVisuals({ success: true });
+      return;
+    }
+    flashDiaryLocker('Código incorreto. Tente novamente.');
+  }
+
+  if (diaryUnlockButton) {
+    diaryUnlockButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      attemptDiaryUnlock();
+    });
+  }
+
+  if (diaryUnlockInput) {
+    diaryUnlockInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        attemptDiaryUnlock();
+      }
+    });
+  }
+
+  updateDiaryLockVisuals({ shouldRenderList: false, success: diaryUnlocked });
 
   function buildWeightEntries() {
     return Object.entries(weightEntries)
@@ -1892,6 +2038,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function showDiaryEditor(dayId) {
+    if (!diaryUnlocked) {
+      flashDiaryLocker('Desbloqueie o diário para escrever.');
+      return;
+    }
     const editor = document.getElementById(`diary-editor-${dayId}`);
     if (!editor) return;
     resetDiaryEditor(dayId);
@@ -1937,6 +2087,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     openWeightBtn.innerHTML = isOpen ? 'Fechar Peso' : '⚖️ Peso';
     openWeightBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     applyTwemoji(openWeightBtn);
+  };
+
+  const resetDiaryButton = diaryPanel.querySelector('#reset-diary-log');
+
+  const refreshDiaryStates = () => {
+    document.querySelectorAll('.habit-item[data-diary-day]').forEach((item) => {
+      const dayId = item.getAttribute('data-diary-day');
+      if (dayId) {
+        resetDiaryEditor(dayId);
+        updateDiaryVisualState(dayId);
+      }
+    });
   };
 
   const toggleDiaryPanel = (force) => {
@@ -1985,6 +2147,32 @@ document.addEventListener("DOMContentLoaded", async function () {
     openWeightBtn.addEventListener('click', (e) => {
       e.preventDefault();
       toggleWeightPanel();
+    });
+  }
+
+  if (resetDiaryButton) {
+    resetDiaryButton.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const confirmReset = confirm('Tem certeza que deseja resetar todo o diário? Esta ação não pode ser desfeita.');
+      if (!confirmReset) return;
+      const originalText = resetDiaryButton.textContent;
+      resetDiaryButton.disabled = true;
+      resetDiaryButton.textContent = 'Resetando...';
+      try {
+        await resetDiaryEntriesRemote();
+        diaryEntries = {};
+        clearDiaryEntriesLocal();
+        renderDiaryLog();
+        refreshDiaryStates();
+        resetDiaryButton.textContent = 'Diário resetado';
+        setTimeout(() => { resetDiaryButton.textContent = originalText; }, 1600);
+      } catch (error) {
+        console.error('Erro ao resetar diário:', error);
+        resetDiaryButton.textContent = 'Erro';
+        setTimeout(() => { resetDiaryButton.textContent = originalText; }, 2000);
+      } finally {
+        resetDiaryButton.disabled = false;
+      }
     });
   }
 
@@ -2154,6 +2342,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         e.stopPropagation();
         const dayId = button.getAttribute('data-day');
         if (!dayId) return;
+        if (!diaryUnlocked) {
+          flashDiaryLocker('Desbloqueie o diário para salvar.');
+          return;
+        }
       const textarea = document.getElementById(`diary-textarea-${dayId}`);
       if (!textarea) return;
       const meta = diaLookup[dayId];
