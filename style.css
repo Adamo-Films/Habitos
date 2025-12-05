@@ -52,8 +52,8 @@ html, body {
 }
 #video-wrapper {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
@@ -61,9 +61,9 @@ html, body {
   transform-origin: center center;
   --wrapper-translate-x: 0px;
   --wrapper-translate-y: 0px;
-  --wrapper-scale: 1;
+  --wrapper-scale: min(calc(100vw / 1920), calc(100vh / 1080));
   opacity: 0;
-  transform: perspective(1600px) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(var(--wrapper-scale));
+  transform: perspective(1600px) translate(-50%, -50%) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(var(--wrapper-scale));
   transition: opacity 0.3s ease, filter 0.6s ease;
 }
 #video-wrapper::before {
