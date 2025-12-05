@@ -1626,7 +1626,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     <div class="diary-log-content">
       <div class="diary-log-header">
         <span class="diary-log-title">Registro do Diário</span>
-        <button type="button" id="reset-diary-log" class="diary-log-close diary-log-reset">Resetar Diário</button>
+        <button type="button" id="diary-lock-toggle" class="diary-log-close diary-lock-toggle">Desbloquear</button>
       </div>
       <div class="diary-locker" id="diary-locker">
         <div class="diary-locker-glow"></div>
@@ -1650,6 +1650,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const diaryUnlockInput = diaryPanel.querySelector('#diary-unlock-code');
   const diaryUnlockButton = diaryPanel.querySelector('#diary-unlock-button');
   const diaryUnlockFeedback = diaryPanel.querySelector('#diary-unlock-feedback');
+  const diaryLockToggleButton = diaryPanel.querySelector('#diary-lock-toggle');
 
   const previousWeightPanel = calendario.querySelector('#weight-log-panel');
   if (previousWeightPanel) previousWeightPanel.remove();
@@ -1692,6 +1693,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function flashDiaryLocker(errorMessage) {
     if (!diaryLocker) return;
+    diaryLocker.classList.remove('hidden');
     diaryLocker.classList.remove('diary-locker-shake');
     // force reflow for restart animation
     // eslint-disable-next-line no-unused-expressions
@@ -1707,12 +1709,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  function updateDiaryLockVisuals({ shouldRenderList = true, success = false } = {}) {
+  function updateDiaryLockVisuals({ shouldRenderList = true, success = false, showLocker = false } = {}) {
     if (diaryPanel) {
       diaryPanel.classList.toggle('diary-locked', !diaryUnlocked);
     }
     if (diaryLocker) {
-      diaryLocker.classList.toggle('hidden', diaryUnlocked);
+      const shouldShowLocker = showLocker && !diaryUnlocked;
+      diaryLocker.classList.toggle('hidden', !shouldShowLocker);
+      if (!shouldShowLocker && diaryUnlockInput) {
+        diaryUnlockInput.value = '';
+      }
       if (success) {
         diaryLocker.classList.add('diary-locker-success');
         setTimeout(() => diaryLocker && diaryLocker.classList.remove('diary-locker-success'), 1200);
@@ -1722,29 +1728,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       diaryUnlockFeedback.textContent = diaryUnlocked ? 'Diário desbloqueado. Entradas liberadas!' : '';
       diaryUnlockFeedback.classList.toggle('show-error', false);
     }
+    if (diaryLockToggleButton) {
+      diaryLockToggleButton.textContent = diaryUnlocked ? 'Bloquear' : 'Desbloquear';
+    }
     if (shouldRenderList) renderDiaryLog();
   }
 
   function renderDiaryLog() {
     if (!diaryLogList) return;
-    if (!diaryUnlocked) {
-      diaryLogList.innerHTML = `
-        <div class="diary-locked-banner">
-          <div class="diary-locked-icon">🔐</div>
-          <div class="diary-locked-text">
-            <p>Aqui ficam as páginas secretas. Desbloqueie para visualizar.</p>
-            <button type="button" class="diary-locked-cta" id="diary-locked-focus">Inserir código</button>
-          </div>
-        </div>`;
-      const focusBtn = diaryLogList.querySelector('#diary-locked-focus');
-      if (focusBtn) {
-        focusBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          flashDiaryLocker();
-        });
-      }
-      return;
-    }
     const entriesArr = Object.entries(diaryEntries)
       .filter(([, entry]) => entry && entry.texto)
       .sort((a, b) => (b[1].order || 0) - (a[1].order || 0));
@@ -1753,11 +1744,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
     const itemsHtml = entriesArr.map(([dayId, entry]) => {
-      const safeText = escapeHTML(entry.texto).replace(/\n/g, '<br>');
       const plain = (entry.texto || '').replace(/\s+/g, ' ').trim();
-      const previewBase = plain.length ? plain : 'Entrada registrada';
-      const preview = previewBase.length > 120 ? previewBase.slice(0, 117) + '…' : previewBase;
+      const shortBody = plain.length > 180 ? plain.slice(0, 177) + '…' : plain;
+      const previewBase = diaryUnlocked ? (plain.length ? plain : 'Entrada registrada') : 'Conteúdo bloqueado';
+      const previewLimit = diaryUnlocked ? 80 : 0;
+      const preview = previewLimit ? (previewBase.length > previewLimit ? `${previewBase.slice(0, previewLimit - 1)}…` : previewBase) : previewBase;
       const previewSafe = escapeHTML(preview);
+      const safeText = diaryUnlocked ? escapeHTML(shortBody).replace(/\n/g, '<br>') : '<em>Desbloqueie para visualizar.</em>';
       const displayDateSafe = escapeHTML(entry.displayDate || '');
       return `
         <article class="diary-entry" data-day="${dayId}">
@@ -1780,6 +1773,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       const body = entryEl.querySelector('.diary-entry-body');
       if (!toggle || !body) return;
       toggle.addEventListener('click', () => {
+        if (!diaryUnlocked) {
+          updateDiaryLockVisuals({ shouldRenderList: false, showLocker: true });
+          flashDiaryLocker();
+          return;
+        }
         const isOpen = entryEl.classList.contains('open');
         entries.forEach((other) => {
           if (other === entryEl) return;
@@ -1814,6 +1812,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       diaryUnlocked = true;
       saveDiaryUnlockState(true);
       updateDiaryLockVisuals({ success: true });
+      refreshDiaryStates();
       return;
     }
     flashDiaryLocker('Código incorreto. Tente novamente.');
@@ -2089,8 +2088,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     applyTwemoji(openWeightBtn);
   };
 
-  const resetDiaryButton = diaryPanel.querySelector('#reset-diary-log');
-
   const refreshDiaryStates = () => {
     document.querySelectorAll('.habit-item[data-diary-day]').forEach((item) => {
       const dayId = item.getAttribute('data-diary-day');
@@ -2150,28 +2147,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   }
 
-  if (resetDiaryButton) {
-    resetDiaryButton.addEventListener('click', async (e) => {
+  const lockDiary = () => {
+    diaryUnlocked = false;
+    saveDiaryUnlockState(false);
+    updateDiaryLockVisuals();
+    renderDiaryLog();
+    refreshDiaryStates();
+  };
+
+  const promptDiaryUnlock = () => {
+    updateDiaryLockVisuals({ shouldRenderList: false, showLocker: true });
+    flashDiaryLocker();
+    if (diaryLocker) {
+      diaryLocker.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  if (diaryLockToggleButton) {
+    diaryLockToggleButton.addEventListener('click', (e) => {
       e.preventDefault();
-      const confirmReset = confirm('Tem certeza que deseja resetar todo o diário? Esta ação não pode ser desfeita.');
-      if (!confirmReset) return;
-      const originalText = resetDiaryButton.textContent;
-      resetDiaryButton.disabled = true;
-      resetDiaryButton.textContent = 'Resetando...';
-      try {
-        await resetDiaryEntriesRemote();
-        diaryEntries = {};
-        clearDiaryEntriesLocal();
-        renderDiaryLog();
-        refreshDiaryStates();
-        resetDiaryButton.textContent = 'Diário resetado';
-        setTimeout(() => { resetDiaryButton.textContent = originalText; }, 1600);
-      } catch (error) {
-        console.error('Erro ao resetar diário:', error);
-        resetDiaryButton.textContent = 'Erro';
-        setTimeout(() => { resetDiaryButton.textContent = originalText; }, 2000);
-      } finally {
-        resetDiaryButton.disabled = false;
+      if (diaryUnlocked) {
+        lockDiary();
+      } else {
+        promptDiaryUnlock();
       }
     });
   }
