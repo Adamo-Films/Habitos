@@ -8,8 +8,23 @@ const firebaseConfig = {
   appId: "1:342699648229:web:a22b4706e2dde3c1c1200c",
   measurementId: "G-5589029JGV"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+
+const firebaseAvailable = typeof firebase !== 'undefined';
+let db = null;
+if (firebaseAvailable) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+} else {
+  console.warn('Firebase não carregou; usando armazenamento local.');
+  db = {
+    collection: () => ({
+      doc: () => ({
+        async get() { return { exists: false, data: () => ({}) }; },
+        async set() { return {}; }
+      })
+    })
+  };
+}
 
 // =================== Recompensas ===================
 const rewards = [
@@ -990,6 +1005,45 @@ document.addEventListener("DOMContentLoaded", async function () {
     setElementVar(card, '--visual-progress-accent', theme.progressAccent);
     const themeId = (reward?.label || 'default').toLowerCase().replace(/[^a-z0-9]+/gi, '-');
     if (themeId) card.dataset.theme = themeId;
+  }
+
+  function playRewardGlowTransition(card, theme, onReady) {
+    if (!card || document.body.classList.contains('visualizer-open')) {
+      if (typeof onReady === 'function') onReady();
+      return () => {};
+    }
+
+    const rect = card.getBoundingClientRect();
+    const overlay = document.createElement('div');
+    overlay.className = 'reward-glow-overlay';
+    overlay.style.setProperty('--portal-x', `${rect.left + rect.width / 2}px`);
+    overlay.style.setProperty('--portal-y', `${rect.top + rect.height / 2}px`);
+    overlay.style.setProperty('--portal-primary', theme?.primary || theme?.warpStart || 'rgba(81, 255, 231, 0.9)');
+    overlay.style.setProperty('--portal-secondary', theme?.secondary || theme?.warpEnd || 'rgba(207, 40, 255, 0.88)');
+    overlay.innerHTML = '<span class="glow-core"></span><span class="glow-rings"></span><span class="glow-rays"></span>';
+    document.body.appendChild(overlay);
+
+    requestAnimationFrame(() => {
+      overlay.classList.add('show');
+      card.classList.add('is-activating');
+    });
+
+    const readyTimeout = setTimeout(() => {
+      if (typeof onReady === 'function') onReady();
+    }, 240);
+
+    const cleanup = () => {
+      clearTimeout(readyTimeout);
+      overlay.classList.add('fade');
+      card.classList.remove('is-activating');
+      setTimeout(() => overlay.remove(), 520);
+    };
+
+    overlay.addEventListener('animationend', (event) => {
+      if (event.animationName === 'portalRays') cleanup();
+    });
+
+    return cleanup;
   }
 
   if (visualizerCloseEl) {
@@ -2450,7 +2504,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       event.stopPropagation();
       const progress = getRewardProgress(month, year);
       const lives = calculateRemainingLives(month, year);
-      showRewardVisualizer(reward, { month, year, lives, progressOverride: progress });
+      playRewardGlowTransition(card, theme, () => {
+        showRewardVisualizer(reward, { month, year, lives, progressOverride: progress });
+      });
     });
     card.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
