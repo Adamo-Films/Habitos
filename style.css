@@ -58,7 +58,7 @@ html, body {
   height: 1080px;
   overflow: hidden;
   z-index: 0;
-  transform-origin: center;
+  transform-origin: top left;
   --wrapper-translate-x: 0px;
   --wrapper-translate-y: 0px;
   --wrapper-scale: 1;
@@ -1132,7 +1132,7 @@ tr.dropdown[style*="display: none;"] {
   padding: 22px 28px 26px;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
   min-height: 0;
 }
 
@@ -1561,17 +1561,9 @@ tr.dropdown[style*="display: none;"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  overflow: hidden;
 }
 
 .weight-chart {
-  width: 100%;
-  height: 100%;
-}
-
-.weight-chart-surface {
-  position: relative;
   width: 100%;
   height: 100%;
 }
@@ -1591,22 +1583,6 @@ tr.dropdown[style*="display: none;"] {
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.weight-focus-line {
-  stroke: rgba(255, 227, 121, 0.65);
-  stroke-width: 1.5;
-  stroke-dasharray: 6 4;
-  opacity: 0;
-  transition: opacity 0.18s ease;
-}
-
-.weight-focus-dot {
-  fill: rgba(255, 227, 121, 0.9);
-  stroke: rgba(81, 255, 231, 0.9);
-  stroke-width: 3;
-  opacity: 0;
-  transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .weight-chart-point {
@@ -1651,39 +1627,6 @@ tr.dropdown[style*="display: none;"] {
   text-align: center;
   color: rgba(103, 234, 255, 0.7);
   margin: 40px 0 20px 0;
-}
-
-.weight-tooltip {
-  position: absolute;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: rgba(0, 16, 38, 0.9);
-  border: 1px solid rgba(81, 255, 231, 0.65);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 22px rgba(81, 255, 231, 0.28);
-  color: #f5f8ff;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.55em;
-  letter-spacing: 0.06em;
-  transform: translate(-50%, -130%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.18s ease;
-  display: grid;
-  gap: 6px;
-  min-width: 180px;
-}
-
-.weight-tooltip strong {
-  color: var(--text-neon);
-}
-
-.weight-tooltip small {
-  color: rgba(255, 227, 121, 0.85);
-}
-
-.weight-chart-hitbox {
-  fill: transparent;
-  pointer-events: all;
 }
 
 
