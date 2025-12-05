@@ -1152,8 +1152,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     "Diário e gratidão",
     "Arrumar quarto"
   ];
-  // Cria calendário reiniciando em 05/12/2024 para contemplar um novo ciclo de hábitos
-  const inicio = new Date(2024, 11, 5), fim = new Date(2025, 11, 5);
+  // Cria o calendário começando na data atual para evitar ciclos que já terminaram
+  const inicio = new Date();
+  inicio.setHours(0, 0, 0, 0);
+  const fim = new Date(inicio);
+  fim.setFullYear(fim.getFullYear() + 1);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
   const caloriasFim = new Date(inicio);
   caloriasFim.setDate(caloriasFim.getDate() + 163);
