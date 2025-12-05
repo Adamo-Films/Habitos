@@ -52,19 +52,31 @@ html, body {
 }
 #video-wrapper {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
+  inset: -2px;
+  width: calc(100vw + 4px);
+  height: calc(100vh + 4px);
   overflow: hidden;
   z-index: 0;
+  isolation: isolate;
   transform-origin: top left;
   --wrapper-translate-x: 0px;
   --wrapper-translate-y: 0px;
   --wrapper-scale: 1;
   opacity: 0;
-  transform: perspective(1600px) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(var(--wrapper-scale));
+  background: radial-gradient(circle at 50% 0%, rgba(31, 0, 76, 0.55), transparent 38%), var(--crt-dark);
+  backface-visibility: hidden;
+  will-change: transform;
+  transform: perspective(1600px) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(var(--wrapper-scale)) translateZ(0);
   transition: opacity 0.3s ease, filter 0.6s ease;
+}
+#video-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.14) 12%, transparent 28%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 0;
 }
 #video-wrapper.visible {
   opacity: 1;
@@ -107,6 +119,7 @@ body.visualizer-entering::after {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  z-index: -1;
 }
 
 /* ========== START SCREEN ========== */
