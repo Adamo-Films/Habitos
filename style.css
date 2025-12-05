@@ -1118,7 +1118,7 @@ tr.dropdown[style*="display: none;"] {
   border: 2px solid rgba(81, 255, 231, 0.82);
   border-radius: 28px;
   box-shadow: 0 0 40px rgba(81, 255, 231, 0.32), 0 0 60px rgba(0, 255, 191, 0.24);
-  padding: 28px 32px;
+  padding: 22px 28px 26px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1130,7 +1130,7 @@ tr.dropdown[style*="display: none;"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 18px;
+  margin-bottom: 12px;
   gap: 18px;
 }
 
@@ -1156,6 +1156,7 @@ tr.dropdown[style*="display: none;"] {
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
+  display: none;
 }
 
 .diary-locker-glow {
@@ -1376,7 +1377,7 @@ tr.dropdown[style*="display: none;"] {
   flex: 1;
   overflow-y: auto;
   padding-right: 6px;
-  margin-top: 12px;
+  margin-top: 6px;
   min-height: 0;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
