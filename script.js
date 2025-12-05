@@ -1321,7 +1321,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         completed++;
       }
     });
-    return completed;
+    return completed + 1;
   }
 
   function updateLevelDisplay() {
@@ -2412,8 +2412,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
   function handleStickyTitles() {
-    // Sticky titles desativados para evitar o 
+    // Sticky titles desativados para evitar o
     // reposicionamento automático ao rolar a página
+  }
+
+  function centerMonthDropdown(dropdown) {
+    if (!calendarioEl || !dropdown) return;
+    const firstRow = dropdown.querySelector('.main-row');
+    const target = firstRow || dropdown;
+    const targetCenter = target.offsetTop + target.offsetHeight / 2;
+    const desiredScroll = Math.max(0, targetCenter - calendarioEl.clientHeight / 2);
+    calendarioEl.scrollTo({ top: desiredScroll, behavior: 'smooth' });
   }
 
   function updateIndicators() {
@@ -2548,7 +2557,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
       // Ativa clicado
       dropdown.style.display = 'block';
-      requestAnimationFrame(() => refreshVisibleRowProgress(dropdown));
+      requestAnimationFrame(() => {
+        refreshVisibleRowProgress(dropdown);
+        centerMonthDropdown(dropdown);
+      });
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
       mesDiv.classList.add('open', 'mes-atual');
       if (allRewards[idx]) {
