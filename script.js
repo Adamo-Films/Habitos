@@ -1030,13 +1030,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const readyTimeout = setTimeout(() => {
       if (typeof onReady === 'function') onReady();
-    }, 240);
+    }, 520);
 
     const cleanup = () => {
       clearTimeout(readyTimeout);
       overlay.classList.add('fade');
       card.classList.remove('is-activating');
-      setTimeout(() => overlay.remove(), 520);
+      setTimeout(() => overlay.remove(), 1100);
     };
 
     overlay.addEventListener('animationend', (event) => {
@@ -1396,6 +1396,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       visualizerEl.classList.remove('show', 'closing');
       visualizerEl.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('visualizer-open');
+      visualizerEl.classList.remove('from-card');
+      visualizerEl.style.removeProperty('--origin-dx');
+      visualizerEl.style.removeProperty('--origin-dy');
+      visualizerEl.style.removeProperty('--origin-scale');
       if (visualizerParticlesEl) visualizerParticlesEl.innerHTML = '';
       if (visualizerEl.dataset.theme) delete visualizerEl.dataset.theme;
       visualizerCloseTimeout = null;
@@ -1411,6 +1415,24 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     visualizerEl.classList.remove('closing');
     applyVisualizerThemeStyles(theme);
+
+    const originRect = context.originRect;
+    if (originRect) {
+      const originX = originRect.left + originRect.width / 2;
+      const originY = originRect.top + originRect.height / 2;
+      const dx = originX - (window.innerWidth / 2);
+      const dy = originY - (window.innerHeight / 2);
+      const approximateScale = Math.min(0.9, Math.max(0.38, originRect.width / Math.min(window.innerWidth * 0.9, 1120)));
+      visualizerEl.style.setProperty('--origin-dx', `${dx}px`);
+      visualizerEl.style.setProperty('--origin-dy', `${dy}px`);
+      visualizerEl.style.setProperty('--origin-scale', approximateScale.toString());
+      visualizerEl.classList.add('from-card');
+    } else {
+      visualizerEl.classList.remove('from-card');
+      visualizerEl.style.removeProperty('--origin-dx');
+      visualizerEl.style.removeProperty('--origin-dy');
+      visualizerEl.style.removeProperty('--origin-scale');
+    }
 
     if (visualizerIconEl) visualizerIconEl.textContent = theme.icon || reward.icon || '⭐';
     if (visualizerTitleEl) visualizerTitleEl.textContent = theme.headline || reward.title || 'Recompensa Arcade';
@@ -2504,8 +2526,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       event.stopPropagation();
       const progress = getRewardProgress(month, year);
       const lives = calculateRemainingLives(month, year);
+      const originRect = card.getBoundingClientRect();
       playRewardGlowTransition(card, theme, () => {
-        showRewardVisualizer(reward, { month, year, lives, progressOverride: progress });
+        showRewardVisualizer(reward, { month, year, lives, progressOverride: progress, originRect });
       });
     });
     card.addEventListener('keydown', (event) => {
