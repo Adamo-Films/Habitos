@@ -1152,10 +1152,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     "Diário e gratidão",
     "Arrumar quarto"
   ];
-  // Cria calendário de 29/09/2025 até 30/09/2026 para contemplar todas as recompensas
-  const inicio = new Date(2025, 8, 29), fim = new Date(2026, 8, 30);
+  // Cria calendário reiniciando em 05/12/2024 para contemplar um novo ciclo de hábitos
+  const inicio = new Date(2024, 11, 5), fim = new Date(2025, 11, 5);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
-  const caloriasFim = new Date(2026, 2, 10);
+  const caloriasFim = new Date(inicio);
+  caloriasFim.setDate(caloriasFim.getDate() + 163);
   let habitos_ativos = [];
   for (let i = 1; i <= dias_total; i++) {
     const data_atual = new Date(inicio);
