@@ -58,7 +58,7 @@ html, body {
   height: 1080px;
   overflow: hidden;
   z-index: 0;
-  transform-origin: center center;
+  transform-origin: top left;
   --wrapper-translate-x: 0px;
   --wrapper-translate-y: 0px;
   --wrapper-scale: 1;
