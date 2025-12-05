@@ -1096,6 +1096,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (mesNum === mesAtual && anoNum === anoAtual) {
         dropdown.style.display = 'block';
         setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
+        requestAnimationFrame(() => centerMonthIntoView(dropdown));
         mesDiv.classList.add('open', 'mes-atual');
         if (allRewards[idx]) allRewards[idx].style.display = '';
         const rows = dropdown.querySelectorAll('tr.main-row');
@@ -1321,7 +1322,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         completed++;
       }
     });
-    return completed;
+    return Math.max(1, completed);
   }
 
   function updateLevelDisplay() {
@@ -1952,24 +1953,89 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).join('');
 
     weightChartContainer.innerHTML = `
-      <svg class="weight-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" role="img" aria-label="Gráfico de evolução do peso">
-        <rect class="weight-chart-bg" x="0" y="0" width="${width}" height="${height}"></rect>
-        <g class="weight-chart-axis">
-          <line x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
-          <line x1="${paddingLeft}" y1="${height - paddingBottom}" x2="${width - paddingRight}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
-        </g>
-        <g class="weight-chart-goal-group">
-          <line x1="${paddingLeft}" y1="${goalY.toFixed(2)}" x2="${width - paddingRight}" y2="${goalY.toFixed(2)}" class="weight-chart-goal"></line>
-          <text x="${width - paddingRight}" y="${goalY - 8}" class="weight-goal-label" text-anchor="end">Meta ${formatWeightDisplay(WEIGHT_GOAL)}</text>
-        </g>
-        <path class="weight-chart-line" d="${pathData}"></path>
-        ${pointDots}
-        <g class="weight-chart-labels">
-          ${xLabels}
-          ${yTicks}
-        </g>
-      </svg>
+      <div class="weight-chart-surface">
+        <svg class="weight-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" role="img" aria-label="Gráfico de evolução do peso">
+          <rect class="weight-chart-bg" x="0" y="0" width="${width}" height="${height}"></rect>
+          <g class="weight-chart-axis">
+            <line x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
+            <line x1="${paddingLeft}" y1="${height - paddingBottom}" x2="${width - paddingRight}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
+          </g>
+          <g class="weight-chart-goal-group">
+            <line x1="${paddingLeft}" y1="${goalY.toFixed(2)}" x2="${width - paddingRight}" y2="${goalY.toFixed(2)}" class="weight-chart-goal"></line>
+            <text x="${width - paddingRight}" y="${goalY - 8}" class="weight-goal-label" text-anchor="end">Meta ${formatWeightDisplay(WEIGHT_GOAL)}</text>
+          </g>
+          <path class="weight-chart-line" d="${pathData}"></path>
+          ${pointDots}
+          <g class="weight-chart-labels">
+            ${xLabels}
+            ${yTicks}
+          </g>
+          <line class="weight-focus-line" x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${height - paddingBottom}"></line>
+          <circle class="weight-focus-dot" cx="${paddingLeft}" cy="${height - paddingBottom}" r="8"></circle>
+          <rect class="weight-chart-hitbox" x="${paddingLeft}" y="${paddingTop}" width="${width - paddingLeft - paddingRight}" height="${height - paddingTop - paddingBottom}" aria-hidden="true"></rect>
+        </svg>
+        <div class="weight-tooltip" aria-hidden="true"></div>
+      </div>
     `;
+
+    const svg = weightChartContainer.querySelector('.weight-chart');
+    const tooltip = weightChartContainer.querySelector('.weight-tooltip');
+    const focusLine = weightChartContainer.querySelector('.weight-focus-line');
+    const focusDot = weightChartContainer.querySelector('.weight-focus-dot');
+    const hitbox = weightChartContainer.querySelector('.weight-chart-hitbox');
+    const pointEls = Array.from(weightChartContainer.querySelectorAll('.weight-chart-point'));
+
+    function hideChartFocus() {
+      if (focusLine) focusLine.style.opacity = '0';
+      if (focusDot) focusDot.style.opacity = '0';
+      if (tooltip) tooltip.style.opacity = '0';
+    }
+
+    function updateChartFocus(coord) {
+      if (!svg || !coord || !focusLine || !focusDot || !tooltip) return;
+      focusLine.setAttribute('x1', coord.x.toFixed(2));
+      focusLine.setAttribute('x2', coord.x.toFixed(2));
+      focusLine.style.opacity = '1';
+
+      focusDot.setAttribute('cx', coord.x.toFixed(2));
+      focusDot.setAttribute('cy', coord.y.toFixed(2));
+      focusDot.style.opacity = '1';
+      focusDot.style.transform = 'scale(1.05)';
+
+      pointEls.forEach((el, idx) => {
+        el.style.filter = coords[idx] && coords[idx].dayId === coord.dayId ? 'drop-shadow(0 0 10px rgba(255,227,121,0.8))' : 'none';
+      });
+
+      const svgRect = svg.getBoundingClientRect();
+      const containerRect = weightChartContainer.getBoundingClientRect();
+      const scaleX = svgRect.width / width;
+      const scaleY = svgRect.height / height;
+      const tooltipX = (coord.x * scaleX) + svgRect.left - containerRect.left;
+      const tooltipY = (coord.y * scaleY) + svgRect.top - containerRect.top;
+      tooltip.style.left = `${tooltipX}px`;
+      tooltip.style.top = `${tooltipY}px`;
+      tooltip.innerHTML = `
+        <strong>${coord.label}</strong>
+        <span>${formatWeightDisplay(coord.weight)}</span>
+        <small>${formatWeightDelta(coord.weight - WEIGHT_GOAL)} da meta</small>
+      `;
+      tooltip.style.opacity = '1';
+    }
+
+    hitbox?.addEventListener('pointermove', (event) => {
+      if (!svg) return;
+      const rect = svg.getBoundingClientRect();
+      const relativeX = (event.clientX - rect.left) * (width / rect.width);
+      let nearest = coords[0];
+      coords.forEach((coord) => {
+        if (Math.abs(coord.x - relativeX) < Math.abs(nearest.x - relativeX)) {
+          nearest = coord;
+        }
+      });
+      updateChartFocus(nearest);
+    });
+
+    hitbox?.addEventListener('pointerleave', hideChartFocus);
   }
 
   function updateDiaryVisualState(dayId) {
@@ -2411,6 +2477,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       calendario.classList.remove('vertical-center');
     }
   }
+
+  function centerMonthIntoView(dropdown) {
+    if (!calendarioEl || !dropdown) return;
+    const calendarRect = calendarioEl.getBoundingClientRect();
+    const dropdownRect = dropdown.getBoundingClientRect();
+    const offset = dropdownRect.top - calendarRect.top - (calendarRect.height / 2 - dropdownRect.height / 2);
+    const target = calendarioEl.scrollTop + offset;
+    calendarioEl.scrollTo({ top: target, behavior: 'smooth' });
+  }
   function handleStickyTitles() {
     // Sticky titles desativados para evitar o 
     // reposicionamento automático ao rolar a página
@@ -2548,7 +2623,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
       // Ativa clicado
       dropdown.style.display = 'block';
-      requestAnimationFrame(() => refreshVisibleRowProgress(dropdown));
+      requestAnimationFrame(() => {
+        refreshVisibleRowProgress(dropdown);
+        centerMonthIntoView(dropdown);
+      });
       setTimeout(() => dropdown.classList.add('arcade-drop-show'), 5);
       mesDiv.classList.add('open', 'mes-atual');
       if (allRewards[idx]) {
