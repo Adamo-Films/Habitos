@@ -925,7 +925,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   let diaryButtonWrapper = null;
   let hasGameStarted = false;
   let visualizerOpen = false;
-  let visualizerEnterTimeout = null;
   let visualizerCloseTimeout = null;
 
   const visualizerStyleMap = {
@@ -1333,14 +1332,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!visualizerEl || !visualizerOpen) return;
     visualizerOpen = false;
     document.body.classList.remove('visualizer-portal');
-    document.body.classList.remove('visualizer-entering');
-    visualizerEl.classList.remove('entering');
     visualizerEl.classList.add('closing');
-    if (visualizerEnterTimeout) {
-      clearTimeout(visualizerEnterTimeout);
-      visualizerEnterTimeout = null;
-      document.body.classList.remove('visualizer-entering');
-    }
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) focusTarget.removeAttribute('tabindex');
     if (visualizerCloseTimeout) {
@@ -1362,11 +1354,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (visualizerCloseTimeout) {
       clearTimeout(visualizerCloseTimeout);
       visualizerCloseTimeout = null;
-    }
-    if (visualizerEnterTimeout) {
-      clearTimeout(visualizerEnterTimeout);
-      visualizerEnterTimeout = null;
-      document.body.classList.remove('visualizer-entering');
     }
     visualizerEl.classList.remove('closing');
     applyVisualizerThemeStyles(theme);
@@ -1443,16 +1430,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     visualizerEl.classList.add('show');
     document.body.classList.add('visualizer-portal');
     document.body.classList.add('visualizer-open');
-    document.body.classList.add('visualizer-entering');
     visualizerOpen = true;
-    requestAnimationFrame(() => {
-      visualizerEl.classList.add('entering');
-    });
-    visualizerEnterTimeout = setTimeout(() => {
-      visualizerEl.classList.remove('entering');
-      document.body.classList.remove('visualizer-entering');
-      visualizerEnterTimeout = null;
-    }, 1300);
 
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) {
