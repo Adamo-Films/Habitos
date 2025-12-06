@@ -1386,10 +1386,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!visualizerEl || !visualizerOpen) return;
     visualizerOpen = false;
     document.body.classList.remove('visualizer-portal');
-    if (videoWrapper) {
-      videoWrapper.style.setProperty('--wrapper-translate-x', '0px');
-      videoWrapper.style.setProperty('--wrapper-translate-y', '0px');
-    }
     visualizerEl.classList.add('closing');
     const focusTarget = visualizerEl.querySelector('.visualizer-content');
     if (focusTarget) focusTarget.removeAttribute('tabindex');
@@ -1431,21 +1427,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       visualizerEl.style.setProperty('--origin-dy', `${dy}px`);
       visualizerEl.style.setProperty('--origin-scale', approximateScale.toString());
       visualizerEl.classList.add('from-card');
-      if (videoWrapper) {
-        const translateX = -(dx / currentScale);
-        const translateY = -(dy / currentScale);
-        videoWrapper.style.setProperty('--wrapper-translate-x', `${translateX}px`);
-        videoWrapper.style.setProperty('--wrapper-translate-y', `${translateY}px`);
-      }
     } else {
       visualizerEl.classList.remove('from-card');
       visualizerEl.style.removeProperty('--origin-dx');
       visualizerEl.style.removeProperty('--origin-dy');
       visualizerEl.style.removeProperty('--origin-scale');
-      if (videoWrapper) {
-        videoWrapper.style.setProperty('--wrapper-translate-x', '0px');
-        videoWrapper.style.setProperty('--wrapper-translate-y', '0px');
-      }
     }
 
     if (visualizerIconEl) visualizerIconEl.textContent = theme.icon || reward.icon || '⭐';
