@@ -1147,7 +1147,7 @@ tr.dropdown[style*="display: none;"] {
   width: min(820px, 94%);
   height: 100%;
   max-height: none;
-  background: transparent;
+  background: linear-gradient(135deg, rgba(0, 21, 48, 0.94), rgba(12, 8, 32, 0.96));
   border: 2px solid rgba(81, 255, 231, 0.82);
   border-radius: 28px;
   box-shadow: 0 0 40px rgba(81, 255, 231, 0.32), 0 0 60px rgba(0, 255, 191, 0.24);
