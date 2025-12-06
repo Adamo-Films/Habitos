@@ -1214,7 +1214,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   let diaryUnlocked = loadDiaryUnlockState();
   let weightEntries = loadWeightEntriesLocal();
   if (!weightEntries || typeof weightEntries !== 'object') weightEntries = {};
-  let weightChartPinnedIndex = null;
   const START_DATE_KEY = 'habitos-start-date-v1';
 
   const DEFAULT_START_DATE_PARTS = { year: 2025, month: 12, day: 5 };
@@ -2071,158 +2070,24 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).join('');
 
     weightChartContainer.innerHTML = `
-      <div class="weight-chart-surface">
-        <svg class="weight-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" role="img" aria-label="Gráfico de evolução do peso">
-          <rect class="weight-chart-bg" x="0" y="0" width="${width}" height="${height}"></rect>
-          <g class="weight-chart-axis">
-            <line x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
-            <line x1="${paddingLeft}" y1="${height - paddingBottom}" x2="${width - paddingRight}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
-          </g>
-          <g class="weight-chart-goal-group">
-            <line x1="${paddingLeft}" y1="${goalY.toFixed(2)}" x2="${width - paddingRight}" y2="${goalY.toFixed(2)}" class="weight-chart-goal"></line>
-            <text x="${width - paddingRight}" y="${goalY - 8}" class="weight-goal-label" text-anchor="end">Meta ${formatWeightDisplay(WEIGHT_GOAL)}</text>
-          </g>
-          <path class="weight-chart-line" d="${pathData}"></path>
-          ${pointDots}
-          <g class="weight-chart-labels">
-            ${xLabels}
-            ${yTicks}
-          </g>
-          <line class="weight-crosshair weight-crosshair-x" x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${height - paddingBottom}"></line>
-          <line class="weight-crosshair weight-crosshair-y" x1="${paddingLeft}" y1="${height - paddingBottom}" x2="${width - paddingRight}" y2="${height - paddingBottom}"></line>
-        </svg>
-        <div class="weight-chart-overlay" aria-live="polite">
-          <div class="weight-tooltip" role="status" aria-live="polite"></div>
-          <div class="weight-insights">
-            <div class="weight-insight-title">Explore seu peso</div>
-            <div class="weight-insight-label">Progresso:</div>
-            <div class="weight-insight-value" data-weight-progress>--</div>
-            <div class="weight-insight-label">Delta:</div>
-            <div class="weight-insight-value" data-weight-delta>--</div>
-          </div>
-        </div>
-      </div>
+      <svg class="weight-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" role="img" aria-label="Gráfico de evolução do peso">
+        <rect class="weight-chart-bg" x="0" y="0" width="${width}" height="${height}"></rect>
+        <g class="weight-chart-axis">
+          <line x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
+          <line x1="${paddingLeft}" y1="${height - paddingBottom}" x2="${width - paddingRight}" y2="${height - paddingBottom}" class="weight-axis-line"></line>
+        </g>
+        <g class="weight-chart-goal-group">
+          <line x1="${paddingLeft}" y1="${goalY.toFixed(2)}" x2="${width - paddingRight}" y2="${goalY.toFixed(2)}" class="weight-chart-goal"></line>
+          <text x="${width - paddingRight}" y="${goalY - 8}" class="weight-goal-label" text-anchor="end">Meta ${formatWeightDisplay(WEIGHT_GOAL)}</text>
+        </g>
+        <path class="weight-chart-line" d="${pathData}"></path>
+        ${pointDots}
+        <g class="weight-chart-labels">
+          ${xLabels}
+          ${yTicks}
+        </g>
+      </svg>
     `;
-
-    const surface = weightChartContainer.querySelector('.weight-chart-surface');
-    const svg = weightChartContainer.querySelector('svg');
-    const tooltip = weightChartContainer.querySelector('.weight-tooltip');
-    const crosshairX = weightChartContainer.querySelector('.weight-crosshair-x');
-    const crosshairY = weightChartContainer.querySelector('.weight-crosshair-y');
-    const insights = weightChartContainer.querySelector('.weight-insights');
-    const insightProgress = weightChartContainer.querySelector('[data-weight-progress]');
-    const insightDelta = weightChartContainer.querySelector('[data-weight-delta]');
-    const pointEls = Array.from(svg.querySelectorAll('.weight-chart-point'));
-    pointEls.forEach((el, idx) => {
-      el.dataset.index = idx.toString();
-    });
-
-    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-    const totalJourney = Math.max(1, WEIGHT_START - WEIGHT_GOAL);
-
-    const showPointDetails = (coord, index, { isPinned = false } = {}) => {
-      const previous = index > 0 ? coords[index - 1] : null;
-      const deltaPrev = previous ? coord.weight - previous.weight : null;
-      const deltaGoal = coord.weight - WEIGHT_GOAL;
-      const progress = clamp(((WEIGHT_START - coord.weight) / totalJourney) * 100, 0, 150);
-      const progressLost = Math.max(0, WEIGHT_START - coord.weight);
-      const progressText = `${weightFormatter.format(progressLost)} kg (${progress.toFixed(1)}%) de evolução desde o início`;
-      const deltaText = deltaPrev == null ? 'Primeiro registro' : `${deltaPrev < 0 ? '▼' : '▲'} ${formatWeightDelta(deltaPrev)} vs. anterior`;
-
-      pointEls.forEach((el, idx) => {
-        el.classList.toggle('active', idx === index);
-        el.setAttribute('r', idx === index ? '8' : '6');
-      });
-
-      const xPercent = (coord.x / width) * 100;
-      const yPercent = (coord.y / height) * 100;
-      tooltip.style.left = `${clamp(xPercent, 8, 92)}%`;
-      tooltip.style.top = `${clamp(yPercent, 12, 88)}%`;
-      tooltip.classList.add('show');
-      tooltip.innerHTML = `
-        <span class="weight-tooltip-title">${coord.label}</span>
-        <span class="weight-tooltip-value">${formatWeightDisplay(coord.weight)}</span>
-        <span class="weight-tooltip-meta">Distância da meta: ${formatWeightDelta(deltaGoal)}</span>
-        <span class="weight-tooltip-meta">${deltaText}</span>
-        <span class="weight-tooltip-delta ${deltaGoal <= 0 ? 'positive' : 'negative'}">${deltaGoal <= 0 ? 'Abaixo' : 'Acima'} da meta ${formatWeightDelta(deltaGoal)}</span>
-      `;
-
-      if (crosshairX && crosshairY) {
-        crosshairX.setAttribute('x1', coord.x.toFixed(2));
-        crosshairX.setAttribute('x2', coord.x.toFixed(2));
-        crosshairX.classList.add('active');
-        crosshairY.setAttribute('y1', coord.y.toFixed(2));
-        crosshairY.setAttribute('y2', coord.y.toFixed(2));
-        crosshairY.classList.add('active');
-      }
-
-      if (insightProgress) {
-        insightProgress.textContent = progressText;
-      }
-      if (insightDelta) {
-        const remaining = Math.max(0, coord.weight - WEIGHT_GOAL);
-        const mood = deltaGoal <= 0 ? '🔥 Na meta!' : remaining <= 1 ? 'Quase lá!' : 'Continue ajustando';
-        insightDelta.textContent = `${mood} — ${formatWeightDelta(deltaGoal)} da meta`;
-      }
-
-      insights?.classList.toggle('pinned', isPinned);
-    };
-
-    const getNearestCoordIndex = (event) => {
-      const rect = svg.getBoundingClientRect();
-      const x = ((event.clientX - rect.left) / rect.width) * width;
-      let nearest = 0;
-      let best = Number.MAX_VALUE;
-      coords.forEach((coord, idx) => {
-        const dist = Math.abs(coord.x - x);
-        if (dist < best) {
-          best = dist;
-          nearest = idx;
-        }
-      });
-      return nearest;
-    };
-
-    const handleHover = (event) => {
-      if (weightChartPinnedIndex != null) return;
-      const idx = getNearestCoordIndex(event);
-      showPointDetails(coords[idx], idx);
-    };
-
-    const handleClick = (event) => {
-      const idx = getNearestCoordIndex(event);
-      weightChartPinnedIndex = idx;
-      showPointDetails(coords[idx], idx, { isPinned: true });
-    };
-
-    const resetInteraction = () => {
-      weightChartPinnedIndex = null;
-      tooltip.classList.remove('show');
-      pointEls.forEach((el) => {
-        el.classList.remove('active');
-        el.setAttribute('r', '6');
-      });
-      crosshairX?.classList.remove('active');
-      crosshairY?.classList.remove('active');
-      insights?.classList.remove('pinned');
-      if (insightProgress) insightProgress.textContent = 'Passe o mouse para explorar a jornada';
-      if (insightDelta) insightDelta.textContent = 'Clique em um ponto para fixar as dicas';
-    };
-
-    surface?.addEventListener('pointermove', handleHover);
-    surface?.addEventListener('click', handleClick);
-    surface?.addEventListener('mouseleave', () => {
-      if (weightChartPinnedIndex == null) {
-        resetInteraction();
-      }
-    });
-
-    if (coords.length) {
-      showPointDetails(coords[coords.length - 1], coords.length - 1, { isPinned: true });
-      weightChartPinnedIndex = coords.length - 1;
-    } else {
-      resetInteraction();
-    }
   }
 
   function updateDiaryVisualState(dayId) {
