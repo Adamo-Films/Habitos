@@ -1445,6 +1445,40 @@ tr.dropdown[style*="display: none;"] {
   overflow: hidden;
 }
 
+.diary-entry-actions {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 1;
+}
+
+.diary-entry-action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid rgba(81, 255, 231, 0.4);
+  background: rgba(0, 24, 52, 0.85);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8em;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.diary-entry-action-btn:hover {
+  border-color: rgba(255, 227, 121, 0.8);
+  background: rgba(14, 46, 82, 0.95);
+  transform: translateY(-1px);
+}
+
+.diary-entry-action-btn:active {
+  transform: translateY(0);
+  background: rgba(10, 32, 58, 0.95);
+}
+
 .diary-entry::after {
   content: "";
   position: absolute;
