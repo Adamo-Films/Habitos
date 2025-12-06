@@ -1222,26 +1222,32 @@ document.addEventListener("DOMContentLoaded", async function () {
     return d;
   }
 
+  // Cria a data inicial usando componentes locais para evitar deriva de fuso horário
+  const DEFAULT_START_DATE = normalizeToStartOfDay(new Date(2025, 11, 5));
+
   function loadStartDate() {
-    const today = normalizeToStartOfDay(new Date());
     try {
       const stored = localStorage.getItem(START_DATE_KEY);
       if (stored) {
         const parsed = normalizeToStartOfDay(new Date(stored));
         if (!isNaN(parsed)) {
-          // Garante que a data inicial não fique no futuro caso o relógio do sistema mude
-          return parsed > today ? today : parsed;
+          // Garante que a data inicial não retroceda antes do início oficial
+          if (parsed < DEFAULT_START_DATE) {
+            localStorage.setItem(START_DATE_KEY, DEFAULT_START_DATE.toISOString());
+            return DEFAULT_START_DATE;
+          }
+          return parsed;
         }
       }
     } catch (err) {
       console.error('Falha ao carregar data inicial:', err);
     }
     try {
-      localStorage.setItem(START_DATE_KEY, today.toISOString());
+      localStorage.setItem(START_DATE_KEY, DEFAULT_START_DATE.toISOString());
     } catch (err) {
       console.error('Falha ao salvar data inicial:', err);
     }
-    return today;
+    return DEFAULT_START_DATE;
   }
 
   const dados = [];
