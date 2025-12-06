@@ -81,7 +81,7 @@ html, body {
   opacity: 1;
 }
 body.visualizer-portal #video-wrapper {
-  transform: perspective(1600px) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(calc(var(--wrapper-scale) * 0.94)) rotateX(7deg);
+  transform: perspective(1600px) translate(-50%, -50%) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(calc(var(--wrapper-scale) * 0.94)) rotateX(7deg);
   filter: brightness(0.6) saturate(150%) blur(8px) contrast(110%) drop-shadow(0 0 28px rgba(81, 255, 231, 0.18)) drop-shadow(0 0 32px rgba(207, 40, 255, 0.16));
 }
 body.visualizer-portal::before {
@@ -2537,15 +2537,15 @@ body.visualizer-open {
 
 @keyframes screenSuck {
   0% {
-    transform: perspective(1600px) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(var(--wrapper-scale));
+    transform: perspective(1600px) translate(-50%, -50%) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 0) scale(var(--wrapper-scale));
     filter: brightness(1) saturate(100%) blur(0);
   }
   60% {
-    transform: perspective(1400px) translate3d(calc(var(--wrapper-translate-x) + 26px), calc(var(--wrapper-translate-y) + 26px), 160px) scale(calc(var(--wrapper-scale) * 1.18)) rotateX(6deg);
+    transform: perspective(1400px) translate(-50%, -50%) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 160px) scale(calc(var(--wrapper-scale) * 1.18)) rotateX(6deg);
     filter: brightness(1.28) saturate(145%) blur(2px);
   }
   100% {
-    transform: perspective(1200px) translate3d(calc(var(--wrapper-translate-x) + 42px), calc(var(--wrapper-translate-y) + 42px), 320px) scale(calc(var(--wrapper-scale) * 1.34)) rotateX(9deg);
+    transform: perspective(1200px) translate(-50%, -50%) translate3d(var(--wrapper-translate-x), var(--wrapper-translate-y), 320px) scale(calc(var(--wrapper-scale) * 1.34)) rotateX(9deg);
     filter: brightness(1.44) saturate(168%) blur(1.5px);
   }
 }
