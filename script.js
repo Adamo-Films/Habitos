@@ -1216,32 +1216,55 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (!weightEntries || typeof weightEntries !== 'object') weightEntries = {};
   const START_DATE_KEY = 'habitos-start-date-v1';
 
-  function normalizeToStartOfDay(date) {
-    const d = new Date(date);
+  const DEFAULT_START_DATE_PARTS = { year: 2025, month: 12, day: 5 };
+
+  function createDateFromParts({ year, month, day }) {
+    const d = new Date(year, month - 1, day);
     d.setHours(0, 0, 0, 0);
     return d;
   }
 
+  function serializeDate(d) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function parseStoredDate(value) {
+    if (typeof value !== 'string') return null;
+    const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!match) return null;
+    const [, yearStr, monthStr, dayStr] = match;
+    const parsed = createDateFromParts({
+      year: Number(yearStr),
+      month: Number(monthStr),
+      day: Number(dayStr)
+    });
+    return isNaN(parsed) ? null : parsed;
+  }
+
+  // Data inicial fixa: 05/12/2025 (armazenada sem timezone para evitar deriva)
+  const DEFAULT_START_DATE = createDateFromParts(DEFAULT_START_DATE_PARTS);
+  const DEFAULT_START_DATE_SERIALIZED = serializeDate(DEFAULT_START_DATE);
+
   function loadStartDate() {
-    const today = normalizeToStartOfDay(new Date());
     try {
       const stored = localStorage.getItem(START_DATE_KEY);
-      if (stored) {
-        const parsed = normalizeToStartOfDay(new Date(stored));
-        if (!isNaN(parsed)) {
-          // Garante que a data inicial não fique no futuro caso o relógio do sistema mude
-          return parsed > today ? today : parsed;
-        }
+      const parsed = parseStoredDate(stored);
+      // Garante que a data inicial permaneça exatamente no lançamento oficial
+      if (parsed && serializeDate(parsed) === DEFAULT_START_DATE_SERIALIZED) {
+        return parsed;
       }
     } catch (err) {
       console.error('Falha ao carregar data inicial:', err);
     }
     try {
-      localStorage.setItem(START_DATE_KEY, today.toISOString());
+      localStorage.setItem(START_DATE_KEY, DEFAULT_START_DATE_SERIALIZED);
     } catch (err) {
       console.error('Falha ao salvar data inicial:', err);
     }
-    return today;
+    return DEFAULT_START_DATE;
   }
 
   const dados = [];
