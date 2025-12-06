@@ -798,10 +798,46 @@ function formatDiaryDisplayDate(meta) {
   return `${dia}/${mes}/${meta.ano}`;
 }
 
+function generateDiarySummary(text) {
+  const clean = (text || '').replace(/\s+/g, ' ').trim();
+  if (!clean) return 'Entrada registrada';
+
+  const stopWords = new Set([
+    'de', 'da', 'do', 'das', 'dos', 'e', 'a', 'o', 'um', 'uma', 'para', 'pra', 'por', 'com', 'sem', 'no', 'na', 'nos', 'nas',
+    'em', 'ao', 'aos', 'às', 'que', 'quem', 'onde', 'quando', 'como', 'porque', 'mas', 'ou', 'se', 'já', 'só', 'muito', 'pouco',
+    'tudo', 'nada', 'mais', 'menos', 'sobre', 'entre', 'cada', 'isso', 'isso', 'isto', 'aquele', 'aquela'
+  ]);
+
+  const tokens = clean.toLowerCase().match(/\p{L}+/gu) || [];
+  const frequencies = tokens.reduce((map, word) => {
+    if (stopWords.has(word) || word.length < 3) return map;
+    map[word] = (map[word] || 0) + 1;
+    return map;
+  }, {});
+
+  const sentences = clean.split(/(?<=[.!?])\s+/).filter(Boolean);
+  const scoredSentences = (sentences.length ? sentences : [clean]).map((sentence) => {
+    const words = sentence.toLowerCase().match(/\p{L}+/gu) || [];
+    let score = 0;
+    words.forEach((word) => {
+      if (stopWords.has(word) || word.length < 3) return;
+      score += (frequencies[word] || 0) + 1;
+    });
+    const densityBonus = Math.min(words.length, 12) / 12;
+    return { sentence, score: score + densityBonus };
+  });
+
+  const best = scoredSentences.reduce((current, candidate) => (candidate.score > current.score ? candidate : current));
+  let summary = (best && best.sentence ? best.sentence : clean).replace(/\s+/g, ' ').trim();
+  if (summary.length > 140) summary = `${summary.slice(0, 137)}…`;
+  return summary;
+}
+
 function normalizeDiaryDoc(docId, data) {
   if (!data) return null;
   const texto = data.texto || '';
   const displayDate = data.displayDate || data.data || docId;
+  const summary = data.summary || generateDiarySummary(texto);
   let order = data.order;
   if (order == null) {
     if (data.referenciaDia && typeof data.referenciaDia.toMillis === 'function') {
@@ -812,7 +848,7 @@ function normalizeDiaryDoc(docId, data) {
       order = Date.now();
     }
   }
-  return { texto, displayDate, order };
+  return { texto, displayDate, order, summary };
 }
 
 async function getDiaryEntries() {
@@ -844,6 +880,7 @@ async function setDiaryEntryRemote(dayId, text, meta) {
   }
   const displayDate = formatDiaryDisplayDate(meta);
   const referencia = new Date(meta.ano, meta.mes - 1, meta.diaDoMes);
+  const summary = generateDiarySummary(text);
   const payload = {
     texto: text,
     displayDate,
@@ -851,9 +888,10 @@ async function setDiaryEntryRemote(dayId, text, meta) {
     diaId: dayId,
     referenciaDia: firebase.firestore.Timestamp.fromDate(referencia),
     updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    summary,
   };
   await ref.set(payload);
-  return { texto: text, displayDate, order: payload.order };
+  return { texto: text, displayDate, order: payload.order, summary };
 }
 
 async function resetDiaryEntriesRemote() {
@@ -1856,20 +1894,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     const itemsHtml = entriesArr.map(([dayId, entry]) => {
       const plain = (entry.texto || '').replace(/\s+/g, ' ').trim();
+      const summary = entry.summary || generateDiarySummary(entry.texto);
       const shortBody = plain.length > 180 ? plain.slice(0, 177) + '…' : plain;
-      const previewBase = diaryUnlocked ? (plain.length ? plain : 'Entrada registrada') : 'Conteúdo bloqueado';
+      const previewBase = diaryUnlocked ? (summary || 'Entrada registrada') : 'Conteúdo bloqueado';
       const previewLimit = diaryUnlocked ? 80 : 0;
       const preview = previewLimit ? (previewBase.length > previewLimit ? `${previewBase.slice(0, previewLimit - 1)}…` : previewBase) : previewBase;
       const previewSafe = escapeHTML(preview);
       const safeText = diaryUnlocked ? escapeHTML(shortBody).replace(/\n/g, '<br>') : '<em>Desbloqueie para visualizar.</em>';
       const displayDateSafe = escapeHTML(entry.displayDate || '');
+      const actionsHtml = diaryUnlocked ? `
+          <div class="diary-entry-actions" aria-hidden="false">
+            <button type="button" class="diary-entry-action diary-entry-edit" data-day="${dayId}" title="Editar entrada">✏️</button>
+            <button type="button" class="diary-entry-action diary-entry-delete" data-day="${dayId}" title="Apagar entrada">🗑️</button>
+          </div>` : '';
       return `
         <article class="diary-entry" data-day="${dayId}">
-          <button type="button" class="diary-entry-toggle" aria-expanded="false">
-            <span class="diary-entry-date">${displayDateSafe}</span>
-            <span class="diary-entry-preview">${previewSafe}</span>
-            <span class="diary-entry-icon" aria-hidden="true">▼</span>
-          </button>
+          <div class="diary-entry-header">
+            <button type="button" class="diary-entry-toggle" aria-expanded="false">
+              <span class="diary-entry-date">${displayDateSafe}</span>
+              <span class="diary-entry-preview">${previewSafe}</span>
+              <span class="diary-entry-icon" aria-hidden="true">▼</span>
+            </button>
+            ${actionsHtml}
+          </div>
           <div class="diary-entry-body" hidden>
             <div class="diary-entry-text">${safeText}</div>
           </div>
@@ -1909,6 +1956,55 @@ document.addEventListener("DOMContentLoaded", async function () {
           entryEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }
       });
+
+      const dayId = entryEl.getAttribute('data-day');
+      const editBtn = entryEl.querySelector('.diary-entry-edit');
+      const deleteBtn = entryEl.querySelector('.diary-entry-delete');
+
+      if (editBtn) {
+        editBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (!diaryUnlocked) {
+            updateDiaryLockVisuals({ shouldRenderList: false, showLocker: true });
+            flashDiaryLocker();
+            return;
+          }
+          if (!dayId) return;
+          entryEl.classList.add('open');
+          toggle.setAttribute('aria-expanded', 'true');
+          body.hidden = false;
+          showDiaryEditor(dayId);
+        });
+      }
+
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          if (!diaryUnlocked) {
+            updateDiaryLockVisuals({ shouldRenderList: false, showLocker: true });
+            flashDiaryLocker();
+            return;
+          }
+          if (!dayId) return;
+          const meta = diaLookup[dayId];
+          if (!meta) return;
+          const confirmed = window.confirm('Deseja apagar esta entrada do diário?');
+          if (!confirmed) return;
+          deleteBtn.disabled = true;
+          deleteBtn.textContent = '⌛';
+          try {
+            await setDiaryEntryRemote(dayId, '', meta);
+            delete diaryEntries[dayId];
+            saveDiaryEntriesLocal(diaryEntries);
+            updateDiaryVisualState(dayId);
+            renderDiaryLog();
+          } catch (err) {
+            console.error('Erro ao apagar diário:', err);
+            deleteBtn.textContent = '⚠️';
+            setTimeout(() => { deleteBtn.textContent = '🗑️'; }, 1500);
+          }
+        });
+      }
     });
   }
 
