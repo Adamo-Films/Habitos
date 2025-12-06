@@ -720,32 +720,6 @@ function loadDiaryEntriesLocal() {
   }
 }
 
-function generateDiarySummary(text) {
-  if (!text) return 'Entrada registrada';
-  const normalized = text.replace(/\s+/g, ' ').trim();
-  if (!normalized) return 'Entrada registrada';
-  const sentences = (normalized.match(/[^.!?]+[.!?]?/g) || []).map((part) => part.trim());
-  if (!sentences.length) return 'Entrada registrada';
-  const words = normalized.toLowerCase().match(/\b[\p{L}\p{N}]{3,}\b/gu) || [];
-  const freq = words.reduce((acc, word) => {
-    acc[word] = (acc[word] || 0) + 1;
-    return acc;
-  }, {});
-  let bestSentence = sentences[0];
-  let bestScore = -Infinity;
-  sentences.forEach((sentence, index) => {
-    const sentenceWords = sentence.toLowerCase().match(/\b[\p{L}\p{N}]{3,}\b/gu) || [];
-    const unique = Array.from(new Set(sentenceWords));
-    const score = unique.reduce((sum, word) => sum + (freq[word] || 0), 0) + (index === 0 ? 0 : 0.5);
-    if (score > bestScore) {
-      bestScore = score;
-      bestSentence = sentence;
-    }
-  });
-  const summary = bestSentence.length > 140 ? `${bestSentence.slice(0, 137)}…` : bestSentence;
-  return summary;
-}
-
 function saveDiaryEntriesLocal(entries) {
   try {
     localStorage.setItem(DIARY_LOCAL_KEY, JSON.stringify(entries));
@@ -1871,32 +1845,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (shouldRenderList) renderDiaryLog();
   }
 
-  async function commitDiaryChange(dayId, text) {
-    const meta = diaLookup[dayId];
-    if (!meta) return;
-    const normalized = await setDiaryEntryRemote(dayId, text, meta);
-    if (normalized) {
-      diaryEntries[dayId] = normalized;
-    } else {
-      delete diaryEntries[dayId];
-    }
-    saveDiaryEntriesLocal(diaryEntries);
-    resetDiaryEditor(dayId);
-    updateDiaryVisualState(dayId);
-    renderDiaryLog();
-    renderWeightLog();
-    const checkbox = document.getElementById(`${dayId}-ciclico`);
-    if (text) {
-      if (checkbox && !checkbox.checked) {
-        checkbox.checked = true;
-        checkbox.dispatchEvent(new Event('change'));
-      }
-    } else if (checkbox && checkbox.checked) {
-      checkbox.checked = false;
-      checkbox.dispatchEvent(new Event('change'));
-    }
-  }
-
   function renderDiaryLog() {
     if (!diaryLogList) return;
     const entriesArr = Object.entries(diaryEntries)
@@ -1909,20 +1857,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     const itemsHtml = entriesArr.map(([dayId, entry]) => {
       const plain = (entry.texto || '').replace(/\s+/g, ' ').trim();
       const shortBody = plain.length > 180 ? plain.slice(0, 177) + '…' : plain;
-      const summary = diaryUnlocked ? generateDiarySummary(entry.texto || '') : 'Conteúdo bloqueado';
+      const previewBase = diaryUnlocked ? (plain.length ? plain : 'Entrada registrada') : 'Conteúdo bloqueado';
       const previewLimit = diaryUnlocked ? 80 : 0;
-      const preview = previewLimit ? (summary.length > previewLimit ? `${summary.slice(0, previewLimit - 1)}…` : summary) : summary;
+      const preview = previewLimit ? (previewBase.length > previewLimit ? `${previewBase.slice(0, previewLimit - 1)}…` : previewBase) : previewBase;
       const previewSafe = escapeHTML(preview);
       const safeText = diaryUnlocked ? escapeHTML(shortBody).replace(/\n/g, '<br>') : '<em>Desbloqueie para visualizar.</em>';
       const displayDateSafe = escapeHTML(entry.displayDate || '');
-      const actionsHtml = diaryUnlocked ? `
-            <div class="diary-entry-actions">
-              <button type="button" class="diary-entry-action-btn diary-entry-edit" data-day="${dayId}" aria-label="Editar entrada">✏️</button>
-              <button type="button" class="diary-entry-action-btn diary-entry-delete" data-day="${dayId}" aria-label="Excluir entrada">🗑️</button>
-            </div>` : '';
       return `
         <article class="diary-entry" data-day="${dayId}">
-          ${actionsHtml}
           <button type="button" class="diary-entry-toggle" aria-expanded="false">
             <span class="diary-entry-date">${displayDateSafe}</span>
             <span class="diary-entry-preview">${previewSafe}</span>
@@ -1968,43 +1910,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       });
     });
-
-    if (diaryUnlocked) {
-      const editButtons = diaryLogList.querySelectorAll('.diary-entry-edit');
-      editButtons.forEach((btn) => {
-        btn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          const dayId = btn.getAttribute('data-day');
-          if (!dayId) return;
-          const currentText = diaryEntries[dayId]?.texto || '';
-          const updated = window.prompt('Edite sua entrada do diário:', currentText);
-          if (updated === null) return;
-          btn.disabled = true;
-          try {
-            await commitDiaryChange(dayId, updated.trim());
-          } finally {
-            btn.disabled = false;
-          }
-        });
-      });
-
-      const deleteButtons = diaryLogList.querySelectorAll('.diary-entry-delete');
-      deleteButtons.forEach((btn) => {
-        btn.addEventListener('click', async (e) => {
-          e.stopPropagation();
-          const dayId = btn.getAttribute('data-day');
-          if (!dayId) return;
-          const confirmed = window.confirm('Remover esta entrada do diário?');
-          if (!confirmed) return;
-          btn.disabled = true;
-          try {
-            await commitDiaryChange(dayId, '');
-          } finally {
-            btn.disabled = false;
-          }
-        });
-      });
-    }
   }
 
   function attemptDiaryUnlock() {
@@ -2789,8 +2694,28 @@ document.addEventListener("DOMContentLoaded", async function () {
       button.disabled = true;
       button.textContent = 'Salvando...';
       try {
-        await commitDiaryChange(dayId, text);
+        const normalized = await setDiaryEntryRemote(dayId, text, meta);
+        if (normalized) {
+          diaryEntries[dayId] = normalized;
+        } else {
+          delete diaryEntries[dayId];
+        }
+        saveDiaryEntriesLocal(diaryEntries);
+        resetDiaryEditor(dayId);
+        updateDiaryVisualState(dayId);
+    renderDiaryLog();
+    renderWeightLog();
         hideDiaryEditor(dayId);
+        const checkbox = document.getElementById(`${dayId}-ciclico`);
+        if (text) {
+          if (checkbox && !checkbox.checked) {
+            checkbox.checked = true;
+            checkbox.dispatchEvent(new Event('change'));
+          }
+        } else if (checkbox && checkbox.checked) {
+          checkbox.checked = false;
+          checkbox.dispatchEvent(new Event('change'));
+        }
         button.textContent = 'Salvo!';
         setTimeout(() => { button.textContent = original; }, 1500);
       } catch (error) {
