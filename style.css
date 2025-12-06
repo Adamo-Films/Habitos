@@ -303,6 +303,8 @@ body.visualizer-entering::after {
   font-size: 0.9em;
   padding: 0 1vw 140px 1vw;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   box-sizing: border-box;
   border: none !important;
   cursor: default;
@@ -2139,8 +2141,16 @@ tr.dropdown[style*="display: none;"] {
 }
 
 /* ==== SCROLLBAR OCULTA ==== */
-#calendario::-webkit-scrollbar { width: 7px; background: none;}
-#calendario::-webkit-scrollbar-thumb { background: transparent; border-radius: 11px;}
+#calendario::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+#calendario::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 11px;
+}
 
 /* ==== DREAMY REWARD PORTAL ==== */
 .reward-glow-overlay {
