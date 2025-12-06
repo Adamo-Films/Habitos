@@ -1214,6 +1214,36 @@ document.addEventListener("DOMContentLoaded", async function () {
   let diaryUnlocked = loadDiaryUnlockState();
   let weightEntries = loadWeightEntriesLocal();
   if (!weightEntries || typeof weightEntries !== 'object') weightEntries = {};
+  const START_DATE_KEY = 'habitos-start-date-v1';
+
+  function normalizeToStartOfDay(date) {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  function loadStartDate() {
+    const today = normalizeToStartOfDay(new Date());
+    try {
+      const stored = localStorage.getItem(START_DATE_KEY);
+      if (stored) {
+        const parsed = normalizeToStartOfDay(new Date(stored));
+        if (!isNaN(parsed)) {
+          // Garante que a data inicial não fique no futuro caso o relógio do sistema mude
+          return parsed > today ? today : parsed;
+        }
+      }
+    } catch (err) {
+      console.error('Falha ao carregar data inicial:', err);
+    }
+    try {
+      localStorage.setItem(START_DATE_KEY, today.toISOString());
+    } catch (err) {
+      console.error('Falha ao salvar data inicial:', err);
+    }
+    return today;
+  }
+
   const dados = [];
   const habitosIncrementaisLista = [
     "Dormir até meia noite",
@@ -1245,9 +1275,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     "Diário e gratidão",
     "Arrumar quarto"
   ];
-  // Cria o calendário começando na data atual para evitar ciclos que já terminaram
-  const inicio = new Date();
-  inicio.setHours(0, 0, 0, 0);
+  // Cria o calendário ancorado na primeira data de uso para manter a sequência diária
+  const inicio = loadStartDate();
   const fim = new Date(inicio);
   fim.setFullYear(fim.getFullYear() + 1);
   const dias_total = Math.floor((fim - inicio) / (1000 * 60 * 60 * 24)) + 1;
