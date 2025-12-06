@@ -939,20 +939,6 @@ function applyTwemoji(target = document.body) {
   }
 }
 
-function loadBonusLives() {
-  const raw = localStorage.getItem('habitos-bonus-lives-v1');
-  const parsed = Number(raw);
-  if (Number.isFinite(parsed)) {
-    return Math.min(3, Math.max(0, parsed));
-  }
-  return 0;
-}
-
-function saveBonusLives(value) {
-  const safe = Math.min(3, Math.max(0, Number(value) || 0));
-  localStorage.setItem('habitos-bonus-lives-v1', String(safe));
-}
-
 // === INÍCIO DO DOMContentLoaded ===
 document.addEventListener("DOMContentLoaded", async function () {
   const bgVideo = document.querySelector('.arcade-bg');
@@ -981,39 +967,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   const visualizerParticlesEl = visualizerEl ? visualizerEl.querySelector('.visualizer-particles') : null;
   const visualizerCloseEl = visualizerEl ? visualizerEl.querySelector('.visualizer-close') : null;
   const levelValueEl = levelContainer ? levelContainer.querySelector('.level-value') : null;
-  const minigameOverlay = document.getElementById('minigame-overlay');
-  const minigameCanvas = document.getElementById('minigame-canvas');
-  const minigameStartButton = document.getElementById('minigame-start');
-  const minigameCloseButton = document.getElementById('minigame-close');
-  const minigameOverlayText = document.getElementById('minigame-overlay-text');
-  const minigameScoreEl = document.getElementById('minigame-score');
-  const minigameGoalEl = document.getElementById('minigame-goal');
-  const minigameShieldEl = document.getElementById('minigame-shield');
   let currentScale = 1;
   let diaryButtonWrapper = null;
   let hasGameStarted = false;
   let visualizerOpen = false;
   let visualizerCloseTimeout = null;
-  let bonusLives = loadBonusLives();
-  let minigameAutoShown = false;
-  const minigameState = {
-    ctx: minigameCanvas ? minigameCanvas.getContext('2d') : null,
-    running: false,
-    playing: false,
-    lastTimestamp: 0,
-    score: 0,
-    goal: 25,
-    shield: 3,
-    player: null,
-    bullets: [],
-    enemies: [],
-    sparks: [],
-    stars: [],
-    pressed: { left: false, right: false, shoot: false },
-    width: minigameCanvas ? minigameCanvas.width : 0,
-    height: minigameCanvas ? minigameCanvas.height : 0
-  };
-  const isMinigameOpen = () => minigameOverlay && minigameOverlay.classList.contains('open');
 
   const visualizerStyleMap = {
     primary: '--visual-primary',
@@ -1466,7 +1424,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     return { done, total, percent: total ? done / total : 0 };
   }
 
-  function calculateBaseLives(month, year) {
+  function calculateRemainingLives(month, year) {
     if (!month || !year) return 3;
     const key = `${month}-${year}`;
     const dias = grupos[key] || [];
@@ -1486,17 +1444,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     });
     return Math.max(0, 3 - lost);
-  }
-
-  function calculateRemainingLives(month, year, includeBonus = true) {
-    const base = calculateBaseLives(month, year);
-    if (!includeBonus) return base;
-    const today = new Date();
-    const isCurrent = today.getFullYear() === year && today.getMonth() + 1 === month;
-    if (isCurrent) {
-      return Math.min(3, base + bonusLives);
-    }
-    return base;
   }
 
   function calculatePlayerLevel() {
@@ -1544,281 +1491,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (visualizerEl.dataset.theme) delete visualizerEl.dataset.theme;
       visualizerCloseTimeout = null;
     }, 420);
-  }
-
-  function resetMinigameState() {
-    if (!minigameCanvas || !minigameState.ctx) return;
-    minigameState.width = minigameCanvas.width;
-    minigameState.height = minigameCanvas.height;
-    minigameState.player = {
-      x: minigameState.width / 2,
-      y: minigameState.height - 70,
-      w: 46,
-      h: 22,
-      speed: 320,
-      cooldown: 0
-    };
-    minigameState.bullets = [];
-    minigameState.enemies = [];
-    minigameState.sparks = [];
-    minigameState.stars = Array.from({ length: 60 }).map(() => ({
-      x: Math.random() * minigameState.width,
-      y: Math.random() * minigameState.height,
-      size: Math.random() * 2 + 0.6,
-      speed: 28 + Math.random() * 38
-    }));
-    minigameState.score = 0;
-    minigameState.goal = 25;
-    minigameState.shield = 3;
-    minigameState.lastTimestamp = 0;
-    minigameState.running = false;
-    minigameState.playing = false;
-    updateMinigameHud();
-    updateMinigameOverlay('Pressione Start', 'Use ← → para mover e Espaço para disparar. Sobreviva à chuva neon.');
-  }
-
-  function updateMinigameHud() {
-    if (minigameScoreEl) minigameScoreEl.textContent = minigameState.score;
-    if (minigameGoalEl) minigameGoalEl.textContent = minigameState.goal;
-    if (minigameShieldEl) minigameShieldEl.textContent = minigameState.shield;
-  }
-
-  function updateMinigameOverlay(title, subtitle, showButton = true) {
-    if (!minigameOverlayText) return;
-    minigameOverlayText.classList.remove('hidden');
-    const statusEl = minigameOverlayText.querySelector('.minigame-status');
-    const para = minigameOverlayText.querySelector('p');
-    if (statusEl) statusEl.textContent = title;
-    if (para) para.textContent = subtitle;
-    const btn = minigameOverlayText.querySelector('#minigame-start');
-    if (btn) btn.style.display = showButton ? '' : 'none';
-  }
-
-  function hideMinigameOverlayText() {
-    if (minigameOverlayText) minigameOverlayText.classList.add('hidden');
-  }
-
-  function openMinigame(auto = false) {
-    if (!minigameOverlay || !minigameCanvas || !minigameState.ctx) return;
-    resetMinigameState();
-    minigameOverlay.classList.add('open');
-    minigameOverlay.setAttribute('aria-hidden', 'false');
-    setMinigameButtonState(true);
-    if (auto) {
-      updateMinigameOverlay('Sem vidas!', 'Fundo transparente ativado. Mostre habilidade para ganhar um continue.');
-    }
-  }
-
-  function closeMinigame() {
-    if (!minigameOverlay) return;
-    minigameState.running = false;
-    minigameState.playing = false;
-    minigameOverlay.classList.remove('open');
-    minigameOverlay.setAttribute('aria-hidden', 'true');
-    setMinigameButtonState(false);
-  }
-
-  function startMinigame() {
-    if (!minigameCanvas || !minigameState.ctx) return;
-    hideMinigameOverlayText();
-    minigameState.running = true;
-    minigameState.playing = true;
-    minigameState.lastTimestamp = performance.now();
-    requestAnimationFrame(minigameLoop);
-  }
-
-  function stopMinigame() {
-    minigameState.running = false;
-    minigameState.playing = false;
-  }
-
-  function awardBonusLife() {
-    bonusLives = Math.min(3, bonusLives + 1);
-    saveBonusLives(bonusLives);
-    updateLivesDisplay();
-  }
-
-  function handleMinigameWin() {
-    stopMinigame();
-    updateMinigameOverlay('Vitória!', 'Você destruiu a frota neon e recuperou +1 vida.', true);
-    awardBonusLife();
-    minigameAutoShown = false;
-  }
-
-  function handleMinigameLose() {
-    stopMinigame();
-    updateMinigameOverlay('Derrota', 'Os invasores dominaram o fliperama. Tente novamente.', true);
-  }
-
-  function spawnEnemy() {
-    const size = 20 + Math.random() * 26;
-    const x = 20 + Math.random() * (minigameState.width - 40);
-    const speed = 160 + Math.random() * 120;
-    const wobble = Math.random() * 2 + 0.5;
-    minigameState.enemies.push({
-      x,
-      y: -size,
-      size,
-      speed,
-      wobble,
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-
-  function spawnSpark(x, y, color = '#ffe379') {
-    for (let i = 0; i < 10; i++) {
-      minigameState.sparks.push({
-        x,
-        y,
-        vx: (Math.random() - 0.5) * 160,
-        vy: (Math.random() - 0.5) * 160,
-        life: 0.6 + Math.random() * 0.4,
-        color
-      });
-    }
-  }
-
-  function updateMinigame(delta) {
-    const { player, pressed } = minigameState;
-    if (!player) return;
-
-    minigameState.stars.forEach((star) => {
-      star.y += star.speed * delta;
-      if (star.y > minigameState.height) {
-        star.y = -star.size;
-        star.x = Math.random() * minigameState.width;
-      }
-    });
-
-    if (pressed.left) player.x -= player.speed * delta;
-    if (pressed.right) player.x += player.speed * delta;
-    player.x = Math.max(player.w / 2 + 6, Math.min(minigameState.width - player.w / 2 - 6, player.x));
-    if (player.cooldown > 0) player.cooldown -= delta;
-    if (pressed.shoot && player.cooldown <= 0) {
-      minigameState.bullets.push({ x: player.x, y: player.y - player.h / 2, vy: -480 });
-      player.cooldown = 0.22;
-    }
-
-    minigameState.bullets.forEach((b) => { b.y += b.vy * delta; });
-    minigameState.bullets = minigameState.bullets.filter((b) => b.y > -30);
-
-    const spawnChance = 0.85 + Math.random() * 0.35;
-    if (Math.random() < spawnChance * delta) spawnEnemy();
-
-    minigameState.enemies.forEach((enemy) => {
-      enemy.y += enemy.speed * delta;
-      enemy.phase += enemy.wobble * delta;
-      enemy.x += Math.sin(enemy.phase) * 28 * delta;
-    });
-    minigameState.enemies = minigameState.enemies.filter((enemy) => enemy.y < minigameState.height + 40);
-
-    minigameState.enemies = minigameState.enemies.filter((enemy) => {
-      for (let i = 0; i < minigameState.bullets.length; i++) {
-        const b = minigameState.bullets[i];
-        if (Math.abs(b.x - enemy.x) < enemy.size * 0.6 && Math.abs(b.y - enemy.y) < enemy.size * 0.6) {
-          spawnSpark(enemy.x, enemy.y);
-          minigameState.bullets.splice(i, 1);
-          minigameState.score += 1;
-          updateMinigameHud();
-          if (minigameState.score >= minigameState.goal) {
-            handleMinigameWin();
-          }
-          return false;
-        }
-      }
-      return true;
-    });
-
-    for (const enemy of minigameState.enemies) {
-      const dx = Math.abs(enemy.x - player.x);
-      const dy = Math.abs(enemy.y - player.y);
-      if (dx < enemy.size * 0.6 + player.w * 0.4 && dy < enemy.size * 0.6 + player.h * 0.4) {
-        spawnSpark(player.x, player.y, '#ff72b6');
-        enemy.y = minigameState.height + 50;
-        minigameState.shield -= 1;
-        updateMinigameHud();
-        if (minigameState.shield <= 0) {
-          handleMinigameLose();
-        }
-      }
-    }
-
-    minigameState.sparks.forEach((s) => {
-      s.life -= delta;
-      s.x += s.vx * delta;
-      s.y += s.vy * delta;
-    });
-    minigameState.sparks = minigameState.sparks.filter((s) => s.life > 0);
-  }
-
-  function renderMinigame() {
-    if (!minigameState.ctx || !minigameCanvas) return;
-    const ctx = minigameState.ctx;
-    ctx.clearRect(0, 0, minigameCanvas.width, minigameCanvas.height);
-    ctx.lineWidth = 2;
-
-    ctx.save();
-    ctx.globalAlpha = 0.7;
-    const gradient = ctx.createLinearGradient(0, 0, 0, minigameCanvas.height);
-    gradient.addColorStop(0, 'rgba(255, 199, 92, 0.08)');
-    gradient.addColorStop(1, 'rgba(255, 114, 182, 0.08)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, minigameCanvas.width, minigameCanvas.height);
-    ctx.restore();
-
-    ctx.fillStyle = 'rgba(255, 227, 121, 0.65)';
-    minigameState.stars.forEach((star) => {
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    const player = minigameState.player;
-    if (player) {
-      ctx.fillStyle = '#51ffe7';
-      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-      ctx.beginPath();
-      if (ctx.roundRect) {
-        ctx.roundRect(player.x - player.w / 2, player.y - player.h / 2, player.w, player.h, 6);
-      } else {
-        ctx.rect(player.x - player.w / 2, player.y - player.h / 2, player.w, player.h);
-      }
-      ctx.fill();
-      ctx.stroke();
-      ctx.fillStyle = '#0b0f22';
-      ctx.fillRect(player.x - 6, player.y - player.h / 2 - 6, 12, 8);
-    }
-
-    ctx.fillStyle = '#ffe6c2';
-    minigameState.bullets.forEach((b) => {
-      ctx.fillRect(b.x - 2, b.y - 8, 4, 12);
-    });
-
-    minigameState.enemies.forEach((enemy) => {
-      const grad = ctx.createRadialGradient(enemy.x, enemy.y, 4, enemy.x, enemy.y, enemy.size);
-      grad.addColorStop(0, '#ff72b6');
-      grad.addColorStop(1, 'rgba(255, 114, 182, 0.35)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(enemy.x, enemy.y, enemy.size * 0.6, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-    minigameState.sparks.forEach((s) => {
-      ctx.fillStyle = s.color;
-      ctx.globalAlpha = Math.max(0, s.life);
-      ctx.fillRect(s.x, s.y, 3, 3);
-    });
-    ctx.globalAlpha = 1;
-  }
-
-  function minigameLoop(timestamp) {
-    if (!minigameState.running) return;
-    const delta = Math.min(0.05, (timestamp - (minigameState.lastTimestamp || timestamp)) / 1000);
-    minigameState.lastTimestamp = timestamp;
-    updateMinigame(delta);
-    renderMinigame();
-    if (minigameState.running) requestAnimationFrame(minigameLoop);
   }
 
   function showRewardVisualizer(reward, context = {}) {
@@ -2077,7 +1749,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   diaryButtonWrapper.innerHTML = `
     <button type="button" id="open-diary-log" class="diary-log-button arcade-clicavel">📔 Diário</button>
     <button type="button" id="open-weight-log" class="diary-log-button weight-log-button arcade-clicavel">⚖️ Peso</button>
-    <button type="button" id="open-minigame" class="diary-log-button minigame-button arcade-clicavel">🕹️ Minigame</button>
   `;
   if (screenWrapper) {
     screenWrapper.appendChild(diaryButtonWrapper);
@@ -3016,7 +2687,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const openDiaryBtn = diaryButtonWrapper.querySelector('#open-diary-log');
   const openWeightBtn = diaryButtonWrapper.querySelector('#open-weight-log');
-  const openMinigameBtn = diaryButtonWrapper.querySelector('#open-minigame');
 
   if (openDiaryBtn) {
     openDiaryBtn.setAttribute('aria-controls', 'diary-log-panel');
@@ -3024,10 +2694,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   if (openWeightBtn) {
     openWeightBtn.setAttribute('aria-controls', 'weight-log-panel');
-  }
-
-  if (openMinigameBtn) {
-    openMinigameBtn.setAttribute('aria-controls', 'minigame-overlay');
   }
 
   const setDiaryButtonState = (isOpen) => {
@@ -3044,14 +2710,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     openWeightBtn.innerHTML = isOpen ? 'Fechar Peso' : '⚖️ Peso';
     openWeightBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     applyTwemoji(openWeightBtn);
-  };
-
-  const setMinigameButtonState = (isOpen) => {
-    if (!openMinigameBtn) return;
-    openMinigameBtn.classList.toggle('active', isOpen);
-    openMinigameBtn.innerHTML = isOpen ? 'Fechar Minigame' : '🕹️ Minigame';
-    openMinigameBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    applyTwemoji(openMinigameBtn);
   };
 
   const refreshDiaryStates = () => {
@@ -3142,62 +2800,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       toggleWeightPanel();
     });
   }
-
-  if (openMinigameBtn) {
-    openMinigameBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openMinigame();
-    });
-  }
-
-  if (minigameStartButton) {
-    minigameStartButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      startMinigame();
-    });
-  }
-
-  if (minigameCloseButton) {
-    minigameCloseButton.addEventListener('click', () => {
-      closeMinigame();
-    });
-  }
-
-  if (minigameOverlay) {
-    minigameOverlay.addEventListener('click', (event) => {
-      if (event.target === minigameOverlay) closeMinigame();
-    });
-  }
-
-  const applyMinigameKey = (key, active) => {
-    if (!isMinigameOpen()) return;
-    if (key === 'ArrowLeft' || key === 'a' || key === 'A') {
-      minigameState.pressed.left = active;
-    }
-    if (key === 'ArrowRight' || key === 'd' || key === 'D') {
-      minigameState.pressed.right = active;
-    }
-    if (key === ' ' || key === 'Spacebar') {
-      minigameState.pressed.shoot = active;
-    }
-  };
-
-  document.addEventListener('keydown', (event) => {
-    if (!isMinigameOpen()) return;
-    if (event.key === 'Escape') {
-      closeMinigame();
-      return;
-    }
-    applyMinigameKey(event.key, true);
-    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D', ' ', 'Spacebar'].includes(event.key)) {
-      event.preventDefault();
-    }
-  });
-
-  document.addEventListener('keyup', (event) => {
-    if (!isMinigameOpen()) return;
-    applyMinigameKey(event.key, false);
-  });
 
   const lockDiary = () => {
     diaryUnlocked = false;
@@ -3938,18 +3540,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!lifeContainer) return;
     const hearts = lifeContainer.querySelectorAll('.life-heart');
     const today = new Date();
-    const currentMonth = today.getMonth() + 1;
-    const currentYear = today.getFullYear();
-    const baseRemaining = calculateBaseLives(currentMonth, currentYear);
-    const remaining = calculateRemainingLives(currentMonth, currentYear);
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+    let lost = 0;
+    for (const dia of dados) {
+      const rowDate = new Date(dia.ano, dia.mes - 1, dia.diaDoMes);
+      if (rowDate < startOfMonth) continue;
+      if (rowDate > yesterday) break;
+      const row = document.getElementById(`mainrow-${dia.id}`);
+      if (!row || !row.classList.contains('day-complete')) {
+        lost++;
+        if (lost >= 3) break;
+      }
+    }
+    const remaining = Math.max(0, 3 - lost);
     hearts.forEach((h, idx) => {
       h.style.visibility = idx < remaining ? 'visible' : 'hidden';
     });
-    if (baseRemaining === 0 && remaining === 0 && !minigameAutoShown) {
-      minigameAutoShown = true;
-      openMinigame(true);
-    }
-    if (remaining > 0) minigameAutoShown = false;
   }
 
   // Checkbox lógica
