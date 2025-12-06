@@ -1147,115 +1147,15 @@ tr.dropdown[style*="display: none;"] {
   width: min(820px, 94%);
   height: 100%;
   max-height: none;
-  background: transparent;
+  background: linear-gradient(135deg, rgba(0, 21, 48, 0.94), rgba(12, 8, 32, 0.96));
+  border: 2px solid rgba(81, 255, 231, 0.82);
   border-radius: 28px;
+  box-shadow: 0 0 40px rgba(81, 255, 231, 0.32), 0 0 60px rgba(0, 255, 191, 0.24);
   padding: 22px 28px 26px;
   display: flex;
   flex-direction: column;
   overflow: auto;
   min-height: 0;
-  position: relative;
-  isolation: isolate;
-  --panel-fade-size: 50px;
-  --panel-fade-softness: 18px;
-  --panel-fade-top-strength: 0;
-  --panel-fade-bottom-strength: 0;
-  -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent calc(var(--panel-fade-top-strength) * (var(--panel-fade-size) - var(--panel-fade-softness))),
-      black calc(var(--panel-fade-top-strength) * var(--panel-fade-size)),
-      black calc(100% - (var(--panel-fade-bottom-strength) * var(--panel-fade-size))),
-      transparent calc(100% - (var(--panel-fade-bottom-strength) * (var(--panel-fade-size) - var(--panel-fade-softness)))),
-      transparent 100%
-  );
-          mask-image: linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent calc(var(--panel-fade-top-strength) * (var(--panel-fade-size) - var(--panel-fade-softness))),
-      black calc(var(--panel-fade-top-strength) * var(--panel-fade-size)),
-      black calc(100% - (var(--panel-fade-bottom-strength) * var(--panel-fade-size))),
-      transparent calc(100% - (var(--panel-fade-bottom-strength) * (var(--panel-fade-size) - var(--panel-fade-softness)))),
-      transparent 100%
-  );
-  -webkit-mask-size: 100% 100%;
-          mask-size: 100% 100%;
-}
-
-.diary-log-content::before,
-.weight-log-content::before,
-.diary-log-content::after,
-.weight-log-content::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  mix-blend-mode: screen;
-}
-
-.diary-log-content::before,
-.weight-log-content::before {
-  background: linear-gradient(120deg, rgba(81, 255, 231, 0.48), rgba(207, 40, 255, 0.35));
-  filter: drop-shadow(0 0 18px rgba(81, 255, 231, 0.35));
-}
-
-.diary-log-content::after,
-.weight-log-content::after {
-  background: repeating-linear-gradient(180deg, rgba(255, 227, 121, 0.25) 0 6px, transparent 6px 12px);
-}
-
-.diary-log-content.glitching::before,
-.weight-log-content.glitching::before {
-  opacity: 0.6;
-  animation: panelGlitchOverlay 0.32s steps(2, end);
-}
-
-.diary-log-content.glitching::after,
-.weight-log-content.glitching::after {
-  opacity: 0.4;
-  animation: panelGlitchScan 0.34s ease-out;
-}
-
-.diary-log-content.glitch-in,
-.weight-log-content.glitch-in {
-  animation: arcadeGlitchIn 0.36s cubic-bezier(.3, .65, .32, 1);
-}
-
-.diary-log-content.glitch-out,
-.weight-log-content.glitch-out {
-  animation: arcadeGlitchOut 0.28s cubic-bezier(.32, .7, .36, 1);
-}
-
-@keyframes arcadeGlitchIn {
-  0% { opacity: 0; transform: scale(0.985) translate3d(0, 10px, 0); clip-path: inset(0 0 58% 0); }
-  22% { clip-path: inset(40% 0 0 0); transform: translate3d(-5px, 4px, 0); }
-  42% { clip-path: inset(0 36% 24% 0); transform: translate3d(4px, -3px, 0); }
-  62% { opacity: 0.92; clip-path: inset(18% 0 0 28%); transform: translate3d(-3px, 2px, 0); }
-  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1) translate3d(0, 0, 0); }
-}
-
-@keyframes arcadeGlitchOut {
-  0% { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1) translate3d(0, 0, 0); }
-  22% { clip-path: inset(0 0 30% 0); transform: translate3d(4px, -4px, 0); }
-  46% { clip-path: inset(44% 0 0 0); transform: translate3d(-4px, 4px, 0); }
-  70% { opacity: 0.72; clip-path: inset(0 22% 10% 0); transform: translate3d(3px, -2px, 0); }
-  100% { opacity: 0; clip-path: inset(100% 0 0 0); transform: scale(0.985) translate3d(0, 10px, 0); }
-}
-
-@keyframes panelGlitchOverlay {
-  0% { clip-path: inset(0 52% 42% 0); transform: translate3d(4px, -3px, 0); }
-  25% { clip-path: inset(12% 0 26% 0); transform: translate3d(-4px, 3px, 0); }
-  50% { clip-path: inset(0 20% 48% 0); transform: translate3d(3px, -2px, 0); }
-  75% { clip-path: inset(38% 6% 0 0); transform: translate3d(-2px, 1px, 0); }
-  100% { clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0); opacity: 0; }
-}
-
-@keyframes panelGlitchScan {
-  0% { opacity: 0.5; transform: translateY(-10px); }
-  50% { opacity: 0.16; }
-  100% { opacity: 0; transform: translateY(10px); }
 }
 
 .diary-log-header,
