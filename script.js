@@ -1794,7 +1794,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   `;
   calendario.appendChild(diaryPanel);
   applyTwemoji(diaryPanel);
-  const diaryContent = diaryPanel.querySelector('.diary-log-content');
   const diaryModal = document.createElement('div');
   diaryModal.id = 'diary-entry-modal';
   diaryModal.className = 'diary-entry-modal';
@@ -1869,29 +1868,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   const weightLogList = weightPanel.querySelector('#weight-log-list');
   const weightCurrentEl = weightPanel.querySelector('#weight-current');
   const weightRemainingEl = weightPanel.querySelector('#weight-remaining');
-  const weightContent = weightPanel.querySelector('.weight-log-content');
-
-  const PANEL_GLITCH_IN_DURATION = 580;
-  const PANEL_GLITCH_OUT_DURATION = 520;
-
-  const playPanelGlitch = (panelContent, direction = 'in') => {
-    if (!panelContent) return Promise.resolve();
-    panelContent.classList.remove('glitch-in', 'glitch-out');
-    panelContent.classList.add('glitching');
-    // force reflow for restart animation
-    // eslint-disable-next-line no-unused-expressions
-    panelContent.offsetHeight;
-    const className = direction === 'out' ? 'glitch-out' : 'glitch-in';
-    panelContent.classList.add(className);
-    return new Promise((resolve) => {
-      const cleanup = () => {
-        panelContent.classList.remove('glitching', className);
-        resolve();
-      };
-      panelContent.addEventListener('animationend', cleanup, { once: true });
-      setTimeout(cleanup, direction === 'out' ? PANEL_GLITCH_OUT_DURATION : PANEL_GLITCH_IN_DURATION);
-    });
-  };
 
   function flashDiaryLocker(errorMessage) {
     if (!diaryLocker) return;
@@ -2690,64 +2666,36 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   };
 
-  const toggleDiaryPanel = async (force) => {
-    const currentlyOpen = calendario.classList.contains('show-diary');
-    const shouldOpen = typeof force === 'boolean' ? force : !currentlyOpen;
-
-    if (shouldOpen === currentlyOpen) {
-      if (shouldOpen) playPanelGlitch(diaryContent, 'in');
-      return;
-    }
-
+  const toggleDiaryPanel = (force) => {
+    const shouldOpen = typeof force === 'boolean' ? force : !calendario.classList.contains('show-diary');
     if (shouldOpen) {
-      if (calendario.classList.contains('show-weight')) {
-        await playPanelGlitch(weightContent, 'out');
-        calendario.classList.remove('show-weight');
-        setWeightButtonState(false);
-      }
-      calendario.classList.add('show-diary');
+      calendario.classList.remove('show-weight');
+      setWeightButtonState(false);
+    }
+    calendario.classList.toggle('show-diary', shouldOpen);
+    if (shouldOpen) {
       renderDiaryLog();
       if (diaryLogList) diaryLogList.scrollTop = 0;
       calendario.scrollTop = 0;
-      setDiaryButtonState(true);
-      requestAnimationFrame(() => playPanelGlitch(diaryContent, 'in'));
-    } else {
-      setDiaryButtonState(false);
-      await playPanelGlitch(diaryContent, 'out');
-      calendario.classList.remove('show-diary');
     }
-
+    setDiaryButtonState(shouldOpen);
     positionDiaryButton(currentScale);
     positionLives(currentScale);
     positionLevel(currentScale);
   };
 
-  const toggleWeightPanel = async (force) => {
-    const currentlyOpen = calendario.classList.contains('show-weight');
-    const shouldOpen = typeof force === 'boolean' ? force : !currentlyOpen;
-
-    if (shouldOpen === currentlyOpen) {
-      if (shouldOpen) playPanelGlitch(weightContent, 'in');
-      return;
-    }
-
+  const toggleWeightPanel = (force) => {
+    const shouldOpen = typeof force === 'boolean' ? force : !calendario.classList.contains('show-weight');
     if (shouldOpen) {
-      if (calendario.classList.contains('show-diary')) {
-        await playPanelGlitch(diaryContent, 'out');
-        calendario.classList.remove('show-diary');
-        setDiaryButtonState(false);
-      }
-      calendario.classList.add('show-weight');
+      calendario.classList.remove('show-diary');
+      setDiaryButtonState(false);
+    }
+    calendario.classList.toggle('show-weight', shouldOpen);
+    if (shouldOpen) {
       renderWeightLog();
       calendario.scrollTop = 0;
-      setWeightButtonState(true);
-      requestAnimationFrame(() => playPanelGlitch(weightContent, 'in'));
-    } else {
-      setWeightButtonState(false);
-      await playPanelGlitch(weightContent, 'out');
-      calendario.classList.remove('show-weight');
     }
-
+    setWeightButtonState(shouldOpen);
     positionDiaryButton(currentScale);
     positionLives(currentScale);
     positionLevel(currentScale);
