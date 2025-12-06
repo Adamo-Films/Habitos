@@ -2274,8 +2274,9 @@ body.visualizer-open {
 #reward-visualizer .visualizer-backdrop {
   position: absolute;
   inset: 0;
-  background: transparent;
+  background-image: var(--visual-background);
   background-size: 140% 140%;
+  background-repeat: no-repeat;
   filter: saturate(120%);
   animation: backdropDrift 18s ease-in-out infinite;
   z-index: 1;
