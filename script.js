@@ -692,7 +692,6 @@ function launchRewardConfetti() {
   }
 
 const DIARY_LOCAL_KEY = 'habitos-diary-entries-v1';
-const DIARY_UNLOCK_KEY = 'habitos-diary-unlock-v1';
 const DIARY_UNLOCK_CODE = '1684';
 const WEIGHT_LOCAL_KEY = 'habitos-weight-entries-v1';
 const WEIGHT_GOAL = 69;
@@ -737,21 +736,15 @@ function clearDiaryEntriesLocal() {
   }
 }
 
+// O status de desbloqueio do diário agora é mantido apenas em memória para garantir
+// que cada carregamento da página comece bloqueado e que o desbloqueio não se propague
+// para outros navegadores ou sessões.
 function loadDiaryUnlockState() {
-  try {
-    return localStorage.getItem(DIARY_UNLOCK_KEY) === 'true';
-  } catch (err) {
-    console.error('Falha ao ler status de bloqueio do diário:', err);
-    return false;
-  }
+  return false;
 }
 
-function saveDiaryUnlockState(isUnlocked) {
-  try {
-    localStorage.setItem(DIARY_UNLOCK_KEY, isUnlocked ? 'true' : 'false');
-  } catch (err) {
-    console.error('Falha ao salvar status de bloqueio do diário:', err);
-  }
+function saveDiaryUnlockState() {
+  // Intencionalmente vazio: o desbloqueio é apenas em memória.
 }
 
 function loadWeightEntriesLocal() {
