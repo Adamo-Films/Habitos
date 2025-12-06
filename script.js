@@ -1955,55 +1955,35 @@ document.addEventListener("DOMContentLoaded", async function () {
   updateDiaryLockVisuals({ shouldRenderList: false, success: diaryUnlocked });
 
   function buildWeightEntries() {
-    const deduped = Object.entries(weightEntries).reduce((acc, [dayId, entry]) => {
-      if (!entry || entry.value == null) return acc;
-      const meta = diaLookup[dayId];
-      if (!meta) return acc;
-      const date = new Date(meta.ano, meta.mes - 1, meta.diaDoMes);
-      const normalized = {
-        dayId,
-        weight: Number(entry.value),
-        date,
-        label: formatDiaryDisplayDate(meta),
-        order: date.getTime(),
-        savedAt: entry.savedAt || Date.now()
-      };
-      acc[dayId] = normalized;
-      return acc;
-    }, {});
-
-    return Object.values(deduped)
-      .sort((a, b) => a.order - b.order || a.savedAt - b.savedAt);
+    return Object.entries(weightEntries)
+      .map(([dayId, entry]) => {
+        if (!entry || entry.value == null) return null;
+        const meta = diaLookup[dayId];
+        if (!meta) return null;
+        const date = new Date(meta.ano, meta.mes - 1, meta.diaDoMes);
+        return {
+          dayId,
+          weight: Number(entry.value),
+          date,
+          label: formatDiaryDisplayDate(meta),
+          order: date.getTime()
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.order - b.order);
   }
 
   function renderWeightLog() {
     if (!weightChartContainer || !weightLogList) return;
     const entries = buildWeightEntries();
     const startDate = new Date(inicio);
-    const startDayId = `dia-${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}`;
-    const points = [
-      {
-        dayId: 'start',
-        weight: WEIGHT_START,
-        date: startDate,
-        label: 'Início',
-        order: startDate.getTime()
-      },
-      ...entries
-    ].filter((point) => point.dayId !== startDayId || point.dayId === 'start')
-      .reduce((acc, point) => {
-        if (point.dayId === 'start') {
-          acc.push(point);
-          return acc;
-        }
-        const existingIndex = acc.findIndex((p) => p.dayId === point.dayId);
-        if (existingIndex >= 0) {
-          acc[existingIndex] = point;
-        } else {
-          acc.push(point);
-        }
-        return acc;
-      }, []);
+    const points = [{
+      dayId: 'start',
+      weight: WEIGHT_START,
+      date: startDate,
+      label: 'Início',
+      order: startDate.getTime()
+    }, ...entries];
 
     const latest = entries.length ? entries[entries.length - 1] : points[0];
     if (weightCurrentEl) weightCurrentEl.textContent = formatWeightDisplay(latest.weight);
@@ -2071,10 +2051,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return {
         ...point,
         x,
-        y,
-        deltaGoal: point.weight - WEIGHT_GOAL,
-        deltaStart: point.weight - WEIGHT_START,
-        deltaPrev: index > 0 ? point.weight - points[index - 1].weight : 0
+        y
       };
     });
 
@@ -2084,7 +2061,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).join(' ');
 
     const goalY = paddingTop + ((maxY - WEIGHT_GOAL) / range) * innerHeight;
-    const pointDots = coords.map((coord, index) => `<circle class="weight-chart-point" data-index="${index}" cx="${coord.x.toFixed(2)}" cy="${coord.y.toFixed(2)}" r="6"></circle>`).join('');
+    const pointDots = coords.map((coord) => `<circle class="weight-chart-point" cx="${coord.x.toFixed(2)}" cy="${coord.y.toFixed(2)}" r="6"></circle>`).join('');
     const xLabels = coords.map((coord) => `<text x="${coord.x.toFixed(2)}" y="${height - paddingBottom / 2}" class="weight-chart-label">${coord.label}</text>`).join('');
     const yTicksValues = [maxVal, (maxVal + minVal) / 2, Math.max(minVal, 0)];
     const yTicks = yTicksValues.map((value) => {
@@ -2092,7 +2069,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return `<text x="${paddingLeft - 16}" y="${y.toFixed(2)}" class="weight-axis-label">${weightFormatter.format(value)}</text>`;
     }).join('');
 
-    const chartSvg = `
+    weightChartContainer.innerHTML = `
       <svg class="weight-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" role="img" aria-label="Gráfico de evolução do peso">
         <rect class="weight-chart-bg" x="0" y="0" width="${width}" height="${height}"></rect>
         <g class="weight-chart-axis">
@@ -2111,216 +2088,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         </g>
       </svg>
     `;
-
-    weightChartContainer.innerHTML = `
-      <div class="weight-chart-surface">
-        ${chartSvg}
-        <div class="weight-chart-overlay">
-          <div class="weight-crosshair weight-crosshair-x"></div>
-          <div class="weight-crosshair weight-crosshair-y"></div>
-          <div class="weight-focus-dot"></div>
-          <div class="weight-tooltip" role="presentation">
-            <strong class="weight-tooltip-date"></strong>
-            <div class="weight-tooltip-row"><span class="badge">Peso</span><span class="weight-tooltip-weight"></span></div>
-            <div class="weight-tooltip-row"><span class="badge">Meta</span><span class="weight-tooltip-goal"></span></div>
-            <div class="weight-tooltip-row"><span class="badge">Último</span><span class="weight-tooltip-trend"></span></div>
-            <div class="weight-tooltip-row"><span class="badge">Início</span><span class="weight-tooltip-start"></span></div>
-          </div>
-        </div>
-      </div>
-    `;
-
-    const surface = weightChartContainer.querySelector('.weight-chart-surface');
-    const overlay = weightChartContainer.querySelector('.weight-chart-overlay');
-    const svg = weightChartContainer.querySelector('.weight-chart');
-    const tooltipEl = weightChartContainer.querySelector('.weight-tooltip');
-    const tooltipDate = weightChartContainer.querySelector('.weight-tooltip-date');
-    const tooltipWeight = weightChartContainer.querySelector('.weight-tooltip-weight');
-    const tooltipGoal = weightChartContainer.querySelector('.weight-tooltip-goal');
-    const tooltipTrend = weightChartContainer.querySelector('.weight-tooltip-trend');
-    const tooltipStart = weightChartContainer.querySelector('.weight-tooltip-start');
-    const crosshairX = weightChartContainer.querySelector('.weight-crosshair-x');
-    const crosshairY = weightChartContainer.querySelector('.weight-crosshair-y');
-    const focusDot = weightChartContainer.querySelector('.weight-focus-dot');
-    const viewWidth = width;
-    const viewHeight = height;
-    let pinnedIndex = null;
-
-    const applyDeltaClass = (el, delta) => {
-      if (!el) return;
-      el.classList.toggle('delta-positive', delta < 0);
-      el.classList.toggle('delta-negative', delta > 0);
-    };
-
-    const clientToSvgPoint = (clientX, clientY) => {
-      if (!svg || !svg.createSVGPoint) return null;
-      const pt = svg.createSVGPoint();
-      pt.x = clientX;
-      pt.y = clientY;
-      const ctm = svg.getScreenCTM();
-      if (!ctm || !ctm.inverse) return null;
-      return pt.matrixTransform(ctm.inverse());
-    };
-
-    const svgToSurfacePoint = (svgX, svgY, surfaceRect) => {
-      if (!svg || !svg.createSVGPoint) return null;
-      const pt = svg.createSVGPoint();
-      pt.x = svgX;
-      pt.y = svgY;
-      const ctm = svg.getScreenCTM();
-      if (!ctm) return null;
-      const screenPoint = pt.matrixTransform(ctm);
-      return { x: screenPoint.x - surfaceRect.left, y: screenPoint.y - surfaceRect.top };
-    };
-
-    const findNearestIndex = (clientX, clientY) => {
-      if (!surface) return 0;
-      const rect = surface.getBoundingClientRect();
-      const svgPoint = clientToSvgPoint(clientX, clientY);
-      const relativeX = svgPoint ? svgPoint.x : ((clientX - rect.left) / rect.width) * viewWidth;
-      let nearest = 0;
-      let bestDist = Infinity;
-      coords.forEach((coord, idx) => {
-        const dist = Math.abs(coord.x - relativeX);
-        if (dist < bestDist) {
-          bestDist = dist;
-          nearest = idx;
-        }
-      });
-      return nearest;
-    };
-
-    const updateTooltipText = (coord) => {
-      if (!coord || !tooltipEl) return;
-      if (tooltipDate) tooltipDate.textContent = coord.dayId === 'start' ? 'Início da jornada' : coord.label;
-      if (tooltipWeight) tooltipWeight.textContent = formatWeightDisplay(coord.weight);
-      if (tooltipGoal) {
-        const deltaGoal = coord.deltaGoal;
-        const goalMsg = deltaGoal === 0
-          ? 'Meta batida!'
-          : deltaGoal > 0
-            ? `Faltam ${formatWeightDelta(deltaGoal)}`
-            : `${formatWeightDelta(deltaGoal)} abaixo da meta`;
-        tooltipGoal.textContent = goalMsg;
-        applyDeltaClass(tooltipGoal, deltaGoal);
-      }
-      if (tooltipTrend) {
-        const trendMsg = coord.deltaPrev === 0 ? 'Sem variação' : `${formatWeightDelta(coord.deltaPrev)} desde o último`;
-        tooltipTrend.textContent = trendMsg;
-        applyDeltaClass(tooltipTrend, coord.deltaPrev);
-      }
-      if (tooltipStart) {
-        const startMsg = coord.deltaStart === 0 ? 'Ponto inicial' : `${formatWeightDelta(coord.deltaStart)} desde o início`;
-        tooltipStart.textContent = startMsg;
-        applyDeltaClass(tooltipStart, coord.deltaStart);
-      }
-    };
-
-    const positionOverlay = (coord) => {
-      if (!surface || !overlay || !tooltipEl || !crosshairX || !crosshairY || !focusDot) return;
-      const surfaceRect = surface.getBoundingClientRect();
-      const surfacePoint = svgToSurfacePoint(coord.x, coord.y, surfaceRect);
-      const svgRect = svg ? svg.getBoundingClientRect() : surfaceRect;
-      const viewBox = svg && svg.viewBox ? svg.viewBox.baseVal : null;
-      const scaleX = viewBox ? svgRect.width / viewBox.width : svgRect.width / viewWidth;
-      const scaleY = viewBox ? svgRect.height / viewBox.height : svgRect.height / viewHeight;
-      const offsetX = svgRect.left - surfaceRect.left;
-      const offsetY = svgRect.top - surfaceRect.top;
-      const fallbackX = coord.x * scaleX + offsetX;
-      const fallbackY = coord.y * scaleY + offsetY;
-      const xPx = surfacePoint ? surfacePoint.x : fallbackX;
-      const yPx = surfacePoint ? surfacePoint.y : fallbackY;
-      overlay.classList.add('active');
-      crosshairX.style.transform = `translate3d(0, ${yPx}px, 0)`;
-      crosshairY.style.transform = `translate3d(${xPx}px, 0, 0)`;
-      focusDot.style.setProperty('--dot-x', `${xPx}px`);
-      focusDot.style.setProperty('--dot-y', `${yPx}px`);
-
-      const tooltipWidth = tooltipEl.offsetWidth || 230;
-      const tooltipHeight = tooltipEl.offsetHeight || 110;
-      const padding = 12;
-      const maxX = surfaceRect.width - tooltipWidth - padding;
-      const maxY = surfaceRect.height - tooltipHeight - padding;
-
-      let desiredX = xPx + 14;
-      let tooltipSide = 'right';
-      if (desiredX > maxX || xPx > surfaceRect.width - tooltipWidth) {
-        desiredX = xPx - tooltipWidth - 14;
-        tooltipSide = 'left';
-      }
-      desiredX = Math.min(maxX, Math.max(padding, desiredX));
-
-      let desiredY = yPx - tooltipHeight - 16;
-      let tooltipVertical = 'above';
-      if (desiredY < padding) {
-        desiredY = yPx + 16;
-        tooltipVertical = 'below';
-      }
-      desiredY = Math.min(maxY, Math.max(padding, desiredY));
-
-      tooltipEl.dataset.side = tooltipSide;
-      tooltipEl.dataset.align = tooltipVertical;
-      tooltipEl.style.transform = `translate(${desiredX}px, ${desiredY}px)`;
-    };
-
-    const activateIndex = (index, { pin = false } = {}) => {
-      const coord = coords[index];
-      if (!coord) return;
-      if (pin) {
-        pinnedIndex = index;
-        if (tooltipEl) tooltipEl.classList.add('pinned');
-      }
-      updateTooltipText(coord);
-      positionOverlay(coord);
-    };
-
-    const clearOverlay = () => {
-      if (overlay) overlay.classList.remove('active');
-      if (focusDot) {
-        focusDot.style.setProperty('--dot-x', `-9999px`);
-        focusDot.style.setProperty('--dot-y', `-9999px`);
-      }
-      if (crosshairX) crosshairX.style.transform = 'translateY(-9999px)';
-      if (crosshairY) crosshairY.style.transform = 'translateX(-9999px)';
-      if (tooltipEl && !pinnedIndex) {
-        tooltipEl.style.transform = 'translate(-9999px, -9999px)';
-        delete tooltipEl.dataset.side;
-        delete tooltipEl.dataset.align;
-      }
-    };
-
-    if (surface && coords.length) {
-      surface.addEventListener('mousemove', (event) => {
-        if (pinnedIndex != null) return;
-        const nearest = findNearestIndex(event.clientX, event.clientY);
-        activateIndex(nearest);
-      });
-
-      surface.addEventListener('mouseleave', () => {
-        if (pinnedIndex != null) {
-          activateIndex(pinnedIndex);
-          return;
-        }
-        clearOverlay();
-      });
-
-      surface.addEventListener('click', (event) => {
-        const nearest = findNearestIndex(event.clientX, event.clientY);
-        if (pinnedIndex === nearest) {
-          pinnedIndex = null;
-          if (tooltipEl) tooltipEl.classList.remove('pinned');
-          clearOverlay();
-          return;
-        }
-        activateIndex(nearest, { pin: true });
-      });
-
-      surface.addEventListener('dblclick', () => {
-        pinnedIndex = null;
-        if (tooltipEl) tooltipEl.classList.remove('pinned');
-        clearOverlay();
-      });
-    }
   }
 
   function updateDiaryVisualState(dayId) {
