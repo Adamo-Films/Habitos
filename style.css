@@ -50,6 +50,17 @@ html, body {
   font-family: 'Press Start 2P', monospace;
   overflow: hidden;
 }
+
+/* Hide scrollbars across the experience while retaining scroll functionality */
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
 #video-wrapper {
   position: fixed;
   top: 50%;
