@@ -2051,7 +2051,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       return {
         ...point,
         x,
-        y
+        y,
+        deltaGoal: point.weight - WEIGHT_GOAL,
+        deltaStart: point.weight - WEIGHT_START,
+        deltaPrev: index > 0 ? point.weight - points[index - 1].weight : 0
       };
     });
 
@@ -2061,7 +2064,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).join(' ');
 
     const goalY = paddingTop + ((maxY - WEIGHT_GOAL) / range) * innerHeight;
-    const pointDots = coords.map((coord) => `<circle class="weight-chart-point" cx="${coord.x.toFixed(2)}" cy="${coord.y.toFixed(2)}" r="6"></circle>`).join('');
+    const pointDots = coords.map((coord, index) => `<circle class="weight-chart-point" data-index="${index}" cx="${coord.x.toFixed(2)}" cy="${coord.y.toFixed(2)}" r="6"></circle>`).join('');
     const xLabels = coords.map((coord) => `<text x="${coord.x.toFixed(2)}" y="${height - paddingBottom / 2}" class="weight-chart-label">${coord.label}</text>`).join('');
     const yTicksValues = [maxVal, (maxVal + minVal) / 2, Math.max(minVal, 0)];
     const yTicks = yTicksValues.map((value) => {
@@ -2069,7 +2072,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return `<text x="${paddingLeft - 16}" y="${y.toFixed(2)}" class="weight-axis-label">${weightFormatter.format(value)}</text>`;
     }).join('');
 
-    weightChartContainer.innerHTML = `
+    const chartSvg = `
       <svg class="weight-chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" role="img" aria-label="Gráfico de evolução do peso">
         <rect class="weight-chart-bg" x="0" y="0" width="${width}" height="${height}"></rect>
         <g class="weight-chart-axis">
@@ -2088,6 +2091,162 @@ document.addEventListener("DOMContentLoaded", async function () {
         </g>
       </svg>
     `;
+
+    weightChartContainer.innerHTML = `
+      <div class="weight-chart-surface">
+        ${chartSvg}
+        <div class="weight-chart-overlay">
+          <div class="weight-crosshair weight-crosshair-x"></div>
+          <div class="weight-crosshair weight-crosshair-y"></div>
+          <div class="weight-focus-dot"></div>
+          <div class="weight-tooltip" role="presentation">
+            <strong class="weight-tooltip-date"></strong>
+            <div class="weight-tooltip-row"><span class="badge">Peso</span><span class="weight-tooltip-weight"></span></div>
+            <div class="weight-tooltip-row"><span class="badge">Meta</span><span class="weight-tooltip-goal"></span></div>
+            <div class="weight-tooltip-row"><span class="badge">Último</span><span class="weight-tooltip-trend"></span></div>
+            <div class="weight-tooltip-row"><span class="badge">Início</span><span class="weight-tooltip-start"></span></div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const surface = weightChartContainer.querySelector('.weight-chart-surface');
+    const overlay = weightChartContainer.querySelector('.weight-chart-overlay');
+    const tooltipEl = weightChartContainer.querySelector('.weight-tooltip');
+    const tooltipDate = weightChartContainer.querySelector('.weight-tooltip-date');
+    const tooltipWeight = weightChartContainer.querySelector('.weight-tooltip-weight');
+    const tooltipGoal = weightChartContainer.querySelector('.weight-tooltip-goal');
+    const tooltipTrend = weightChartContainer.querySelector('.weight-tooltip-trend');
+    const tooltipStart = weightChartContainer.querySelector('.weight-tooltip-start');
+    const crosshairX = weightChartContainer.querySelector('.weight-crosshair-x');
+    const crosshairY = weightChartContainer.querySelector('.weight-crosshair-y');
+    const focusDot = weightChartContainer.querySelector('.weight-focus-dot');
+    const viewWidth = width;
+    const viewHeight = height;
+    let pinnedIndex = null;
+
+    const applyDeltaClass = (el, delta) => {
+      if (!el) return;
+      el.classList.toggle('delta-positive', delta < 0);
+      el.classList.toggle('delta-negative', delta > 0);
+    };
+
+    const findNearestIndex = (clientX) => {
+      if (!surface) return 0;
+      const rect = surface.getBoundingClientRect();
+      const relativeX = ((clientX - rect.left) / rect.width) * viewWidth;
+      let nearest = 0;
+      let bestDist = Infinity;
+      coords.forEach((coord, idx) => {
+        const dist = Math.abs(coord.x - relativeX);
+        if (dist < bestDist) {
+          bestDist = dist;
+          nearest = idx;
+        }
+      });
+      return nearest;
+    };
+
+    const updateTooltipText = (coord) => {
+      if (!coord || !tooltipEl) return;
+      if (tooltipDate) tooltipDate.textContent = coord.dayId === 'start' ? 'Início da jornada' : coord.label;
+      if (tooltipWeight) tooltipWeight.textContent = formatWeightDisplay(coord.weight);
+      if (tooltipGoal) {
+        const deltaGoal = coord.deltaGoal;
+        const goalMsg = deltaGoal === 0
+          ? 'Meta batida!'
+          : deltaGoal > 0
+            ? `Faltam ${formatWeightDelta(deltaGoal)}`
+            : `${formatWeightDelta(deltaGoal)} abaixo da meta`;
+        tooltipGoal.textContent = goalMsg;
+        applyDeltaClass(tooltipGoal, deltaGoal);
+      }
+      if (tooltipTrend) {
+        const trendMsg = coord.deltaPrev === 0 ? 'Sem variação' : `${formatWeightDelta(coord.deltaPrev)} desde o último`;
+        tooltipTrend.textContent = trendMsg;
+        applyDeltaClass(tooltipTrend, coord.deltaPrev);
+      }
+      if (tooltipStart) {
+        const startMsg = coord.deltaStart === 0 ? 'Ponto inicial' : `${formatWeightDelta(coord.deltaStart)} desde o início`;
+        tooltipStart.textContent = startMsg;
+        applyDeltaClass(tooltipStart, coord.deltaStart);
+      }
+    };
+
+    const positionOverlay = (coord) => {
+      if (!surface || !overlay || !tooltipEl || !crosshairX || !crosshairY || !focusDot) return;
+      const rect = surface.getBoundingClientRect();
+      const xPx = (coord.x / viewWidth) * rect.width;
+      const yPx = (coord.y / viewHeight) * rect.height;
+      overlay.classList.add('active');
+      crosshairX.style.transform = `translateY(${yPx}px)`;
+      crosshairY.style.transform = `translateX(${xPx}px)`;
+      focusDot.style.setProperty('--dot-x', `${xPx}px`);
+      focusDot.style.setProperty('--dot-y', `${yPx}px`);
+
+      const tooltipWidth = tooltipEl.offsetWidth || 230;
+      const tooltipHeight = tooltipEl.offsetHeight || 110;
+      const desiredX = Math.min(rect.width - tooltipWidth - 12, Math.max(12, xPx - tooltipWidth / 2));
+      const desiredY = Math.max(10, yPx - tooltipHeight - 16);
+      tooltipEl.style.transform = `translate(${desiredX}px, ${desiredY}px)`;
+    };
+
+    const activateIndex = (index, { pin = false } = {}) => {
+      const coord = coords[index];
+      if (!coord) return;
+      if (pin) {
+        pinnedIndex = index;
+        if (tooltipEl) tooltipEl.classList.add('pinned');
+      }
+      updateTooltipText(coord);
+      positionOverlay(coord);
+    };
+
+    const clearOverlay = () => {
+      if (overlay) overlay.classList.remove('active');
+      if (focusDot) {
+        focusDot.style.setProperty('--dot-x', `-9999px`);
+        focusDot.style.setProperty('--dot-y', `-9999px`);
+      }
+      if (crosshairX) crosshairX.style.transform = 'translateY(-9999px)';
+      if (crosshairY) crosshairY.style.transform = 'translateX(-9999px)';
+      if (tooltipEl && !pinnedIndex) {
+        tooltipEl.style.transform = 'translate(-9999px, -9999px)';
+      }
+    };
+
+    if (surface && coords.length) {
+      surface.addEventListener('mousemove', (event) => {
+        if (pinnedIndex != null) return;
+        const nearest = findNearestIndex(event.clientX);
+        activateIndex(nearest);
+      });
+
+      surface.addEventListener('mouseleave', () => {
+        if (pinnedIndex != null) {
+          activateIndex(pinnedIndex);
+          return;
+        }
+        clearOverlay();
+      });
+
+      surface.addEventListener('click', (event) => {
+        const nearest = findNearestIndex(event.clientX);
+        if (pinnedIndex === nearest) {
+          pinnedIndex = null;
+          if (tooltipEl) tooltipEl.classList.remove('pinned');
+          clearOverlay();
+          return;
+        }
+        activateIndex(nearest, { pin: true });
+      });
+
+      surface.addEventListener('dblclick', () => {
+        pinnedIndex = null;
+        if (tooltipEl) tooltipEl.classList.remove('pinned');
+        clearOverlay();
+      });
+    }
   }
 
   function updateDiaryVisualState(dayId) {
