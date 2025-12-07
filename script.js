@@ -1020,9 +1020,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     boss: null,
     bossBullets: [],
     bossSpawned: false,
+    bossIntroTimer: 0,
+    impacts: [],
     sparks: [],
     pops: [],
     stars: [],
+    screenShake: 0,
     pressed: { left: false, right: false, up: false, down: false, shoot: false },
     width: minigameCanvas ? minigameCanvas.width : 0,
     height: minigameCanvas ? minigameCanvas.height : 0
@@ -1613,8 +1616,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.bossBullets = [];
     minigameState.enemyBullets = [];
     minigameState.bossSpawned = false;
+    minigameState.bossIntroTimer = 0;
+    minigameState.impacts = [];
     minigameState.sparks = [];
     minigameState.pops = [];
+    minigameState.screenShake = 0;
     minigameState.stars = Array.from({ length: 70 }).map(() => ({
       x: Math.random() * minigameState.width,
       y: Math.random() * minigameState.height,
@@ -1807,7 +1813,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.superProgress = minigameState.killCount % 10;
     if (minigameState.superProgress === 0) {
       minigameState.superCharges += 1;
-      triggerPop('super');
+      triggerPop('superReady');
     }
   }
 
@@ -1816,6 +1822,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.level += 1;
     strengthenPlayerForm();
     spawnSpark(minigameState.player.x, minigameState.player.y, '#51ffe7');
+    spawnImpact(minigameState.player.x, minigameState.player.y, '#51ffe7', 150);
+    minigameState.screenShake = Math.max(minigameState.screenShake, 0.2);
     triggerPop('evolve');
     updateMinigameHud();
   }
@@ -1828,6 +1836,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     strengthenPlayerForm();
     triggerPop('hit');
+    spawnImpact(minigameState.player.x, minigameState.player.y, '#ff2d55', 140);
+    minigameState.screenShake = Math.max(minigameState.screenShake, 0.35);
     updateMinigameHud();
   }
 
@@ -1853,20 +1863,42 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function spawnBoss() {
+    const player = minigameState.player;
+    if (player) {
+      player.x = minigameState.width / 2;
+      player.y = minigameState.height - 140;
+      triggerPop('superReady');
+    }
+    minigameState.enemies.forEach((enemy) => {
+      registerKill();
+      spawnImpact(enemy.x, enemy.y, '#ff6b3d', 130);
+      spawnSpark(enemy.x, enemy.y, '#ffc857');
+    });
+    minigameState.enemies = [];
+    minigameState.enemyBullets = [];
+    minigameState.screenShake = Math.max(minigameState.screenShake, 0.55);
     minigameState.boss = {
       x: minigameState.width / 2,
-      y: 120,
-      w: 180,
-      h: 110,
-      hp: 160 + minigameState.elapsed * 4,
-      maxHp: 160 + minigameState.elapsed * 4,
-      vx: 180,
+      y: -220,
+      w: 240,
+      h: 160,
+      hp: 260 + minigameState.elapsed * 5,
+      maxHp: 260 + minigameState.elapsed * 5,
+      vx: 0,
+      vy: 0,
       phaseTime: 0,
-      cooldown: 0.8,
-      enraged: false
+      cooldown: 0.5,
+      attackMode: 'barrage',
+      attackTimer: 5,
+      slamTimer: 4,
+      minionTimer: 3,
+      enraged: false,
+      introDuration: 2.4,
+      entryY: 140
     };
     minigameState.bossBullets = [];
     minigameState.bossSpawned = true;
+    minigameState.bossIntroTimer = minigameState.boss.introDuration;
     minigameState.timeLeft = 0;
     updateMinigameHud();
   }
@@ -1882,6 +1914,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         color
       });
     }
+  }
+
+  function spawnImpact(x, y, color = '#ff72b6', radius = 90) {
+    minigameState.impacts.push({
+      x,
+      y,
+      time: 0,
+      duration: 0.55,
+      radius,
+      color
+    });
   }
 
   function triggerPop(type) {
@@ -1915,7 +1958,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.superCharges -= 1;
     const radius = 180 + minigameState.level * 18;
     triggerPop('super');
-    spawnSpark(player.x, player.y, '#ffe379');
+    ['#ff6b3d', '#ff9248', '#ffe379', '#ff4d6d'].forEach((color) => {
+      spawnSpark(player.x, player.y, color);
+    });
+    minigameState.screenShake = Math.max(minigameState.screenShake, 0.65);
     minigameState.enemies = minigameState.enemies.filter((enemy) => {
       const dx = enemy.x - player.x;
       const dy = enemy.y - player.y;
@@ -1953,6 +1999,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       pop.time += delta;
     });
     minigameState.pops = minigameState.pops.filter((pop) => pop.time < pop.duration);
+    minigameState.impacts.forEach((impact) => {
+      impact.time += delta;
+    });
+    minigameState.impacts = minigameState.impacts.filter((impact) => impact.time < impact.duration);
+    minigameState.screenShake = Math.max(0, minigameState.screenShake - delta * 1.35);
+    if (minigameState.bossIntroTimer > 0) {
+      minigameState.bossIntroTimer = Math.max(0, minigameState.bossIntroTimer - delta);
+    }
     updateMinigameHud();
     if (!minigameState.bossSpawned && minigameState.timeLeft <= 0) {
       spawnBoss();
@@ -2099,6 +2153,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const b = minigameState.bullets[i];
         if (Math.abs(b.x - enemy.x) < enemy.size * 0.6 && Math.abs(b.y - enemy.y) < enemy.size * 0.6) {
           spawnSpark(enemy.x, enemy.y);
+          spawnImpact(enemy.x, enemy.y, '#ff9248', enemy.size * 2.2);
           enemy.hp -= b.damage || 1;
           if (!b.pierce || b.damage <= 1) {
             minigameState.bullets.splice(i, 1);
@@ -2135,6 +2190,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (hit) {
           boss.hp -= b.damage || 1;
           spawnSpark(b.x, b.y, '#51ffe7');
+          spawnImpact(b.x, b.y, '#51ffe7', 120);
           if (!b.pierce || b.damage <= 1) return false;
           b.damage -= 1;
           updateMinigameHud();
@@ -2173,6 +2229,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const dy = Math.abs(enemy.y - player.y);
       if (dx < enemy.size * 0.6 + player.w * 0.4 && dy < enemy.size * 0.6 + player.h * 0.4) {
         spawnSpark(player.x, player.y, '#ff72b6');
+        spawnImpact(player.x, player.y, '#ff355d', 120);
         enemy.y = minigameState.height + 50;
         applyDamage(1);
       }
@@ -2183,6 +2240,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const dy = Math.abs(shot.y - player.y);
       if (dx < player.w * 0.55 && dy < player.h * 0.55) {
         spawnSpark(player.x, player.y, '#ff72b6');
+        spawnImpact(player.x, player.y, '#ff355d', 110);
         applyDamage(1);
         return false;
       }
@@ -2194,6 +2252,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const dy = Math.abs(shot.y - player.y);
       if (dx < player.w * 0.6 && dy < player.h * 0.6) {
         spawnSpark(player.x, player.y, '#ff72b6');
+        spawnImpact(player.x, player.y, '#ff355d', 130);
         shot.y = minigameState.height + 60;
         applyDamage(minigameState.boss && minigameState.boss.enraged ? 2 : 1);
       }
@@ -2212,32 +2271,118 @@ document.addEventListener("DOMContentLoaded", async function () {
   function updateBoss(delta, player) {
     const boss = minigameState.boss;
     if (!boss) return;
+    if (minigameState.bossIntroTimer > 0) {
+      const progress = 1 - minigameState.bossIntroTimer / boss.introDuration;
+      const ease = 1 - Math.pow(1 - progress, 3);
+      boss.y = -boss.h + ease * (boss.entryY + boss.h);
+      boss.vx = 120;
+      return;
+    }
     boss.phaseTime += delta;
-    boss.x += boss.vx * delta;
-    if (boss.x < boss.w / 2 + 16 || boss.x > minigameState.width - boss.w / 2 - 16) {
-      boss.vx *= -1;
-    }
-    if (boss.phaseTime > 9 && !boss.enraged) {
+    const targetX = player ? player.x + Math.sin(boss.phaseTime * 1.2) * 80 : minigameState.width / 2;
+    const followSpeed = boss.enraged ? 2.8 : 2;
+    boss.x += (targetX - boss.x) * followSpeed * delta;
+    boss.y = boss.entryY + Math.sin(boss.phaseTime * 1.8) * (boss.enraged ? 18 : 12);
+    boss.x = Math.max(boss.w / 2 + 16, Math.min(minigameState.width - boss.w / 2 - 16, boss.x));
+    if (!boss.enraged && boss.hp <= boss.maxHp * 0.45) {
       boss.enraged = true;
-      boss.vx *= 1.35;
+      boss.attackTimer = 0;
+      boss.cooldown = 0.25;
+      boss.slamTimer = 1.5;
+      boss.minionTimer = 2.2;
+      minigameState.screenShake = Math.max(minigameState.screenShake, 0.38);
+      triggerPop('superReady');
     }
+
+    boss.attackTimer -= delta;
+    boss.slamTimer -= delta;
+    boss.minionTimer -= delta;
     boss.cooldown -= delta;
-    if (boss.cooldown <= 0) {
-      const spread = boss.enraged ? 5 : 3;
-      for (let i = 0; i < spread; i++) {
-        const offset = i - (spread - 1) / 2;
-        const angle = offset * 0.22;
+
+    if (boss.attackTimer <= 0) {
+      const modes = ['barrage', 'spiral', 'lock'];
+      const idx = modes.indexOf(boss.attackMode);
+      boss.attackMode = modes[(idx + 1) % modes.length];
+      boss.attackTimer = boss.enraged ? 6 : 7.5;
+      boss.cooldown = boss.enraged ? 0.2 : 0.32;
+    }
+
+    if (boss.minionTimer <= 0) {
+      spawnEnemy('slicer');
+      if (boss.enraged) spawnEnemy('diver'); else spawnEnemy('orbiter');
+      boss.minionTimer = boss.enraged ? 3 : 4.2;
+    }
+
+    if (boss.slamTimer <= 0) {
+      const burstCount = boss.enraged ? 18 : 12;
+      for (let i = 0; i < burstCount; i++) {
+        const angle = (Math.PI * 2 * i) / burstCount;
         minigameState.bossBullets.push({
-          x: boss.x + offset * 26,
-          y: boss.y + boss.h / 2 - 6,
-          vx: Math.sin(angle) * (boss.enraged ? 220 : 180),
-          vy: 260 + (boss.enraged ? 160 : 120),
-          size: boss.enraged ? 9 : 8
+          x: boss.x,
+          y: boss.y,
+          vx: Math.cos(angle) * (boss.enraged ? 320 : 240),
+          vy: Math.sin(angle) * (boss.enraged ? 320 : 240),
+          size: boss.enraged ? 11 : 9
         });
       }
-      boss.cooldown = boss.enraged ? 0.55 : 0.85;
+      spawnImpact(boss.x, boss.y, '#ff4d6d', boss.w);
+      minigameState.screenShake = Math.max(minigameState.screenShake, boss.enraged ? 0.6 : 0.4);
+      boss.slamTimer = boss.enraged ? 3.2 : 4.6;
     }
-    if (Math.random() < 0.18 * delta) spawnEnemy('phantom');
+
+    if (boss.cooldown <= 0) {
+      switch (boss.attackMode) {
+        case 'spiral': {
+          const spinBase = boss.phaseTime * (boss.enraged ? 6 : 4.5);
+          for (let i = 0; i < 6; i++) {
+            const angle = spinBase + (Math.PI * 2 * i) / 6;
+            minigameState.bossBullets.push({
+              x: boss.x,
+              y: boss.y,
+              vx: Math.cos(angle) * (boss.enraged ? 260 : 200),
+              vy: Math.sin(angle) * (boss.enraged ? 260 : 200),
+              size: boss.enraged ? 10 : 8
+            });
+          }
+          boss.cooldown = boss.enraged ? 0.2 : 0.32;
+          break;
+        }
+        case 'lock': {
+          if (player) {
+            const dx = player.x - boss.x;
+            const dy = player.y - boss.y;
+            const dist = Math.max(80, Math.hypot(dx, dy));
+            const speed = boss.enraged ? 340 : 270;
+            minigameState.bossBullets.push({
+              x: boss.x,
+              y: boss.y,
+              vx: (dx / dist) * speed,
+              vy: (dy / dist) * speed,
+              size: boss.enraged ? 12 : 10
+            });
+          }
+          boss.cooldown = boss.enraged ? 0.55 : 0.75;
+          break;
+        }
+        case 'barrage':
+        default: {
+          const spread = boss.enraged ? 7 : 5;
+          for (let i = 0; i < spread; i++) {
+            const offset = i - (spread - 1) / 2;
+            const angle = offset * 0.16;
+            minigameState.bossBullets.push({
+              x: boss.x + offset * 26,
+              y: boss.y + boss.h / 2 - 6,
+              vx: Math.sin(angle) * (boss.enraged ? 240 : 200),
+              vy: 240 + (boss.enraged ? 180 : 140),
+              size: boss.enraged ? 10 : 8
+            });
+          }
+          boss.cooldown = boss.enraged ? 0.4 : 0.65;
+        }
+      }
+    }
+
     minigameState.bossBullets.forEach((shot) => {
       shot.x += shot.vx * delta;
       shot.y += shot.vy * delta;
@@ -2249,6 +2394,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     const ctx = minigameState.ctx;
     ctx.clearRect(0, 0, minigameCanvas.width, minigameCanvas.height);
     ctx.lineWidth = 2;
+    ctx.save();
+    if (minigameState.screenShake > 0) {
+      const intensity = minigameState.screenShake * 9;
+      ctx.translate((Math.random() - 0.5) * intensity, (Math.random() - 0.5) * intensity);
+    }
 
     ctx.fillStyle = 'rgba(255, 227, 121, 0.8)';
     minigameState.stars.forEach((star) => {
@@ -2257,14 +2407,24 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.fill();
     });
 
+    if (minigameState.boss) {
+      const fear = ctx.createRadialGradient(minigameState.boss.x, minigameState.boss.y, 80, minigameState.boss.x, minigameState.boss.y, minigameState.width);
+      fear.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      fear.addColorStop(0.35, 'rgba(8, 2, 24, 0.4)');
+      fear.addColorStop(1, 'rgba(5, 0, 12, 0.75)');
+      ctx.fillStyle = fear;
+      ctx.fillRect(0, 0, minigameState.width, minigameState.height);
+    }
+
     const easeOut = (t) => 1 - Math.pow(1 - t, 2);
     minigameState.pops.forEach((pop) => {
       const t = Math.min(1, pop.time / pop.duration);
       const fade = 1 - t;
       const styleMap = {
-        evolve: { base: 38, max: 120, outer: 'rgba(81, 255, 231, 0.7)', inner: 'rgba(255, 227, 121, 0.65)' },
-        super: { base: 52, max: 150, outer: 'rgba(255, 227, 121, 0.9)', inner: 'rgba(255, 114, 182, 0.85)' },
-        hit: { base: 30, max: 90, outer: 'rgba(255, 114, 182, 0.75)', inner: 'rgba(255, 186, 186, 0.7)' }
+        evolve: { base: 46, max: 140, outer: 'rgba(81, 255, 231, 0.85)', inner: 'rgba(255, 227, 121, 0.75)' },
+        super: { base: 52, max: 170, outer: 'rgba(255, 146, 72, 0.95)', inner: 'rgba(255, 227, 121, 0.95)' },
+        superReady: { base: 40, max: 150, outer: 'rgba(255, 114, 182, 0.85)', inner: 'rgba(255, 241, 214, 0.9)' },
+        hit: { base: 34, max: 110, outer: 'rgba(255, 62, 62, 0.85)', inner: 'rgba(255, 196, 180, 0.75)' }
       };
       const style = styleMap[pop.type] || styleMap.hit;
       const radius = style.base + easeOut(t) * (style.max - style.base);
@@ -2280,6 +2440,69 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.arc(pop.x, pop.y, innerRadius, 0, Math.PI * 2);
+      ctx.stroke();
+      if (pop.type === 'super') {
+        const fireGlow = ctx.createRadialGradient(pop.x, pop.y, innerRadius * 0.3, pop.x, pop.y, radius * 0.9);
+        fireGlow.addColorStop(0, `rgba(255, 241, 214, ${0.9 * fade})`);
+        fireGlow.addColorStop(0.5, `rgba(255, 132, 74, ${0.65 * fade})`);
+        fireGlow.addColorStop(1, `rgba(84, 6, 0, ${0.25 * fade})`);
+        ctx.fillStyle = fireGlow;
+        ctx.beginPath();
+        ctx.arc(pop.x, pop.y, radius * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.save();
+        ctx.translate(pop.x, pop.y);
+        ctx.shadowBlur = 18;
+        ctx.shadowColor = 'rgba(255, 120, 80, 0.9)';
+        for (let i = 0; i < 10; i++) {
+          const spin = i / 10 * Math.PI * 2 + t * Math.PI * 4;
+          ctx.rotate(spin);
+          ctx.fillStyle = `rgba(255, ${Math.floor(90 + 80 * fade)}, ${Math.floor(50 + 40 * fade)}, ${0.7 * fade})`;
+          ctx.beginPath();
+          ctx.moveTo(innerRadius * 0.2, 0);
+          ctx.lineTo(radius * 0.9, 6);
+          ctx.lineTo(radius * 0.75, -6);
+          ctx.closePath();
+          ctx.fill();
+          ctx.rotate(-spin);
+        }
+        ctx.restore();
+      } else if (pop.type === 'superReady') {
+        ctx.save();
+        ctx.translate(pop.x, pop.y);
+        ctx.shadowBlur = 22;
+        ctx.shadowColor = 'rgba(255, 114, 182, 0.9)';
+        for (let i = 0; i < 12; i++) {
+          const spin = i / 12 * Math.PI * 2 + t * Math.PI * 3;
+          ctx.rotate(spin);
+          ctx.strokeStyle = `rgba(255, 114, 182, ${0.75 * fade})`;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.moveTo(innerRadius * 0.45, 0);
+          ctx.lineTo(radius * 0.9, 0);
+          ctx.stroke();
+          ctx.rotate(-spin);
+        }
+        ctx.restore();
+      }
+      ctx.restore();
+    });
+
+    minigameState.impacts.forEach((impact) => {
+      const t = Math.min(1, impact.time / impact.duration);
+      const fade = 1 - t;
+      const radius = impact.radius * (0.6 + 0.4 * easeOut(t));
+      ctx.save();
+      ctx.globalAlpha = fade;
+      ctx.strokeStyle = impact.color;
+      ctx.lineWidth = 3 + (1 - fade) * 3;
+      ctx.beginPath();
+      ctx.arc(impact.x, impact.y, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.strokeStyle = 'rgba(255, 227, 121, 0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(impact.x, impact.y, radius * 0.55, 0, Math.PI * 2);
       ctx.stroke();
       ctx.restore();
     });
@@ -2298,21 +2521,87 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       ctx.save();
       ctx.translate(boss.x, boss.y);
-      const bodyGrad = ctx.createRadialGradient(0, 0, 20, 0, 0, boss.w * 0.7);
-      bodyGrad.addColorStop(0, 'rgba(255, 227, 121, 0.5)');
-      bodyGrad.addColorStop(1, boss.enraged ? 'rgba(255, 40, 120, 0.65)' : 'rgba(0, 195, 255, 0.45)');
-      ctx.fillStyle = bodyGrad;
+      const hullGrad = ctx.createLinearGradient(-boss.w / 2, -boss.h / 2, boss.w / 2, boss.h / 2);
+      hullGrad.addColorStop(0, boss.enraged ? 'rgba(36, 2, 18, 0.95)' : 'rgba(7, 7, 18, 0.9)');
+      hullGrad.addColorStop(1, boss.enraged ? 'rgba(96, 2, 24, 0.9)' : 'rgba(12, 14, 32, 0.9)');
+      ctx.fillStyle = hullGrad;
       ctx.beginPath();
       ctx.moveTo(0, -boss.h / 2);
-      ctx.bezierCurveTo(boss.w / 2, -boss.h / 3, boss.w / 2, boss.h / 3, 0, boss.h / 2);
-      ctx.bezierCurveTo(-boss.w / 2, boss.h / 3, -boss.w / 2, -boss.h / 3, 0, -boss.h / 2);
+      ctx.bezierCurveTo(boss.w / 2.2, -boss.h / 4, boss.w / 2.2, boss.h / 3, 0, boss.h / 2.1);
+      ctx.bezierCurveTo(-boss.w / 2.2, boss.h / 3, -boss.w / 2.2, -boss.h / 4, 0, -boss.h / 2);
+      ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+
+      ctx.strokeStyle = boss.enraged ? 'rgba(255, 56, 56, 0.4)' : 'rgba(81, 255, 231, 0.3)';
+      ctx.lineWidth = 3;
       ctx.stroke();
-      ctx.fillStyle = '#0b0f22';
-      ctx.fillRect(-12, -boss.h / 4, 24, 18);
-      ctx.fillStyle = boss.enraged ? '#ff72b6' : '#51ffe7';
-      ctx.fillRect(-10, -boss.h / 4 + 2, 20, 6);
+
+      ctx.fillStyle = boss.enraged ? 'rgba(255, 56, 56, 0.4)' : 'rgba(81, 255, 231, 0.25)';
+      for (let i = -2; i <= 2; i++) {
+        ctx.beginPath();
+        ctx.moveTo(i * 26, -boss.h / 2.4);
+        ctx.lineTo(i * 26 + (i % 2 === 0 ? 18 : -18), -boss.h / 2.4 - 20);
+        ctx.lineTo(i * 26 + (i % 2 === 0 ? 34 : -34), -boss.h / 2.4);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      const coreGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, boss.enraged ? 110 : 90);
+      coreGrad.addColorStop(0, boss.enraged ? '#ff2147' : '#51ffe7');
+      coreGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(0, 6, boss.enraged ? 42 : 36, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = boss.enraged ? '#1d0008' : '#020610';
+      ctx.fillRect(-16, -boss.h / 6, 32, 34);
+      ctx.fillStyle = boss.enraged ? '#ffe379' : '#ff72b6';
+      ctx.fillRect(-14, -boss.h / 6 + 4, 14, 8);
+      ctx.fillRect(0, -boss.h / 6 + 4, 14, 8);
+
+      ctx.fillStyle = boss.enraged ? '#ff502b' : '#ffe379';
+      ctx.beginPath();
+      ctx.moveTo(0, boss.h / 2.1 - 6);
+      ctx.lineTo(24, boss.h / 2.1 + 18);
+      ctx.lineTo(-24, boss.h / 2.1 + 18);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = boss.enraged ? 'rgba(255, 56, 56, 0.65)' : 'rgba(81, 255, 231, 0.55)';
+      ctx.beginPath();
+      ctx.moveTo(-boss.w / 2 + 18, -boss.h / 2 + 32);
+      ctx.quadraticCurveTo(-boss.w / 2 - 14, -boss.h / 2 + 18, -boss.w / 2 + 8, -boss.h / 2 + 72);
+      ctx.moveTo(boss.w / 2 - 18, -boss.h / 2 + 32);
+      ctx.quadraticCurveTo(boss.w / 2 + 14, -boss.h / 2 + 18, boss.w / 2 - 8, -boss.h / 2 + 72);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = boss.enraged ? '#ffe379' : '#ffe6c2';
+      ctx.beginPath();
+      ctx.arc(-32, -boss.h / 6, 12, 0, Math.PI * 2);
+      ctx.arc(32, -boss.h / 6, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = boss.enraged ? '#ff2147' : '#0b0f22';
+      ctx.beginPath();
+      ctx.arc(-32, -boss.h / 6, 6 + Math.sin(boss.phaseTime * 5) * 2, 0, Math.PI * 2);
+      ctx.arc(32, -boss.h / 6, 6 + Math.cos(boss.phaseTime * 5) * 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = boss.enraged ? 'rgba(255, 56, 56, 0.8)' : 'rgba(81, 255, 231, 0.6)';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(-boss.w / 2.4, boss.h / 4);
+      ctx.lineTo(0, boss.h / 3 + Math.sin(boss.phaseTime * 2) * 6);
+      ctx.lineTo(boss.w / 2.4, boss.h / 4);
+      ctx.stroke();
+
+      if (boss.enraged) {
+        ctx.fillStyle = 'rgba(255, 68, 68, 0.2)';
+        ctx.beginPath();
+        ctx.arc(0, 0, boss.w * 0.62, 0, Math.PI * 2);
+        ctx.fill();
+      }
       ctx.restore();
     }
 
@@ -2417,6 +2706,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     ctx.beginPath();
     ctx.arc(0, 0, 26, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * novaProgress);
     ctx.stroke();
+    if (novaReady) {
+      ctx.strokeStyle = 'rgba(255, 114, 182, 0.7)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      const pulse = 26 + Math.sin(performance.now() / 120) * 3;
+      ctx.arc(0, 0, pulse, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     ctx.fillStyle = '#ffe6c2';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -2566,6 +2863,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.fillRect(s.x, s.y, 3, 3);
     });
     ctx.globalAlpha = 1;
+    ctx.restore();
   }
 
   function minigameLoop(timestamp) {
