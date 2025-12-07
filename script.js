@@ -1002,11 +1002,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     playing: false,
     lastTimestamp: 0,
     score: 0,
-    goal: 90,
+    goal: 60,
     level: 1,
     maxLevel: 5,
-    timeLeft: 90,
-    survivalTime: 90,
+    timeLeft: 60,
+    survivalTime: 60,
     difficulty: 1,
     elapsed: 0,
     killCount: 0,
@@ -1601,7 +1601,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.enemies = [];
     minigameState.powerUps = [];
     minigameState.level = 1;
-    minigameState.survivalTime = 90;
+    minigameState.survivalTime = 60;
     minigameState.timeLeft = minigameState.survivalTime;
     minigameState.difficulty = 0.35;
     minigameState.elapsed = 0;
@@ -1626,7 +1626,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.running = false;
     minigameState.playing = false;
     updateMinigameHud();
-    updateMinigameOverlay('Pressione Start', 'Desvie, segure o tempo e evolua até o nível 5. Cada novo nível melhora seu fogo, mas qualquer acerto remove o último poder — o jogo acaba se você for atingido no nível 1. A cada 15 abates, a Super Nova (Espaço ou clique direito) limpa tudo ao redor.');
+    updateMinigameOverlay('Pressione Start', 'Sobreviva e vença o chefão para ganhar uma vida extra.');
   }
 
   function updateMinigameHud() {
@@ -1771,7 +1771,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           vy: 56 + Math.random() * 26,
           wobble: 1.2 + Math.random() * 0.9,
           phase: Math.random() * Math.PI * 2,
-          fireCooldown: 1.4 + Math.random() * 0.8,
+          fireCooldown: 1.8 + Math.random() * 1,
           hp: 4,
           type,
           value: 4
@@ -1804,7 +1804,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   function registerKill() {
     minigameState.killCount += 1;
-    minigameState.superProgress = minigameState.killCount % 15;
+    minigameState.superProgress = minigameState.killCount % 10;
     if (minigameState.superProgress === 0) {
       minigameState.superCharges += 1;
       triggerPop('super');
@@ -1834,11 +1834,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   function getPlayerForm(level = minigameState.level) {
     const clamped = Math.min(Math.max(1, level), minigameState.maxLevel);
     const forms = [
-      { cooldown: 0.3, speed: 360, pattern: [0], damage: 1, pierce: false, bulletSpeed: -500 },
-      { cooldown: 0.24, speed: 390, pattern: [-0.08, 0.08], damage: 1, pierce: false, bulletSpeed: -540 },
-      { cooldown: 0.19, speed: 420, pattern: [-0.16, 0, 0.16], damage: 1, pierce: false, bulletSpeed: -600 },
-      { cooldown: 0.16, speed: 440, pattern: [-0.24, -0.08, 0.08, 0.24], damage: 2, pierce: true, bulletSpeed: -660 },
-      { cooldown: 0.12, speed: 470, pattern: [-0.3, -0.12, 0, 0.12, 0.3], damage: 2, pierce: true, bulletSpeed: -720 }
+      { cooldown: 0.3, speed: 360, pattern: [0], damage: 1, pierce: false, bulletSpeed: -1000 },
+      { cooldown: 0.24, speed: 390, pattern: [-0.08, 0.08], damage: 1, pierce: false, bulletSpeed: -1080 },
+      { cooldown: 0.19, speed: 420, pattern: [-0.16, 0, 0.16], damage: 1, pierce: false, bulletSpeed: -1200 },
+      { cooldown: 0.16, speed: 440, pattern: [-0.24, -0.08, 0.08, 0.24], damage: 2, pierce: true, bulletSpeed: -1320 },
+      { cooldown: 0.12, speed: 470, pattern: [-0.3, -0.12, 0, 0.12, 0.3], damage: 2, pierce: true, bulletSpeed: -1440 }
     ];
     return forms[clamped - 1];
   }
@@ -2080,7 +2080,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 size: 10
               });
             });
-            enemy.fireCooldown = 1.6 - Math.min(0.9, minigameState.difficulty * 0.12);
+            enemy.fireCooldown = 2 - Math.min(0.9, minigameState.difficulty * 0.12);
           }
           break;
         case 'scout':
@@ -2403,7 +2403,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.restore();
     }
 
-    const novaProgress = minigameState.superProgress / 15;
+    const novaProgress = minigameState.superProgress / 10;
     const novaReady = minigameState.superCharges > 0;
     ctx.save();
     ctx.translate(56, 70);
@@ -2421,7 +2421,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = '12px "Press Start 2P", monospace';
-    ctx.fillText(novaReady ? `X${minigameState.superCharges}` : `${Math.max(0, 15 - minigameState.superProgress)}`, 0, 2);
+    ctx.fillText(novaReady ? `X${minigameState.superCharges}` : `${Math.max(0, 10 - minigameState.superProgress)}`, 0, 2);
     ctx.restore();
 
     ctx.strokeStyle = '#ffe6c2';
