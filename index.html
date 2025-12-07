@@ -122,25 +122,31 @@
 
   <div id="minigame-overlay" aria-hidden="true">
     <div class="minigame-window">
-      <button type="button" id="minigame-close" aria-label="Fechar minigame">✕</button>
+      <div class="minigame-header">
+        <div>
+          <p class="minigame-kicker">Continues esgotados</p>
+          <h2 class="minigame-title">Last Stand Arcade</h2>
+          <p class="minigame-subtitle">Destrua os invasores para recuperar uma vida extra.</p>
+        </div>
+        <button type="button" id="minigame-close" aria-label="Fechar minigame">✕</button>
+      </div>
       <div class="minigame-stage">
-        <div class="minigame-countdown" id="minigame-countdown">90</div>
         <canvas id="minigame-canvas" width="520" height="620"></canvas>
+        <div class="minigame-hud">
+          <div class="hud-item"><span>Score</span><strong id="minigame-score">0</strong></div>
+          <div class="hud-item"><span>Objetivo</span><strong id="minigame-goal">80</strong></div>
+          <div class="hud-item"><span>Escudo</span><strong id="minigame-shield">3</strong></div>
+          <div class="hud-item"><span>Boss</span><strong id="minigame-boss">--</strong></div>
+          <div class="hud-item"><span>Dificuldade</span><strong>Insano</strong></div>
+        </div>
         <div class="minigame-overlay-text" id="minigame-overlay-text">
           <div class="minigame-status">Pressione Start</div>
-          <p class="minigame-objective">Sobreviva até o cronômetro zerar para chamar o boss. Evolua até o nível 5, mas cada acerto reduz um nível.</p>
-          <div class="controls-grid">
-            <div class="control-card">
-              <div class="control-label">Mover</div>
-              <div class="control-keys"><span>W</span><span>A</span><span>S</span><span>D</span></div>
-            </div>
-            <div class="control-card">
-              <div class="control-label">Atirar</div>
-              <div class="control-keys"><span class="wide">Clique Esquerdo</span></div>
-            </div>
-          </div>
+          <p>Use ← → para mover e Espaço para disparar. Sobreviva até o boss insano.</p>
           <button type="button" id="minigame-start">Start</button>
         </div>
+      </div>
+      <div class="minigame-footer">
+        <p class="minigame-tip">Fundo transparente ativado quando ficar sem vidas. Vença para ganhar +1 coração.</p>
       </div>
     </div>
   </div>
