@@ -990,6 +990,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const minigameScoreEl = document.getElementById('minigame-score');
   const minigameGoalEl = document.getElementById('minigame-goal');
   const minigameShieldEl = document.getElementById('minigame-shield');
+  const minigameBossEl = document.getElementById('minigame-boss');
   const arcadeScreen = document.querySelector('.arcade-screen-curve');
   let currentScale = 1;
   let diaryButtonWrapper = null;
@@ -1004,24 +1005,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     playing: false,
     lastTimestamp: 0,
     score: 0,
-    goal: 90,
-    level: 1,
-    maxLevel: 5,
-    timeLeft: 90,
-    survivalTime: 90,
-    difficulty: 1,
-    elapsed: 0,
+    goal: 80,
+    shield: 3,
     player: null,
     bullets: [],
-    enemyBullets: [],
     enemies: [],
     powerUps: [],
+    activePowerUps: { rapid: 0, spread: 0, pierce: 0 },
     boss: null,
     bossBullets: [],
     bossSpawned: false,
     sparks: [],
     stars: [],
-    pressed: { left: false, right: false, up: false, down: false, shoot: false },
+    pressed: { left: false, right: false, shoot: false },
     width: minigameCanvas ? minigameCanvas.width : 0,
     height: minigameCanvas ? minigameCanvas.height : 0
   };
@@ -1587,26 +1583,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     resizeMinigameCanvas();
     minigameState.player = {
       x: minigameState.width / 2,
-      y: minigameState.height - 140,
+      y: minigameState.height - 82,
       w: 52,
       h: 30,
-      speed: 380,
+      speed: 360,
       cooldown: 0
     };
-    strengthenPlayerForm();
     minigameState.bullets = [];
-    minigameState.enemyBullets = [];
     minigameState.enemies = [];
     minigameState.powerUps = [];
-    minigameState.level = 1;
-    minigameState.survivalTime = 90;
-    minigameState.timeLeft = minigameState.survivalTime;
-    minigameState.difficulty = 0.35;
-    minigameState.elapsed = 0;
-    minigameState.goal = minigameState.survivalTime;
+    minigameState.activePowerUps = { rapid: 0, spread: 0, pierce: 0 };
     minigameState.boss = null;
     minigameState.bossBullets = [];
-    minigameState.enemyBullets = [];
     minigameState.bossSpawned = false;
     minigameState.sparks = [];
     minigameState.stars = Array.from({ length: 70 }).map(() => ({
@@ -1616,20 +1604,24 @@ document.addEventListener("DOMContentLoaded", async function () {
       speed: 38 + Math.random() * 42
     }));
     minigameState.score = 0;
+    minigameState.goal = 80;
+    minigameState.shield = 3;
     minigameState.lastTimestamp = 0;
     minigameState.running = false;
     minigameState.playing = false;
     updateMinigameHud();
-    updateMinigameOverlay('Pressione Start', 'Use W A S D para mover, clique esquerdo para atirar. Colete núcleos para subir de nível até 5; cada acerto remove um nível. Sobreviva até o boss.');
+    updateMinigameOverlay('Pressione Start', 'Use ← → para mover e Espaço para disparar. Sobreviva até o boss insano.');
   }
 
   function updateMinigameHud() {
     if (minigameScoreEl) minigameScoreEl.textContent = minigameState.score;
-    if (minigameGoalEl) {
-      const objective = minigameState.boss ? 'Boss' : `${Math.max(0, Math.ceil(minigameState.timeLeft))}s`;
-      minigameGoalEl.textContent = objective;
+    if (minigameGoalEl) minigameGoalEl.textContent = minigameState.boss ? 'Boss' : minigameState.goal;
+    if (minigameShieldEl) minigameShieldEl.textContent = minigameState.shield;
+    if (minigameBossEl) {
+      minigameBossEl.textContent = minigameState.boss
+        ? `${Math.max(0, Math.ceil(minigameState.boss.hp))}/${minigameState.boss.maxHp}`
+        : '--';
     }
-    if (minigameShieldEl) minigameShieldEl.textContent = minigameState.level;
   }
 
   function updateMinigameOverlay(title, subtitle, showButton = true) {
@@ -1708,133 +1700,54 @@ document.addEventListener("DOMContentLoaded", async function () {
     updateMinigameOverlay('Derrota', 'Os invasores dominaram o fliperama. Tente novamente.', true);
   }
 
-  function spawnEnemy(forcedType) {
-    const pool = ['scout', 'slicer', 'orbiter', 'diver', 'phantom'];
-    const type = forcedType || pool[Math.floor(Math.random() * pool.length)];
+  function spawnEnemy(type = 'grunt') {
+    const size = (type === 'elite' ? 30 : 18) + Math.random() * (type === 'elite' ? 22 : 18);
     const x = 20 + Math.random() * (minigameState.width - 40);
-    const size = 26 + Math.random() * 14;
-    const base = {
+    const speed = (type === 'elite' ? 260 : 200) + Math.random() * (type === 'elite' ? 160 : 140);
+    const wobble = (type === 'elite' ? 1.8 : 0.8) + Math.random() * (type === 'elite' ? 1.6 : 1.2);
+    minigameState.enemies.push({
       x,
-      y: -size - Math.random() * 50,
+      y: -size,
       size,
-      lifeTime: 0
-    };
-
-    switch (type) {
-      case 'slicer':
-        minigameState.enemies.push({
-          ...base,
-          vy: 150 + Math.random() * 70,
-          vx: (Math.random() < 0.5 ? -1 : 1) * (140 + Math.random() * 50),
-          targetVX: 0,
-          hp: 2,
-          wobble: 0,
-          dashTimer: 1.2 + Math.random() * 0.5,
-          type,
-          value: 2
-        });
-        break;
-      case 'orbiter':
-        minigameState.enemies.push({
-          ...base,
-          vx: (Math.random() < 0.5 ? -1 : 1) * (60 + Math.random() * 60),
-          vy: 120 + Math.random() * 60,
-          wobble: 0.75 + Math.random() * 1.1,
-          phase: Math.random() * Math.PI * 2,
-          hp: 2,
-          fireCooldown: 1 + Math.random() * 0.7,
-          type,
-          value: 3
-        });
-        break;
-      case 'diver':
-        minigameState.enemies.push({
-          ...base,
-          prep: 0.5 + Math.random() * 0.8,
-          wobble: 1.3 + Math.random() * 0.8,
-          vy: 70 + Math.random() * 34,
-          vx: 0,
-          hp: 3,
-          locked: false,
-          explosive: true,
-          type,
-          value: 3
-        });
-        break;
-      case 'phantom':
-        minigameState.enemies.push({
-          ...base,
-          vy: 110 + Math.random() * 50,
-          wobble: 1.2 + Math.random() * 0.9,
-          phase: Math.random() * Math.PI * 2,
-          fireCooldown: 1.4 + Math.random() * 0.8,
-          hp: 4,
-          type,
-          value: 4
-        });
-        break;
-      case 'scout':
-      default:
-        minigameState.enemies.push({
-          ...base,
-          vy: 150 + Math.random() * 70,
-          wobble: 0.7 + Math.random() * 1.2,
-          phase: Math.random() * Math.PI * 2,
-          hp: 1,
-          type: 'scout',
-          value: 1
-        });
-        break;
-    }
+      speed,
+      wobble,
+      phase: Math.random() * Math.PI * 2,
+      hp: type === 'elite' ? 2 : 1,
+      type
+    });
   }
 
   function spawnPowerUp(x, y) {
-    const type = 'core';
+    const pool = ['rapid', 'spread', 'pierce', 'shield'];
+    const type = pool[Math.floor(Math.random() * pool.length)];
     minigameState.powerUps.push({ x, y, vy: 140 + Math.random() * 40, wobble: Math.random() * Math.PI * 2, type });
   }
 
   function applyPowerUp(type) {
-    if (type === 'core') gainEvolution();
-    updateMinigameHud();
-  }
-
-  function gainEvolution() {
-    if (minigameState.level >= minigameState.maxLevel) return;
-    minigameState.level += 1;
-    strengthenPlayerForm();
-    spawnSpark(minigameState.player.x, minigameState.player.y, '#51ffe7');
-    updateMinigameHud();
-  }
-
-  function applyDamage(loss = 1) {
-    minigameState.level -= loss;
-    if (minigameState.level < 1) {
-      handleMinigameLose();
-      return;
+    switch (type) {
+      case 'rapid':
+        minigameState.activePowerUps.rapid = 10;
+        break;
+      case 'spread':
+        minigameState.activePowerUps.spread = 9;
+        break;
+      case 'pierce':
+        minigameState.activePowerUps.pierce = 7;
+        break;
+      case 'shield':
+      default:
+        minigameState.shield = Math.min(5, minigameState.shield + 1);
+        break;
     }
-    strengthenPlayerForm();
     updateMinigameHud();
   }
 
-  function getPlayerForm(level = minigameState.level) {
-    const clamped = Math.min(Math.max(1, level), minigameState.maxLevel);
-    const forms = [
-      { cooldown: 0.3, speed: 360, pattern: [0], damage: 1, pierce: false, bulletSpeed: -500 },
-      { cooldown: 0.24, speed: 390, pattern: [-0.08, 0.08], damage: 1, pierce: false, bulletSpeed: -540 },
-      { cooldown: 0.19, speed: 420, pattern: [-0.16, 0, 0.16], damage: 1, pierce: false, bulletSpeed: -600 },
-      { cooldown: 0.16, speed: 440, pattern: [-0.24, -0.08, 0.08, 0.24], damage: 2, pierce: true, bulletSpeed: -660 },
-      { cooldown: 0.12, speed: 470, pattern: [-0.3, -0.12, 0, 0.12, 0.3], damage: 2, pierce: true, bulletSpeed: -720 }
-    ];
-    return forms[clamped - 1];
-  }
-
-  function strengthenPlayerForm() {
-    const player = minigameState.player;
-    if (!player) return;
-    const form = getPlayerForm();
-    player.speed = form.speed;
-    player.w = 52 + (minigameState.level - 1) * 4;
-    player.h = 30 + (minigameState.level - 1) * 2;
+  function updatePowerUpTimers(delta) {
+    Object.keys(minigameState.activePowerUps).forEach((key) => {
+      if (minigameState.activePowerUps[key] > 0) {
+        minigameState.activePowerUps[key] = Math.max(0, minigameState.activePowerUps[key] - delta);
+      }
+    });
   }
 
   function spawnBoss() {
@@ -1843,8 +1756,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       y: 120,
       w: 180,
       h: 110,
-      hp: 160 + minigameState.elapsed * 4,
-      maxHp: 160 + minigameState.elapsed * 4,
+      hp: 160,
+      maxHp: 160,
       vx: 180,
       phaseTime: 0,
       cooldown: 0.8,
@@ -1852,7 +1765,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
     minigameState.bossBullets = [];
     minigameState.bossSpawned = true;
-    minigameState.timeLeft = 0;
     updateMinigameHud();
   }
 
@@ -1869,31 +1781,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  function spawnEnemyBurst(x, y, count = 6, speed = 260) {
-    for (let i = 0; i < count; i++) {
-      const angle = (Math.PI * 2 * i) / count;
-      minigameState.enemyBullets.push({
-        x,
-        y,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed + 60,
-        size: 9
-      });
-    }
-  }
-
   function updateMinigame(delta) {
     const { player, pressed } = minigameState;
     if (!player) return;
 
-    minigameState.elapsed += delta;
-    minigameState.timeLeft = Math.max(0, minigameState.survivalTime - minigameState.elapsed);
-    const timeScale = minigameState.elapsed / 24;
-    minigameState.difficulty = 0.35 + Math.pow(Math.max(0, timeScale), 2.2);
-    if (!minigameState.bossSpawned && minigameState.timeLeft <= 0) {
-      spawnBoss();
-    }
-    updateMinigameHud();
+    updatePowerUpTimers(delta);
 
     minigameState.stars.forEach((star) => {
       star.y += star.speed * delta;
@@ -1905,25 +1797,24 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     if (pressed.left) player.x -= player.speed * delta;
     if (pressed.right) player.x += player.speed * delta;
-    if (pressed.up) player.y -= player.speed * delta;
-    if (pressed.down) player.y += player.speed * delta;
     player.x = Math.max(player.w / 2 + 6, Math.min(minigameState.width - player.w / 2 - 6, player.x));
-    player.y = Math.max(player.h / 2 + 6, Math.min(minigameState.height - player.h / 2 - 16, player.y));
-
-    const form = getPlayerForm();
+    const hasRapid = minigameState.activePowerUps.rapid > 0;
+    const hasSpread = minigameState.activePowerUps.spread > 0;
+    const hasPierce = minigameState.activePowerUps.pierce > 0;
     if (player.cooldown > 0) player.cooldown -= delta;
     if (pressed.shoot && player.cooldown <= 0) {
-      form.pattern.forEach((angle) => {
+      const pattern = hasSpread ? [-0.4, 0, 0.4] : [0];
+      pattern.forEach((angle) => {
         minigameState.bullets.push({
           x: player.x,
           y: player.y - player.h / 2,
-          vy: form.bulletSpeed,
-          vx: Math.sin(angle) * 360,
-          damage: form.damage,
-          pierce: form.pierce
+          vy: hasRapid ? -640 : -540,
+          vx: angle * 320,
+          damage: hasPierce ? 2 : 1,
+          pierce: hasPierce
         });
       });
-      player.cooldown = form.cooldown;
+      player.cooldown = hasRapid ? 0.12 : 0.2;
     }
 
     minigameState.bullets.forEach((b) => {
@@ -1932,104 +1823,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     minigameState.bullets = minigameState.bullets.filter((b) => b.y > -40 && b.y < minigameState.height + 20 && b.x > -20 && b.x < minigameState.width + 20);
 
-    minigameState.enemyBullets.forEach((shot) => {
-      shot.y += shot.vy * delta;
-      shot.x += (shot.vx || 0) * delta;
-    });
-    minigameState.enemyBullets = minigameState.enemyBullets.filter((s) => s.y < minigameState.height + 50 && s.y > -60 && s.x > -60 && s.x < minigameState.width + 60);
-
-    const spawnIntensity = 0.35 + minigameState.difficulty * 0.8;
-    if (Math.random() < spawnIntensity * delta) spawnEnemy();
-    if (Math.random() < (0.18 + minigameState.difficulty * 0.08) * delta) spawnEnemy('slicer');
-    if (Math.random() < (0.12 + minigameState.difficulty * 0.06) * delta) spawnEnemy('orbiter');
-    if (Math.random() < (0.12 + minigameState.difficulty * 0.08) * delta) spawnEnemy('diver');
+    const spawnChance = 1.45 + Math.random() * 0.85;
+    if (Math.random() < spawnChance * delta) spawnEnemy();
+    if (Math.random() < 0.22 * delta) spawnEnemy('elite');
 
     minigameState.enemies.forEach((enemy) => {
-      switch (enemy.type) {
-        case 'slicer': {
-          enemy.dashTimer -= delta;
-          if (!enemy.targetVX) enemy.targetVX = enemy.vx;
-          if (enemy.dashTimer <= 0) {
-            enemy.dashTimer = 1.25 - Math.min(0.55, minigameState.difficulty * 0.07);
-            enemy.targetVX *= -1;
-          }
-          const accel = 260;
-          const diff = enemy.targetVX - enemy.vx;
-          const adjust = Math.sign(diff) * Math.min(Math.abs(diff), accel * delta);
-          enemy.vx += adjust;
-          const dashBoost = enemy.dashTimer < 0.2 ? 1.6 : 1;
-          enemy.y += enemy.vy * dashBoost * delta;
-          enemy.x += enemy.vx * delta;
-          if (enemy.x < 18 || enemy.x > minigameState.width - 18) {
-            enemy.targetVX *= -1;
-          }
-          break;
-        }
-        case 'orbiter':
-          enemy.y += enemy.vy * delta;
-          enemy.phase = (enemy.phase || 0) + enemy.wobble * delta;
-          enemy.x += Math.sin(enemy.phase) * 30 * delta + enemy.vx * delta;
-          enemy.fireCooldown -= delta;
-          if (enemy.fireCooldown <= 0) {
-            minigameState.enemyBullets.push({
-              x: enemy.x,
-              y: enemy.y + enemy.size * 0.3,
-              vx: Math.sin(enemy.phase) * 40,
-              vy: 180 + minigameState.difficulty * 32,
-              size: 9
-            });
-            enemy.fireCooldown = 1.35 - Math.min(0.7, minigameState.difficulty * 0.1);
-          }
-          break;
-        case 'diver':
-          if (!enemy.locked) {
-            enemy.prep -= delta;
-            enemy.y += enemy.vy * delta;
-            enemy.x += Math.sin(enemy.wobble) * 30 * delta;
-            enemy.wobble += 2.4 * delta;
-            if (enemy.prep <= 0) {
-              const dx = player.x - enemy.x;
-              const dy = player.y - enemy.y;
-              const dist = Math.max(80, Math.hypot(dx, dy));
-              const speed = 360 + minigameState.difficulty * 28;
-              enemy.vx = (dx / dist) * speed;
-              enemy.vy = (dy / dist) * speed;
-              enemy.locked = true;
-            }
-          } else {
-            enemy.x += enemy.vx * delta;
-            enemy.y += enemy.vy * delta;
-          }
-          break;
-        case 'phantom':
-          enemy.y += enemy.vy * delta;
-          enemy.phase += enemy.wobble * delta;
-          enemy.x += Math.sin(enemy.phase) * 42 * delta;
-          enemy.fireCooldown -= delta;
-          if (enemy.fireCooldown <= 0) {
-            const spread = [-0.18, 0, 0.18];
-            spread.forEach((angle) => {
-              minigameState.enemyBullets.push({
-                x: enemy.x,
-                y: enemy.y + enemy.size * 0.25,
-                vx: Math.sin(angle) * 110,
-                vy: 210 + minigameState.difficulty * 40,
-                size: 10
-              });
-            });
-            enemy.fireCooldown = 1.6 - Math.min(0.9, minigameState.difficulty * 0.12);
-          }
-          break;
-        case 'scout':
-        default:
-          enemy.y += enemy.vy * delta;
-          enemy.phase += enemy.wobble * delta;
-          enemy.x += Math.sin(enemy.phase) * 26 * delta;
-          break;
-      }
-      enemy.lifeTime += delta;
+      enemy.y += enemy.speed * delta;
+      enemy.phase += enemy.wobble * delta;
+      enemy.x += Math.sin(enemy.phase) * 28 * delta;
     });
-    minigameState.enemies = minigameState.enemies.filter((enemy) => enemy.y < minigameState.height + 60 && enemy.x > -80 && enemy.x < minigameState.width + 80);
+    minigameState.enemies = minigameState.enemies.filter((enemy) => enemy.y < minigameState.height + 40);
 
     minigameState.enemies = minigameState.enemies.filter((enemy) => {
       for (let i = 0; i < minigameState.bullets.length; i++) {
@@ -2043,22 +1846,19 @@ document.addEventListener("DOMContentLoaded", async function () {
             minigameState.bullets[i].damage -= 1;
           }
           if (enemy.hp <= 0) {
-            minigameState.score += enemy.value;
-            if (Math.random() < 0.22) spawnPowerUp(enemy.x, enemy.y);
-            if (enemy.explosive) {
-              spawnEnemyBurst(enemy.x, enemy.y, 7, 240 + minigameState.difficulty * 40);
-              const dx = Math.abs(enemy.x - player.x);
-              const dy = Math.abs(enemy.y - player.y);
-              if (Math.hypot(dx, dy) < 68) applyDamage(1);
-            }
+            minigameState.score += enemy.type === 'elite' ? 2 : 1;
+            if (Math.random() < 0.18) spawnPowerUp(enemy.x, enemy.y);
             updateMinigameHud();
-            return false;
           }
-          return true;
+          return false;
         }
       }
       return true;
     });
+
+    if (!minigameState.bossSpawned && minigameState.score >= minigameState.goal) {
+      spawnBoss();
+    }
 
     if (minigameState.boss) {
       const boss = minigameState.boss;
@@ -2110,20 +1910,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (dx < enemy.size * 0.6 + player.w * 0.4 && dy < enemy.size * 0.6 + player.h * 0.4) {
         spawnSpark(player.x, player.y, '#ff72b6');
         enemy.y = minigameState.height + 50;
-        applyDamage(1);
+        minigameState.shield -= 1;
+        updateMinigameHud();
+        if (minigameState.shield <= 0) {
+          handleMinigameLose();
+        }
       }
     }
-
-    minigameState.enemyBullets = minigameState.enemyBullets.filter((shot) => {
-      const dx = Math.abs(shot.x - player.x);
-      const dy = Math.abs(shot.y - player.y);
-      if (dx < player.w * 0.55 && dy < player.h * 0.55) {
-        spawnSpark(player.x, player.y, '#ff72b6');
-        applyDamage(1);
-        return false;
-      }
-      return true;
-    });
 
     minigameState.bossBullets.forEach((shot) => {
       const dx = Math.abs(shot.x - player.x);
@@ -2131,7 +1924,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (dx < player.w * 0.6 && dy < player.h * 0.6) {
         spawnSpark(player.x, player.y, '#ff72b6');
         shot.y = minigameState.height + 60;
-        applyDamage(minigameState.boss && minigameState.boss.enraged ? 2 : 1);
+        minigameState.shield -= minigameState.boss && minigameState.boss.enraged ? 2 : 1;
+        updateMinigameHud();
+        if (minigameState.shield <= 0) handleMinigameLose();
       }
     });
 
@@ -2167,13 +1962,12 @@ document.addEventListener("DOMContentLoaded", async function () {
           x: boss.x + offset * 26,
           y: boss.y + boss.h / 2 - 6,
           vx: Math.sin(angle) * (boss.enraged ? 220 : 180),
-          vy: 260 + (boss.enraged ? 160 : 120),
-          size: boss.enraged ? 9 : 8
+          vy: 260 + (boss.enraged ? 160 : 120)
         });
       }
       boss.cooldown = boss.enraged ? 0.55 : 0.85;
     }
-    if (Math.random() < 0.18 * delta) spawnEnemy('phantom');
+    if (Math.random() < 0.18 * delta) spawnEnemy('elite');
     minigameState.bossBullets.forEach((shot) => {
       shot.x += shot.vx * delta;
       shot.y += shot.vy * delta;
@@ -2227,51 +2021,24 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const player = minigameState.player;
     if (player) {
-      const level = minigameState.level - 1;
-      const aura = ctx.createRadialGradient(player.x, player.y, 6, player.x, player.y, 60 + level * 6);
-      aura.addColorStop(0, 'rgba(81, 255, 231, 0.32)');
-      aura.addColorStop(1, 'rgba(81, 255, 231, 0)');
-      ctx.fillStyle = aura;
-      ctx.beginPath();
-      ctx.arc(player.x, player.y, 60 + level * 6, 0, Math.PI * 2);
-      ctx.fill();
-
       ctx.save();
       ctx.translate(player.x, player.y);
-      ctx.rotate(Math.sin(player.y * 0.01 + level) * 0.02);
-      const hullGrad = ctx.createLinearGradient(-player.w / 2, 0, player.w / 2, 0);
-      hullGrad.addColorStop(0, '#51ffe7');
-      hullGrad.addColorStop(1, '#ff72b6');
-      ctx.fillStyle = hullGrad;
+      ctx.fillStyle = '#51ffe7';
       ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(0, -player.h / 2);
       ctx.lineTo(player.w / 2, player.h / 2);
-      ctx.lineTo(0, player.h / 3);
+      ctx.lineTo(0, player.h / 4);
       ctx.lineTo(-player.w / 2, player.h / 2);
       ctx.closePath();
       ctx.fill();
       ctx.stroke();
-
-      ctx.fillStyle = 'rgba(12, 18, 40, 0.9)';
-      ctx.fillRect(-8, -player.h / 3, 16, 12 + level * 1.2);
-      ctx.fillStyle = 'rgba(255, 227, 121, 0.7)';
-      ctx.fillRect(-6, -player.h / 3 + 2, 12, 4);
-
-      ctx.fillStyle = 'rgba(255, 114, 182, 0.6)';
+      ctx.fillStyle = '#0b0f22';
+      ctx.fillRect(-6, -player.h / 2 + 2, 12, 10);
+      ctx.fillStyle = 'rgba(255, 114, 182, 0.7)';
       ctx.beginPath();
-      ctx.ellipse(0, player.h / 2, 10 + level, 14 + level * 0.6, 0, Math.PI, 2 * Math.PI);
+      ctx.ellipse(0, player.h / 2, 8, 12, 0, Math.PI, 2 * Math.PI);
       ctx.fill();
-
-      for (let i = 0; i < level; i++) {
-        ctx.globalAlpha = 0.4;
-        ctx.strokeStyle = 'rgba(81, 255, 231, 0.8)';
-        ctx.beginPath();
-        ctx.arc(0, 0, player.w * 0.4 + i * 4, Math.PI * 1.2, Math.PI * 1.8);
-        ctx.stroke();
-      }
-      ctx.globalAlpha = 1;
       ctx.restore();
     }
 
@@ -2283,111 +2050,32 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.stroke();
     });
 
-    minigameState.enemyBullets.forEach((s) => {
-      ctx.fillStyle = '#ff72b6';
-      ctx.beginPath();
-      ctx.moveTo(s.x, s.y - s.size * 0.6);
-      ctx.lineTo(s.x + s.size * 0.5, s.y + s.size * 0.6);
-      ctx.lineTo(s.x - s.size * 0.5, s.y + s.size * 0.6);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-      ctx.stroke();
-    });
-
     minigameState.enemies.forEach((enemy) => {
-      ctx.save();
-      ctx.translate(enemy.x, enemy.y);
-      switch (enemy.type) {
-        case 'slicer':
-          ctx.fillStyle = '#ff72b6';
-          ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-          ctx.beginPath();
-          ctx.moveTo(0, enemy.size * 0.75);
-          ctx.lineTo(enemy.size * 0.65, -enemy.size * 0.4);
-          ctx.lineTo(0, -enemy.size * 0.1);
-          ctx.lineTo(-enemy.size * 0.65, -enemy.size * 0.4);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-          break;
-        case 'orbiter':
-          ctx.fillStyle = '#ffe379';
-          ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-          ctx.beginPath();
-          ctx.moveTo(0, enemy.size * 0.65);
-          ctx.lineTo(enemy.size * 0.45, 0);
-          ctx.lineTo(enemy.size * 0.3, -enemy.size * 0.55);
-          ctx.lineTo(-enemy.size * 0.3, -enemy.size * 0.55);
-          ctx.lineTo(-enemy.size * 0.45, 0);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-          ctx.fillStyle = '#0b0f22';
-          ctx.fillRect(-enemy.size * 0.18, 0, enemy.size * 0.36, enemy.size * 0.26);
-          break;
-        case 'diver':
-          ctx.fillStyle = '#51ffe7';
-          ctx.strokeStyle = 'rgba(0,0,0,0.45)';
-          ctx.beginPath();
-          ctx.moveTo(0, enemy.size * 0.85);
-          ctx.lineTo(enemy.size * 0.55, -enemy.size * 0.25);
-          ctx.lineTo(0, -enemy.size * 0.55);
-          ctx.lineTo(-enemy.size * 0.55, -enemy.size * 0.25);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-          ctx.fillStyle = 'rgba(255, 227, 121, 0.7)';
-          ctx.fillRect(-enemy.size * 0.12, -enemy.size * 0.05, enemy.size * 0.24, enemy.size * 0.12);
-          break;
-        case 'phantom':
-          ctx.globalAlpha = 0.7;
-          ctx.fillStyle = '#8ea6ff';
-          ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-          ctx.beginPath();
-          ctx.moveTo(0, enemy.size * 0.7);
-          ctx.quadraticCurveTo(enemy.size * 0.5, enemy.size * 0.1, 0, -enemy.size * 0.65);
-          ctx.quadraticCurveTo(-enemy.size * 0.5, enemy.size * 0.1, 0, enemy.size * 0.7);
-          ctx.fill();
-          ctx.stroke();
-          ctx.strokeStyle = 'rgba(255, 114, 182, 0.5)';
-          ctx.beginPath();
-          ctx.moveTo(-enemy.size * 0.45, enemy.size * 0.1);
-          ctx.lineTo(0, enemy.size * 0.35);
-          ctx.lineTo(enemy.size * 0.45, enemy.size * 0.1);
-          ctx.stroke();
-          break;
-        case 'scout':
-        default:
-          ctx.fillStyle = '#ff9f6e';
-          ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-          ctx.beginPath();
-          ctx.moveTo(0, enemy.size * 0.6);
-          ctx.quadraticCurveTo(enemy.size * 0.5, 0, 0, -enemy.size * 0.6);
-          ctx.quadraticCurveTo(-enemy.size * 0.5, 0, 0, enemy.size * 0.6);
-          ctx.fill();
-          ctx.stroke();
-          break;
-      }
-      ctx.restore();
+      const grad = ctx.createRadialGradient(enemy.x, enemy.y, 6, enemy.x, enemy.y, enemy.size);
+      grad.addColorStop(0, enemy.type === 'elite' ? '#ffe379' : '#ff72b6');
+      grad.addColorStop(1, 'rgba(255, 114, 182, 0.25)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(enemy.x, enemy.y, enemy.size * 0.6, 0, Math.PI * 2);
+      ctx.fill();
     });
 
     minigameState.bossBullets.forEach((shot) => {
       ctx.fillStyle = '#ff72b6';
       ctx.beginPath();
-      ctx.arc(shot.x, shot.y, shot.size || 6, 0, Math.PI * 2);
+      ctx.arc(shot.x, shot.y, 6, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = 'rgba(255, 227, 121, 0.5)';
       ctx.stroke();
     });
 
-    const iconMap = { core: '⬢' };
+    const iconMap = { rapid: '⚡', spread: '🔱', pierce: '💥', shield: '🛡️' };
     minigameState.powerUps.forEach((p) => {
-      ctx.fillStyle = 'rgba(5, 10, 22, 0.35)';
+      ctx.fillStyle = 'rgba(5, 10, 22, 0.6)';
       ctx.beginPath();
       ctx.arc(p.x, p.y, 14, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = '#51ffe7';
+      ctx.strokeStyle = '#ffe379';
       ctx.stroke();
       ctx.fillStyle = '#ffe6c2';
       ctx.font = '16px "Press Start 2P", monospace';
@@ -3770,12 +3458,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (key === 'ArrowRight' || key === 'd' || key === 'D') {
       minigameState.pressed.right = active;
     }
-    if (key === 'ArrowUp' || key === 'w' || key === 'W') {
-      minigameState.pressed.up = active;
-    }
-    if (key === 'ArrowDown' || key === 's' || key === 'S') {
-      minigameState.pressed.down = active;
-    }
     if (key === ' ' || key === 'Spacebar') {
       minigameState.pressed.shoot = active;
     }
@@ -3788,7 +3470,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
     applyMinigameKey(event.key, true);
-    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'a', 'A', 'd', 'D', 'w', 'W', 's', 'S', ' ', 'Spacebar'].includes(event.key)) {
+    if (['ArrowLeft', 'ArrowRight', 'a', 'A', 'd', 'D', ' ', 'Spacebar'].includes(event.key)) {
       event.preventDefault();
     }
   });
@@ -3797,22 +3479,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!isMinigameOpen()) return;
     applyMinigameKey(event.key, false);
   });
-
-  if (minigameCanvas) {
-    minigameCanvas.addEventListener('mousedown', (event) => {
-      if (!isMinigameOpen()) return;
-      if (event.button === 0) {
-        minigameState.pressed.shoot = true;
-        event.preventDefault();
-      }
-    });
-    window.addEventListener('mouseup', () => {
-      minigameState.pressed.shoot = false;
-    });
-    minigameCanvas.addEventListener('mouseleave', () => {
-      minigameState.pressed.shoot = false;
-    });
-  }
 
   const lockDiary = () => {
     diaryUnlocked = false;
