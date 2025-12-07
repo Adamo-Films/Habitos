@@ -1020,9 +1020,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     boss: null,
     bossBullets: [],
     bossSpawned: false,
+    bossIntroTimer: 0,
     sparks: [],
     pops: [],
     stars: [],
+    screenShake: 0,
     pressed: { left: false, right: false, up: false, down: false, shoot: false },
     width: minigameCanvas ? minigameCanvas.width : 0,
     height: minigameCanvas ? minigameCanvas.height : 0
@@ -1613,8 +1615,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.bossBullets = [];
     minigameState.enemyBullets = [];
     minigameState.bossSpawned = false;
+    minigameState.bossIntroTimer = 0;
     minigameState.sparks = [];
     minigameState.pops = [];
+    minigameState.screenShake = 0;
     minigameState.stars = Array.from({ length: 70 }).map(() => ({
       x: Math.random() * minigameState.width,
       y: Math.random() * minigameState.height,
@@ -1853,20 +1857,38 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function spawnBoss() {
+    const player = minigameState.player;
+    if (player) {
+      player.x = minigameState.width / 2;
+      player.y = minigameState.height - 140;
+      triggerPop('super');
+    }
+    minigameState.enemies.forEach((enemy) => {
+      registerKill();
+      spawnSpark(enemy.x, enemy.y, '#ff6b3d');
+      spawnSpark(enemy.x, enemy.y, '#ffc857');
+      triggerPop('super');
+    });
+    minigameState.enemies = [];
+    minigameState.enemyBullets = [];
+    minigameState.screenShake = Math.max(minigameState.screenShake, 0.55);
     minigameState.boss = {
       x: minigameState.width / 2,
-      y: 120,
-      w: 180,
-      h: 110,
-      hp: 160 + minigameState.elapsed * 4,
-      maxHp: 160 + minigameState.elapsed * 4,
+      y: -220,
+      w: 200,
+      h: 130,
+      hp: 180 + minigameState.elapsed * 4,
+      maxHp: 180 + minigameState.elapsed * 4,
       vx: 180,
       phaseTime: 0,
-      cooldown: 0.8,
-      enraged: false
+      cooldown: 1,
+      enraged: false,
+      introDuration: 2.4,
+      entryY: 120
     };
     minigameState.bossBullets = [];
     minigameState.bossSpawned = true;
+    minigameState.bossIntroTimer = minigameState.boss.introDuration;
     minigameState.timeLeft = 0;
     updateMinigameHud();
   }
@@ -1915,7 +1937,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     minigameState.superCharges -= 1;
     const radius = 180 + minigameState.level * 18;
     triggerPop('super');
-    spawnSpark(player.x, player.y, '#ffe379');
+    ['#ff6b3d', '#ff9248', '#ffe379', '#ff4d6d'].forEach((color) => {
+      spawnSpark(player.x, player.y, color);
+    });
+    minigameState.screenShake = Math.max(minigameState.screenShake, 0.65);
     minigameState.enemies = minigameState.enemies.filter((enemy) => {
       const dx = enemy.x - player.x;
       const dy = enemy.y - player.y;
@@ -1953,6 +1978,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       pop.time += delta;
     });
     minigameState.pops = minigameState.pops.filter((pop) => pop.time < pop.duration);
+    minigameState.screenShake = Math.max(0, minigameState.screenShake - delta * 1.35);
+    if (minigameState.bossIntroTimer > 0) {
+      minigameState.bossIntroTimer = Math.max(0, minigameState.bossIntroTimer - delta);
+    }
     updateMinigameHud();
     if (!minigameState.bossSpawned && minigameState.timeLeft <= 0) {
       spawnBoss();
@@ -2212,14 +2241,23 @@ document.addEventListener("DOMContentLoaded", async function () {
   function updateBoss(delta, player) {
     const boss = minigameState.boss;
     if (!boss) return;
+    if (minigameState.bossIntroTimer > 0) {
+      const progress = 1 - minigameState.bossIntroTimer / boss.introDuration;
+      const ease = 1 - Math.pow(1 - progress, 3);
+      boss.y = -boss.h + ease * (boss.entryY + boss.h);
+      boss.vx = 120;
+      return;
+    }
     boss.phaseTime += delta;
     boss.x += boss.vx * delta;
     if (boss.x < boss.w / 2 + 16 || boss.x > minigameState.width - boss.w / 2 - 16) {
       boss.vx *= -1;
+      minigameState.screenShake = Math.max(minigameState.screenShake, 0.18);
     }
     if (boss.phaseTime > 9 && !boss.enraged) {
       boss.enraged = true;
       boss.vx *= 1.35;
+      minigameState.screenShake = Math.max(minigameState.screenShake, 0.25);
     }
     boss.cooldown -= delta;
     if (boss.cooldown <= 0) {
@@ -2249,6 +2287,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     const ctx = minigameState.ctx;
     ctx.clearRect(0, 0, minigameCanvas.width, minigameCanvas.height);
     ctx.lineWidth = 2;
+    ctx.save();
+    if (minigameState.screenShake > 0) {
+      const intensity = minigameState.screenShake * 9;
+      ctx.translate((Math.random() - 0.5) * intensity, (Math.random() - 0.5) * intensity);
+    }
 
     ctx.fillStyle = 'rgba(255, 227, 121, 0.8)';
     minigameState.stars.forEach((star) => {
@@ -2257,13 +2300,22 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.fill();
     });
 
+    if (minigameState.boss) {
+      const fear = ctx.createRadialGradient(minigameState.boss.x, minigameState.boss.y, 80, minigameState.boss.x, minigameState.boss.y, minigameState.width);
+      fear.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      fear.addColorStop(0.35, 'rgba(8, 2, 24, 0.4)');
+      fear.addColorStop(1, 'rgba(5, 0, 12, 0.75)');
+      ctx.fillStyle = fear;
+      ctx.fillRect(0, 0, minigameState.width, minigameState.height);
+    }
+
     const easeOut = (t) => 1 - Math.pow(1 - t, 2);
     minigameState.pops.forEach((pop) => {
       const t = Math.min(1, pop.time / pop.duration);
       const fade = 1 - t;
       const styleMap = {
         evolve: { base: 38, max: 120, outer: 'rgba(81, 255, 231, 0.7)', inner: 'rgba(255, 227, 121, 0.65)' },
-        super: { base: 52, max: 150, outer: 'rgba(255, 227, 121, 0.9)', inner: 'rgba(255, 114, 182, 0.85)' },
+        super: { base: 52, max: 170, outer: 'rgba(255, 146, 72, 0.95)', inner: 'rgba(255, 227, 121, 0.95)' },
         hit: { base: 30, max: 90, outer: 'rgba(255, 114, 182, 0.75)', inner: 'rgba(255, 186, 186, 0.7)' }
       };
       const style = styleMap[pop.type] || styleMap.hit;
@@ -2281,6 +2333,33 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.beginPath();
       ctx.arc(pop.x, pop.y, innerRadius, 0, Math.PI * 2);
       ctx.stroke();
+      if (pop.type === 'super') {
+        const fireGlow = ctx.createRadialGradient(pop.x, pop.y, innerRadius * 0.3, pop.x, pop.y, radius * 0.9);
+        fireGlow.addColorStop(0, `rgba(255, 241, 214, ${0.9 * fade})`);
+        fireGlow.addColorStop(0.5, `rgba(255, 132, 74, ${0.65 * fade})`);
+        fireGlow.addColorStop(1, `rgba(84, 6, 0, ${0.25 * fade})`);
+        ctx.fillStyle = fireGlow;
+        ctx.beginPath();
+        ctx.arc(pop.x, pop.y, radius * 0.9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.save();
+        ctx.translate(pop.x, pop.y);
+        ctx.shadowBlur = 18;
+        ctx.shadowColor = 'rgba(255, 120, 80, 0.9)';
+        for (let i = 0; i < 10; i++) {
+          const spin = i / 10 * Math.PI * 2 + t * Math.PI * 4;
+          ctx.rotate(spin);
+          ctx.fillStyle = `rgba(255, ${Math.floor(90 + 80 * fade)}, ${Math.floor(50 + 40 * fade)}, ${0.7 * fade})`;
+          ctx.beginPath();
+          ctx.moveTo(innerRadius * 0.2, 0);
+          ctx.lineTo(radius * 0.9, 6);
+          ctx.lineTo(radius * 0.75, -6);
+          ctx.closePath();
+          ctx.fill();
+          ctx.rotate(-spin);
+        }
+        ctx.restore();
+      }
       ctx.restore();
     });
 
@@ -2299,20 +2378,51 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.save();
       ctx.translate(boss.x, boss.y);
       const bodyGrad = ctx.createRadialGradient(0, 0, 20, 0, 0, boss.w * 0.7);
-      bodyGrad.addColorStop(0, 'rgba(255, 227, 121, 0.5)');
-      bodyGrad.addColorStop(1, boss.enraged ? 'rgba(255, 40, 120, 0.65)' : 'rgba(0, 195, 255, 0.45)');
+      bodyGrad.addColorStop(0, 'rgba(255, 120, 80, 0.6)');
+      bodyGrad.addColorStop(1, boss.enraged ? 'rgba(120, 6, 32, 0.85)' : 'rgba(10, 18, 52, 0.8)');
       ctx.fillStyle = bodyGrad;
       ctx.beginPath();
       ctx.moveTo(0, -boss.h / 2);
       ctx.bezierCurveTo(boss.w / 2, -boss.h / 3, boss.w / 2, boss.h / 3, 0, boss.h / 2);
       ctx.bezierCurveTo(-boss.w / 2, boss.h / 3, -boss.w / 2, -boss.h / 3, 0, -boss.h / 2);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+      ctx.strokeStyle = 'rgba(255, 114, 182, 0.35)';
       ctx.stroke();
-      ctx.fillStyle = '#0b0f22';
-      ctx.fillRect(-12, -boss.h / 4, 24, 18);
-      ctx.fillStyle = boss.enraged ? '#ff72b6' : '#51ffe7';
-      ctx.fillRect(-10, -boss.h / 4 + 2, 20, 6);
+      ctx.fillStyle = boss.enraged ? '#ff2147' : '#0b0f22';
+      ctx.fillRect(-14, -boss.h / 4, 28, 22);
+      ctx.fillStyle = boss.enraged ? '#ffe379' : '#ff72b6';
+      ctx.fillRect(-12, -boss.h / 4 + 4, 12, 6);
+      ctx.fillRect(0, -boss.h / 4 + 4, 12, 6);
+      ctx.fillStyle = 'rgba(255, 94, 0, 0.6)';
+      ctx.beginPath();
+      ctx.moveTo(0, boss.h / 2 - 10);
+      ctx.lineTo(18, boss.h / 2 + 14);
+      ctx.lineTo(-18, boss.h / 2 + 14);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255, 146, 72, 0.6)';
+      ctx.stroke();
+      ctx.fillStyle = 'rgba(255, 227, 121, 0.7)';
+      ctx.beginPath();
+      ctx.moveTo(-boss.w / 2 + 12, -boss.h / 2 + 22);
+      ctx.quadraticCurveTo(-boss.w / 2 - 12, -boss.h / 2 + 14, -boss.w / 2 + 4, -boss.h / 2 + 60);
+      ctx.quadraticCurveTo(-boss.w / 2 + 18, -boss.h / 2 + 30, -boss.w / 2 + 12, -boss.h / 2 + 22);
+      ctx.moveTo(boss.w / 2 - 12, -boss.h / 2 + 22);
+      ctx.quadraticCurveTo(boss.w / 2 + 12, -boss.h / 2 + 14, boss.w / 2 - 4, -boss.h / 2 + 60);
+      ctx.quadraticCurveTo(boss.w / 2 - 18, -boss.h / 2 + 30, boss.w / 2 - 12, -boss.h / 2 + 22);
+      ctx.fill();
+      ctx.fillStyle = boss.enraged ? 'rgba(255, 72, 99, 0.8)' : 'rgba(81, 255, 231, 0.8)';
+      ctx.beginPath();
+      ctx.arc(-28, -boss.h / 6, 10, 0, Math.PI * 2);
+      ctx.arc(28, -boss.h / 6, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255, 241, 214, 0.9)';
+      ctx.beginPath();
+      ctx.arc(-28, -boss.h / 6, 4 + Math.sin(boss.phaseTime * 4) * 1.5, 0, Math.PI * 2);
+      ctx.arc(28, -boss.h / 6, 4 + Math.cos(boss.phaseTime * 4) * 1.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+      ctx.stroke();
       ctx.restore();
     }
 
@@ -2566,6 +2676,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       ctx.fillRect(s.x, s.y, 3, 3);
     });
     ctx.globalAlpha = 1;
+    ctx.restore();
   }
 
   function minigameLoop(timestamp) {
