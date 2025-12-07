@@ -986,6 +986,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const minigameStartButton = document.getElementById('minigame-start');
   const minigameCloseButton = document.getElementById('minigame-close');
   const minigameOverlayText = document.getElementById('minigame-overlay-text');
+  const minigameWindow = document.querySelector('.minigame-window');
   const minigameScoreEl = document.getElementById('minigame-score');
   const minigameGoalEl = document.getElementById('minigame-goal');
   const minigameShieldEl = document.getElementById('minigame-shield');
@@ -1638,25 +1639,33 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (minigameOverlayText) minigameOverlayText.classList.add('hidden');
   }
 
-  function openMinigame(auto = false) {
+  async function openMinigame(auto = false) {
     if (!minigameOverlay || !minigameCanvas || !minigameState.ctx) return;
     syncMinigameOverlayToScreen();
     minigameOverlay.classList.add('open');
     minigameOverlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('minigame-open');
     resetMinigameState();
     setMinigameButtonState(true);
+    if (minigameWindow) {
+      requestAnimationFrame(() => playPanelGlitch(minigameWindow, 'in'));
+    }
     if (auto) {
       updateMinigameOverlay('Sem vidas!', 'Fundo transparente ativado. Mostre habilidade para ganhar um continue.');
     }
   }
 
-  function closeMinigame() {
+  async function closeMinigame() {
     if (!minigameOverlay) return;
     minigameState.running = false;
     minigameState.playing = false;
+    setMinigameButtonState(false);
+    if (minigameWindow && minigameOverlay.classList.contains('open')) {
+      await playPanelGlitch(minigameWindow, 'out');
+    }
     minigameOverlay.classList.remove('open');
     minigameOverlay.setAttribute('aria-hidden', 'true');
-    setMinigameButtonState(false);
+    document.body.classList.remove('minigame-open');
   }
 
   function startMinigame() {
@@ -3304,25 +3313,19 @@ document.addEventListener("DOMContentLoaded", async function () {
   const setDiaryButtonState = (isOpen) => {
     if (!openDiaryBtn) return;
     openDiaryBtn.classList.toggle('active', isOpen);
-    openDiaryBtn.innerHTML = isOpen ? 'Fechar Diário' : '📔 Diário';
     openDiaryBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    applyTwemoji(openDiaryBtn);
   };
 
   const setWeightButtonState = (isOpen) => {
     if (!openWeightBtn) return;
     openWeightBtn.classList.toggle('active', isOpen);
-    openWeightBtn.innerHTML = isOpen ? 'Fechar Peso' : '⚖️ Peso';
     openWeightBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    applyTwemoji(openWeightBtn);
   };
 
   const setMinigameButtonState = (isOpen) => {
     if (!openMinigameBtn) return;
     openMinigameBtn.classList.toggle('active', isOpen);
-    openMinigameBtn.innerHTML = isOpen ? 'Fechar Minigame' : '🕹️ Minigame';
     openMinigameBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    applyTwemoji(openMinigameBtn);
   };
 
   const refreshDiaryStates = () => {
