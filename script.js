@@ -1510,7 +1510,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!includeBonus) return base;
     const today = new Date();
     const isCurrent = today.getFullYear() === year && today.getMonth() + 1 === month;
-    if (isCurrent) {
+    if (isCurrent && base === 0 && bonusLives > 0) {
       return Math.min(3, base + bonusLives);
     }
     return base;
@@ -1659,6 +1659,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   async function openMinigame(auto = false) {
     if (!minigameOverlay || !minigameCanvas || !minigameState.ctx) return;
+    if (!auto && !canAttemptBonusLife()) {
+      return;
+    }
     syncMinigameOverlayToScreen();
     minigameOverlay.classList.add('open');
     minigameOverlay.setAttribute('aria-hidden', 'false');
@@ -1701,7 +1704,15 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function awardBonusLife() {
-    bonusLives = Math.min(3, bonusLives + 1);
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const baseRemaining = calculateBaseLives(month, year);
+    if (baseRemaining > 0 || bonusLives > 0) {
+      updateLivesDisplay();
+      return;
+    }
+    bonusLives = 1;
     saveBonusLives(bonusLives);
     updateLivesDisplay();
   }
@@ -4051,6 +4062,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   const openDiaryBtn = diaryButtonWrapper.querySelector('#open-diary-log');
   const openWeightBtn = diaryButtonWrapper.querySelector('#open-weight-log');
   const openMinigameBtn = diaryButtonWrapper.querySelector('#open-minigame');
+
+  function canAttemptBonusLife() {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    return calculateBaseLives(month, year) === 0 && bonusLives === 0;
+  }
 
   if (openDiaryBtn) {
     openDiaryBtn.setAttribute('aria-controls', 'diary-log-panel');
