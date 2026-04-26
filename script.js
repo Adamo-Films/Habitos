@@ -44,6 +44,14 @@ const rewards = [
   { month: 10, year: 2026, icon: "✈️", title: "Prêmio Outubro", desc: "Viagem para fora", label: "Viagem" }
 ];
 
+const weeklyRewards = [
+  { icon: "🌶️", title: "Prêmio Semanal", desc: "Doritos sweet chilli", label: "Doritos sweet chilli" },
+  { icon: "🍫", title: "Prêmio Semanal", desc: "M&Ms de amendoim", label: "M&Ms de amendoim" },
+  { icon: "🥥", title: "Prêmio Semanal", desc: "Rafaelo", label: "Rafaelo" },
+  { icon: "🥜", title: "Prêmio Semanal", desc: "Castanha de caju", label: "Castanha de caju" },
+  { icon: "🍬", title: "Prêmio Semanal", desc: "Ferrero rocher", label: "Ferrero rocher" }
+];
+
 const baseVisualizerTheme = {
   headline: "Recompensa Arcade",
   tagline: "Modo vitória ativado",
@@ -679,7 +687,7 @@ function launchRewardConfetti() {
       return doc.exists ? doc.data() : {};
     } catch (e) {
       console.error("Erro ao buscar dados do Firebase:", e);
-      return JSON.parse(localStorage.getItem('habits-progress-v2')) || {};
+      return JSON.parse(localStorage.getItem('habits-progress-v3')) || {};
     }
   }
   async function saveProgress(progress) {
@@ -688,7 +696,7 @@ function launchRewardConfetti() {
     } catch (e) {
       console.error("Erro ao salvar no Firebase:", e);
     }
-    localStorage.setItem('habits-progress-v2', JSON.stringify(progress));
+    localStorage.setItem('habits-progress-v3', JSON.stringify(progress));
   }
 
 const DIARY_LOCAL_KEY = 'habitos-diary-entries-v1';
@@ -1298,15 +1306,28 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (e.code === 'Enter' || e.code === 'Space') startApp();
   }, { once: true });
 
-  const progress = await getProgress();
+  const RESET_VERSION_KEY = 'habitos-reset-version';
+  const RESET_VERSION = '2026-04-27-reset-v1';
+
+  let progress = await getProgress();
   let diaryEntries = await getDiaryEntries();
   if (!diaryEntries || typeof diaryEntries !== 'object') diaryEntries = {};
   let diaryUnlocked = loadDiaryUnlockState();
   let weightEntries = loadWeightEntriesLocal();
   if (!weightEntries || typeof weightEntries !== 'object') weightEntries = {};
-  const START_DATE_KEY = 'habitos-start-date-v1';
+  const START_DATE_KEY = 'habitos-start-date-v2';
 
-  const DEFAULT_START_DATE_PARTS = { year: 2025, month: 12, day: 5 };
+  function getTomorrowDateParts() {
+    const now = new Date();
+    const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    return {
+      year: tomorrow.getFullYear(),
+      month: tomorrow.getMonth() + 1,
+      day: tomorrow.getDate()
+    };
+  }
+
+  const DEFAULT_START_DATE_PARTS = getTomorrowDateParts();
 
   function createDateFromParts({ year, month, day }) {
     const d = new Date(year, month - 1, day);
@@ -1342,7 +1363,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     try {
       const stored = localStorage.getItem(START_DATE_KEY);
       const parsed = parseStoredDate(stored);
-      // Garante que a data inicial permaneça exatamente no lançamento oficial
+      // Garante que a data inicial permaneça exatamente no reset atual
       if (parsed && serializeDate(parsed) === DEFAULT_START_DATE_SERIALIZED) {
         return parsed;
       }
@@ -1356,6 +1377,30 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     return DEFAULT_START_DATE;
   }
+
+  async function applyResetIfNeeded() {
+    const alreadyReset = localStorage.getItem(RESET_VERSION_KEY) === RESET_VERSION;
+    if (alreadyReset) return;
+    try {
+      localStorage.setItem(START_DATE_KEY, DEFAULT_START_DATE_SERIALIZED);
+      localStorage.removeItem('habits-progress-v2');
+      localStorage.removeItem('habits-progress-v3');
+      localStorage.removeItem('habitos-bonus-lives-v1');
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith('reward-celebrated-')) {
+          localStorage.removeItem(key);
+        }
+      });
+      progress = {};
+      await saveProgress({});
+    } catch (err) {
+      console.error('Falha ao aplicar reset automático:', err);
+    } finally {
+      localStorage.setItem(RESET_VERSION_KEY, RESET_VERSION);
+    }
+  }
+
+  await applyResetIfNeeded();
 
   const dados = [];
   const habitosIncrementaisLista = [
@@ -1417,6 +1462,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       habitos_ativos = habitos_ativos.filter(h => h !== '1700 calorias');
     }
     const habito_ciclico = habitos_ciclicos[(i - 1) % habitos_ciclicos.length];
+    const weekIndex = Math.floor((i - 1) / 7);
+    const weekDay = ((i - 1) % 7) + 1;
     dados.push({
       data: data_atual.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
       dia: `Dia ${i}`,
@@ -1425,7 +1472,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       mes: data_atual.getMonth() + 1,
       ano: data_atual.getFullYear(),
       diaDoMes: data_atual.getDate(),
-      id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth() + 1}-${data_atual.getDate()}`
+      id: `dia-${data_atual.getFullYear()}-${data_atual.getMonth() + 1}-${data_atual.getDate()}`,
+      weekIndex,
+      weekDay
     });
   }
   const calendario = document.getElementById("calendario");
@@ -1437,6 +1486,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const anos = {};
   const grupos = {};
+  const gruposSemana = {};
   dados.forEach((obj) => {
     if (!anos[obj.ano]) anos[obj.ano] = {};
     if (!anos[obj.ano][obj.mes]) anos[obj.ano][obj.mes] = [];
@@ -1445,6 +1495,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     const gid = `${obj.mes}-${obj.ano}`;
     if (!grupos[gid]) grupos[gid] = [];
     grupos[gid].push(obj);
+
+    if (!gruposSemana[obj.weekIndex]) gruposSemana[obj.weekIndex] = [];
+    gruposSemana[obj.weekIndex].push(obj);
   });
 
   function getRewardTheme(reward) {
@@ -1474,6 +1527,22 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (!month || !year) return { done: 0, total: 0, percent: 0 };
     const key = `${month}-${year}`;
     const dias = grupos[key] || [];
+    let done = 0;
+    dias.forEach((dia) => {
+      const habitCount = dia.habitos.length + 1;
+      if (checkAllHabitsComplete(dia.id, habitCount - 1)) done++;
+    });
+    const total = dias.length;
+    return { done, total, percent: total ? done / total : 0 };
+  }
+
+  function getWeeklyRewardByWeekIndex(weekIndex) {
+    if (!weeklyRewards.length) return null;
+    return weeklyRewards[weekIndex % weeklyRewards.length];
+  }
+
+  function getWeeklyProgress(weekIndex) {
+    const dias = gruposSemana[weekIndex] || [];
     let done = 0;
     dias.forEach((dia) => {
       const habitCount = dia.habitos.length + 1;
@@ -3076,6 +3145,36 @@ document.addEventListener("DOMContentLoaded", async function () {
             ${weightEditorHtml}
           </td>
         </tr>`;
+
+        const isWeekEnd = dia.weekDay === 7 || i === dias.length - 1;
+        if (isWeekEnd) {
+          const weekReward = getWeeklyRewardByWeekIndex(dia.weekIndex);
+          if (weekReward) {
+            html += `
+        <tr class="weekly-reward-row">
+          <td colspan="3">
+            <div class="reward-card weekly-reward-card arcade-clicavel" data-week-reward="${dia.weekIndex}" role="button" tabindex="0">
+              <div class="reward-card-warp"></div>
+              <div class="reward-card-grid"></div>
+              <div class="reward-card-sheen"></div>
+              <div class="reward-card-content">
+                <div class="reward-card-header">
+                  <div class="reward-card-icon">${weekReward.icon}</div>
+                  <div class="reward-card-text">
+                    <div class="reward-card-title">Prêmio Semanal • Semana ${dia.weekIndex + 1}</div>
+                    <div class="reward-card-desc">${weekReward.desc}</div>
+                  </div>
+                </div>
+                <div class="reward-card-progress">
+                  <div class="reward-bar-bg"><div class="reward-bar" id="weekly-reward-bar-${dia.weekIndex}"></div></div>
+                  <div class="reward-unlocked" id="weekly-reward-unlocked-${dia.weekIndex}" style="display:none">Prêmio semanal desbloqueado: <span>${weekReward.label}</span></div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>`;
+          }
+        }
       });
       html += `</tbody>
         </table>`;
@@ -4592,7 +4691,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const allAnoDrops = document.querySelectorAll('#calendario .ano-dropdown');
   const allMesDivs = document.querySelectorAll('#calendario .mes');
   const allDropdowns = document.querySelectorAll('#calendario .mes-dropdown');
-  const allRewards = document.querySelectorAll('#calendario .reward-card');
+  const allRewards = document.querySelectorAll('#calendario .reward-card[data-reward]');
 
   allRewards.forEach((card) => {
     const key = card.getAttribute('data-reward');
@@ -4957,6 +5056,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+  function updateWeeklyRewardProgress(weekIndex, totalDias, diasCompletos) {
+    const pct = totalDias ? diasCompletos / totalDias : 0;
+    const bar = document.getElementById(`weekly-reward-bar-${weekIndex}`);
+    const unlocked = document.getElementById(`weekly-reward-unlocked-${weekIndex}`);
+    if (bar) {
+      bar.style.width = `${pct * 100}%`;
+    }
+    if (unlocked) {
+      unlocked.style.display = pct === 1 ? 'block' : 'none';
+    }
+  }
+
   function checkAllHabitsComplete(dayId, habitCount) {
     let complete = true;
     for (let i = 0; i < habitCount; i++) {
@@ -4983,6 +5094,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       updateRewardProgress(mes, ano, dias.length, diasCompletos, skipCelebrate);
     });
     updateLevelDisplay();
+  }
+
+  function updateAllWeeklyRewardProgress() {
+    Object.entries(gruposSemana).forEach(([weekIndex, dias]) => {
+      const progress = getWeeklyProgress(Number(weekIndex));
+      updateWeeklyRewardProgress(Number(weekIndex), dias.length, progress.done);
+    });
   }
 
   // Contadores 3D
@@ -5054,6 +5172,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const habitCount = document.querySelectorAll(`#dropdown-${dayId} .habit-checkbox`).length;
         updateProgressBar(dayId, habitCount);
         updateAllRewardProgress(false);
+        updateAllWeeklyRewardProgress();
         countStats();
       }
     });
@@ -5100,6 +5219,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   });
   updateAllRewardProgress(true);
+  updateAllWeeklyRewardProgress();
   countStats();
 
   let resizeProgressTimeout = null;
